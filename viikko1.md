@@ -12,3 +12,6 @@ const hello = (name) => {
 }
 hello('World')
 ```
+
+... which is shown in the screenshot below:
+![My helpful screenshot]({{ "/assets/1/kuva.png" | absolute_url }})
