@@ -262,15 +262,99 @@ xhttp.onreadystatechange = function () {
 
 Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan [call back](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function) eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen _tapahtuman_ tapahduttua. 
 
-### DOM
+### Document Object Model eli DOM
 
-[DOM](https://en.wikipedia.org/wiki/Document_Object_Model)
+Voimme ajatella, että HTML-sivut muodostavat implisiittisen puurakenteen
+
+<pre>
+html
+  head
+    link
+    script
+  body
+    div
+      h1
+      div  
+        ul
+          li
+          li
+          li
+      form
+        input
+        input
+</pre>
+
+Sama puumaisuus on nähtävissä konsolin välilehdellä _Elements_
+
+![]({{ "/assets/1/12.png" | absolute_url }})
+
+Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena. 
+
+Document Object Model eli [DOM](https://en.wikipedia.org/wiki/Document_Object_Model) on ohjelmointirajapinta eli _API_, jonka mahdollistaa selaimessa esitettävien web-sivujen muokkaamisen ohjelmallisesti.
+
+Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle  muistiinpanojen listan.
+
+HTML-dokumentin
+
+![]({{ "/assets/1/13.png" | absolute_url }})
+
+DOM:a havainnollistava kuva Wikipedian sivulta:
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/DOM-model.svg/428px-DOM-model.svg.png)
+
+### document-olio
+
+HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään _document_. Olioon pääsee käsiksi Console-välilehdeltä:
+
+![]({{ "/assets/1/14.png" | absolute_url }})
+
+Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle. 
+
+Lisätään sivulle uusi muistiinpano suoraan konsolista.
+
+Haetaan ensin sivulta muistiinpanojen lista, eli sivun ul-elementeistä ensimmäinen:
+```js
+lista = document.getElementsByTagName('ul')[0]
+```
+
+luodaan uusi li-elementti ja lisätään sille sopiva tekstisisältö:
+
+```js
+uusi = document.createElement('li')
+uusi.textContent = 'Sivun manipulointi konsolista on helppoa'
+```
+
+liitetään li-elementti listalle:
+
+```js
+lista.appendChild(uusi)
+```
+
+![]({{ "/assets/1/15.png" | absolute_url }})
+
+Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json>  haettavan JSON-muotoisen raakadatan perusteella. 
+
+
 
 ### CSS
 
 HTML-koodin _head_ osio sisältää link-tagin, joka määrittelee sivulla käytettävän
 
-### HTTP POST
+```css
+.container {
+  padding: 10px;
+  border: 1px solid
+}
+
+.notes {
+  color: blue;
+}
+```
+
+### lomake ja HTTP POST
+
+## single page app
+
 
 ## react
 

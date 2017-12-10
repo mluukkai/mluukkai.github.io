@@ -326,15 +326,92 @@ muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöst�
 
 <p>Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan <a href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function">call back</a> eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen <em>tapahtuman</em> tapahduttua.</p>
 
-<h3 id="dom">DOM</h3>
+<h3 id="document-object-model-eli-dom">Document Object Model eli DOM</h3>
 
-<p><a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a></p>
+<p>Voimme ajatella, että HTML-sivut muodostavat implisiittisen puurakenteen</p>
+
+<pre>
+html
+  head
+    link
+    script
+  body
+    div
+      h1
+      div  
+        ul
+          li
+          li
+          li
+      form
+        input
+        input
+</pre>
+
+<p>Sama puumaisuus on nähtävissä konsolin välilehdellä <em>Elements</em></p>
+
+<p><img src="http://localhost:4000/assets/1/12.png" alt="" /></p>
+
+<p>Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena.</p>
+
+<p>Document Object Model eli <a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> on ohjelmointirajapinta eli <em>API</em>, jonka mahdollistaa selaimessa esitettävien web-sivujen muokkaamisen ohjelmallisesti.</p>
+
+<p>Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle  muistiinpanojen listan.</p>
+
+<p>HTML-dokumentin</p>
+
+<p><img src="http://localhost:4000/assets/1/13.png" alt="" /></p>
+
+<p>DOM:a havainnollistava kuva Wikipedian sivulta:</p>
+
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/DOM-model.svg/428px-DOM-model.svg.png" alt="" /></p>
+
+<h3 id="document-olio">document-olio</h3>
+
+<p>HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään <em>document</em>. Olioon pääsee käsiksi Console-välilehdeltä:</p>
+
+<p><img src="http://localhost:4000/assets/1/14.png" alt="" /></p>
+
+<p>Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle.</p>
+
+<p>Lisätään sivulle uusi muistiinpano suoraan konsolista.</p>
+
+<p>Haetaan ensin sivulta muistiinpanojen lista, eli sivun ul-elementeistä ensimmäinen:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">lista</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'ul'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>luodaan uusi li-elementti ja lisätään sille sopiva tekstisisältö:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">uusi</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
+<span class="nx">uusi</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">'Sivun manipulointi konsolista on helppoa'</span>
+</code></pre></div></div>
+
+<p>liitetään li-elementti listalle:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">lista</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">uusi</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="http://localhost:4000/assets/1/15.png" alt="" /></p>
+
+<p>Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/data.json">https://fullstack-exampleapp.herokuapp.com/data.json</a>  haettavan JSON-muotoisen raakadatan perusteella.</p>
 
 <h3 id="css">CSS</h3>
 
 <p>HTML-koodin <em>head</em> osio sisältää link-tagin, joka määrittelee sivulla käytettävän</p>
 
-<h3 id="http-post">HTTP POST</h3>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
+  <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+  <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span>
+<span class="p">}</span>
+
+<span class="nc">.notes</span> <span class="p">{</span>
+  <span class="nl">color</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="lomake-ja-http-post">lomake ja HTTP POST</h3>
+
+<h2 id="single-page-app">single page app</h2>
 
 <h2 id="react">react</h2>
 
