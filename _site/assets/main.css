@@ -184,3 +184,5 @@ pre > code { border: 0; padding-right: 0; padding-left: 0; }
 .highlight .vg { color: #008080; }
 .highlight .vi { color: #008080; }
 .highlight .il { color: #099; }
+
+.important { border: 2px solid black; padding: 10px; margin-bottom: 10px; margin-top: 10px; font-size: 20px; border-radius: 10px; background-color: lightgray; }
