@@ -397,7 +397,11 @@ html
 
 <h3 id="css">CSS</h3>
 
-<p>HTML-koodin <em>head</em> osio sisältää link-tagin, joka määrittelee sivulla käytettävän</p>
+<p>Muistiinpanojen sivun HTML-koodin <em>head</em>-osio sisältää <em>link</em>-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/main.css">main.css</a> sivulla käytettävä <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">css</a>-tyylitiedosto</p>
+
+<p>Cascading Style Sheets eli CSS on kieli, jonka avulla web-sovellusten ulkoasu määritellään.</p>
+
+<p>Ladattu css-tiedosto näyttää seuraavalta:</p>
 
 <div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">.container</span> <span class="p">{</span>
   <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
@@ -408,6 +412,29 @@ html
   <span class="nl">color</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
+
+<p>Tiedosto määrittelee kaksi <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors">luokkaselektoria</a>, joiden avulla valitaan tietty sivun alue ja määritellään alueelle sovellettavat tyylisäännöt.</p>
+
+<p>Luokkaselekotori alkaa aina pisteellä ja sisältää luokan nimen.</p>
+
+<p>Luokat ovat <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class">attribuuteja</a> joita voidaan liittää HTML-elementeille.</p>
+
+<p>Konsolin <em>Elements</em>-välilehti mahdollistaa class-attribuuttien tarkastelun:</p>
+
+<p><img src="http://localhost:4000/assets/1/16.png" alt="" /></p>
+
+<p>sovelluksen uloimmalle <em>div</em>-elementille on siis liitetty luokka <em>container</em>. Muistiinpanojen listan sisältävä <em>ul</em>-elementin sisällä oleva lista sisältää luokan <em>notes</em>.</p>
+
+<p>CSS-säännön avulla on määritelty, että <em>container</em>-luokan sisältävä elementti ympäröidään yhden pikselin paksuisella <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/border">border</a>:illa. Elementille asetetaan myös 10 pikselin <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/padding">padding</a>, jonka ansiosta elementin sisältön ja elementin ulkorajan väliin jätetään hieman tilaa.</p>
+
+<p>Toinen määritelty CSS-sääntö asettaa muistiinpanojen kirjainten värin siniseksi.</p>
+
+<p>HTML-elementeillä on muitekin attribuutteja kuin luokkia. Muistiinpanot sisältävä <em>div</em>-elementti sisältää <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id">id</a>-attribuutin. Javascript-koodi hyödyntää attribuuttia elementin etsimiseen.</p>
+
+<p>Konsolin <em>Elements</em>-välilehdellä on mahdollista manipuloida elementtien tyylejä:
+<img src="http://localhost:4000/assets/1/17.png" alt="" /></p>
+
+<p>Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudelleenladataan, eli jos muutokset halutaan pysyviksi, tulee ne konsolissa tehtävien kokeilujen jälkeen tallettaa palvelimella olevaan tyylitiedostoon.</p>
 
 <h3 id="lomake-ja-http-post">lomake ja HTTP POST</h3>
 

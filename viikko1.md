@@ -338,7 +338,11 @@ Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu 
 
 ### CSS
 
-HTML-koodin _head_ osio sisältää link-tagin, joka määrittelee sivulla käytettävän
+Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto 
+
+Cascading Style Sheets eli CSS on kieli, jonka avulla web-sovellusten ulkoasu määritellään.
+
+Ladattu css-tiedosto näyttää seuraavalta:
 
 ```css
 .container {
@@ -351,10 +355,32 @@ HTML-koodin _head_ osio sisältää link-tagin, joka määrittelee sivulla käyt
 }
 ```
 
+Tiedosto määrittelee kaksi [luokkaselektoria](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors), joiden avulla valitaan tietty sivun alue ja määritellään alueelle sovellettavat tyylisäännöt.
+
+Luokkaselekotori alkaa aina pisteellä ja sisältää luokan nimen. 
+
+Luokat ovat [attribuuteja](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) joita voidaan liittää HTML-elementeille. 
+
+Konsolin _Elements_-välilehti mahdollistaa class-attribuuttien tarkastelun:
+
+![]({{ "/assets/1/16.png" | absolute_url }})
+
+sovelluksen uloimmalle _div_-elementille on siis liitetty luokka _container_. Muistiinpanojen listan sisältävä _ul_-elementin sisällä oleva lista sisältää luokan _notes_.
+
+CSS-säännön avulla on määritelty, että _container_-luokan sisältävä elementti ympäröidään yhden pikselin paksuisella [border](https://developer.mozilla.org/en-US/docs/Web/CSS/border):illa. Elementille asetetaan myös 10 pikselin [padding](https://developer.mozilla.org/en-US/docs/Web/CSS/padding), jonka ansiosta elementin sisältön ja elementin ulkorajan väliin jätetään hieman tilaa.
+
+Toinen määritelty CSS-sääntö asettaa muistiinpanojen kirjainten värin siniseksi.
+
+HTML-elementeillä on muitekin attribuutteja kuin luokkia. Muistiinpanot sisältävä _div_-elementti sisältää [id](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id)-attribuutin. Javascript-koodi hyödyntää attribuuttia elementin etsimiseen.
+
+Konsolin _Elements_-välilehdellä on mahdollista manipuloida elementtien tyylejä:
+![]({{ "/assets/1/17.png" | absolute_url }})
+
+Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudelleenladataan, eli jos muutokset halutaan pysyviksi, tulee ne konsolissa tehtävien kokeilujen jälkeen tallettaa palvelimella olevaan tyylitiedostoon.
+
 ### lomake ja HTTP POST
 
 ## single page app
-
 
 ## react
 
