@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "viikko1"
+date:   2017-12-10 17:40:59 +0200
+categories: jekyll 
+---
+
+# Full stack -websovelluskehitys
+
+foobar
+
+```js
+const hello = (name) => {
+  console.log(name)
+}
+hello('World')
+```
