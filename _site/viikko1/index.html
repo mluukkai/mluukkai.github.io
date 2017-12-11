@@ -497,6 +497,14 @@ html
 
 <h2 id="single-page-app">single page app</h2>
 
+<p>Esimerkkisovelluksemme pääsivu toimii perinteisten web-sivujen tapaan, kaikki sovelluslogiikka on palvelimella, selain ainoastaan renderöi palvelimen lähettämää HTML-koodia.</p>
+
+<p>Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevien muistiinpanojen HTML-koodin generointi on siirretty selaimen vastuulle. Selain hoita tehtävän suorittamalla palvelimelta lataamansa Javascript-koodin. Selaimella suoritettava koodi hakee muistiinpanot palvelimelta JSON-muotoisena raakadatana.</p>
+
+<p>Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen <a href="https://en.wikipedia.org/wiki/Single-page_application">Single-page application</a> (SPA) -tyyliä, missä sovelluksille ei enää tehdä esimerkkisovelluksemme tapaan erillisiä sivuja, palvelimen sille lähettämiä sivuja, vaan sovellus koostuu ainoastaan yhdestä palvelimen lähettämästä HTML-sivusta, jonka sisältöä manipuloidaan selaimessa suoritettavalla Javascriptillä.</p>
+
+<p>Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteista mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää <em>uudelleenohjauksen</em> avulla selainta lataamaan muistiinpanojen sivun uudelleen.</p>
+
 <h2 id="full-stack">full stack</h2>
 
 <h2 id="react">react</h2>
