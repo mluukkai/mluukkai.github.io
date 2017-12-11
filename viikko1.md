@@ -550,16 +550,631 @@ Aiemmin on ollut yleisempää, että sovelluskehittäjät ovat erikoistuneet tie
 
 Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi. 
 
-Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerttu termi [Javascript fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/) eli Javascript-väsymys.
+Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerattu termi [Javascript](https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4) [fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/) eli [Javascript](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f)-väsymys.
 
 Jaavascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.
 
-## react
+## React
+
+Alamme nyt tutustua kurssin ehkä tärkeimpään teemaan, [React](https://reactjs.org/)-kirjastoon.
+
+Tedään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.
+
+Ehdottomasti helpoin tapa päästä alkuun on asentaa [create-react-app](https://github.com/facebookincubator/create-react-app). 
+
+Luodaan sovellus nimeltään _viikko1_ ja käynnistetään se:
+
+<pre>
+$ create-react-app viikko1
+$ cd viikko1
+$ npm start
+</pre>
+
+Chromen pitäisi aueta automaattisesti. Avaa konsoli **välittömästi**. Avaa myös tekstieditori siten, että näet koodin ja web-sivun samaan aikaan ruudulla: 
+
+![]({{ "/assets/1/26.png" | absolute_url }})
+
+Sovelluksessa on hieman valmista koodia, mutta yksinkertaistetaan koodi siten, että tiedoston _index.js_ sisällöksi tulee:
 
 ```js
-const hello = (name) => {
-  console.log(name)
-}
-hello('World')
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const App = () => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+Voit poistaa tiedostot _App.css_, _App.test.js_, _logo.svg_ ja _registerServiceWorkes.js_
+Jätä tiedosto _App.js_, tulemme tarvitsemaan sitä myöhemin.
+
+### komponentti
+
+Tiedosto _index.js_ määrittelee nyt React [komponentin](https://reactjs.org/docs/components-and-props.html) nimeltään _App_.
+
+Komento 
+
+```js
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+Renderöi komponentin sisällön tiedoston _public/index.html_ määrittelemään _div_-elementtiin, jonka _id:n_ arvona on 'root'
+
+Tiedosto _public/index.html_ on oleellisesti ottaen tyhjä, voit kokeilla lisätä sinne HTML:ää. Reactilla ohjelmoitaessa yleensä kuitenkin kaikki renderöitävä sisältä määritellään reactin komponenttien avulla.
+
+Tarkastellaan vielä tarkemmin komponentin määrittelevää koodia:
+
+```react
+const App = () => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+```
+
+Kuten arvata saattaa, komponentti renderöityy _div_-tagina, jonka sisällä on _p_-tagin sisällä oleva teksti _Hello world_.
+
+Teknisesti ottaen komponentti on määritelty Javascript-funktiona. Seuraava siis on funktio:
+
+```react
+() => (
+  <div>
+    <p>Hello world</p>
+  </div>
+)
+```
+
+joka sijoitetaan vakioarvoiseen muuttujaan _App_
+
+```js
+const App = ...
+```
+
+Javascriptissa on muutama tapa määritellä funktioita. Käytämme nyt javascriptin hieman uudemman version [EcmaScript 6:n](http://es6-features.org/#Constants) eli ES6:n [nuolifunktiota](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+
+Koska funktio koostuu vain yhdestä lausekkeesta, on käytössämme lyhennysmerkintä, joka vastaa oikeasti seuraavaa koodia:
+
+```react
+const App = () => {
+  return(
+    <div>
+      <p>Hello world</p>
+    </div>
+  )}
+```
+
+eli funktio palauttaa sisältämänsä lausekkeen arvon.
+
+Komponenttifunktio voi sisältää mitä tahansa javascript-koodia. Muuta komponenttisi seuraavaan muotoon ja katso mitä konsolissa tapahtuu:
+
+```react
+const App = () => {
+  console.log('Hello from komponentti')
+  return(
+    <div>
+      <p>Hello world</p>
+    </div>
+  )}
+```
+
+Komponenttien sisällä on mahdollista renderöidä myös dynaamista sisältöä. 
+
+Muuta komponentti muotoon:
+
+```react
+const App = () => {
+  const now = new Date()
+  const a = 10
+  const b = 20
+  return(
+    <div>
+      <p>Hello world, it is {now.toString()}</p>
+      <p>{a} plus {b} is {a+b}</p>
+    </div>
+  )}
+```
+
+Aaltosulkeiden sisällä oleva javascript-koodi evaluoidaan ja evaluoinnin tulos upotetaan määriteltyyn kohtaan komponentin HTML-koodia.
+
+### JSX
+
+Näyttää siltä, että React-komponetti palauttaa HTML-koodia. Näin ei kuitenkaan ole. React-komponenttien ulkoasu kirjoitetaan yleensä [JSX](https://reactjs.org/docs/introducing-jsx.html):ää käyttäen. Vaikka JSX näyttää HTML:ltä, kyseessä on kuitenkin tapa kirjoittaa javascriptiä. React komponenttien palauttaman JSX:n javascriptiksi. 
+
+Käännösvaiheen jälkeen ohjelmamme näyttää seuraavalta:
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = () => {
+  const now = new Date();
+  const a = 10;
+  const b = 20;
+  return React.createElement(
+    'div', null,
+    React.createElement(
+      'p', null, 'Hello world, it is ', now.toString()
+    ),
+    React.createElement(
+      'p', null, a,' plus ',b, ' is ', a + b
+    )
+  );
+};
+
+ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+```
+
+Käännksen hoitaa [Babel](https://babeljs.io/repl/). Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.
+
+Reactia olisi myös mahdollista kirjoittaa "suoraan javascriptinä" käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee,
+
+Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden takaan. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.
+
+## monta komponenttia
+
+Muutetaan sovellusta seuraavasti (yläreunan importit jätetään nyt ja jatkossa pois):
+
+```react
+const Hello = () => {
+  return (
+    <div>
+      <p>Hello world</p>
+    </div>
+  )  
+}
+
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello />
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+Olemme määritelleet uuden komponentin _Hello_ jota käytetään komponentista _App_. Komponenttia voidaan luonnollisesti käyttää monta kertaa: 
+
+```react
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello />
+      <Hello />
+      <Hello />
+    </div>
+  )
+}
+```
+
+Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuulliseti ylläpidettävänä. Reactissa on filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista. 
+
+Jatkamme komponentteihin tutustumista.
+
+## props: tiedonvälitys komponenttien välillä
+
+Komponenteille on mahdollista välittää dataa [propsien](https://reactjs.org/docs/components-and-props.html) avulla.
+
+Muutetaan komponenttia _Hello_ seuraavasti
+
+```react
+const Hello = (props) => {
+  return (
+    <div>
+      <p>Hello {props.name}</p>
+    </div>
+  )  
+}
+```
+
+komponentin määrittelevällä funktiolla on nyt parametri _props_. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri "propsit", jota komponentin käyttäjä määrittelee.
+
+Propsit määritellään seuraavasti:
+
+```react
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello name='Arto' />
+      <Hello name='Pekka' />
+    </div>
+  )
+}
+```
+
+Propseja voi olla mielivaltainen lukumäärä ja niiden arvot voivat olla "kovakoodattuja" tai javascript-lausekkeiden tuloksia. Jos propsin arvo muodostetaan javascriptillä, tulee se olla aaltosulkeissa.
+
+```react
+const Hello = (props) => {
+  return (
+    <div>
+      <p>Hello {props.name}, you are {props.age} years old</p>
+    </div>
+  )  
+}
+
+const App = () => {
+  const nimi = 'Pekka'
+  const ika = 10
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello name='Arto' age={26+10} />
+      <Hello name={nimi} age={ika} />
+    </div>
+  )
+}
+```
+
+### Muutama huomio
+
+React on konfiguroitu antamaan varsin hyviä virheilmoituksia. Kannattaa kuitenkin edetä ainakin alussa **todella pienin askelin** ja varmistaa, että jokainen muutos toimii halutulla tavalla.
+
+Konsolin tulee olla **koko ajan auki**. Jos selain ilmoittaa virheestä, ei kannata kirjoittaa sokeasti lisää koodia ja toivoa ihmettä tapahtuvaksi vaan tulee yrittää ymmärtää virheen syy ja esim. palata edelliseen toimivaan tilaan: 
+
+![]({{ "/assets/1/27.png" | absolute_url }})
+
+Kannattaa myös muistaa, että React-koodissakin on mahdollista ja kannattavaa lisätä koodin sekaan sopivia <code>console.log()</code>-komentoja. Tulemme hieman myöhemmin tutustumaan muutamiin muihinkin tapoihin debugata reactia.
+
+React-komponenttien nimien tulee alkaa isolla kirjaimella. Jos yrität määritellä komponentin seuraavasti
+
+```react
+const footer = () => {
+  return(
+    <div>greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a></div>
+  )
+}
+```
+
+ja ottaa sen käyttöön
+
+```react
+const App = () => {
+  return (
+    <div>
+      <h1>Greetings</h1>
+      <Hello name='Arto' age={26+10} />
+      <footer />
+    </div>
+  )
+}
+```
+
+sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän _div_-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.
+
+### Javascriptiä
+
+Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.
+
+Javascript on kehittynyt viime vuosina nopeaan tahtiin, ja käytämme kurssilla kielen uusimpien versioiden piirteitä, joista osa ei ole vielä olemassa kielen standardoiduissa versiossa. Javascript-standardin virallinen nimi on [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript). Tämän hetken tuorein version on kesäkuussa 2017 julkaistu [ES8](https://www.ecma-international.org/publications/standards/Ecma-262.htm), toiselta nimeltään ECMAScript 2017.
+
+Selaimet eivät vielä osaa kaikkia Javascriptin uusimpien versioiden ominaisuuksia. Tämän takia selaimessa suoritetaan useimmiten koodia joka on käännetty tai englanniksi _transpiled_ uudemmasta javascriptin versiosta johonkin vanhempaan, paremmin tuettuun versioon.
+
+Tällä hetkellä johtava tapa tehdä transpilointi on [Babel](https://babeljs.io/). Create-react-app:in avulla luodoissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen traspilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.
+
+[NodeJS](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen. 
+
+Koodi kirjoitetaan _.js-_päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
+
+Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusmekanismeiltaan kielet kuitenkin poikkeavat radikaalisti. Java-taustalta tultaessa Javascriptin käyttäytyminen saattaa aiheuttaa hämmennystä, varsinkin jos kielen piirteistä ei viitsitä ottaa selvää.
+
+Tietyissä piireissä on myös ollut suosittua yrittää "simuloida" Javascriptilla eräitä Javan piirteitä ja ohjelmointitapoja. En suosittele.
+
+### muuttujat
+
+Javascriptissä on kolme tapaa määritellä muttujia:
+
+```js
+const x = 1
+let y = 5
+
+console.log(x, y)  // tulostuu 1, 5
+y += 10
+console.log(x, y)  // tulostuu 1, 15
+y = 'teksti'
+console.log(x, y)  // tulostuu 1, teksti
+x = 4              // aiheuttaa virheen
+```
+
+[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä varia jos ei tiedä mitä se tekee, käytä aina const:ia tai let:iä!
+
+Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
+
+### taulukot
+
+[Taulukko](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)  ja muutama esimerkki sen käytöstä
+
+```js
+const t = [1, -1, 3]
+
+t.push(5) 
+
+console.log(t.length)  // tulostuu 4
+console.log(t[2])      // tuostuu -1
+
+t.forEach( (luku) => { 
+  console.log(luku)    // tulostuu 1, -1, 3 ja 5 omille riveilleen
+})
+
+t[6] = 99
+
+console.log(t)         // tulostuu [ 1, -1, 3, 5, <2 empty items>, 99 ]
+```
+
+Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty _const_iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.
+
+Eräs tapa käydä taulukon alkiot läpi on esimerkissä käytetty _forEach_, joka saa parametrikseen nuolisyntaksilla määritellyn _funktion_
+
+```js
+(luku) => { 
+  console.log(luku)    // tulostuu 1, -1, 3 ja 5 omille riveilleen
+}
+```
+
+forEach kutsuu funktiota jokaiselle taulukon alkiolle antaen taulukon alkion aina parametrina. forEachin parametrina oleva funktio voi saada myös [muita parametreja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach).
+
+Taulukoille on määritelty runsaasti hyödyllisiä operaatioita, tutustumme niihin tarkemmin laskareissa. Katsotaan kuiten jo nyt pieni esimerkki operaation [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) käytöstä. 
+
+```js
+const t = [1, 2, 3, 4]
+
+const m1 = t.map((luku) => luku*2 )
+console.log(m1) // tulostuu 2, 4, 6, 8
+
+const m2 = t.map((luku) => '<li>'+luku+'</li>')
+console.log(m2) // tulostuu [ '<li>1</li>', '<li>2</li>', '<li>3</li>', '<li>4</li>' ]
+```
+
+Map siis muodostaa taulukon perusteella uuden taulukon, jonka jokainen alkio muodostetaan map:in parametrina olevan funktion avulla. Kuten tulemme pian näkemään, mapia käytetään Reactissa todella usein.
+
+### oliot
+
+Javasriptissa on muutama tapa määritellä olioita. Erittäin yleisesti käytetään [olioliteraaleja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#Object_literals), eli määritellään olio luettelemalla sen kentät (englanniksi property) aaltosulkeiden sisällä:
+
+```js
+const olio1 = {
+  nimi: 'Arto Hellas',
+  ika: 35,
+  koulutus: 'Filosofian tohtori'
+}
+
+const olio2 = {
+  nimi: 'Full Stact -websovelluskehitys',
+  taso: 'aineopinto',
+  laajuus: 5
+}
+
+const olio3 = {
+  nimi: {
+    etunimi: 'Jami',
+    sukunimi: 'Kousa'
+  },
+  arvosanat: [2, 3, 5, 3],
+  laitos: 'TKTL'
+}
+```
+
+Kentät voivat olla mielivaltaista javascriptin tyyppiä. Olioiden kenttiin viitataan pistenotaatiolla. 
+
+Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai kulmasulkeiden avulla:
+
+```js
+olio1.osoite = 'Tapiola'
+olio1['salainen numero'] = 12341
+```
+
+Jälkimäinen lisäysksistä on pakko tehdä kulmasulkeiden avulla, sillä pistenotaatiota käytettäessä 'salainen numero' ei kelpaa kentän nimeksi.
+
+Javascriptissä olioilla voi luonnollisesti olla myös metodeja. Palaamme aiheeseen funktioiden käsittelyn jälkeen.
+
+Olioita on myös mahdollista määritellä ns. konstruktorifunktioiden avulla, jolloin saadaan aikaan hieman monien ohjelmointikielten, esim. Javan luokkia (class) muistuttava mekansimi. Javascriptissä ei kuitenkaan ole luokkia samassa mielessä kuin olio-ohjelmointikieleissä. Kieleen on kuitenkin lisätty versiosta ES6 alkaen _luokkasyntaksi_, joka helpottaa tietyissä tilanteissa olio-ohjelmointikielimäisten luokkien esittämistä. Palaamme asiaan hetken kuluttua.
+
+Reactissa konstruktorifunktioihin perustuvalle olioiden määrittelyyn ei ole kovin usein tarvetta, joten sivuutamme sen ainakin toistaiseksi. 
+
+### funktiot
+
+Olemme jo tutustuneet ns. nuolifunktioiden määrittelyyn. Täydellinen tapa nuolifunktion määrittelyyn on seuraava
+
+```js
+const summa = (p1, p2) => {
+  console.log(p1)
+  console.log(p2)
+  return p1+p2
+}
+```
+
+ja funktiota kutsutaan kuten olettaa saattaa
+
+```js
+const vastaus = summa(1,5)
+console.log(vastaus)
+```
+
+Jos parameteja on vain yksi, voidaan sulut jättää määrittelystä pois:
+
+```js
+const nelio = p => {
+  console.log(p)
+  return p*p
+}
+```
+
+Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhemmin seuraavasti:
+
+```js
+const nelio = p => p*p
+```
+
+Tämä muoto on erityisen kätevä käsiteltäessä taulukkoja esim. map-metodin avulla:
+
+```js
+const t = [1, 2, 3]
+const tnelio = t.map(p => p*p)
+// tnelio on nyt [1, 2, 3]
+```
+
+Nuolifunktio on tullut javascriptiin vasta muutama vuosi sitten version [ES6](http://es6-features.org/) myötä. Tätä ennen ja paikoin nykyäänkin funktioden määrittely tapahtui avainsanan _function_ avulla. 
+
+Määrittelytapoja on kaksi, funktiolle voidaan antaa [function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function) tyyppisessä määrittelyssä _nimi_ jonka avulla funktioon voidaan viitata:
+
+```js
+function tulo(a, b) {
+  return a*b
+}
+
+const vastaus = tulo(2, 6)
+```
+
+Toinen tapa on tehdä määrittely [funktiolausekkeena]
+(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). Tällöin funtiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:
+
+```js
+const keskiarvo = function(a, b) {
+  return (a + b)/2
+}
+
+const vastaus = keskiarvo(2, 5)
+```
+
+### olioiden metodit ja this
+
+Kaikille kolmelle tavalle määritellä funktio on oma paikkansa. 
+
+Nuolifunktiot ja avainsanan _function_ avulla määritellyt funktiot kuitenkin poikkeavat radikaalisti siitä miten ne käyttytyvät _this_ avainsanan suhteen.
+
+Voimme liittää oliolle metodeja määrittelemällä niille kenttiä, jotka ovat funktioita:
+
+```js
+const arto = {
+  nimi: 'Arto Hellas',
+  ika: 35,
+  koulutus: 'Filosofian tohtori',
+  tervehdi: function () {
+    console.log('hello, my name is', this.nimi)
+  }
+}
+
+arto.tervehdi()  // tulostuu hello, my name is Arto Hellas
+```
+
+metodeja voidaan liittää olioille myös niiden luomisen jälkeen:
+
+```js
+const arto = {
+  nimi: 'Arto Hellas',
+  ika: 35,
+  koulutus: 'Filosofian tohtori',
+  tervehdi: function () {
+    console.log('hello, my name is', this.nimi)
+  }
+}
+
+arto.vanhene = function() {
+  this.ika += 1
+}
+
+console.log(arto.ika)  // tulostuu 35
+arto.vanhene()
+console.log(arto.ika)  // tulostuu 36
+```
+
+Muutetaan olioa hiukan
+
+```js
+const arto = {
+  nimi: 'Arto Hellas',
+  tervehdi: function () {
+    console.log('hello, my name is', this.nimi)
+  },
+  laskeSumma: function (a, b) {
+    console.log(a+b)
+  }
+}
+
+arto.laskeSumma(1, 4)   // tulostuu 5
+
+const viiteSummaan = arto.laskeSumma
+viiteSummaan(10, 15)   // tulostuu 25
+```
+
+Oliolla on nyt metodi, joka osaa laskea summan. Metodia voidaan kutsua normaaliin tapaan olion kautta <code>arto.laskeSumma(1, 4)</code> tai tallettamalla _metodiviite_ muuttujaan ja kutsumalla metodia muuttujan kautta <code>viiteSummaan(10, 15)</code>.
+
+Jos yritämme samaa metodille _tervehdi_, aiheutuu ongelmia:
+
+```js
+const arto = {
+  nimi: 'Arto Hellas',
+  tervehdi: function () {
+    console.log('hello, my name is', this.nimi)
+  },
+  laskeSumma: function (a, b) {
+    console.log(a+b)
+  }
+}
+
+arto.tervehdi()        // tulostuu hello, my name is Arto Hellas
+
+const viiteTervehdykseen = arto.tervehdi
+viiteTervehdykseen()   // tulostuu hello, my name is undefined
+```
+
+Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen _this_. Toisin kuin melkein kaikissa muissa kielissä [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this):n arvo määrittyy sen mukaan miten olioa on kutsuttu. Kutsuttaessa metodia viitteen kautta, _this_:in arvoksi tulee ns [globaali objekti](https://developer.mozilla.org/en-US/docs/Glossary/Global_object).
+
+Thisin menettäminen aiheuttaa Reactilla ja Nodella ohjelmoidessa monia potentiaalisia ongelmia. Eteen tulee erittäin usein tilanteita, missä Reactin/Noden (oikeammin ilmaistuna selaimen Javascript-moottorin) tulee kutsua joitan käyttäjän olioiden metodeja. Tälläinen tilanne tulee esim. jos pyytetään Artoa tervehtimään sekunnin kuluttua metodia [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) hyväksikäyttäen.
+
+```js
+const arto = {
+  nimi: 'Arto Hellas',
+  tervehdi: function () {
+    console.log('hello, my name is', this.nimi)
+  },
+}
+
+setTimeout(arto.tervehdi, 1000)
+```
+
+Javascriptissa this:in arvo siis määräytyy siitä miten metodia on kutsuttu. setTimeoutia käytettäessä metodia kutsuu Javascript-moottori ja this viittaa Timeout-olioon.
+
+On useita mekanismeja, joiden avulla alkuperäinen _this_ voidaan säilyttää, eräs näistä on [bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
+
+```js
+setTimeout(arto.tervehdi.bind(arto), 1000)
+```
+
+Komento <code>arto.tervehdi.bind(arto)</code> luo uuden funktion, missä se on sitonut _this_:in tarkottamaan Artoa riippumatta siitä missä metodia kutsutaan.
+
+[Nuolifunktioiden](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) avulla on mahdollista ratkaista eräitä thisiin liittyviä ongelmia. Olioiden metodeina niitä ei kuitenkaan kannata käyttää, sillä silloin _this_ ei toimi ollenkaan. Palaamme nuolifunktioiden this:in käyttäytymiseen myöhemmin.
+
+Jos haluat ymmärtää paremmin javascriptin _this_:in toimintaa, löytyy internetistä runsaasti materiaalia aiheesta. Esim. [egghead.io](https://egghead.io):n 20 minuutin screencastsarja [Understand JavaScript's this Keyword in Depth](https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth) on erittäin suositeltava!
+
+### ES6:n 
+
+- spread
+- 
+
+### luokat
+
+- class
+
+### js materiaalia
+
+https://egghead.io
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+https://github.com/getify/You-Dont-Know-JS
+
+### react dev tool
+
+### tilallinen komponentti
+
+### state
 

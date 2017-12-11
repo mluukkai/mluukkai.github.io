@@ -603,17 +603,602 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
 
 <p>Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi.</p>
 
-<p>Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerttu termi <a href="https://auth0.com/blog/how-to-manage-javascript-fatigue/">Javascript fatigue</a> eli Javascript-väsymys.</p>
+<p>Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerattu termi <a href="https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4">Javascript</a> <a href="https://auth0.com/blog/how-to-manage-javascript-fatigue/">fatigue</a> eli <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">Javascript</a>-väsymys.</p>
 
 <p>Jaavascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.</p>
 
-<h2 id="react">react</h2>
+<h2 id="react">React</h2>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">hello</span> <span class="o">=</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="nx">hello</span><span class="p">(</span><span class="s1">'World'</span><span class="p">)</span>
+<p>Alamme nyt tutustua kurssin ehkä tärkeimpään teemaan, <a href="https://reactjs.org/">React</a>-kirjastoon.</p>
+
+<p>Tedään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.</p>
+
+<p>Ehdottomasti helpoin tapa päästä alkuun on asentaa <a href="https://github.com/facebookincubator/create-react-app">create-react-app</a>.</p>
+
+<p>Luodaan sovellus nimeltään <em>viikko1</em> ja käynnistetään se:</p>
+
+<pre>
+$ create-react-app viikko1
+$ cd viikko1
+$ npm start
+</pre>
+
+<p>Chromen pitäisi aueta automaattisesti. Avaa konsoli <strong>välittömästi</strong>. Avaa myös tekstieditori siten, että näet koodin ja web-sivun samaan aikaan ruudulla:</p>
+
+<p><img src="http://localhost:4000/assets/1/26.png" alt="" /></p>
+
+<p>Sovelluksessa on hieman valmista koodia, mutta yksinkertaistetaan koodi siten, että tiedoston <em>index.js</em> sisällöksi tulee:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span>
+<span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s1">'react-dom'</span>
+
+<span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="nx">world</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
 </code></pre></div></div>
+
+<p>Voit poistaa tiedostot <em>App.css</em>, <em>App.test.js</em>, <em>logo.svg</em> ja <em>registerServiceWorkes.js</em>
+Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
+
+<h3 id="komponentti">komponentti</h3>
+
+<p>Tiedosto <em>index.js</em> määrittelee nyt React <a href="https://reactjs.org/docs/components-and-props.html">komponentin</a> nimeltään <em>App</em>.</p>
+
+<p>Komento</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Renderöi komponentin sisällön tiedoston <em>public/index.html</em> määrittelemään <em>div</em>-elementtiin, jonka <em>id:n</em> arvona on ‘root’</p>
+
+<p>Tiedosto <em>public/index.html</em> on oleellisesti ottaen tyhjä, voit kokeilla lisätä sinne HTML:ää. Reactilla ohjelmoitaessa yleensä kuitenkin kaikki renderöitävä sisältä määritellään reactin komponenttien avulla.</p>
+
+<p>Tarkastellaan vielä tarkemmin komponentin määrittelevää koodia:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Kuten arvata saattaa, komponentti renderöityy <em>div</em>-tagina, jonka sisällä on <em>p</em>-tagin sisällä oleva teksti <em>Hello world</em>.</p>
+
+<p>Teknisesti ottaen komponentti on määritelty Javascript-funktiona. Seuraava siis on funktio:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>joka sijoitetaan vakioarvoiseen muuttujaan <em>App</em></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">...</span>
+</code></pre></div></div>
+
+<p>Javascriptissa on muutama tapa määritellä funktioita. Käytämme nyt javascriptin hieman uudemman version <a href="http://es6-features.org/#Constants">EcmaScript 6:n</a> eli ES6:n <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">nuolifunktiota</a></p>
+
+<p>Koska funktio koostuu vain yhdestä lausekkeesta, on käytössämme lyhennysmerkintä, joka vastaa oikeasti seuraavaa koodia:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)}</span>
+</code></pre></div></div>
+
+<p>eli funktio palauttaa sisältämänsä lausekkeen arvon.</p>
+
+<p>Komponenttifunktio voi sisältää mitä tahansa javascript-koodia. Muuta komponenttisi seuraavaan muotoon ja katso mitä konsolissa tapahtuu:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Hello from komponentti'</span><span class="p">)</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)}</span>
+</code></pre></div></div>
+
+<p>Komponenttien sisällä on mahdollista renderöidä myös dynaamista sisältöä.</p>
+
+<p>Muuta komponentti muotoon:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+  <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">20</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world, it is <span class="si">{</span><span class="nx">now</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">a</span><span class="si">}</span> plus <span class="si">{</span><span class="nx">b</span><span class="si">}</span> is <span class="si">{</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)}</span>
+</code></pre></div></div>
+
+<p>Aaltosulkeiden sisällä oleva javascript-koodi evaluoidaan ja evaluoinnin tulos upotetaan määriteltyyn kohtaan komponentin HTML-koodia.</p>
+
+<h3 id="jsx">JSX</h3>
+
+<p>Näyttää siltä, että React-komponetti palauttaa HTML-koodia. Näin ei kuitenkaan ole. React-komponenttien ulkoasu kirjoitetaan yleensä <a href="https://reactjs.org/docs/introducing-jsx.html">JSX</a>:ää käyttäen. Vaikka JSX näyttää HTML:ltä, kyseessä on kuitenkin tapa kirjoittaa javascriptiä. React komponenttien palauttaman JSX:n javascriptiksi.</p>
+
+<p>Käännösvaiheen jälkeen ohjelmamme näyttää seuraavalta:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s1">'react-dom'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span>
+    <span class="s1">'div'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span>
+      <span class="s1">'p'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s1">'Hello world, it is '</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+    <span class="p">),</span>
+    <span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span>
+      <span class="s1">'p'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span><span class="s1">' plus '</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span> <span class="s1">' is '</span><span class="p">,</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+    <span class="p">)</span>
+  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">App</span><span class="p">,</span> <span class="kc">null</span><span class="p">),</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>Käännksen hoitaa <a href="https://babeljs.io/repl/">Babel</a>. Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.</p>
+
+<p>Reactia olisi myös mahdollista kirjoittaa “suoraan javascriptinä” käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee,</p>
+
+<p>Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden takaan. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.</p>
+
+<h2 id="monta-komponenttia">monta komponenttia</h2>
+
+<p>Muutetaan sovellusta seuraavasti (yläreunan importit jätetään nyt ja jatkossa pois):</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Hello</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>  
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(&lt;</span><span class="nc">App</span> <span class="p">/&gt;,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Olemme määritelleet uuden komponentin <em>Hello</em> jota käytetään komponentista <em>App</em>. Komponenttia voidaan luonnollisesti käyttää monta kertaa:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuulliseti ylläpidettävänä. Reactissa on filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.</p>
+
+<p>Jatkamme komponentteihin tutustumista.</p>
+
+<h2 id="props-tiedonvälitys-komponenttien-välillä">props: tiedonvälitys komponenttien välillä</h2>
+
+<p>Komponenteille on mahdollista välittää dataa <a href="https://reactjs.org/docs/components-and-props.html">propsien</a> avulla.</p>
+
+<p>Muutetaan komponenttia <em>Hello</em> seuraavasti</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Hello</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>  
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>komponentin määrittelevällä funktiolla on nyt parametri <em>props</em>. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri “propsit”, jota komponentin käyttäjä määrittelee.</p>
+
+<p>Propsit määritellään seuraavasti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Pekka'</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Propseja voi olla mielivaltainen lukumäärä ja niiden arvot voivat olla “kovakoodattuja” tai javascript-lausekkeiden tuloksia. Jos propsin arvo muodostetaan javascriptillä, tulee se olla aaltosulkeissa.</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Hello</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>  
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">nimi</span> <span class="o">=</span> <span class="s1">'Pekka'</span>
+  <span class="kd">const</span> <span class="nx">ika</span> <span class="o">=</span> <span class="mi">10</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span><span class="o">+</span><span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="nx">nimi</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="nx">ika</span><span class="si">}</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="muutama-huomio">Muutama huomio</h3>
+
+<p>React on konfiguroitu antamaan varsin hyviä virheilmoituksia. Kannattaa kuitenkin edetä ainakin alussa <strong>todella pienin askelin</strong> ja varmistaa, että jokainen muutos toimii halutulla tavalla.</p>
+
+<p>Konsolin tulee olla <strong>koko ajan auki</strong>. Jos selain ilmoittaa virheestä, ei kannata kirjoittaa sokeasti lisää koodia ja toivoa ihmettä tapahtuvaksi vaan tulee yrittää ymmärtää virheen syy ja esim. palata edelliseen toimivaan tilaan:</p>
+
+<p><img src="http://localhost:4000/assets/1/27.png" alt="" /></p>
+
+<p>Kannattaa myös muistaa, että React-koodissakin on mahdollista ja kannattavaa lisätä koodin sekaan sopivia <code>console.log()</code>-komentoja. Tulemme hieman myöhemmin tutustumaan muutamiin muihinkin tapoihin debugata reactia.</p>
+
+<p>React-komponenttien nimien tulee alkaa isolla kirjaimella. Jos yrität määritellä komponentin seuraavasti</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">footer</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>greeting app created by <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href=</span><span class="s1">'https://github.com/mluukkai'</span><span class="p">&gt;</span>mluukkai<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ja ottaa sen käyttöön</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span><span class="o">+</span><span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nt">footer</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän <em>div</em>-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.</p>
+
+<h3 id="javascriptiä">Javascriptiä</h3>
+
+<p>Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.</p>
+
+<p>Javascript on kehittynyt viime vuosina nopeaan tahtiin, ja käytämme kurssilla kielen uusimpien versioiden piirteitä, joista osa ei ole vielä olemassa kielen standardoiduissa versiossa. Javascript-standardin virallinen nimi on <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a>. Tämän hetken tuorein version on kesäkuussa 2017 julkaistu <a href="https://www.ecma-international.org/publications/standards/Ecma-262.htm">ES8</a>, toiselta nimeltään ECMAScript 2017.</p>
+
+<p>Selaimet eivät vielä osaa kaikkia Javascriptin uusimpien versioiden ominaisuuksia. Tämän takia selaimessa suoritetaan useimmiten koodia joka on käännetty tai englanniksi <em>transpiled</em> uudemmasta javascriptin versiosta johonkin vanhempaan, paremmin tuettuun versioon.</p>
+
+<p>Tällä hetkellä johtava tapa tehdä transpilointi on <a href="https://babeljs.io/">Babel</a>. Create-react-app:in avulla luodoissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen traspilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.</p>
+
+<p><a href="https://nodejs.org/en/">NodeJS</a> on melkein missä vaan, mm. palvelimilla toimiva, Googlen <a href="https://developers.google.com/v8/">chrome V8</a>-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio <em>v8.6.0</em>. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.</p>
+
+<p>Koodi kirjoitetaan _.js-_päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code></p>
+
+<p>Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusmekanismeiltaan kielet kuitenkin poikkeavat radikaalisti. Java-taustalta tultaessa Javascriptin käyttäytyminen saattaa aiheuttaa hämmennystä, varsinkin jos kielen piirteistä ei viitsitä ottaa selvää.</p>
+
+<p>Tietyissä piireissä on myös ollut suosittua yrittää “simuloida” Javascriptilla eräitä Javan piirteitä ja ohjelmointitapoja. En suosittele.</p>
+
+<h3 id="muuttujat">muuttujat</h3>
+
+<p>Javascriptissä on kolme tapaa määritellä muttujia:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>  <span class="c1">// tulostuu 1, 5</span>
+<span class="nx">y</span> <span class="o">+=</span> <span class="mi">10</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>  <span class="c1">// tulostuu 1, 15</span>
+<span class="nx">y</span> <span class="o">=</span> <span class="s1">'teksti'</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>  <span class="c1">// tulostuu 1, teksti</span>
+<span class="nx">x</span> <span class="o">=</span> <span class="mi">4</span>              <span class="c1">// aiheuttaa virheen</span>
+</code></pre></div></div>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a> ei oikeastaan määrittele muuttujaa vaan <em>vakion</em>, jonka arvoa ei voi enää muuttaa. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">let</a> taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var">var</a> avulla. Älä käytä varia jos ei tiedä mitä se tekee, käytä aina const:ia tai let:iä!</p>
+
+<p>Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, <em>y</em> tallettaa aluksi luvun ja lopulta merkkijonon.</p>
+
+<h3 id="taulukot">taulukot</h3>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Taulukko</a>  ja muutama esimerkki sen käytöstä</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>  <span class="c1">// tulostuu 4</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>      <span class="c1">// tuostuu -1</span>
+
+<span class="nx">t</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="p">(</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">luku</span><span class="p">)</span>    <span class="c1">// tulostuu 1, -1, 3 ja 5 omille riveilleen</span>
+<span class="p">})</span>
+
+<span class="nx">t</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>         <span class="c1">// tulostuu [ 1, -1, 3, 5, &lt;2 empty items&gt;, 99 ]</span>
+</code></pre></div></div>
+
+<p>Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty _const_iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.</p>
+
+<p>Eräs tapa käydä taulukon alkiot läpi on esimerkissä käytetty <em>forEach</em>, joka saa parametrikseen nuolisyntaksilla määritellyn <em>funktion</em></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">luku</span><span class="p">)</span>    <span class="c1">// tulostuu 1, -1, 3 ja 5 omille riveilleen</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>forEach kutsuu funktiota jokaiselle taulukon alkiolle antaen taulukon alkion aina parametrina. forEachin parametrina oleva funktio voi saada myös <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">muita parametreja</a>.</p>
+
+<p>Taulukoille on määritelty runsaasti hyödyllisiä operaatioita, tutustumme niihin tarkemmin laskareissa. Katsotaan kuiten jo nyt pieni esimerkki operaation <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map">map</a> käytöstä.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="kd">const</span> <span class="nx">m1</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">luku</span><span class="o">*</span><span class="mi">2</span> <span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">m1</span><span class="p">)</span> <span class="c1">// tulostuu 2, 4, 6, 8</span>
+
+<span class="kd">const</span> <span class="nx">m2</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s1">'&lt;li&gt;'</span><span class="o">+</span><span class="nx">luku</span><span class="o">+</span><span class="s1">'&lt;/li&gt;'</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">m2</span><span class="p">)</span> <span class="c1">// tulostuu [ '&lt;li&gt;1&lt;/li&gt;', '&lt;li&gt;2&lt;/li&gt;', '&lt;li&gt;3&lt;/li&gt;', '&lt;li&gt;4&lt;/li&gt;' ]</span>
+</code></pre></div></div>
+
+<p>Map siis muodostaa taulukon perusteella uuden taulukon, jonka jokainen alkio muodostetaan map:in parametrina olevan funktion avulla. Kuten tulemme pian näkemään, mapia käytetään Reactissa todella usein.</p>
+
+<h3 id="oliot">oliot</h3>
+
+<p>Javasriptissa on muutama tapa määritellä olioita. Erittäin yleisesti käytetään <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#Object_literals">olioliteraaleja</a>, eli määritellään olio luettelemalla sen kentät (englanniksi property) aaltosulkeiden sisällä:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">olio1</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">ika</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+  <span class="na">koulutus</span><span class="p">:</span> <span class="s1">'Filosofian tohtori'</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">olio2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Full Stact -websovelluskehitys'</span><span class="p">,</span>
+  <span class="na">taso</span><span class="p">:</span> <span class="s1">'aineopinto'</span><span class="p">,</span>
+  <span class="na">laajuus</span><span class="p">:</span> <span class="mi">5</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">olio3</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">etunimi</span><span class="p">:</span> <span class="s1">'Jami'</span><span class="p">,</span>
+    <span class="na">sukunimi</span><span class="p">:</span> <span class="s1">'Kousa'</span>
+  <span class="p">},</span>
+  <span class="na">arvosanat</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+  <span class="na">laitos</span><span class="p">:</span> <span class="s1">'TKTL'</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Kentät voivat olla mielivaltaista javascriptin tyyppiä. Olioiden kenttiin viitataan pistenotaatiolla.</p>
+
+<p>Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai kulmasulkeiden avulla:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">olio1</span><span class="p">.</span><span class="nx">osoite</span> <span class="o">=</span> <span class="s1">'Tapiola'</span>
+<span class="nx">olio1</span><span class="p">[</span><span class="s1">'salainen numero'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12341</span>
+</code></pre></div></div>
+
+<p>Jälkimäinen lisäysksistä on pakko tehdä kulmasulkeiden avulla, sillä pistenotaatiota käytettäessä ‘salainen numero’ ei kelpaa kentän nimeksi.</p>
+
+<p>Javascriptissä olioilla voi luonnollisesti olla myös metodeja. Palaamme aiheeseen funktioiden käsittelyn jälkeen.</p>
+
+<p>Olioita on myös mahdollista määritellä ns. konstruktorifunktioiden avulla, jolloin saadaan aikaan hieman monien ohjelmointikielten, esim. Javan luokkia (class) muistuttava mekansimi. Javascriptissä ei kuitenkaan ole luokkia samassa mielessä kuin olio-ohjelmointikieleissä. Kieleen on kuitenkin lisätty versiosta ES6 alkaen <em>luokkasyntaksi</em>, joka helpottaa tietyissä tilanteissa olio-ohjelmointikielimäisten luokkien esittämistä. Palaamme asiaan hetken kuluttua.</p>
+
+<p>Reactissa konstruktorifunktioihin perustuvalle olioiden määrittelyyn ei ole kovin usein tarvetta, joten sivuutamme sen ainakin toistaiseksi.</p>
+
+<h3 id="funktiot">funktiot</h3>
+
+<p>Olemme jo tutustuneet ns. nuolifunktioiden määrittelyyn. Täydellinen tapa nuolifunktion määrittelyyn on seuraava</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">summa</span> <span class="o">=</span> <span class="p">(</span><span class="nx">p1</span><span class="p">,</span> <span class="nx">p2</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p1</span><span class="p">)</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p2</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">p1</span><span class="o">+</span><span class="nx">p2</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ja funktiota kutsutaan kuten olettaa saattaa</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">vastaus</span> <span class="o">=</span> <span class="nx">summa</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">vastaus</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Jos parameteja on vain yksi, voidaan sulut jättää määrittelystä pois:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nelio</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhemmin seuraavasti:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nelio</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span>
+</code></pre></div></div>
+
+<p>Tämä muoto on erityisen kätevä käsiteltäessä taulukkoja esim. map-metodin avulla:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="kd">const</span> <span class="nx">tnelio</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span><span class="p">)</span>
+<span class="c1">// tnelio on nyt [1, 2, 3]</span>
+</code></pre></div></div>
+
+<p>Nuolifunktio on tullut javascriptiin vasta muutama vuosi sitten version <a href="http://es6-features.org/">ES6</a> myötä. Tätä ennen ja paikoin nykyäänkin funktioden määrittely tapahtui avainsanan <em>function</em> avulla.</p>
+
+<p>Määrittelytapoja on kaksi, funktiolle voidaan antaa <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function">function declaration</a> tyyppisessä määrittelyssä <em>nimi</em> jonka avulla funktioon voidaan viitata:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">tulo</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">a</span><span class="o">*</span><span class="nx">b</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">vastaus</span> <span class="o">=</span> <span class="nx">tulo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Toinen tapa on tehdä määrittely [funktiolausekkeena]
+(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). Tällöin funtiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keskiarvo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">vastaus</span> <span class="o">=</span> <span class="nx">keskiarvo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="olioiden-metodit-ja-this">olioiden metodit ja this</h3>
+
+<p>Kaikille kolmelle tavalle määritellä funktio on oma paikkansa.</p>
+
+<p>Nuolifunktiot ja avainsanan <em>function</em> avulla määritellyt funktiot kuitenkin poikkeavat radikaalisti siitä miten ne käyttytyvät <em>this</em> avainsanan suhteen.</p>
+
+<p>Voimme liittää oliolle metodeja määrittelemällä niille kenttiä, jotka ovat funktioita:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">ika</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+  <span class="na">koulutus</span><span class="p">:</span> <span class="s1">'Filosofian tohtori'</span><span class="p">,</span>
+  <span class="na">tervehdi</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">()</span>  <span class="c1">// tulostuu hello, my name is Arto Hellas</span>
+</code></pre></div></div>
+
+<p>metodeja voidaan liittää olioille myös niiden luomisen jälkeen:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">ika</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+  <span class="na">koulutus</span><span class="p">:</span> <span class="s1">'Filosofian tohtori'</span><span class="p">,</span>
+  <span class="na">tervehdi</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">arto</span><span class="p">.</span><span class="nx">vanhene</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">ika</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arto</span><span class="p">.</span><span class="nx">ika</span><span class="p">)</span>  <span class="c1">// tulostuu 35</span>
+<span class="nx">arto</span><span class="p">.</span><span class="nx">vanhene</span><span class="p">()</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">arto</span><span class="p">.</span><span class="nx">ika</span><span class="p">)</span>  <span class="c1">// tulostuu 36</span>
+</code></pre></div></div>
+
+<p>Muutetaan olioa hiukan</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">tervehdi</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
+  <span class="p">},</span>
+  <span class="na">laskeSumma</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">arto</span><span class="p">.</span><span class="nx">laskeSumma</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>   <span class="c1">// tulostuu 5</span>
+
+<span class="kd">const</span> <span class="nx">viiteSummaan</span> <span class="o">=</span> <span class="nx">arto</span><span class="p">.</span><span class="nx">laskeSumma</span>
+<span class="nx">viiteSummaan</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>   <span class="c1">// tulostuu 25</span>
+</code></pre></div></div>
+
+<p>Oliolla on nyt metodi, joka osaa laskea summan. Metodia voidaan kutsua normaaliin tapaan olion kautta <code>arto.laskeSumma(1, 4)</code> tai tallettamalla <em>metodiviite</em> muuttujaan ja kutsumalla metodia muuttujan kautta <code>viiteSummaan(10, 15)</code>.</p>
+
+<p>Jos yritämme samaa metodille <em>tervehdi</em>, aiheutuu ongelmia:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">tervehdi</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
+  <span class="p">},</span>
+  <span class="na">laskeSumma</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">()</span>        <span class="c1">// tulostuu hello, my name is Arto Hellas</span>
+
+<span class="kd">const</span> <span class="nx">viiteTervehdykseen</span> <span class="o">=</span> <span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span>
+<span class="nx">viiteTervehdykseen</span><span class="p">()</span>   <span class="c1">// tulostuu hello, my name is undefined</span>
+</code></pre></div></div>
+
+<p>Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen <em>this</em>. Toisin kuin melkein kaikissa muissa kielissä <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a>:n arvo määrittyy sen mukaan miten olioa on kutsuttu. Kutsuttaessa metodia viitteen kautta, <em>this</em>:in arvoksi tulee ns <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object">globaali objekti</a>.</p>
+
+<p>Thisin menettäminen aiheuttaa Reactilla ja Nodella ohjelmoidessa monia potentiaalisia ongelmia. Eteen tulee erittäin usein tilanteita, missä Reactin/Noden (oikeammin ilmaistuna selaimen Javascript-moottorin) tulee kutsua joitan käyttäjän olioiden metodeja. Tälläinen tilanne tulee esim. jos pyytetään Artoa tervehtimään sekunnin kuluttua metodia <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout">setTimeout</a> hyväksikäyttäen.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">nimi</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">tervehdi</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
+  <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Javascriptissa this:in arvo siis määräytyy siitä miten metodia on kutsuttu. setTimeoutia käytettäessä metodia kutsuu Javascript-moottori ja this viittaa Timeout-olioon.</p>
+
+<p>On useita mekanismeja, joiden avulla alkuperäinen <em>this</em> voidaan säilyttää, eräs näistä on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">arto</span><span class="p">),</span> <span class="mi">1000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Komento <code>arto.tervehdi.bind(arto)</code> luo uuden funktion, missä se on sitonut <em>this</em>:in tarkottamaan Artoa riippumatta siitä missä metodia kutsutaan.</p>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Nuolifunktioiden</a> avulla on mahdollista ratkaista eräitä thisiin liittyviä ongelmia. Olioiden metodeina niitä ei kuitenkaan kannata käyttää, sillä silloin <em>this</em> ei toimi ollenkaan. Palaamme nuolifunktioiden this:in käyttäytymiseen myöhemmin.</p>
+
+<p>Jos haluat ymmärtää paremmin javascriptin <em>this</em>:in toimintaa, löytyy internetistä runsaasti materiaalia aiheesta. Esim. <a href="https://egghead.io">egghead.io</a>:n 20 minuutin screencastsarja <a href="https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth">Understand JavaScript’s this Keyword in Depth</a> on erittäin suositeltava!</p>
+
+<h3 id="es6n">ES6:n</h3>
+
+<ul>
+  <li>spread</li>
+  <li></li>
+</ul>
+
+<h3 id="luokat">luokat</h3>
+
+<ul>
+  <li>class</li>
+</ul>
+
+<h3 id="js-materiaalia">js materiaalia</h3>
+
+<p>https://egghead.io</p>
+
+<p>https://developer.mozilla.org/en-US/docs/Web/JavaScript</p>
+
+<p>https://github.com/getify/You-Dont-Know-JS</p>
+
+<h3 id="react-dev-tool">react dev tool</h3>
+
+<h3 id="tilallinen-komponentti">tilallinen komponentti</h3>
+
+<h3 id="state">state</h3>
 
 
   </div>
