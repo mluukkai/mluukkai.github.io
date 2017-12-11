@@ -16,7 +16,10 @@ Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-
 
 ## web-sovelluksen toimintaperiaatteita
 
-Tällä kurssilla suositellaan [Chrome](https://www.google.fi/chrome/browser/desktop/index.html)-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
+Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
+
+Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikkein suositeltavinta on Chromen ns.
+[canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen. 
 
 Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
 
@@ -100,7 +103,7 @@ Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisält�
 
 Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta  HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä, kuten [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä. Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelien toteuttamiseen. 
 
-### selainpuolen logiikka
+### selaimessa suoritettava sovelluslogiikka
 
 Pidä konsoli edelleen auki. Tyhjennä konsoloin näkymä painamalla vasemmalla olevaa &empty;-symbolia. 
 
@@ -286,7 +289,7 @@ html
 
 Sama puumaisuus on nähtävissä konsolin välilehdellä _Elements_
 
-![]({{ "/assets/1/12.png" | absolute_url }})
+![]({{ "/assets/1/13.png" | absolute_url }})
 
 Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena. 
 
@@ -296,7 +299,7 @@ Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia l
 
 HTML-dokumentin
 
-![]({{ "/assets/1/13.png" | absolute_url }})
+![]({{ "/assets/1/13b.png" | absolute_url }})
 
 DOM:a havainnollistava kuva Wikipedian sivulta:
 
@@ -310,7 +313,7 @@ HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään _do
 
 Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle. 
 
-Lisätään sivulle uusi muistiinpano suoraan konsolista.
+Lisätään nyt sivulle uusi muistiinpano suoraan konsolista.
 
 Haetaan ensin sivulta muistiinpanojen lista, eli sivun ul-elementeistä ensimmäinen:
 ```js
@@ -380,7 +383,65 @@ Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudel
 
 ### lomake ja HTTP POST
 
+Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli [formin](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form). 
+
+![]({{ "/assets/1/18.png" | absolute_url }})
+
+Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimele. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
+
+![]({{ "/assets/1/19.png" | absolute_url }})
+
+Lomakkeen lähettäminen aiheuttaa yllättäen yhteensä viisi HTTP-pyyntöä. Näistä ensimmäinen vastaa lomakkeen lähetystapahtumaa. Tarkennetaan siihen:
+
+![]({{ "/assets/1/20.png" | absolute_url }})
+
+Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen _new_note_. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. uudelleenohjauspyyntö, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin _Location_ kertomaan paikkaan, eli osoitteeseen _notes_. 
+
+Selain siis lataa uudelleen muistiinpanojen sivun. Sivunlataus saa aikaan myös kolme muuta HTTP-pyyntöä: tyylitiedostojen, javascriptin ja muistiinpanojen raakadatan lataamisen.
+
+Network-välilehti näyttää myös lomakkeen mukana lähetetyn datan:
+
+![]({{ "/assets/1/21.png" | absolute_url }})
+
+Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva [bugi](https://bugs.chromium.org/p/chromium/issues/detail?id=766715). Bugi on korjattu Chromen [canary-versiossa](https://www.google.fi/chrome/browser/canary.html) ja tulee korjaantumaan aikanaan myös "normaaliin" versioon. 
+
+Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_note_ form-tagiin määriteltyjen attribuuttien _action_ ja _method_ ansiosta:
+
+![]({{ "/assets/1/22.png" | absolute_url }})
+
+POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
+
+```js
+app.post('/new_note', (req, res) => {
+  notes.push( { 
+    content: req.body.note,
+    date: new Date()
+  })
+
+  return res.redirect('/notes')
+})
+```
+
+POST-pyyntöihin liitettävä data lähetetään pyynnön mukana "runkona" eli [bodynä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST). Palvelin saa POST-pyynnön datan pyytämällä sitä pyyntöä vastaavan olion _req_ kentästä _req.body_. 
+
+Tekstikenttään kirjoitettu data on avaimen _notes_ alla, eli palvelin viittaa siihen _req.body.note_.
+
+Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon:
+
+```js
+  notes.push( { 
+    content: req.body.note,
+    date: new Date()
+  })
+```  
+
+Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _content_ ja luomishetken kertova _data_.
+
+Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoavat aina Herokun uudelleenkäynnistäessä palvelun.
+
 ## single page app
+
+## full stack
 
 ## react
 

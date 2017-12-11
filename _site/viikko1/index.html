@@ -91,7 +91,10 @@
 
 <h2 id="web-sovelluksen-toimintaperiaatteita">web-sovelluksen toimintaperiaatteita</h2>
 
-<p>Tällä kurssilla suositellaan <a href="https://www.google.fi/chrome/browser/desktop/index.html">Chrome</a>-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.</p>
+<p>Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.</p>
+
+<p>Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikkein suositeltavinta on Chromen ns.
+<a href="https://www.google.fi/chrome/browser/canary.html">canary-version</a> käyttäminen.</p>
 
 <p>Avataan selaimella osoitteessa <a href="https://fullstack-exampleapp.herokuapp.com/">https://fullstack-exampleapp.herokuapp.com/</a> oleva esimerkkisovellus.</p>
 
@@ -174,7 +177,7 @@ Pidä selaimen developer-konsoli koko ajan auki
 
 <p>Perinteisissä websovelluksissa selain on “tyhmä”, se ainoastaan pyytää palvelimelta  HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin <a href="https://courses.helsinki.fi/fi/tkt21007/119558639">Web-palvelinohjelmointi, Java</a> tapaan Springillä, kuten <a href="http://tsoha.github.io/#/johdanto#top">Tietokantasovelluksessa</a> PHP:llä. Esimerkissä on käytetty Node.js:n <a href="https://expressjs.com/">Express</a>-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelien toteuttamiseen.</p>
 
-<h3 id="selainpuolen-logiikka">selainpuolen logiikka</h3>
+<h3 id="selaimessa-suoritettava-sovelluslogiikka">selaimessa suoritettava sovelluslogiikka</h3>
 
 <p>Pidä konsoli edelleen auki. Tyhjennä konsoloin näkymä painamalla vasemmalla olevaa ∅-symbolia.</p>
 
@@ -350,7 +353,7 @@ html
 
 <p>Sama puumaisuus on nähtävissä konsolin välilehdellä <em>Elements</em></p>
 
-<p><img src="http://localhost:4000/assets/1/12.png" alt="" /></p>
+<p><img src="http://localhost:4000/assets/1/13.png" alt="" /></p>
 
 <p>Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena.</p>
 
@@ -360,7 +363,7 @@ html
 
 <p>HTML-dokumentin</p>
 
-<p><img src="http://localhost:4000/assets/1/13.png" alt="" /></p>
+<p><img src="http://localhost:4000/assets/1/13b.png" alt="" /></p>
 
 <p>DOM:a havainnollistava kuva Wikipedian sivulta:</p>
 
@@ -374,7 +377,7 @@ html
 
 <p>Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle.</p>
 
-<p>Lisätään sivulle uusi muistiinpano suoraan konsolista.</p>
+<p>Lisätään nyt sivulle uusi muistiinpano suoraan konsolista.</p>
 
 <p>Haetaan ensin sivulta muistiinpanojen lista, eli sivun ul-elementeistä ensimmäinen:</p>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">lista</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'ul'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -438,7 +441,63 @@ html
 
 <h3 id="lomake-ja-http-post">lomake ja HTTP POST</h3>
 
+<p>Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form">formin</a>.</p>
+
+<p><img src="http://localhost:4000/assets/1/18.png" alt="" /></p>
+
+<p>Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimele. Avataan <em>Network</em>-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:</p>
+
+<p><img src="http://localhost:4000/assets/1/19.png" alt="" /></p>
+
+<p>Lomakkeen lähettäminen aiheuttaa yllättäen yhteensä viisi HTTP-pyyntöä. Näistä ensimmäinen vastaa lomakkeen lähetystapahtumaa. Tarkennetaan siihen:</p>
+
+<p><img src="http://localhost:4000/assets/1/20.png" alt="" /></p>
+
+<p>Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen <em>new_note</em>. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. uudelleenohjauspyyntö, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin <em>Location</em> kertomaan paikkaan, eli osoitteeseen <em>notes</em>.</p>
+
+<p>Selain siis lataa uudelleen muistiinpanojen sivun. Sivunlataus saa aikaan myös kolme muuta HTTP-pyyntöä: tyylitiedostojen, javascriptin ja muistiinpanojen raakadatan lataamisen.</p>
+
+<p>Network-välilehti näyttää myös lomakkeen mukana lähetetyn datan:</p>
+
+<p><img src="http://localhost:4000/assets/1/21.png" alt="" /></p>
+
+<p>Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=766715">bugi</a>. Bugi on korjattu Chromen <a href="https://www.google.fi/chrome/browser/canary.html">canary-versiossa</a> ja tulee korjaantumaan aikanaan myös “normaaliin” versioon.</p>
+
+<p>Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen <em>new_note</em> form-tagiin määriteltyjen attribuuttien <em>action</em> ja <em>method</em> ansiosta:</p>
+
+<p><img src="http://localhost:4000/assets/1/22.png" alt="" /></p>
+
+<p>POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/new_note'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="p">{</span> 
+    <span class="na">content</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">note</span><span class="p">,</span>
+    <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+  <span class="p">})</span>
+
+  <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">'/notes'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>POST-pyyntöihin liitettävä data lähetetään pyynnön mukana “runkona” eli <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST">bodynä</a>. Palvelin saa POST-pyynnön datan pyytämällä sitä pyyntöä vastaavan olion <em>req</em> kentästä <em>req.body</em>.</p>
+
+<p>Tekstikenttään kirjoitettu data on avaimen <em>notes</em> alla, eli palvelin viittaa siihen <em>req.body.note</em>.</p>
+
+<p>Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="p">{</span> 
+    <span class="na">content</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">note</span><span class="p">,</span>
+    <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+  <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava <em>content</em> ja luomishetken kertova <em>data</em>.</p>
+
+<p>Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoavat aina Herokun uudelleenkäynnistäessä palvelun.</p>
+
 <h2 id="single-page-app">single page app</h2>
+
+<h2 id="full-stack">full stack</h2>
 
 <h2 id="react">react</h2>
 
