@@ -887,7 +887,9 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän <em>div</em>-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.</p>
 
-<h3 id="javascriptiä">Javascriptiä</h3>
+<h3 id="react-tehtävät-osa-1">react-tehtävät, osa 1</h3>
+
+<h2 id="javascriptiä">Javascriptiä</h2>
 
 <p>Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.</p>
 
@@ -1173,33 +1175,56 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>Jos haluat ymmärtää paremmin javascriptin <em>this</em>:in toimintaa, löytyy internetistä runsaasti materiaalia aiheesta. Esim. <a href="https://egghead.io">egghead.io</a>:n 20 minuutin screencastsarja <a href="https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth">Understand JavaScript’s this Keyword in Depth</a> on erittäin suositeltava!</p>
 
-<h3 id="es6n">ES6:n</h3>
-
-<ul>
-  <li>spread</li>
-  <li></li>
-</ul>
-
 <h3 id="luokat">luokat</h3>
 
-<ul>
-  <li>class</li>
-</ul>
+<p>Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">luokkien</a> “simuloinnin”. Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan <em>prototyyppiperintämekanismiin</em>.</p>
 
-<h3 id="js-materiaalia">js materiaalia</h3>
+<p>Tutustumme kuitenkin pikaisesti ES6:n myltä javascriptiin tulleeseen <em>luokkasyntaksiin</em>, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.</p>
 
-<p>https://egghead.io</p>
+<p>Seuraavassa on määritelyt “luokka” Henkilö ja sille kaksi Henkilö-olioa:</p>
 
-<p>https://developer.mozilla.org/en-US/docs/Web/JavaScript</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Henkilo</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">nimi</span><span class="p">,</span> <span class="nx">ika</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span> <span class="o">=</span> <span class="nx">nimi</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">ika</span> <span class="o">=</span> <span class="nx">ika</span>
+  <span class="p">}</span>
+  <span class="nx">tervehdi</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>  
+  <span class="p">}</span>
+<span class="p">}</span>
 
-<p>https://github.com/getify/You-Dont-Know-JS</p>
+<span class="kd">const</span> <span class="nx">arto</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Henkilo</span><span class="p">(</span><span class="s1">'Arto Hellas'</span><span class="p">,</span> <span class="mi">35</span><span class="p">)</span>
+<span class="nx">arto</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">()</span>
 
-<h3 id="react-dev-tool">react dev tool</h3>
+<span class="kd">const</span> <span class="nx">jami</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Henkilo</span><span class="p">(</span><span class="s1">'Jami Kousa'</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+<span class="nx">jami</span><span class="p">.</span><span class="nx">tervehdi</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Syntaksin osalta luokat ja niistä luodut oliot muistuttavat erittäin paljon esim. Javan olioita. Käyttäytymiseltäänkin ne ovat aika lähellä Javan olioita. Perimmiltään kyseessä on kuitenkin edelleen Javascriptin <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance">prototyyppiperintään</a> perustuvista olioista. Molempien olioiden todellinen tyyppi on <em>Object</em> sillä javascriptissä ei perimmiltään ole muita tyyppejä kuin kuin <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures">Boolean, Null, Undefined, Number, String, Symbol ja Object</a></p>
+
+<p>Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. <a href="https://github.com/joshburgess/not-awesome-es6-classes">Not Awesome: ES6 Classes</a>  tai <a href="https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65">Is “Class” In ES6 The New “Bad” Part?</a></p>
+
+<p>ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkoiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.</p>
+
+<h3 id="javascript-materiaalia">Javascript-materiaalia</h3>
+
+<p>Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Mozillan javascript -materiaaliin</a></p>
+
+<p>Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja <a href="https://github.com/getify/You-Dont-Know-JS">You-Dont-Know-JS</a></p>
+
+<p><a href="https://egghead.io">egghead.io</a>:lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.</p>
+
+<h3 id="tehtäviä-javascriptistä">tehtäviä javascriptistä</h3>
+
+<h2 id="paluu-reactin-äärelle">paluu Reactin äärelle</h2>
 
 <h3 id="tilallinen-komponentti">tilallinen komponentti</h3>
 
 <h3 id="state">state</h3>
 
+<h3 id="react-dev-tool">react dev tool</h3>
+
+<h3 id="react-tehtävät-osa-2">react-tehtävät, osa 2</h3>
 
   </div>
 

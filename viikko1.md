@@ -850,7 +850,9 @@ const App = () => {
 
 sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän _div_-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.
 
-### Javascriptiä
+### react-tehtävät, osa 1
+
+## Javascriptiä
 
 Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.
 
@@ -1155,26 +1157,54 @@ Komento <code>arto.tervehdi.bind(arto)</code> luo uuden funktion, missä se on s
 
 Jos haluat ymmärtää paremmin javascriptin _this_:in toimintaa, löytyy internetistä runsaasti materiaalia aiheesta. Esim. [egghead.io](https://egghead.io):n 20 minuutin screencastsarja [Understand JavaScript's this Keyword in Depth](https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth) on erittäin suositeltava!
 
-### ES6:n 
-
-- spread
-- 
-
 ### luokat
 
-- class
+Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin [luokkien](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) "simuloinnin". Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan _prototyyppiperintämekanismiin_. 
 
-### js materiaalia
+Tutustumme kuitenkin pikaisesti ES6:n myltä javascriptiin tulleeseen _luokkasyntaksiin_, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.
 
-https://egghead.io
+Seuraavassa on määritelyt "luokka" Henkilö ja sille kaksi Henkilö-olioa:
 
-https://developer.mozilla.org/en-US/docs/Web/JavaScript
+```js
+class Henkilo {
+  constructor(nimi, ika) {
+    this.nimi = nimi
+    this.ika = ika
+  }
+  tervehdi() {
+    console.log('hello, my name is', this.nimi)  
+  }
+}
 
-https://github.com/getify/You-Dont-Know-JS
+const arto = new Henkilo('Arto Hellas', 35)
+arto.tervehdi()
 
-### react dev tool
+const jami = new Henkilo('Jami Kousa', 21)
+jami.tervehdi()
+```
+
+Syntaksin osalta luokat ja niistä luodut oliot muistuttavat erittäin paljon esim. Javan olioita. Käyttäytymiseltäänkin ne ovat aika lähellä Javan olioita. Perimmiltään kyseessä on kuitenkin edelleen Javascriptin [prototyyppiperintään](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance) perustuvista olioista. Molempien olioiden todellinen tyyppi on _Object_ sillä javascriptissä ei perimmiltään ole muita tyyppejä kuin kuin [Boolean, Null, Undefined, Number, String, Symbol ja Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures)
+
+Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. [Not Awesome: ES6 Classes](https://github.com/joshburgess/not-awesome-es6-classes)  tai [Is “Class” In ES6 The New “Bad” Part?](https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65)
+
+ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkoiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.
+
+### Javascript-materiaalia
+
+Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  [Mozillan javascript -materiaaliin](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja [You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
+
+[egghead.io](https://egghead.io):lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.
+
+### tehtäviä javascriptistä
+
+## paluu Reactin äärelle
 
 ### tilallinen komponentti
 
 ### state
 
+### react dev tool
+
+### react-tehtävät, osa 2
