@@ -472,7 +472,7 @@ Pyyntö on tyypiltään POST ja se sisältää JSON-muodossa olevan uuden muisti
 
 Pyyntöön liitetty headeri _Content-Type_ kertoo palvelimelle, että pyynnön mukana tuleva data on JSON-muotoista:
 
-![]({{ "/assets/1/24.png" | absolute_url }})
+![]({{ "/assets/1/25.png" | absolute_url }})
 
 Ilman headeria, palvelin ei osaisi parsia pyynnön mukana tulevaa dataa oiken.
 
