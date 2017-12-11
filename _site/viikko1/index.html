@@ -552,18 +552,14 @@ html
 </code></pre></div></div>
 
 <p>Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake “submitoidaan”, eli lähetetään. Tapahtumankäsittelijä 
-kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan.</p>
+kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme spa-sovelluksissa halua tapahtuvatn.</p>
 
-<p>Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.</p>
+<p>Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle komennolla <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.</p>
 
 <p>Palvelimelle muistiinpanon lähettävä koodi seuraavassa:</p>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">sendToServer</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">note</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">xhttpForPost</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">()</span>
-  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">201</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  <span class="c1">// ...</span>
 
   <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s1">'/new_note_spa'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
   <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">"Content-type"</span><span class="p">,</span> <span class="s2">"application/json"</span><span class="p">)</span>
@@ -571,11 +567,45 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritellään headerin <em>Content-type</em> avulla lähetettävän datan tyyppi, ja lähetetään data JSON-merkkijonona.</p>
+<p>Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritellään headerin <em>Content-type</em> avulla lähetettävän datan tyypiksi JSON, ja lähetetään data JSON-merkkijonona.</p>
 
 <p>Sovelluksen koodi on nähtävissä osoitteessa <a href="https://github.com/mluukkai/example_app">https://github.com/mluukkai/example_app</a>. Kannattaa huomata, että sovellus on tarkoitettu ainoastaan kurssin käsitteistöä demonstroivaksi esimerkiksi, koodi on osin tyyliltään huonoa ja siitä ei tulee ottaa mallia omia sovelluksia tehdessä.</p>
 
-<h2 id="kirjastot-sovelluskehykset-ja-full-stack">kirjastot, sovelluskehykset ja full stack</h2>
+<h2 id="kirjastot">kirjastot</h2>
+
+<p>Kurssin esimerkkisovellus on tehty ns. <a href="https://medium.freecodecamp.org/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34">vanilla Javascriptillä</a> eli käyttäen pelkkää DOM-apia ja Javascript-kieltä sivujen rakenteen manipulointiin.</p>
+
+<p>Pelkän Javascriptin ja DOM-apin käytön sijaan Web-ohjelmoinnissa hyödynnetään usein kirjastoja, jotka sisältävät DOM-apia helpommin käytettäviä tykaluja sivujen muokkaukseen. Eräs tälläinen kirjasto on edelleenkin hyvin suosittu <a href="https://jquery.com/">JQuery</a>.</p>
+
+<p>JQuery on kehitetty ainkana, jolloin web-sivut olivat vielä suurimmaksi osaksi perinteisiä, eli palvelin muodosti HTML-sivuja joiden toiminnallisuutta rikastettiin selaimessa JQueryllä kirjoitetun Javascript-koodin avulla.</p>
+
+<p>Single page app -tyylin noustua suosioon on ilmestynyt useita JQueryä “modernempia” tapoja sovellusten kehittämiseen. Googlen kehittämä <a href="https://angularjs.org/">AngularJS</a> oli erittäin vielä muutama vuosi sitten erittäin suosittu. Angularin suosio kuitenkin romahti siinä vaiheessa kun Angular-tiimi <a href="https://jaxenter.com/angular-2-0-announcement-backfires-112127.html">ilmoitti</a> lokakuussa 2014, että version 1 tuki lopetetaan ja Angular 2 ei tule olemaan taaksepäin yhteensopiva ykkösversion kanssa. Angular 2 ja uudemmat versiot eivät ole saaneet kovin innostunutta vastaanottoa.</p>
+
+<p>Nykyisin suosituin tapa toteuttaa web-sovellusten selainpuolen logiikka on Facebookin kehittämä <a href="https://reactjs.org/">ReactJS</a>-kirjasto. Tulemme tutustumaan kurssin aikana Reactiin ja sen kanssa yleisesti käytettyyn <a href="https://github.com/reactjs/redux">Redux</a>-kirjastoon.</p>
+
+<p>Reactin asema näyttää tällä hetkellä vahvalta, mutta Javascript-maailma ei lepää koskaan. Viime aikoina huomioita on alkanut kiinnittää mm. uudempi tulokas <a href="https://vuejs.org/">VueJS</a>.</p>
+
+<h2 id="full-stack--websovelluskehitys">full stack -websovelluskehitys</h2>
+
+<p>Mitä tarkoitetaan kurssin nimellä <em>full stack -websovelluskehitys</em>? Full stack on hypen omainen termi, kaikki puhuvat siitä, mutta kukaan ei oikein tiedä mitä se tarkoittaa tai ainakaan mitään yhteneväistä määritelmää termille ei ole.</p>
+
+<p>Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi “kerrosta”, ylempänä olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on “stack”, eli pino. Websovelluskehityksen yhteydessä puhutaan usein myös “frontista” (<a href="https://en.wikipedia.org/wiki/Front_and_back_ends">frontend</a>) ja “backistä” (<a href="https://en.wikipedia.org/wiki/Front_and_back_ends">backend</a>).</p>
+
+<p>Selain on fronend ja selaimessa suoritettava javascript on fronend-koodia. Palvelimella taas pyörii backend-koodi.</p>
+
+<p>Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että kiinnostus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin.</p>
+
+<p>Ohjelmoimme myös palvelinpuolta, eli backendia Javascriptilla, käyttäen <a href="https://nodejs.org/en/">node.js</a>-suoritusympäristöä. Näin full stack -sovelluskehitys saa vielä uuden ulottuvuuden, käytämme samaa kieltä pinon kaikissa osissa. Full stack -sovelluskehitys ei välttämättä edellytä sitä että kaikissa sovelluksen kerroksissa on käytössä sama kieli (javascript). Termi on kuitenkin (todennäköisesti) lanseerattu vasta sen jälkeen kun Node.js mahdollisti Javascriptin käyttämisen kaikkialla.</p>
+
+<p>Aiemmin on ollut yleisempää, että sovelluskehittäjät ovat erikoistuneet tiettyyn sovelluksen osaan, esim. backendiin. Tekniikat backendissa ja frontendissa ovat saattaneet olla hyvin erilaisia. Full stack -trendin myötä on tullut tavanomaiseksi että sovelluskehittäjä hallitsee riittävästi kaikilta sovelluksen tasoilta. Usein full stack -kehittäjän on myös omattava riittävä määrä konfiguraatio- ja ylläpito-osaamista jotta kehittäjä pystyy operoimaan sovellustaan esim. pilvipalveluissa.</p>
+
+<h2 id="javascript-fatigue">Javascript fatigue</h2>
+
+<p>Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi.</p>
+
+<p>Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerttu termi <a href="https://auth0.com/blog/how-to-manage-javascript-fatigue/">Javascript fatigue</a> eli Javascript-väsymys.</p>
+
+<p>Jaavascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.</p>
 
 <h2 id="react">react</h2>
 
