@@ -505,7 +505,77 @@ html
 
 <p>Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteista mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää <em>uudelleenohjauksen</em> avulla selainta lataamaan muistiinpanojen sivun uudelleen.</p>
 
-<h2 id="full-stack">full stack</h2>
+<p>Osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/spa">https://fullstack-exampleapp.herokuapp.com/spa</a> löytyy sovelluksen single page app -versio.</p>
+
+<p>Sovellus näyttää ensivilkaisulta täsmälleen samalta kuin edellinen versio.</p>
+
+<p>HTML-koodi on lähes samanlainen, erona on ladattava javascript-tiedosto ja pieni muutos form-tagin määrittelyssä:</p>
+
+<p><img src="http://localhost:4000/assets/1/23.png" alt="" /></p>
+
+<p>Avaa nyt ‘Network’-tabi ja tyhjennä se  ∅-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:</p>
+
+<p><img src="http://localhost:4000/assets/1/24.png" alt="" /></p>
+
+<p>Pyyntö on tyypiltään POST ja se sisältää JSON-muodossa olevan uuden muistiinpanon, johon kuuluu sekä sisältö, että aikaleima:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nl">content</span><span class="p">:</span> <span class="s2">"single page app ei tee turhia sivun latauksia"</span><span class="p">,</span> 
+  <span class="nx">date</span><span class="p">:</span> <span class="s2">"2017-12-11T10:51:29.025Z"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Pyyntöön liitetty headeri <em>Content-Type</em> kertoo palvelimelle, että pyynnön mukana tuleva data on JSON-muotoista:</p>
+
+<p><img src="http://localhost:4000/assets/1/24.png" alt="" /></p>
+
+<p>Ilman headeria, palvelin ei osaisi parsia pyynnön mukana tulevaa dataa oiken.</p>
+
+<p>Palvelin vastaa kyselyyn statuskoodilla 201 <a href="https://httpstatuses.com/201">created</a>. Tällä kertaa palvelin ei pyydä uudelleenohjausta kuten aiemmassa versiossamme. Selain pysyy samalla sivulla ja muita HTTP-pyyntöjä ei suoriteta.</p>
+
+<p>Ohjelman spa-versiossa lomakkeen tietoja ei lähetetä selaimen “normaalin” lomakkeiden lähetysmekanismin avulla, lähettämisen hoitaa selaimen lataamassa Javascript-tiedostossa määritelty koodi. Katsotaan hieman koodia vaikka yksityiskohdista ei tarvitse nytkään välittää liikaa.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"notes_form"</span><span class="p">)</span>
+  <span class="nx">form</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+
+    <span class="kd">var</span> <span class="nx">note</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">content</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">,</span>
+      <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="nx">redrawNotes</span><span class="p">()</span>
+    <span class="nx">sendToServer</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake “submitoidaan”, eli lähetetään. Tapahtumankäsittelijä 
+kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan.</p>
+
+<p>Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.</p>
+
+<p>Palvelimelle muistiinpanon lähettävä koodi seuraavassa:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">sendToServer</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">note</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">xhttpForPost</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">()</span>
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">201</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s1">'/new_note_spa'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">"Content-type"</span><span class="p">,</span> <span class="s2">"application/json"</span><span class="p">)</span>
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">note</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritellään headerin <em>Content-type</em> avulla lähetettävän datan tyyppi, ja lähetetään data JSON-merkkijonona.</p>
+
+<p>Sovelluksen koodi on nähtävissä osoitteessa <a href="https://github.com/mluukkai/example_app">https://github.com/mluukkai/example_app</a>. Kannattaa huomata, että sovellus on tarkoitettu ainoastaan kurssin käsitteistöä demonstroivaksi esimerkiksi, koodi on osin tyyliltään huonoa ja siitä ei tulee ottaa mallia omia sovelluksia tehdessä.</p>
+
+<h2 id="kirjastot-sovelluskehykset-ja-full-stack">kirjastot, sovelluskehykset ja full stack</h2>
 
 <h2 id="react">react</h2>
 

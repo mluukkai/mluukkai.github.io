@@ -449,7 +449,81 @@ Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen [Single-pa
 
 Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteista mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää _uudelleenohjauksen_ avulla selainta lataamaan muistiinpanojen sivun uudelleen. 
 
-## full stack
+Osoitteesta <https://fullstack-exampleapp.herokuapp.com/spa> löytyy sovelluksen single page app -versio.
+
+Sovellus näyttää ensivilkaisulta täsmälleen samalta kuin edellinen versio. 
+
+HTML-koodi on lähes samanlainen, erona on ladattava javascript-tiedosto ja pieni muutos form-tagin määrittelyssä:
+
+![]({{ "/assets/1/23.png" | absolute_url }})
+
+Avaa nyt 'Network'-tabi ja tyhjennä se  &empty;-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:
+
+![]({{ "/assets/1/24.png" | absolute_url }})
+
+Pyyntö on tyypiltään POST ja se sisältää JSON-muodossa olevan uuden muistiinpanon, johon kuuluu sekä sisältö, että aikaleima:
+
+```js
+{
+  content: "single page app ei tee turhia sivun latauksia", 
+  date: "2017-12-11T10:51:29.025Z"
+}
+```
+
+Pyyntöön liitetty headeri _Content-Type_ kertoo palvelimelle, että pyynnön mukana tuleva data on JSON-muotoista:
+
+![]({{ "/assets/1/24.png" | absolute_url }})
+
+Ilman headeria, palvelin ei osaisi parsia pyynnön mukana tulevaa dataa oiken.
+
+Palvelin vastaa kyselyyn statuskoodilla 201 [created](https://httpstatuses.com/201). Tällä kertaa palvelin ei pyydä uudelleenohjausta kuten aiemmassa versiossamme. Selain pysyy samalla sivulla ja muita HTTP-pyyntöjä ei suoriteta.
+
+Ohjelman spa-versiossa lomakkeen tietoja ei lähetetä selaimen "normaalin" lomakkeiden lähetysmekanismin avulla, lähettämisen hoitaa selaimen lataamassa Javascript-tiedostossa määritelty koodi. Katsotaan hieman koodia vaikka yksityiskohdista ei tarvitse nytkään välittää liikaa.
+
+```js
+  var form = document.getElementById("notes_form")
+  form.onsubmit = function (e) {
+    e.preventDefault()
+
+    var note = {
+      content: e.target.elements[0].value,
+      date: new Date()
+    }
+
+    notes.push(note)
+    e.target.elements[0].value = ""
+    redrawNotes()
+    sendToServer(note)
+  }
+```
+
+Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake "submitoidaan", eli lähetetään. Tapahtumankäsittelijä 
+kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan.
+
+Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.
+
+Palvelimelle muistiinpanon lähettävä koodi seuraavassa:
+```js
+var sendToServer = function (note) {
+  var xhttpForPost = new XMLHttpRequest()
+  xhttpForPost.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 201) {
+      console.log(this.responseText)
+    }
+  }
+
+  xhttpForPost.open("POST", '/new_note_spa', true)
+  xhttpForPost.setRequestHeader("Content-type", "application/json")
+  xhttpForPost.send(JSON.stringify(note));
+}
+```
+
+Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritellään headerin _Content-type_ avulla lähetettävän datan tyyppi, ja lähetetään data JSON-merkkijonona.
+
+Sovelluksen koodi on nähtävissä osoitteessa <https://github.com/mluukkai/example_app>. Kannattaa huomata, että sovellus on tarkoitettu ainoastaan kurssin käsitteistöä demonstroivaksi esimerkiksi, koodi on osin tyyliltään huonoa ja siitä ei tulee ottaa mallia omia sovelluksia tehdessä.
+
+
+## kirjastot, sovelluskehykset ja full stack
 
 ## react
 
