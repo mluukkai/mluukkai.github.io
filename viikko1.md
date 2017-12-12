@@ -1366,57 +1366,378 @@ saa <code const {name, age} = this.props</code>> aikaan sen, että _name_ saa ar
 
 Komponentti _Hello_ on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista. 
 
-### uudelleenrenderöinti
+### Sivun uudelleenrenderöinti
+
+Toistaiseksi tekemämme sovellukset ovat olleet sellaisia, että kun niiden komponentit on kerran renderöity, niiden tilaa ei ole enää voinut muuttaa. Entä jos haluaisimme toteuttaa laskurin, jonka arvo kasvaa esim. ajan kuluessa tai nappien painallusten yhteydessä?
+
+Aloitetaan seuravasta rungosta:
+
+```react
+const App = (props) => {
+  const {counter} = props
+  return(
+    <div>{counter.value}</div>
+  )
+} 
+
+const counter = {
+  value: 1
+}
+
+ReactDOM.render(
+  <App counter={counter} />,
+  document.getElementById('root')
+)
+```
+
+Sovelluksen juurikomponentille siis annetaan viite laskuriin. Juurikomponentti renderöi arvon ruudulle. Entä laskurin arvon muuttuessa? Jos lisäämme ohjelmaan esim. komennon
+
+```react
+counter.value += 1
+```
+
+ei komponenttia kuitenkaan renderöidä uudelleen. Voimme saada komponentin uudelleenrenderöitymään kutsumalla uudelleen metodia _ReactDOM.render_, esim. seuraavasti
+
+```react
+const App = (props) => {
+  const {counter} = props
+  return(
+    <div>{counter.value}</div>
+  )
+} 
+
+const counter = {
+  value: 1
+}
+
+const renderoi = () => {
+  ReactDOM.render(
+    <App counter={counter} />,
+    document.getElementById('root')
+  )
+}
+
+renderoi()
+counter.value += 1
+renderoi()
+counter.value += 1
+renderoi()
+```
+
+Copypastea vähentämään on komponentin renderöinti kääritty funktioon _renderoi_.
+
+Nyt komponentti renderöityy kolme kertaa, saaden ensin arvon 1, sitten 2 ja lopulta 3. 1 ja 2 tosin ovat ruudulla niin vähän aikaa, että niitä ei ehdi havaita.
+
+Hieman mielenkiintoisempaan toiminnallisuuteen pääsemme tekemällä renderöinnin ja laskurin kasvatuksen toistuvasti sekunnin välein käyttäen [SetInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)-
+
+```js
+setInterval(
+  () => { 
+    renderoi()
+    counter.value += 1;
+  }
+  , 1000)
+```
+
+_ReactDOM.render_-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa päivittää komponentteja. Tutustutaan seuraavaksi järkevämpään tapaan.
 
 ### tilallinen komponentti
 
-
-Muutetaan esimerkkisovelluksen komponentti _App_ seuraavasti:
-
-```react
-class App extends React.Component {
-  render() {
-    const nimi = 'Pekka'
-    const ika = 10
-    return (
-      <div>
-        <h1>Greetings</h1>
-        <Hello name='Arto' age={36} />
-        <Hello name={nimi} age={ika} />
-      </div>
-    )
-  }
-}
-```
-
-Muutetaan komponenttia hieman lisäämällä sille konstruktori: 
+Muutetaan esimerkkisovelluksen komponentti _App_ luokkaperustaiseksi:
 
 ```react
-class App extends React.Component {
+class App  extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      henkilo: { name: 'Arto', age: 35 },
+      counter: 1
+    }
+  }
+  render() {
+    return (
+      <div>{this.state.counter}</div>
+    )
+  }
+} 
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+) 
+```
+
+Komponentilla on nyt metodin _render_ lisäksi _konstruktori_. Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin _props_ välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>. 
+
+Luokkiin perustuvalla komponenteilla voi olla _tila_, joka talletetaan muuttujaan _state_. 
+
+Konstruktori määrittelee komponentin alkutilan olevan:
+
+```js
+{
+  counter: 1
+}
+```
+
+Eli tila sisältää kentän _counter_, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa _this.state_ **ei saa päivittää suoraan**, tilan päivitys on tehtävä aina funktion [setState](https://reactjs.org/docs/faq-state.html#what-does-setstate-do) avulla. Metodin kutsuminen päivittää tilan _ja_ aiheuttaa komponentin uuden renderöinnin. Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.
+
+Muutetaan komponenttia _App_ siten, että konstruktorissa käynnistetään ajastin joka kutsuu funktiota _setState_ kolmen sekunnin kuluttua ja asettaa laskurin, eli _this.state.counter_:in arvoksi 1000.
+
+```render
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+
+    setTimeout(() => {
+      this.setState({counter: 1000})
+    }, 3000);
+  }
+  render() {
+    return (
+      <div>{this.state.counter}</div>
+    )
+  }
+} 
+```
+
+Tehdään sovelluksesta vielä edistyneempi versio, missä metodia _setState_ kutsutaan toistuvasti sekunnin välein päivittäen laskurin arvoa aina yhdellä.
+
+```render
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+
+    setInterval(() => {
+      this.setState({ counter: this.state.counter + 1 })
+    }, 1000);
+  }
+  render() {
+    return (
+      <div>{this.state.counter}</div>
+    )
+  }
+} 
+```
+
+### tapahtumankäsittely
+
+Mainitsimme jo alun johdanto-osassa muutamaan kertaan _tepahtumankäsittelijät_, eli funktiot, jotka on rekisteröity kutsuttavaksi tiettyjen tapahtumien eli eventien yhteydessä. Esim. käyttäjän interaktio sivun elementtien kanssa aiheuttaa joukon erinäisiä tapahtumia. 
+
+Muutetaan sovellusta siten, että laskurin kasvaminen tapahtuukin käyttäjän painaessa [button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)-elementin avulla toteutettua nappia. 
+
+Button-elementit tukevat mm. [hiiritapahtumia](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent), joista yleisin on [click](https://developer.mozilla.org/en-US/docs/Web/Events/click). 
+
+Reactissa funktion rekisteröiminen tapahtumankäsittelijäksi [tapahtuu](https://reactjs.org/docs/handling-events.html) tapahtumalle _click_ tapahtuu seuraavasti:
+
+```react
+const funktio = () => { /* koodi */ }
+
+//...
+
+<button onClick={funktio}>
+  plus
+</button>
+```
+Tapahtumankäsittelijäfunktio voidaan myös määritellä suoraan onClick-määrittelyn yhteydessä:
+
+```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+
+  }
+  render() {
+    return (
+      <div>
+        <div>{this.state.counter}</div>
+        <button onClick={()=>console.log('clicked')}>
+          plus
+        </button>
+      </div>
+    )
+  }
+} 
+```
+
+Nyt jokainen napin _plus_ painallus tulostaa konsoliin _clicked_.
+
+Muuttamalla tapahtumankäsittelijä seuraavaan muotoon
+
+```react
+    <button onClick={()=>this.setState({ counter: this.state.counter+1 }) }>
+      plus
+    </button>
+```
+
+saamme halutun toiminnallisuuden.
+
+Lisätään sovellukseen myös nappi laskurin nollaamiseen:
+
+```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
     }
   }
   render() {
     return (
       <div>
-        <h1>Greetings</h1>
-        <Hello name={this.state.henkilo.name} age={this.state.henkilo.age} />
+        <div>{this.state.counter}</div>
+        <div>
+          <button onClick={() => this.setState({ counter: this.state.counter + 1 })}>
+            plus
+          </button>
+          <button onClick={() => this.setState({ counter: 0 })}>
+            zero
+          </button>          
+        </div>
       </div>
     )
   }
 }
+
+Sovelluksemme on valmis!
+
+### metodien käyttö ja _this_
+
+Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin visasta. 
+
+```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+  }
+
+  kasvataYhdella() {
+    this.setState({ counter: this.state.counter+1 })
+  }
+
+  nollaa() {
+    this.setState({ counter: 0 })  
+  }
+
+  render() {
+    return (
+      <div>
+        <div>{this.state.counter}</div>
+        <div>
+          <button onClick={this.kasvataYhdella}>
+            plus
+          </button>
+          <button onClick={this.nollaa}>
+            zero
+          </button>          
+        </div>
+      </div>
+    )
+  }
+} 
 ```
 
-Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin _props_ välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.
+ei toimi, this katoaa
 
-Luokkiin perustuvalla komponenteilla voi olla _tila_. 
+bindi
 
+```react
+    <button onClick={this.kasvataYhdella.bind(this)}>
+      plus
+    </button>
+    <button onClick={this.nollaa.bind(this)}>
+      zero
+    </button>  
+```
 
+tai bindatun sijoittaminen
 
-### state
+```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+    this.kasvataYhdella = this.kasvataYhdella.bind(this)
+    this.nollaa = this.nollaa.bind(this)
+  }
+```
+
+paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/docs/plugins/transform-class-properties/) -featurea
+
+```react
+  kasvataYhdella = () => {
+    this.setState({ counter: this.state.counter+1 })
+  }
+
+  nollaa = () => {
+    this.setState({ counter: 0 })  
+  }
+```
+
+### refaktorointi
+
+```react
+    asetaArvoon = (arvo) => {
+      this.setState({ counter: arvo })  
+    }
+
+    <button onClick={this.asetaArvoon(this.state.counter+1)}>
+      Plus
+    </button>    
+```react
+
+funktio joka palauttaa funktion...
+
+```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+  }
+
+  asetaArvoon = (arvo) => { 
+    return () => {
+      this.setState({ counter: arvo })  
+    }
+  } 
+
+  render() {
+    return (
+      <div>
+        <div>{this.state.counter}</div>
+        <div>
+          <button onClick={this.asetaArvoon(this.state.counter+1)}>
+            Plus
+          </button>        
+          <button onClick={this.asetaArvoon(0)}>
+            Zero
+          </button>   
+        </div>
+      </div>
+    )
+  }
+} 
+```react
+
+suoraviivastus
+
+```react
+  asetaArvoon = (arvo) => () => this.setState({ counter: arvo })  
+```
 
 ### react dev tool
 

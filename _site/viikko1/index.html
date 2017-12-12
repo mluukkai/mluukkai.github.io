@@ -1374,52 +1374,362 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <p>Komponentti <em>Hello</em> on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista.</p>
 
-<h3 id="uudelleenrenderöinti">uudelleenrenderöinti</h3>
+<h3 id="sivun-uudelleenrenderöinti">Sivun uudelleenrenderöinti</h3>
+
+<p>Toistaiseksi tekemämme sovellukset ovat olleet sellaisia, että kun niiden komponentit on kerran renderöity, niiden tilaa ei ole enää voinut muuttaa. Entä jos haluaisimme toteuttaa laskurin, jonka arvo kasvaa esim. ajan kuluessa tai nappien painallusten yhteydessä?</p>
+
+<p>Aloitetaan seuravasta rungosta:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">{</span><span class="nx">counter</span><span class="p">}</span> <span class="o">=</span> <span class="nx">props</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">counter</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span> 
+
+<span class="kd">const</span> <span class="nx">counter</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+  <span class="p">&lt;</span><span class="nc">App</span> <span class="na">counter=</span><span class="si">{</span><span class="nx">counter</span><span class="si">}</span> <span class="p">/&gt;,</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Sovelluksen juurikomponentille siis annetaan viite laskuriin. Juurikomponentti renderöi arvon ruudulle. Entä laskurin arvon muuttuessa? Jos lisäämme ohjelmaan esim. komennon</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<p>ei komponenttia kuitenkaan renderöidä uudelleen. Voimme saada komponentin uudelleenrenderöitymään kutsumalla uudelleen metodia <em>ReactDOM.render</em>, esim. seuraavasti</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="p">{</span><span class="nx">counter</span><span class="p">}</span> <span class="o">=</span> <span class="nx">props</span>
+  <span class="k">return</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">counter</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>
+<span class="p">}</span> 
+
+<span class="kd">const</span> <span class="nx">counter</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">renderoi</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+    <span class="p">&lt;</span><span class="nc">App</span> <span class="na">counter=</span><span class="si">{</span><span class="nx">counter</span><span class="si">}</span> <span class="p">/&gt;,</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">renderoi</span><span class="p">()</span>
+<span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nx">renderoi</span><span class="p">()</span>
+<span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nx">renderoi</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Copypastea vähentämään on komponentin renderöinti kääritty funktioon <em>renderoi</em>.</p>
+
+<p>Nyt komponentti renderöityy kolme kertaa, saaden ensin arvon 1, sitten 2 ja lopulta 3. 1 ja 2 tosin ovat ruudulla niin vähän aikaa, että niitä ei ehdi havaita.</p>
+
+<p>Hieman mielenkiintoisempaan toiminnallisuuteen pääsemme tekemällä renderöinnin ja laskurin kasvatuksen toistuvasti sekunnin välein käyttäen <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval">SetInterval</a>-</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setInterval</span><span class="p">(</span>
+  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+    <span class="nx">renderoi</span><span class="p">()</span>
+    <span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>ReactDOM.render</em>-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa päivittää komponentteja. Tutustutaan seuraavaksi järkevämpään tapaan.</p>
 
 <h3 id="tilallinen-komponentti">tilallinen komponentti</h3>
 
-<p>Muutetaan esimerkkisovelluksen komponentti <em>App</em> seuraavasti:</p>
+<p>Muutetaan esimerkkisovelluksen komponentti <em>App</em> luokkaperustaiseksi:</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">nimi</span> <span class="o">=</span> <span class="s1">'Pekka'</span>
-    <span class="kd">const</span> <span class="nx">ika</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="k">return</span> <span class="p">(</span>
-      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">36</span><span class="si">}</span> <span class="p">/&gt;</span>
-        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="nx">nimi</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="nx">ika</span><span class="si">}</span> <span class="p">/&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">)</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Muutetaan komponenttia hieman lisäämällä sille konstruktori:</p>
-
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="na">henkilo</span><span class="p">:</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s1">'Arto'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">35</span> <span class="p">},</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span> 
+
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
+  <span class="p">&lt;</span><span class="nc">App</span> <span class="p">/&gt;,</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
+<span class="p">)</span> 
+</code></pre></div></div>
+
+<p>Komponentilla on nyt metodin <em>render</em> lisäksi <em>konstruktori</em>. Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin <em>props</em> välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.</p>
+
+<p>Luokkiin perustuvalla komponenteilla voi olla <em>tila</em>, joka talletetaan muuttujaan <em>state</em>.</p>
+
+<p>Konstruktori määrittelee komponentin alkutilan olevan:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="nl">counter</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Eli tila sisältää kentän <em>counter</em>, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa <em>this.state</em> <strong>ei saa päivittää suoraan</strong>, tilan päivitys on tehtävä aina funktion <a href="https://reactjs.org/docs/faq-state.html#what-does-setstate-do">setState</a> avulla. Metodin kutsuminen päivittää tilan <em>ja</em> aiheuttaa komponentin uuden renderöinnin. Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.</p>
+
+<p>Muutetaan komponenttia <em>App</em> siten, että konstruktorissa käynnistetään ajastin joka kutsuu funktiota <em>setState</em> kolmen sekunnin kuluttua ja asettaa laskurin, eli <em>this.state.counter</em>:in arvoksi 1000.</p>
+
+<pre><code class="language-render">class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+
+    setTimeout(() =&gt; {
+      this.setState({counter: 1000})
+    }, 3000);
+  }
+  render() {
+    return (
+      &lt;div&gt;{this.state.counter}&lt;/div&gt;
+    )
+  }
+} 
+</code></pre>
+
+<p>Tehdään sovelluksesta vielä edistyneempi versio, missä metodia <em>setState</em> kutsutaan toistuvasti sekunnin välein päivittäen laskurin arvoa aina yhdellä.</p>
+
+<pre><code class="language-render">class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+
+    setInterval(() =&gt; {
+      this.setState({ counter: this.state.counter + 1 })
+    }, 1000);
+  }
+  render() {
+    return (
+      &lt;div&gt;{this.state.counter}&lt;/div&gt;
+    )
+  }
+} 
+</code></pre>
+
+<h3 id="tapahtumankäsittely">tapahtumankäsittely</h3>
+
+<p>Mainitsimme jo alun johdanto-osassa muutamaan kertaan <em>tepahtumankäsittelijät</em>, eli funktiot, jotka on rekisteröity kutsuttavaksi tiettyjen tapahtumien eli eventien yhteydessä. Esim. käyttäjän interaktio sivun elementtien kanssa aiheuttaa joukon erinäisiä tapahtumia.</p>
+
+<p>Muutetaan sovellusta siten, että laskurin kasvaminen tapahtuukin käyttäjän painaessa <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button">button</a>-elementin avulla toteutettua nappia.</p>
+
+<p>Button-elementit tukevat mm. <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent">hiiritapahtumia</a>, joista yleisin on <a href="https://developer.mozilla.org/en-US/docs/Web/Events/click">click</a>.</p>
+
+<p>Reactissa funktion rekisteröiminen tapahtumankäsittelijäksi <a href="https://reactjs.org/docs/handling-events.html">tapahtuu</a> tapahtumalle <em>click</em> tapahtuu seuraavasti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">funktio</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="cm">/* koodi */</span> <span class="p">}</span>
+
+<span class="c1">//...</span>
+
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="nx">funktio</span><span class="si">}</span><span class="p">&gt;</span>
+  plus
+<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div></div>
+<p>Tapahtumankäsittelijäfunktio voidaan myös määritellä suoraan onClick-määrittelyn yhteydessä:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">()</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span><span class="o">=&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'clicked'</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+          plus
+        <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+
+<p>Nyt jokainen napin <em>plus</em> painallus tulostaa konsoliin <em>clicked</em>.</p>
+
+<p>Muuttamalla tapahtumankäsittelijä seuraavaan muotoon</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span><span class="o">=&gt;</span><span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span> <span class="p">})</span> <span class="p">}</span><span class="o">&gt;</span>
+      <span class="nx">plus</span>
+    <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span></code></pre></div></div>
+
+<p>saamme halutun toiminnallisuuden.</p>
+
+<p>Lisätään sovellukseen myös nappi laskurin nollaamiseen:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">()</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
     <span class="p">}</span>
   <span class="p">}</span>
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">henkilo</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">henkilo</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">})</span><span class="si">}</span><span class="p">&gt;</span>
+            plus
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span><span class="si">}</span><span class="p">&gt;</span>
+            zero
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>          
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
+
+<span class="nx">Sovelluksemme</span> <span class="nx">on</span> <span class="nx">valmis</span><span class="o">!</span>
+
+<span class="err">###</span> <span class="nx">metodien</span> <span class="nx">k</span><span class="err">ä</span><span class="nx">ytt</span><span class="err">ö</span> <span class="nx">ja</span> <span class="nx">_this_</span>
+
+<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">visasta</span><span class="p">.</span> 
+
+<span class="s2">```react
+class App  extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+  }
+
+  kasvataYhdella() {
+    this.setState({ counter: this.state.counter+1 })
+  }
+
+  nollaa() {
+    this.setState({ counter: 0 })  
+  }
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;div&gt;{this.state.counter}&lt;/div&gt;
+        &lt;div&gt;
+          &lt;button onClick={this.kasvataYhdella}&gt;
+            plus
+          &lt;/button&gt;
+          &lt;button onClick={this.nollaa}&gt;
+            zero
+          &lt;/button&gt;          
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+} 
+</span></code></pre></div></div>
+
+<p>ei toimi, this katoaa</p>
+
+<p>bindi</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)}</span><span class="o">&gt;</span>
+      <span class="nx">plus</span>
+    <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)}</span><span class="o">&gt;</span>
+      <span class="nx">zero</span>
+    <span class="o">&lt;</span><span class="sr">/button&gt; </span><span class="err"> 
+</span></code></pre></div></div>
+
+<p>tai bindatun sijoittaminen</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">()</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+  <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin <em>props</em> välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.</p>
+<p>paras käyttää vielä standardoimatonta <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class properties</a> -featurea</p>
 
-<p>Luokkiin perustuvalla komponenteilla voi olla <em>tila</em>.</p>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span> <span class="p">})</span>
+  <span class="p">}</span>
 
-<h3 id="state">state</h3>
+  <span class="nx">nollaa</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>  
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="refaktorointi">refaktorointi</h3>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
+    <span class="p">}</span>
+
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+      Plus
+    <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>    
+<span class="s2">```react
+
+funktio joka palauttaa funktion...
+
+```</span><span class="nx">react</span>
+<span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">()</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
+    <span class="p">}</span>
+  <span class="p">}</span> 
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+            Plus
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>        
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+            Zero
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>   
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span> 
+<span class="s2">```react
+
+suoraviivastus
+
+```</span><span class="nx">react</span>
+  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
+</code></pre></div></div>
 
 <h3 id="react-dev-tool">react dev tool</h3>
 
