@@ -14,6 +14,14 @@ Osallistujilta edellytetään vahvaa ohjelmointiruutiinia, web-ohjelmoinnin ja t
 
 Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.
 
+## alkutoimet
+
+node, git, chrome, ...
+
+## viikon 1 oppimistavoitteet
+
+- ...
+
 ## web-sovelluksen toimintaperiaatteita
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
@@ -1193,6 +1201,11 @@ ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja 
 
 Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  [Mozillan javascript -materiaaliin](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
+Jo ennen seuraavien tehtävien tekemistä Mozzillan sivuilta kannattaa lukea välittömästi
+[A re-introduction to JavaScript (JS tutorial)]
+(https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
+
+
 Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja [You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
 
 [egghead.io](https://egghead.io):lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.
@@ -1201,7 +1214,207 @@ Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä i
 
 ## paluu Reactin äärelle
 
+Palataan jälleen Reactin pariin. 
+
+Aiemmassa esimerkissämme käytimme funktionaalisia komponentteja, eli määrittelimme kaikki komponentit nuolifunktioiden avulla, esim:
+
+```react
+const Hello = (props) => {
+  return (
+    <div>
+      <p>Hello {props.name}, you are {props.age} years old</p>
+    </div>
+  )  
+}
+```
+
+Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponetti määritellään luokaksi, joka perii [React.Component](https://reactjs.org/docs/react-component.html)-luokan. 
+
+Muutetaan esimerkkisovelluksen komponentti _Hello_ seuraavasti:
+
+```react
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>Hello {this.props.name}, you are {this.props.age} years old</p>
+      </div>
+    )  
+  }
+}
+```
+
+Luokkakomponenttien tulee määritellä ainakin metodi _render_ joka palauttaa komponentin ulkoasun. Luokkakomponentissa viitataan komponentin _propseihin_ this-viitteen kautta.
+Eli koska komponenttia käytetään seuraavasti
+
+```react
+<Hello name='Arto' age={36} />
+```
+
+Päästään nimeen ja ikään käsiksi luokkamuotoisen komponentin sisällä viittaamalla _this.props.name_ ja _this.props.age_. Huomaa ero luokkamuotoiseen komponenttiin.
+
+
+Luokkakomponenteille voidaan tarvittaessa määritellä muitakin metodeja ja "oliomuuttujua", eli kenttiä. 
+
+Voisimme esim. määritellä apumuuttujan seuraavasti:
+
+```react
+class Hello extends React.Component {
+  bornYear() {
+    const yearNow = 1900 + new Date().getYear()
+    return yearNow - this.props.age
+  }
+  render() {
+    return (
+      <div>
+        <p>
+          Hello {this.props.name}, you are {this.props.age} years old <br />
+          So you were propably born {this.bornYear()} 
+        </p>
+      </div>
+    )
+  }
+}
+```
+
+Tässä tilanteessa ei kuitenkaan ole varsinaisesti mitään hyötyä määritellä apufunktiota _bornYear_ metodiksi, joten parempi olisi määritellä se metodin _render_ sisäisenä apumetodina:
+
+```react
+class Hello extends React.Component {
+  render() {
+    const bornYear = () => {
+      const yearNow = 1900 + new Date().getYear()
+      return yearNow - this.props.age
+    }
+
+    return (
+      <div>
+        <p>
+          Hello {this.props.name}, you are {this.props.age} years old <br />
+          So you were propably born {bornYear()} 
+        </p>
+      </div>
+    )
+  }
+}
+```
+
+Ennen kuin siirrymme eteenpäin, tarkastellaan erästä pientä, mutta käyttökelpoista ES6:n uutta piirrettä javascriptissä, eli sijoittamisen yhteydessä tapahtuvaa [destruktorointia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+Jouduimme äskeisessä koodissa viittaamaan propseina välitettyyn dataan hieman ikävästi muodossa _this.props.name_ ja _this.props.age_. Näistä _this.props.age_ pitää toistaa metodissa _render_ kahteen kertaan.
+
+Koska _this.props_ on nyt olio
+
+```js
+this.props = {
+  name: 'Arto Hellas',
+  age: 35
+}
+```
+
+voisimme suoraviivaistaa metodia _render_ siten, että sijoittaisimme kenttien arvot muuttujiin _name_ ja _age_ joita voisimme sitten hyödyntää
+
+```js
+  render() {
+    const name = this.props.name
+    const age = this.props.age
+    const bornYear = () => 1900 + new Date().getYear() - age
+
+    return (
+      <div>
+        <p>
+          Hello {name}, you are {age} years old <br />
+          So you were propably born {bornYear()} 
+        </p>
+      </div>
+    )
+  }
+```
+
+Huomaa, että oleme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.
+
+Destrukturointi tekee asian vielä helpommaksi, sen avulla voimme "kerätä" olion oliomuuttujien arvot suoraan omiin yksittäisiin muuttujiin:
+
+```react
+class Hello extends React.Component {
+  render() {
+    const {name, age} = this.props
+    const bornYear = () => 1900 + new Date().getYear() - age
+
+    return (
+      <div>
+        <p>
+          Hello {name}, you are {age} years old <br />
+          So you were propably born {bornYear()} 
+        </p>
+      </div>
+    )
+  }
+}
+```
+
+Eli koska 
+
+```js
+this.props = {
+  name: 'Arto Hellas',
+  age: 35
+}
+```
+
+saa <code const {name, age} = this.props</code>> aikaan sen, että _name_ saa arvon 'Arto Hellas' ja _age_ arvon 35. 
+
+Komponentti _Hello_ on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista. 
+
+### uudelleenrenderöinti
+
 ### tilallinen komponentti
+
+
+Muutetaan esimerkkisovelluksen komponentti _App_ seuraavasti:
+
+```react
+class App extends React.Component {
+  render() {
+    const nimi = 'Pekka'
+    const ika = 10
+    return (
+      <div>
+        <h1>Greetings</h1>
+        <Hello name='Arto' age={36} />
+        <Hello name={nimi} age={ika} />
+      </div>
+    )
+  }
+}
+```
+
+Muutetaan komponenttia hieman lisäämällä sille konstruktori: 
+
+```react
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      henkilo: { name: 'Arto', age: 35 },
+    }
+  }
+  render() {
+    return (
+      <div>
+        <h1>Greetings</h1>
+        <Hello name={this.state.henkilo.name} age={this.state.henkilo.age} />
+      </div>
+    )
+  }
+}
+```
+
+Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin _props_ välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.
+
+Luokkiin perustuvalla komponenteilla voi olla _tila_. 
+
+
 
 ### state
 

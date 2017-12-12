@@ -89,6 +89,16 @@
 
 <p>Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.</p>
 
+<h2 id="alkutoimet">alkutoimet</h2>
+
+<p>node, git, chrome, …</p>
+
+<h2 id="viikon-1-oppimistavoitteet">viikon 1 oppimistavoitteet</h2>
+
+<ul>
+  <li>…</li>
+</ul>
+
 <h2 id="web-sovelluksen-toimintaperiaatteita">web-sovelluksen toimintaperiaatteita</h2>
 
 <p>Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.</p>
@@ -1210,6 +1220,10 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Mozillan javascript -materiaaliin</a></p>
 
+<p>Jo ennen seuraavien tehtävien tekemistä Mozzillan sivuilta kannattaa lukea välittömästi
+[A re-introduction to JavaScript (JS tutorial)]
+(https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)</p>
+
 <p>Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja <a href="https://github.com/getify/You-Dont-Know-JS">You-Dont-Know-JS</a></p>
 
 <p><a href="https://egghead.io">egghead.io</a>:lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.</p>
@@ -1218,7 +1232,192 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <h2 id="paluu-reactin-äärelle">paluu Reactin äärelle</h2>
 
+<p>Palataan jälleen Reactin pariin.</p>
+
+<p>Aiemmassa esimerkissämme käytimme funktionaalisia komponentteja, eli määrittelimme kaikki komponentit nuolifunktioiden avulla, esim:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Hello</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">)</span>  
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponetti määritellään luokaksi, joka perii <a href="https://reactjs.org/docs/react-component.html">React.Component</a>-luokan.</p>
+
+<p>Muutetaan esimerkkisovelluksen komponentti <em>Hello</em> seuraavasti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Hello</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>  
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Luokkakomponenttien tulee määritellä ainakin metodi <em>render</em> joka palauttaa komponentin ulkoasun. Luokkakomponentissa viitataan komponentin <em>propseihin</em> this-viitteen kautta.
+Eli koska komponenttia käytetään seuraavasti</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">Hello</span> <span class="nx">name</span><span class="o">=</span><span class="s1">'Arto'</span> <span class="nx">age</span><span class="o">=</span><span class="p">{</span><span class="mi">36</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span></code></pre></div></div>
+
+<p>Päästään nimeen ja ikään käsiksi luokkamuotoisen komponentin sisällä viittaamalla <em>this.props.name</em> ja <em>this.props.age</em>. Huomaa ero luokkamuotoiseen komponenttiin.</p>
+
+<p>Luokkakomponenteille voidaan tarvittaessa määritellä muitakin metodeja ja “oliomuuttujua”, eli kenttiä.</p>
+
+<p>Voisimme esim. määritellä apumuuttujan seuraavasti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Hello</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">bornYear</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">yearNow</span> <span class="o">=</span> <span class="mi">1900</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getYear</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nx">yearNow</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+          Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
+          So you were propably born <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+        <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Tässä tilanteessa ei kuitenkaan ole varsinaisesti mitään hyötyä määritellä apufunktiota <em>bornYear</em> metodiksi, joten parempi olisi määritellä se metodin <em>render</em> sisäisenä apumetodina:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Hello</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">bornYear</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">yearNow</span> <span class="o">=</span> <span class="mi">1900</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getYear</span><span class="p">()</span>
+      <span class="k">return</span> <span class="nx">yearNow</span> <span class="o">-</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+          Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
+          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+        <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Ennen kuin siirrymme eteenpäin, tarkastellaan erästä pientä, mutta käyttökelpoista ES6:n uutta piirrettä javascriptissä, eli sijoittamisen yhteydessä tapahtuvaa <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">destruktorointia</a></p>
+
+<p>Jouduimme äskeisessä koodissa viittaamaan propseina välitettyyn dataan hieman ikävästi muodossa <em>this.props.name</em> ja <em>this.props.age</em>. Näistä <em>this.props.age</em> pitää toistaa metodissa <em>render</em> kahteen kertaan.</p>
+
+<p>Koska <em>this.props</em> on nyt olio</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nx">props</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">age</span><span class="p">:</span> <span class="mi">35</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>voisimme suoraviivaistaa metodia <em>render</em> siten, että sijoittaisimme kenttien arvot muuttujiin <em>name</em> ja <em>age</em> joita voisimme sitten hyödyntää</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span>
+    <span class="kd">const</span> <span class="nx">age</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span>
+    <span class="kd">const</span> <span class="nx">bornYear</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="mi">1900</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getYear</span><span class="p">()</span> <span class="o">-</span> <span class="nx">age</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
+          <span class="nx">Hello</span> <span class="p">{</span><span class="nx">name</span><span class="p">},</span> <span class="nx">you</span> <span class="nx">are</span> <span class="p">{</span><span class="nx">age</span><span class="p">}</span> <span class="nx">years</span> <span class="nx">old</span> <span class="o">&lt;</span><span class="nx">br</span> <span class="o">/&gt;</span>
+          <span class="nx">So</span> <span class="nx">you</span> <span class="nx">were</span> <span class="nx">propably</span> <span class="nx">born</span> <span class="p">{</span><span class="nx">bornYear</span><span class="p">()}</span> 
+        <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>    <span class="p">)</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Huomaa, että oleme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.</p>
+
+<p>Destrukturointi tekee asian vielä helpommaksi, sen avulla voimme “kerätä” olion oliomuuttujien arvot suoraan omiin yksittäisiin muuttujiin:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">Hello</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="p">{</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span>
+    <span class="kd">const</span> <span class="nx">bornYear</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="mi">1900</span> <span class="o">+</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getYear</span><span class="p">()</span> <span class="o">-</span> <span class="nx">age</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+          Hello <span class="si">{</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
+          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+        <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Eli koska</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nx">props</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="s1">'Arto Hellas'</span><span class="p">,</span>
+  <span class="na">age</span><span class="p">:</span> <span class="mi">35</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>saa &lt;code const {name, age} = this.props&lt;/code&gt;&gt; aikaan sen, että <em>name</em> saa arvon ‘Arto Hellas’ ja <em>age</em> arvon 35.</p>
+
+<p>Komponentti <em>Hello</em> on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista.</p>
+
+<h3 id="uudelleenrenderöinti">uudelleenrenderöinti</h3>
+
 <h3 id="tilallinen-komponentti">tilallinen komponentti</h3>
+
+<p>Muutetaan esimerkkisovelluksen komponentti <em>App</em> seuraavasti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">nimi</span> <span class="o">=</span> <span class="s1">'Pekka'</span>
+    <span class="kd">const</span> <span class="nx">ika</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">36</span><span class="si">}</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="nx">nimi</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="nx">ika</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Muutetaan komponenttia hieman lisäämällä sille konstruktori:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">henkilo</span><span class="p">:</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s1">'Arto'</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">35</span> <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">henkilo</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">henkilo</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin <em>props</em> välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.</p>
+
+<p>Luokkiin perustuvalla komponenteilla voi olla <em>tila</em>.</p>
 
 <h3 id="state">state</h3>
 
