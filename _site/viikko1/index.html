@@ -247,8 +247,7 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:</p>
 
 <p><img src="http://localhost:4000/assets/1/9.png" alt="" /></p>
 
-<p>Osoitteesta löytyvät muistiinpanot [JSON][https://en.wikipedia.org/wiki/JSON]-muotoisena “raakadatana”. Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView]
-(https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
+<p>Osoitteesta löytyvät muistiinpanot <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-muotoisena “raakadatana”. Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. <a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>
 ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:</p>
 
 <p><img src="http://localhost:4000/assets/1/10.png" alt="" /></p>
@@ -639,16 +638,16 @@ $ npm start
 
 <p>Sovelluksessa on hieman valmista koodia, mutta yksinkertaistetaan koodi siten, että tiedoston <em>index.js</em> sisällöksi tulee:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span>
 <span class="k">import</span> <span class="nx">ReactDOM</span> <span class="k">from</span> <span class="s1">'react-dom'</span>
 
 <span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">(</span>
-  <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Hello</span> <span class="nx">world</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
-</span>  <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
-</span><span class="p">)</span>
+  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">)</span>
 
-<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
+<span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(&lt;</span><span class="nc">App</span> <span class="p">/&gt;,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>Voit poistaa tiedostot <em>App.css</em>, <em>App.test.js</em>, <em>logo.svg</em> ja <em>registerServiceWorkes.js</em>
@@ -660,7 +659,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>Komento</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">App</span> <span class="o">/&gt;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(&lt;</span><span class="nc">App</span> <span class="p">/&gt;,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">))</span>
 </code></pre></div></div>
 
 <p>Renderöi komponentin sisällön tiedoston <em>public/index.html</em> määrittelemään <em>div</em>-elementtiin, jonka <em>id:n</em> arvona on ‘root’</p>
@@ -911,7 +910,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p><a href="https://nodejs.org/en/">NodeJS</a> on melkein missä vaan, mm. palvelimilla toimiva, Googlen <a href="https://developers.google.com/v8/">chrome V8</a>-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio <em>v8.6.0</em>. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.</p>
 
-<p>Koodi kirjoitetaan _.js-_päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code></p>
+<p>Koodi kirjoitetaan <em>.js-</em>päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code></p>
 
 <p>Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusmekanismeiltaan kielet kuitenkin poikkeavat radikaalisti. Java-taustalta tultaessa Javascriptin käyttäytyminen saattaa aiheuttaa hämmennystä, varsinkin jos kielen piirteistä ei viitsitä ottaa selvää.</p>
 
@@ -932,7 +931,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <span class="nx">x</span> <span class="o">=</span> <span class="mi">4</span>              <span class="c1">// aiheuttaa virheen</span>
 </code></pre></div></div>
 
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a> ei oikeastaan määrittele muuttujaa vaan <em>vakion</em>, jonka arvoa ei voi enää muuttaa. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">let</a> taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var">var</a> avulla. Älä käytä varia jos ei tiedä mitä se tekee, käytä aina const:ia tai let:iä!</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">const</a> ei oikeastaan määrittele muuttujaa vaan <em>vakion</em>, jonka arvoa ei voi enää muuttaa. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let">let</a> taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var">var</a> avulla. Älä käytä tällä kurssilla varia, käytä aina const:ia tai let:iä!</p>
 
 <p>Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, <em>y</em> tallettaa aluksi luvun ja lopulta merkkijonon.</p>
 
@@ -1606,7 +1605,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <span class="err">###</span> <span class="nx">metodien</span> <span class="nx">k</span><span class="err">ä</span><span class="nx">ytt</span><span class="err">ö</span> <span class="nx">ja</span> <span class="nx">_this_</span>
 
-<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">visasta</span><span class="p">.</span> 
+<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">visasta</span><span class="p">.</span> <span class="nx">Eriytet</span><span class="err">ää</span><span class="nx">n</span> <span class="nx">nappien</span> <span class="nx">tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ä</span> <span class="nx">omaksi</span> <span class="nx">metodeikseen</span><span class="p">:</span> 
 
 <span class="s2">```react
 class App  extends React.Component {
@@ -1643,9 +1642,22 @@ class App  extends React.Component {
 } 
 </span></code></pre></div></div>
 
-<p>ei toimi, this katoaa</p>
+<p>Komponentin määrittelemälle luokalle on nyt lisätty metodit <em>kasvataYhdella</em> ja <em>nollaa</em>. Metodeihin <em>viitataan</em> nappeja vastaavista React-elementeistä:</p>
 
-<p>bindi</p>
+<div class="language-jsx highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span><span class="p">}</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>Kun testaamme nyt sovellusta, törmäämme ongelmaan. Virheilmoitus on erittäin hyvä:</p>
+
+<p><img src="http://localhost:4000/assets/1/29.png" alt="" /></p>
+
+<p>Eli törmäämme Javascriptin luokkien yhteydessä mainitsemaamme ongelmaan alkuperäisen <em>this</em>:in kadottamisesta.</p>
+
+<p>Kun javascriptin runtime kutsuu takaisinkutsufunktiota, <em>this</em> ei enää viittaa komponenttiin <em>App</em> vaan on arvoltaan <em>undefined</em> eli määrittelemätön:</p>
+
+<p><img src="http://localhost:4000/assets/1/6.png" alt="" /></p>
+
+<p>Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on aiemminkin mainitsemamme <em>bindaaminen</em>, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä <em>this</em> on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä. Eli sovellus toimii taas kun koodi muotetaan muotoon:</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)}</span><span class="o">&gt;</span>
       <span class="nx">plus</span>
@@ -1655,7 +1667,9 @@ class App  extends React.Component {
     <span class="o">&lt;</span><span class="sr">/button&gt; </span><span class="err"> 
 </span></code></pre></div></div>
 
-<p>tai bindatun sijoittaminen</p>
+<p>Jos samaa metodia joudutaan kutsumaan useasta kohtaa koodia, on hieman ikävää kirjoittaa toistuvasti metodin bindattu muoto React-elementtien sekaan.</p>
+
+<p>Yksi mahdollisuus onkin suorittaa bindaukset konstruktorissa:</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
@@ -1668,6 +1682,18 @@ class App  extends React.Component {
   <span class="p">}</span>
 </code></pre></div></div>
 
+<p>Nyt riittää viitata metodeihin “normaalisti”, ilman bindiä:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">kasvataYhdella</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="nx">plus</span>
+    <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span><span class="p">}</span><span class="o">&gt;</span>
+      <span class="nx">zero</span>
+    <span class="o">&lt;</span><span class="sr">/button&gt; </span><span class="err"> 
+</span></code></pre></div></div>
+
+<p>Tenkisesti ottaen konstruktorissa korvataan kenttään <em>kasvataYhdella</em> alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että <em>this</em> on pysyväti bindattu olioon itseensä.</p>
+
 <p>paras käyttää vielä standardoimatonta <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class properties</a> -featurea</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -1678,6 +1704,10 @@ class App  extends React.Component {
     <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>  
   <span class="p">}</span>
 </code></pre></div></div>
+
+<h3 id="huomio-funktion-setstate-käytöstä">huomio funktion setState käytöstä</h3>
+
+<p>älä kutsu noin…</p>
 
 <h3 id="refaktorointi">refaktorointi</h3>
 
@@ -1731,7 +1761,19 @@ suoraviivastus
   <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
 </code></pre></div></div>
 
-<h3 id="react-dev-tool">react dev tool</h3>
+<h3 id="tilan-vienti-alikomponenttiin">tilan vienti alikomponenttiin</h3>
+
+<h3 id="debuggaus">debuggaus</h3>
+
+<ul>
+  <li>konsoli auki AINA</li>
+  <li>console.log</li>
+  <li>komento debug</li>
+  <li>debuggeri</li>
+  <li>react dev tool</li>
+</ul>
+
+<h3 id="hyödyllistä-materiaalia">hyödyllistä materiaalia</h3>
 
 <h3 id="react-tehtävät-osa-2">react-tehtävät, osa 2</h3>
 
