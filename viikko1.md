@@ -1889,12 +1889,19 @@ Koska metodi itse sisältää ainoastaan yhden komennon, eli _returnin_, joka pa
     }
 ```  
 
-Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville:
+Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tuloksena on "kaksi nuolta sisältävä funktio":
 
 ```js
   asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
 
+Kaksinuolisen funktion voi ajatella funktiona jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa. 
+
+Ensimmäisellä kutsulla konfuguroidaan varsinaine funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon ja funktiosta jää jäljelle seuraava funktio:
+
+```js
+() => this.setState({ counter: 5 })
+```
 
 
 

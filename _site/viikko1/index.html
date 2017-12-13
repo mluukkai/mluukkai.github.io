@@ -1869,9 +1869,16 @@ class App extends React.Component {
     <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville:</p>
+<p>Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tuloksena on “kaksi nuolta sisältävä funktio”:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Kaksinuolisen funktion voi ajatella funktiona jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa.</p>
+
+<p>Ensimmäisellä kutsulla konfuguroidaan varsinaine funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan <em>arvo</em> arvon ja funktiosta jää jäljelle seuraava funktio:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">5</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <h3 id="tilan-vienti-alikomponenttiin">tilan vienti alikomponenttiin</h3>
