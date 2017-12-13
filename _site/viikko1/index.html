@@ -109,7 +109,7 @@
 <p>Avataan selaimella osoitteessa <a href="https://fullstack-exampleapp.herokuapp.com/">https://fullstack-exampleapp.herokuapp.com/</a> oleva esimerkkisovellus.</p>
 
 <div class="important">
-<h3>Web-sovelluskehityksen sääntö numero yksi</h3>  
+<h3>Web-sovelluskehityksen sääntö numero yksi</h3>
 Pidä selaimen developer-konsoli koko ajan auki
 </div>
 
@@ -134,7 +134,7 @@ Pidä selaimen developer-konsoli koko ajan auki
 
 <p>Ylimmästä osasta ‘General’ selviää, että selain teki <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET</a>-metodilla pyynnön osoitteeseen <em>https://fullstack-exampleapp.herokuapp.com/</em> ja että pyyntö oli onnistunut, sillä pyyntöön saatiin vastaus, jonka <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">Status code</a> on 200.</p>
 
-<p>Pyyntöön ja palvelimen lähettämään vastaukseen liitty erinäinen määrä otsakkeita eli <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">headereita</a>.</p>
+<p>Pyyntöön ja palvelimen lähettämään vastaukseen liittyy erinäinen määrä otsakkeita eli <a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">headereita</a>.</p>
 
 <p><img src="http://localhost:4000/assets/1/4.png" alt="" /></p>
 
@@ -160,36 +160,36 @@ Pidä selaimen developer-konsoli koko ajan auki
 
 <p>Etusivun muodostama koodi näyttää seuraavalta:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">getFronPageHtml</span> <span class="o">=</span> <span class="p">(</span><span class="nx">noteCount</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">getFrontPageHtml</span> <span class="o">=</span> <span class="p">(</span><span class="nx">noteCount</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="k">return</span><span class="p">(</span><span class="s2">`
   &lt;!DOCTYPE html&gt;
     &lt;html&gt;
       &lt;head&gt;
       &lt;/head&gt;
       &lt;body&gt;
-        &lt;div class='container'&gt;
+        &lt;div class="container"&gt;
           &lt;h1&gt;Full stack -esimerkkisovellus&lt;/h1&gt;
           &lt;p&gt;muistiinpanoja luotu </span><span class="p">${</span><span class="nx">noteCount</span><span class="p">}</span><span class="s2"> kappaletta&lt;/p&gt;
-          &lt;a href='/notes'&gt;muistiinpanot&lt;/a&gt;
-          &lt;img src='kuva.png' width='200' /&gt;
+          &lt;a href="/notes"&gt;muistiinpanot&lt;/a&gt;
+          &lt;img src="kuva.png" width="200" /&gt;
         &lt;/div&gt;
       &lt;/body&gt;
     &lt;/html&gt;`</span><span class="p">)</span>
-<span class="p">}</span> 
+<span class="p">}</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">getFronPageHtml</span><span class="p">(</span><span class="nx">notes</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+  <span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">getFrontPageHtml</span><span class="p">(</span><span class="nx">notes</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">page</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div></div>
 
 <p>Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisältö on talletettu ns. template stringinä muuttujaan. Etusivun dynaamisesti muuttuva osa, eli muistiinpanojen lukumäärä korvataan template stringissä sen hetkisellä konkreettisella lukuarvolla.</p>
 
-<p>Perinteisissä websovelluksissa selain on “tyhmä”, se ainoastaan pyytää palvelimelta  HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin <a href="https://courses.helsinki.fi/fi/tkt21007/119558639">Web-palvelinohjelmointi, Java</a> tapaan Springillä, kuten <a href="http://tsoha.github.io/#/johdanto#top">Tietokantasovelluksessa</a> PHP:llä. Esimerkissä on käytetty Node.js:n <a href="https://expressjs.com/">Express</a>-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelien toteuttamiseen.</p>
+<p>Perinteisissä websovelluksissa selain on “tyhmä”, se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin <a href="https://courses.helsinki.fi/fi/tkt21007/119558639">Web-palvelinohjelmointi, Java</a> tapaan Springillä, kuten <a href="http://tsoha.github.io/#/johdanto#top">Tietokantasovelluksessa</a> PHP:llä. Esimerkissä on käytetty Node.js:n <a href="https://expressjs.com/">Express</a>-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.</p>
 
 <h3 id="selaimessa-suoritettava-sovelluslogiikka">selaimessa suoritettava sovelluslogiikka</h3>
 
-<p>Pidä konsoli edelleen auki. Tyhjennä konsoloin näkymä painamalla vasemmalla olevaa ∅-symbolia.</p>
+<p>Pidä konsoli edelleen auki. Tyhjennä konsolin näkymä painamalla vasemmalla olevaa ∅-symbolia.</p>
 
 <p>Kun menet nyt muistiinpanojen sivulle, selain tekee 4 HTTP-pyyntöä:</p>
 
@@ -207,7 +207,7 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:</p>
 <p>Ladattu javascript-koodi näyttää seuraavalta</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">xhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">()</span>
-  
+
 <span class="nx">xhttp</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
@@ -216,18 +216,18 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:</p>
     <span class="kd">var</span> <span class="nx">ul</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'ul'</span><span class="p">)</span>
     <span class="nx">ul</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'class'</span><span class="p">,</span> <span class="s1">'notes'</span><span class="p">)</span>
 
-    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">){</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
-      
+
       <span class="nx">ul</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">);</span>
       <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">content</span><span class="p">))</span>
     <span class="p">})</span>
 
-    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"notes"</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ul</span><span class="p">)</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'notes'</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ul</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/data.json"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+<span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/data.json'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 <span class="nx">xhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">()</span>
 </code></pre></div></div>
 
@@ -237,7 +237,7 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:</p>
 
 <p>Kaksi viimeistä riviä määrittelevät, että selain tekee GET-tyyppisen HTTP-pyynnön osoitteeseen palvelimen osoitteeseen <em>/data.json</em>:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/data.json"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/data.json'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 <span class="nx">xhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">()</span>
 </code></pre></div></div>
 
@@ -247,12 +247,13 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:</p>
 
 <p><img src="http://localhost:4000/assets/1/9.png" alt="" /></p>
 
-<p>Osoitteesta löytyvät muistiinpanot <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-muotoisena “raakadatana”. Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. <a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a>
-ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:</p>
+<p>Osoitteesta löytyvät muistiinpanot <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-muotoisena “raakadatana”. Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. <a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">JSONView</a></p>
+
+<p>ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:</p>
 
 <p><img src="http://localhost:4000/assets/1/10.png" alt="" /></p>
 
-<p>Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja 
+<p>Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja
 muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöstä:</p>
 
 <p>Tämän saa aikaan seuraava koodi:</p>
@@ -263,14 +264,14 @@ muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöst�
     <span class="kd">var</span> <span class="nx">ul</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'ul'</span><span class="p">)</span>
     <span class="nx">ul</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'class'</span><span class="p">,</span> <span class="s1">'notes'</span><span class="p">)</span>
 
-    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">){</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
-      
+
       <span class="nx">ul</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">);</span>
       <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">content</span><span class="p">))</span>
     <span class="p">})</span>
 
-    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"notes"</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ul</span><span class="p">)</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'notes'</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">ul</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p>Koodi muodostaa ensin järjestämätöntä listaa edustavan <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul">ul</a>-tagin:</p>
@@ -281,9 +282,9 @@ muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöst�
 
 <p>ja lisää ul:n sisään yhden <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li">li</a>-elementin kutakin muistiinpanoa kohti. Ainoastaan muistiinpanon <em>content</em>-kenttä tulee li-elementin sisällöksi, raakadatassa olevia aikaleimoja ei käytetä mihinkään.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">){</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">data</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'li'</span><span class="p">)</span>
-      
+
       <span class="nx">ul</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">);</span>
       <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">note</span><span class="p">.</span><span class="nx">content</span><span class="p">))</span>
     <span class="p">})</span>
@@ -312,12 +313,12 @@ muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöst�
 <p>Koodin rakenne on hieman erikoinen:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">xhttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">()</span>
-  
+
 <span class="nx">xhttp</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="c1">// koodi, joka käsittelee palvelimen vastauksen</span>
 <span class="p">}</span>
 
-<span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"/data.json"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+<span class="nx">xhttp</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/data.json'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 <span class="nx">xhttp</span><span class="p">.</span><span class="nx">send</span><span class="p">()</span>
 </code></pre></div></div>
 
@@ -336,7 +337,7 @@ muodostaa datan avulla selaimeen “bulletlistan” muistiinpanojen sisällöst�
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan <a href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function">call back</a> eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen <em>tapahtuman</em> tapahduttua.</p>
+<p>Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan <a href="https://developer.mozilla.org/en-US/docs/Glossary/Callback_function">callback</a> eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen <em>tapahtuman</em> tapahduttua.</p>
 
 <h3 id="document-object-model-eli-dom">Document Object Model eli DOM</h3>
 
@@ -350,7 +351,7 @@ html
   body
     div
       h1
-      div  
+      div
         ul
           li
           li
@@ -368,7 +369,7 @@ html
 
 <p>Document Object Model eli <a href="https://en.wikipedia.org/wiki/Document_Object_Model">DOM</a> on ohjelmointirajapinta eli <em>API</em>, jonka mahdollistaa selaimessa esitettävien web-sivujen muokkaamisen ohjelmallisesti.</p>
 
-<p>Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle  muistiinpanojen listan.</p>
+<p>Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle muistiinpanojen listan.</p>
 
 <p>HTML-dokumentin</p>
 
@@ -405,7 +406,7 @@ html
 
 <p><img src="http://localhost:4000/assets/1/15.png" alt="" /></p>
 
-<p>Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/data.json">https://fullstack-exampleapp.herokuapp.com/data.json</a>  haettavan JSON-muotoisen raakadatan perusteella.</p>
+<p>Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/data.json">https://fullstack-exampleapp.herokuapp.com/data.json</a> haettavan JSON-muotoisen raakadatan perusteella.</p>
 
 <h3 id="css">CSS</h3>
 
@@ -427,7 +428,7 @@ html
 
 <p>Tiedosto määrittelee kaksi <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors">luokkaselektoria</a>, joiden avulla valitaan tietty sivun alue ja määritellään alueelle sovellettavat tyylisäännöt.</p>
 
-<p>Luokkaselekotori alkaa aina pisteellä ja sisältää luokan nimen.</p>
+<p>Luokkaselektori alkaa aina pisteellä ja sisältää luokan nimen.</p>
 
 <p>Luokat ovat <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class">attribuuteja</a> joita voidaan liittää HTML-elementeille.</p>
 
@@ -479,7 +480,7 @@ html
 <p>POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/new_note'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="p">{</span> 
+  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
     <span class="na">content</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">note</span><span class="p">,</span>
     <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
   <span class="p">})</span>
@@ -494,7 +495,7 @@ html
 
 <p>Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span> <span class="p">{</span> 
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
     <span class="na">content</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">note</span><span class="p">,</span>
     <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
   <span class="p">})</span>
@@ -512,7 +513,7 @@ html
 
 <p>Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen <a href="https://en.wikipedia.org/wiki/Single-page_application">Single-page application</a> (SPA) -tyyliä, missä sovelluksille ei enää tehdä esimerkkisovelluksemme tapaan erillisiä sivuja, palvelimen sille lähettämiä sivuja, vaan sovellus koostuu ainoastaan yhdestä palvelimen lähettämästä HTML-sivusta, jonka sisältöä manipuloidaan selaimessa suoritettavalla Javascriptillä.</p>
 
-<p>Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteista mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää <em>uudelleenohjauksen</em> avulla selainta lataamaan muistiinpanojen sivun uudelleen.</p>
+<p>Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteistä mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää <em>uudelleenohjauksen</em> avulla selainta lataamaan muistiinpanojen sivun uudelleen.</p>
 
 <p>Osoitteesta <a href="https://fullstack-exampleapp.herokuapp.com/spa">https://fullstack-exampleapp.herokuapp.com/spa</a> löytyy sovelluksen single page app -versio.</p>
 
@@ -522,14 +523,14 @@ html
 
 <p><img src="http://localhost:4000/assets/1/23.png" alt="" /></p>
 
-<p>Avaa nyt ‘Network’-tabi ja tyhjennä se  ∅-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:</p>
+<p>Avaa nyt ‘Network’-tabi ja tyhjennä se ∅-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:</p>
 
 <p><img src="http://localhost:4000/assets/1/24.png" alt="" /></p>
 
 <p>Pyyntö on tyypiltään POST ja se sisältää JSON-muodossa olevan uuden muistiinpanon, johon kuuluu sekä sisältö, että aikaleima:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
-  <span class="nl">content</span><span class="p">:</span> <span class="s2">"single page app ei tee turhia sivun latauksia"</span><span class="p">,</span> 
+  <span class="nl">content</span><span class="p">:</span> <span class="s2">"single page app ei tee turhia sivun latauksia"</span><span class="p">,</span>
   <span class="nx">date</span><span class="p">:</span> <span class="s2">"2017-12-11T10:51:29.025Z"</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -544,9 +545,9 @@ html
 
 <p>Ohjelman spa-versiossa lomakkeen tietoja ei lähetetä selaimen “normaalin” lomakkeiden lähetysmekanismin avulla, lähettämisen hoitaa selaimen lataamassa Javascript-tiedostossa määritelty koodi. Katsotaan hieman koodia vaikka yksityiskohdista ei tarvitse nytkään välittää liikaa.</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"notes_form"</span><span class="p">)</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'notes_form'</span><span class="p">)</span>
   <span class="nx">form</span><span class="p">.</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+   <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
 
     <span class="kd">var</span> <span class="nx">note</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">content</span><span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">,</span>
@@ -554,14 +555,13 @@ html
     <span class="p">}</span>
 
     <span class="nx">notes</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span>
-    <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">''</span>
     <span class="nx">redrawNotes</span><span class="p">()</span>
     <span class="nx">sendToServer</span><span class="p">(</span><span class="nx">note</span><span class="p">)</span>
   <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake “submitoidaan”, eli lähetetään. Tapahtumankäsittelijä 
-kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme spa-sovelluksissa halua tapahtuvatn.</p>
+<p>Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake “submitoidaan”, eli lähetetään. Tapahtumankäsittelijä kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme spa-sovelluksissa halua tapahtuvan.</p>
 
 <p>Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle komennolla <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.</p>
 
@@ -570,8 +570,8 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
   <span class="kd">var</span> <span class="nx">xhttpForPost</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">()</span>
   <span class="c1">// ...</span>
 
-  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="s1">'/new_note_spa'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
-  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s2">"Content-type"</span><span class="p">,</span> <span class="s2">"application/json"</span><span class="p">)</span>
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">'POST'</span><span class="p">,</span> <span class="s1">'/new_note_spa'</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">'Content-type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
   <span class="nx">xhttpForPost</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">note</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -584,11 +584,11 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
 
 <p>Kurssin esimerkkisovellus on tehty ns. <a href="https://medium.freecodecamp.org/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34">vanilla Javascriptillä</a> eli käyttäen pelkkää DOM-apia ja Javascript-kieltä sivujen rakenteen manipulointiin.</p>
 
-<p>Pelkän Javascriptin ja DOM-apin käytön sijaan Web-ohjelmoinnissa hyödynnetään usein kirjastoja, jotka sisältävät DOM-apia helpommin käytettäviä tykaluja sivujen muokkaukseen. Eräs tälläinen kirjasto on edelleenkin hyvin suosittu <a href="https://jquery.com/">JQuery</a>.</p>
+<p>Pelkän Javascriptin ja DOM-apin käytön sijaan Web-ohjelmoinnissa hyödynnetään usein kirjastoja, jotka sisältävät DOM-apia helpommin käytettäviä työkaluja sivujen muokkaukseen. Eräs tälläinen kirjasto on edelleenkin hyvin suosittu <a href="https://jquery.com/">JQuery</a>.</p>
 
-<p>JQuery on kehitetty ainkana, jolloin web-sivut olivat vielä suurimmaksi osaksi perinteisiä, eli palvelin muodosti HTML-sivuja joiden toiminnallisuutta rikastettiin selaimessa JQueryllä kirjoitetun Javascript-koodin avulla.</p>
+<p>JQuery on kehitetty aikana, jolloin web-sivut olivat vielä suurimmaksi osaksi perinteisiä, eli palvelin muodosti HTML-sivuja joiden toiminnallisuutta rikastettiin selaimessa JQueryllä kirjoitetun Javascript-koodin avulla.</p>
 
-<p>Single page app -tyylin noustua suosioon on ilmestynyt useita JQueryä “modernempia” tapoja sovellusten kehittämiseen. Googlen kehittämä <a href="https://angularjs.org/">AngularJS</a> oli erittäin vielä muutama vuosi sitten erittäin suosittu. Angularin suosio kuitenkin romahti siinä vaiheessa kun Angular-tiimi <a href="https://jaxenter.com/angular-2-0-announcement-backfires-112127.html">ilmoitti</a> lokakuussa 2014, että version 1 tuki lopetetaan ja Angular 2 ei tule olemaan taaksepäin yhteensopiva ykkösversion kanssa. Angular 2 ja uudemmat versiot eivät ole saaneet kovin innostunutta vastaanottoa.</p>
+<p>Single page app -tyylin noustua suosioon on ilmestynyt useita JQueryä “modernimpia” tapoja sovellusten kehittämiseen. Googlen kehittämä <a href="https://angularjs.org/">AngularJS</a> oli vielä muutama vuosi sitten erittäin suosittu. Angularin suosio kuitenkin romahti siinä vaiheessa kun Angular-tiimi <a href="https://jaxenter.com/angular-2-0-announcement-backfires-112127.html">ilmoitti</a> lokakuussa 2014, että version 1 tuki lopetetaan ja Angular 2 ei tule olemaan taaksepäin yhteensopiva ykkösversion kanssa. Angular 2 ja uudemmat versiot eivät ole saaneet kovin innostunutta vastaanottoa.</p>
 
 <p>Nykyisin suosituin tapa toteuttaa web-sovellusten selainpuolen logiikka on Facebookin kehittämä <a href="https://reactjs.org/">ReactJS</a>-kirjasto. Tulemme tutustumaan kurssin aikana Reactiin ja sen kanssa yleisesti käytettyyn <a href="https://github.com/reactjs/redux">Redux</a>-kirjastoon.</p>
 
@@ -600,7 +600,7 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
 
 <p>Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi “kerrosta”, ylempänä olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on “stack”, eli pino. Websovelluskehityksen yhteydessä puhutaan usein myös “frontista” (<a href="https://en.wikipedia.org/wiki/Front_and_back_ends">frontend</a>) ja “backistä” (<a href="https://en.wikipedia.org/wiki/Front_and_back_ends">backend</a>).</p>
 
-<p>Selain on fronend ja selaimessa suoritettava javascript on fronend-koodia. Palvelimella taas pyörii backend-koodi.</p>
+<p>Selain on frontend ja selaimessa suoritettava javascript on frontend-koodia. Palvelimella taas pyörii backend-koodi.</p>
 
 <p>Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että kiinnostus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin.</p>
 
@@ -610,17 +610,17 @@ kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen l
 
 <h2 id="javascript-fatigue">Javascript fatigue</h2>
 
-<p>Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi.</p>
+<p>Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisesti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi.</p>
 
 <p>Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerattu termi <a href="https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4">Javascript</a> <a href="https://auth0.com/blog/how-to-manage-javascript-fatigue/">fatigue</a> eli <a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">Javascript</a>-väsymys.</p>
 
-<p>Jaavascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.</p>
+<p>Javascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.</p>
 
 <h2 id="react">React</h2>
 
 <p>Alamme nyt tutustua kurssin ehkä tärkeimpään teemaan, <a href="https://reactjs.org/">React</a>-kirjastoon.</p>
 
-<p>Tedään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.</p>
+<p>Tehdään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.</p>
 
 <p>Ehdottomasti helpoin tapa päästä alkuun on asentaa <a href="https://github.com/facebookincubator/create-react-app">create-react-app</a>.</p>
 
@@ -727,9 +727,10 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
   <span class="k">return</span><span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world, it is <span class="si">{</span><span class="nx">now</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">a</span><span class="si">}</span> plus <span class="si">{</span><span class="nx">b</span><span class="si">}</span> is <span class="si">{</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">a</span><span class="si">}</span> plus <span class="si">{</span><span class="nx">b</span><span class="si">}</span> is <span class="si">{</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">)}</span>
+  <span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>Aaltosulkeiden sisällä oleva javascript-koodi evaluoidaan ja evaluoinnin tulos upotetaan määriteltyyn kohtaan komponentin HTML-koodia.</p>
@@ -753,7 +754,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
       <span class="s1">'p'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s1">'Hello world, it is '</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
     <span class="p">),</span>
     <span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span>
-      <span class="s1">'p'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span><span class="s1">' plus '</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span> <span class="s1">' is '</span><span class="p">,</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+      <span class="s1">'p'</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="s1">' plus '</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="s1">' is '</span><span class="p">,</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
     <span class="p">)</span>
   <span class="p">);</span>
 <span class="p">};</span>
@@ -761,11 +762,11 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">React</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">App</span><span class="p">,</span> <span class="kc">null</span><span class="p">),</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">));</span>
 </code></pre></div></div>
 
-<p>Käännksen hoitaa <a href="https://babeljs.io/repl/">Babel</a>. Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.</p>
+<p>Käännöksen hoitaa <a href="https://babeljs.io/repl/">Babel</a>. Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.</p>
 
-<p>Reactia olisi myös mahdollista kirjoittaa “suoraan javascriptinä” käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee,</p>
+<p>Reactia olisi myös mahdollista kirjoittaa “suoraan javascriptinä” käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee.</p>
 
-<p>Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden takaan. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.</p>
+<p>Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden sisälle. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.</p>
 
 <h2 id="monta-komponenttia">monta komponenttia</h2>
 
@@ -776,7 +777,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">)</span>  
+  <span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -805,7 +806,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuulliseti ylläpidettävänä. Reactissa on filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.</p>
+<p>Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuullisesti ylläpidettävänä. Reactissa filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.</p>
 
 <p>Jatkamme komponentteihin tutustumista.</p>
 
@@ -820,11 +821,11 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">)</span>  
+  <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>komponentin määrittelevällä funktiolla on nyt parametri <em>props</em>. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri “propsit”, jota komponentin käyttäjä määrittelee.</p>
+<p>komponentin määrittelevällä funktiolla on nyt parametri <em>props</em>. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri “propsit”, jotka komponentin käyttäjä määrittelee.</p>
 
 <p>Propsit määritellään seuraavasti:</p>
 
@@ -832,8 +833,8 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
   <span class="k">return</span> <span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="p">/&gt;</span>
-      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Pekka'</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s2">"Arto"</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s2">"Pekka"</span> <span class="p">/&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">)</span>
 <span class="p">}</span>
@@ -846,7 +847,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">)</span>  
+  <span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -855,7 +856,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
   <span class="k">return</span> <span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span><span class="o">+</span><span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s2">"Arto"</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span> <span class="o">+</span> <span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
       <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="si">{</span><span class="nx">nimi</span><span class="si">}</span> <span class="na">age=</span><span class="si">{</span><span class="nx">ika</span><span class="si">}</span> <span class="p">/&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">)</span>
@@ -887,28 +888,28 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
   <span class="k">return</span> <span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Greetings<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s1">'Arto'</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span><span class="o">+</span><span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;</span><span class="nc">Hello</span> <span class="na">name=</span><span class="s2">"Arto"</span> <span class="na">age=</span><span class="si">{</span><span class="mi">26</span> <span class="o">+</span> <span class="mi">10</span><span class="si">}</span> <span class="p">/&gt;</span>
       <span class="p">&lt;</span><span class="nt">footer</span> <span class="p">/&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän <em>div</em>-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.</p>
+<p>sivulle ei kuitenkaan tule mitään, sillä React luo sivulle ainoastaan tyhjän <em>div</em>-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.</p>
 
 <h3 id="react-tehtävät-osa-1">react-tehtävät, osa 1</h3>
 
 <h2 id="javascriptiä">Javascriptiä</h2>
 
-<p>Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.</p>
+<p>Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascriptiä.</p>
 
 <p>Javascript on kehittynyt viime vuosina nopeaan tahtiin, ja käytämme kurssilla kielen uusimpien versioiden piirteitä, joista osa ei ole vielä olemassa kielen standardoiduissa versiossa. Javascript-standardin virallinen nimi on <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a>. Tämän hetken tuorein version on kesäkuussa 2017 julkaistu <a href="https://www.ecma-international.org/publications/standards/Ecma-262.htm">ES8</a>, toiselta nimeltään ECMAScript 2017.</p>
 
 <p>Selaimet eivät vielä osaa kaikkia Javascriptin uusimpien versioiden ominaisuuksia. Tämän takia selaimessa suoritetaan useimmiten koodia joka on käännetty tai englanniksi <em>transpiled</em> uudemmasta javascriptin versiosta johonkin vanhempaan, paremmin tuettuun versioon.</p>
 
-<p>Tällä hetkellä johtava tapa tehdä transpilointi on <a href="https://babeljs.io/">Babel</a>. Create-react-app:in avulla luodoissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen traspilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.</p>
+<p>Tällä hetkellä johtava tapa tehdä transpilointi on <a href="https://babeljs.io/">Babel</a>. Create-react-app:in avulla luoduissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen transpilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.</p>
 
-<p><a href="https://nodejs.org/en/">NodeJS</a> on melkein missä vaan, mm. palvelimilla toimiva, Googlen <a href="https://developers.google.com/v8/">chrome V8</a>-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio <em>v8.6.0</em>. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.</p>
+<p><a href="https://nodejs.org/en/">NodeJS</a> on melkein missä vaan, mm. palvelimilla toimiva, Googlen <a href="https://developers.google.com/v8/">chrome V8</a>-javascriptmoottoriin perustuva javascriptsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio <em>v8.6.0</em>. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.</p>
 
 <p>Koodi kirjoitetaan <em>.js-</em>päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code></p>
 
@@ -918,7 +919,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <h3 id="muuttujat">muuttujat</h3>
 
-<p>Javascriptissä on kolme tapaa määritellä muttujia:</p>
+<p>Javascriptissä on kolme tapaa määritellä muuttujia:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="kd">let</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">5</span>
@@ -937,16 +938,16 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <h3 id="taulukot">taulukot</h3>
 
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Taulukko</a>  ja muutama esimerkki sen käytöstä</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Taulukko</a> ja muutama esimerkki sen käytöstä</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
-<span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> 
+<span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>  <span class="c1">// tulostuu 4</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>      <span class="c1">// tuostuu -1</span>
 
-<span class="nx">t</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span> <span class="p">(</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+<span class="nx">t</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">luku</span><span class="p">)</span>    <span class="c1">// tulostuu 1, -1, 3 ja 5 omille riveilleen</span>
 <span class="p">})</span>
 
@@ -955,11 +956,11 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>         <span class="c1">// tulostuu [ 1, -1, 3, 5, &lt;2 empty items&gt;, 99 ]</span>
 </code></pre></div></div>
 
-<p>Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty _const_iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.</p>
+<p>Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty <em>const</em> iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.</p>
 
 <p>Eräs tapa käydä taulukon alkiot läpi on esimerkissä käytetty <em>forEach</em>, joka saa parametrikseen nuolisyntaksilla määritellyn <em>funktion</em></p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">luku</span><span class="p">)</span>    <span class="c1">// tulostuu 1, -1, 3 ja 5 omille riveilleen</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -970,10 +971,10 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 
-<span class="kd">const</span> <span class="nx">m1</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">luku</span><span class="o">*</span><span class="mi">2</span> <span class="p">)</span>
+<span class="kd">const</span> <span class="nx">m1</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">luku</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">m1</span><span class="p">)</span> <span class="c1">// tulostuu 2, 4, 6, 8</span>
 
-<span class="kd">const</span> <span class="nx">m2</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s1">'&lt;li&gt;'</span><span class="o">+</span><span class="nx">luku</span><span class="o">+</span><span class="s1">'&lt;/li&gt;'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">m2</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">luku</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s1">'&lt;li&gt;'</span> <span class="o">+</span> <span class="nx">luku</span> <span class="o">+</span> <span class="s1">'&lt;/li&gt;'</span><span class="p">)</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">m2</span><span class="p">)</span> <span class="c1">// tulostuu [ '&lt;li&gt;1&lt;/li&gt;', '&lt;li&gt;2&lt;/li&gt;', '&lt;li&gt;3&lt;/li&gt;', '&lt;li&gt;4&lt;/li&gt;' ]</span>
 </code></pre></div></div>
 
@@ -997,7 +998,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <span class="kd">const</span> <span class="nx">olio3</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">nimi</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">etunimi</span><span class="p">:</span> <span class="s1">'Jami'</span><span class="p">,</span>
+   <span class="na">etunimi</span><span class="p">:</span> <span class="s1">'Jami'</span><span class="p">,</span>
     <span class="na">sukunimi</span><span class="p">:</span> <span class="s1">'Kousa'</span>
   <span class="p">},</span>
   <span class="na">arvosanat</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
@@ -1028,7 +1029,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">summa</span> <span class="o">=</span> <span class="p">(</span><span class="nx">p1</span><span class="p">,</span> <span class="nx">p2</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p1</span><span class="p">)</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p2</span><span class="p">)</span>
-  <span class="k">return</span> <span class="nx">p1</span><span class="o">+</span><span class="nx">p2</span>
+  <span class="k">return</span> <span class="nx">p1</span> <span class="o">+</span> <span class="nx">p2</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
@@ -1042,20 +1043,20 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nelio</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
-  <span class="k">return</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span>
+  <span class="k">return</span> <span class="nx">p</span> <span class="o">*</span> <span class="nx">p</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhemmin seuraavasti:</p>
+<p>Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhyemmin seuraavasti:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nelio</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">nelio</span> <span class="o">=</span> <span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span> <span class="o">*</span> <span class="nx">p</span>
 </code></pre></div></div>
 
 <p>Tämä muoto on erityisen kätevä käsiteltäessä taulukkoja esim. map-metodin avulla:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="kd">const</span> <span class="nx">tnelio</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span><span class="o">*</span><span class="nx">p</span><span class="p">)</span>
-<span class="c1">// tnelio on nyt [1, 2, 3]</span>
+<span class="kd">const</span> <span class="nx">tnelio</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">p</span> <span class="o">=&gt;</span> <span class="nx">p</span> <span class="o">*</span> <span class="nx">p</span><span class="p">)</span>
+<span class="c1">// tnelio on nyt [1, 4, 9]</span>
 </code></pre></div></div>
 
 <p>Nuolifunktio on tullut javascriptiin vasta muutama vuosi sitten version <a href="http://es6-features.org/">ES6</a> myötä. Tätä ennen ja paikoin nykyäänkin funktioden määrittely tapahtui avainsanan <em>function</em> avulla.</p>
@@ -1063,17 +1064,16 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <p>Määrittelytapoja on kaksi, funktiolle voidaan antaa <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function">function declaration</a> tyyppisessä määrittelyssä <em>nimi</em> jonka avulla funktioon voidaan viitata:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">tulo</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">a</span><span class="o">*</span><span class="nx">b</span>
+  <span class="k">return</span> <span class="nx">a</span> <span class="o">*</span> <span class="nx">b</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">vastaus</span> <span class="o">=</span> <span class="nx">tulo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 </code></pre></div></div>
 
-<p>Toinen tapa on tehdä määrittely [funktiolausekkeena]
-(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). Tällöin funtiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:</p>
+<p>Toinen tapa on tehdä määrittely <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function">funktiolausekkeena</a>. Tällöin funktiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">keskiarvo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">vastaus</span> <span class="o">=</span> <span class="nx">keskiarvo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -1127,7 +1127,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
   <span class="p">},</span>
   <span class="na">laskeSumma</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -1147,7 +1147,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
   <span class="p">},</span>
   <span class="na">laskeSumma</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -1157,7 +1157,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 <span class="nx">viiteTervehdykseen</span><span class="p">()</span>   <span class="c1">// tulostuu hello, my name is undefined</span>
 </code></pre></div></div>
 
-<p>Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen <em>this</em>. Toisin kuin melkein kaikissa muissa kielissä <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a>:n arvo määrittyy sen mukaan miten olioa on kutsuttu. Kutsuttaessa metodia viitteen kautta, <em>this</em>:in arvoksi tulee ns <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object">globaali objekti</a>.</p>
+<p>Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen <em>this</em>. Toisin kuin melkein kaikissa muissa kielissä <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">this</a>:n arvo määrittyy sen mukaan miten oliota on kutsuttu. Kutsuttaessa metodia viitteen kautta, <em>this</em>:in arvoksi tulee ns <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object">globaali objekti</a>.</p>
 
 <p>Thisin menettäminen aiheuttaa Reactilla ja Nodella ohjelmoidessa monia potentiaalisia ongelmia. Eteen tulee erittäin usein tilanteita, missä Reactin/Noden (oikeammin ilmaistuna selaimen Javascript-moottorin) tulee kutsua joitan käyttäjän olioiden metodeja. Tälläinen tilanne tulee esim. jos pyytetään Artoa tervehtimään sekunnin kuluttua metodia <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout">setTimeout</a> hyväksikäyttäen.</p>
 
@@ -1188,7 +1188,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">luokkien</a> “simuloinnin”. Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan <em>prototyyppiperintämekanismiin</em>.</p>
 
-<p>Tutustumme kuitenkin pikaisesti ES6:n myltä javascriptiin tulleeseen <em>luokkasyntaksiin</em>, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.</p>
+<p>Tutustumme kuitenkin pikaisesti ES6:n myötä javascriptiin tulleeseen <em>luokkasyntaksiin</em>, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.</p>
 
 <p>Seuraavassa on määritelyt “luokka” Henkilö ja sille kaksi Henkilö-olioa:</p>
 
@@ -1198,7 +1198,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="k">this</span><span class="p">.</span><span class="nx">ika</span> <span class="o">=</span> <span class="nx">ika</span>
   <span class="p">}</span>
   <span class="nx">tervehdi</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>  
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'hello, my name is'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nimi</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -1211,19 +1211,17 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
 
 <p>Syntaksin osalta luokat ja niistä luodut oliot muistuttavat erittäin paljon esim. Javan olioita. Käyttäytymiseltäänkin ne ovat aika lähellä Javan olioita. Perimmiltään kyseessä on kuitenkin edelleen Javascriptin <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance">prototyyppiperintään</a> perustuvista olioista. Molempien olioiden todellinen tyyppi on <em>Object</em> sillä javascriptissä ei perimmiltään ole muita tyyppejä kuin kuin <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures">Boolean, Null, Undefined, Number, String, Symbol ja Object</a></p>
 
-<p>Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. <a href="https://github.com/joshburgess/not-awesome-es6-classes">Not Awesome: ES6 Classes</a>  tai <a href="https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65">Is “Class” In ES6 The New “Bad” Part?</a></p>
+<p>Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. <a href="https://github.com/joshburgess/not-awesome-es6-classes">Not Awesome: ES6 Classes</a> tai <a href="https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65">Is “Class” In ES6 The New “Bad” Part?</a></p>
 
-<p>ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkoiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.</p>
+<p>ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkioiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.</p>
 
 <h3 id="javascript-materiaalia">Javascript-materiaalia</h3>
 
-<p>Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Mozillan javascript -materiaaliin</a></p>
+<p>Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Mozillan javascript -materiaaliin</a></p>
 
-<p>Jo ennen seuraavien tehtävien tekemistä Mozzillan sivuilta kannattaa lukea välittömästi
-[A re-introduction to JavaScript (JS tutorial)]
-(https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)</p>
+<p>Jo ennen seuraavien tehtävien tekemistä Mozillan sivuilta kannattaa lukea välittömästi <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript">A re-introduction to JavaScript (JS tutorial)</a></p>
 
-<p>Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja <a href="https://github.com/getify/You-Dont-Know-JS">You-Dont-Know-JS</a></p>
+<p>Jos haluat tutustua todella syvällisesti Javascriptiin, löytyy internetistä ilmaiseksi mainio kirjasarja <a href="https://github.com/getify/You-Dont-Know-JS">You-Dont-Know-JS</a></p>
 
 <p><a href="https://egghead.io">egghead.io</a>:lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.</p>
 
@@ -1240,11 +1238,11 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">)</span>  
+  <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponetti määritellään luokaksi, joka perii <a href="https://reactjs.org/docs/react-component.html">React.Component</a>-luokan.</p>
+<p>Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponentti määritellään luokaksi, joka perii <a href="https://reactjs.org/docs/react-component.html">React.Component</a>-luokan.</p>
 
 <p>Muutetaan esimerkkisovelluksen komponentti <em>Hello</em> seuraavasti:</p>
 
@@ -1254,7 +1252,7 @@ Jätä tiedosto <em>App.js</em>, tulemme tarvitsemaan sitä myöhemin.</p>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">)</span>  
+    <span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -1281,7 +1279,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
           Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
-          So you were propably born <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+          So you were propably born <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span>
         <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
@@ -1302,7 +1300,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
           Hello <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
-          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span>
         <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
@@ -1333,14 +1331,14 @@ Eli koska komponenttia käytetään seuraavasti</p>
       <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>
           <span class="nx">Hello</span> <span class="p">{</span><span class="nx">name</span><span class="p">},</span> <span class="nx">you</span> <span class="nx">are</span> <span class="p">{</span><span class="nx">age</span><span class="p">}</span> <span class="nx">years</span> <span class="nx">old</span> <span class="o">&lt;</span><span class="nx">br</span> <span class="o">/&gt;</span>
-          <span class="nx">So</span> <span class="nx">you</span> <span class="nx">were</span> <span class="nx">propably</span> <span class="nx">born</span> <span class="p">{</span><span class="nx">bornYear</span><span class="p">()}</span> 
+          <span class="nx">So</span> <span class="nx">you</span> <span class="nx">were</span> <span class="nx">propably</span> <span class="nx">born</span> <span class="p">{</span><span class="nx">bornYear</span><span class="p">()}</span>
         <span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
 </span>      <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
 </span>    <span class="p">)</span>
   <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Huomaa, että oleme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.</p>
+<p>Huomaa, että olemme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.</p>
 
 <p>Destrukturointi tekee asian vielä helpommaksi, sen avulla voimme “kerätä” olion oliomuuttujien arvot suoraan omiin yksittäisiin muuttujiin:</p>
 
@@ -1353,7 +1351,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
           Hello <span class="si">{</span><span class="nx">name</span><span class="si">}</span>, you are <span class="si">{</span><span class="nx">age</span><span class="si">}</span> years old <span class="p">&lt;</span><span class="nt">br</span> <span class="p">/&gt;</span>
-          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span> 
+          So you were propably born <span class="si">{</span><span class="nx">bornYear</span><span class="p">()</span><span class="si">}</span>
         <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
@@ -1369,7 +1367,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>saa &lt;code const {name, age} = this.props&lt;/code&gt;&gt; aikaan sen, että <em>name</em> saa arvon ‘Arto Hellas’ ja <em>age</em> arvon 35.</p>
+<p>saa <code> const {name, age} = this.props</code> aikaan sen, että <em>name</em> saa arvon ‘Arto Hellas’ ja <em>age</em> arvon 35.</p>
 
 <p>Komponentti <em>Hello</em> on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista.</p>
 
@@ -1377,14 +1375,14 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <p>Toistaiseksi tekemämme sovellukset ovat olleet sellaisia, että kun niiden komponentit on kerran renderöity, niiden tilaa ei ole enää voinut muuttaa. Entä jos haluaisimme toteuttaa laskurin, jonka arvo kasvaa esim. ajan kuluessa tai nappien painallusten yhteydessä?</p>
 
-<p>Aloitetaan seuravasta rungosta:</p>
+<p>Aloitetaan seuraavasta rungosta:</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">App</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="p">{</span><span class="nx">counter</span><span class="p">}</span> <span class="o">=</span> <span class="nx">props</span>
   <span class="k">return</span><span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">counter</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">)</span>
-<span class="p">}</span> 
+<span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">counter</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">value</span><span class="p">:</span> <span class="mi">1</span>
@@ -1408,7 +1406,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
   <span class="k">return</span><span class="p">(</span>
     <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">counter</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">)</span>
-<span class="p">}</span> 
+<span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">counter</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">value</span><span class="p">:</span> <span class="mi">1</span>
@@ -1434,12 +1432,10 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <p>Hieman mielenkiintoisempaan toiminnallisuuteen pääsemme tekemällä renderöinnin ja laskurin kasvatuksen toistuvasti sekunnin välein käyttäen <a href="https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval">SetInterval</a>-</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setInterval</span><span class="p">(</span>
-  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span> 
-    <span class="nx">renderoi</span><span class="p">()</span>
-    <span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setInterval</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">renderoi</span><span class="p">()</span>
+  <span class="nx">counter</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">},</span> <span class="mi">1000</span><span class="p">)</span>
 </code></pre></div></div>
 
 <p><em>ReactDOM.render</em>-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa päivittää komponentteja. Tutustutaan seuraavaksi järkevämpään tapaan.</p>
@@ -1448,24 +1444,25 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <p>Muutetaan esimerkkisovelluksen komponentti <em>App</em> luokkaperustaiseksi:</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
     <span class="p">}</span>
   <span class="p">}</span>
+
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
   <span class="p">}</span>
-<span class="p">}</span> 
+<span class="p">}</span>
 
 <span class="nx">ReactDOM</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span>
   <span class="p">&lt;</span><span class="nc">App</span> <span class="p">/&gt;,</span>
   <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'root'</span><span class="p">)</span>
-<span class="p">)</span> 
+<span class="p">)</span>
 </code></pre></div></div>
 
 <p>Komponentilla on nyt metodin <em>render</em> lisäksi <em>konstruktori</em>. Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin <em>props</em> välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.</p>
@@ -1479,11 +1476,11 @@ Eli koska komponenttia käytetään seuraavasti</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Eli tila sisältää kentän <em>counter</em>, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa <em>this.state</em> <strong>ei saa päivittää suoraan</strong>, tilan päivitys on tehtävä aina funktion <a href="https://reactjs.org/docs/faq-state.html#what-does-setstate-do">setState</a> avulla. Metodin kutsuminen päivittää tilan <em>ja</em> aiheuttaa komponentin uuden renderöinnin. Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.</p>
+<p>Eli tila sisältää kentän <em>counter</em>, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa <em>this.state</em> <strong>ei saa päivittää suoraan</strong>, tilan päivitys on tehtävä aina funktion <a href="https://reactjs.org/docs/faq-state.html#what-does-setstate-do">setState</a> avulla. Metodin kutsuminen päivittää tilan <em>ja</em> aiheuttaa komponentin uuden renderöinnin (ellei sitä ole estetty viikolla 2 esiteltävällä tavalla). Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.</p>
 
 <p>Muutetaan komponenttia <em>App</em> siten, että konstruktorissa käynnistetään ajastin joka kutsuu funktiota <em>setState</em> kolmen sekunnin kuluttua ja asettaa laskurin, eli <em>this.state.counter</em>:in arvoksi 1000.</p>
 
-<pre><code class="language-render">class App  extends React.Component {
+<pre><code class="language-render">class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1499,12 +1496,12 @@ Eli koska komponenttia käytetään seuraavasti</p>
       &lt;div&gt;{this.state.counter}&lt;/div&gt;
     )
   }
-} 
+}
 </code></pre>
 
 <p>Tehdään sovelluksesta vielä edistyneempi versio, missä metodia <em>setState</em> kutsutaan toistuvasti sekunnin välein päivittäen laskurin arvoa aina yhdellä.</p>
 
-<pre><code class="language-render">class App  extends React.Component {
+<pre><code class="language-render">class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1520,7 +1517,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
       &lt;div&gt;{this.state.counter}&lt;/div&gt;
     )
   }
-} 
+}
 </code></pre>
 
 <h3 id="tapahtumankäsittely">tapahtumankäsittely</h3>
@@ -1543,32 +1540,32 @@ Eli koska komponenttia käytetään seuraavasti</p>
 </code></pre></div></div>
 <p>Tapahtumankäsittelijäfunktio voidaan myös määritellä suoraan onClick-määrittelyn yhteydessä:</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">()</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
     <span class="p">}</span>
-
   <span class="p">}</span>
+
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span><span class="o">=&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'clicked'</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'clicked'</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
           plus
         <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
   <span class="p">}</span>
-<span class="p">}</span> 
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>Nyt jokainen napin <em>plus</em> painallus tulostaa konsoliin <em>clicked</em>.</p>
 
 <p>Muuttamalla tapahtumankäsittelijä seuraavaan muotoon</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span><span class="o">=&gt;</span><span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span> <span class="p">})</span> <span class="p">}</span><span class="o">&gt;</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">})}</span><span class="o">&gt;</span>
       <span class="nx">plus</span>
     <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span></code></pre></div></div>
@@ -1577,13 +1574,14 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <p>Lisätään sovellukseen myös nappi laskurin nollaamiseen:</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">()</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
     <span class="p">}</span>
   <span class="p">}</span>
+
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
@@ -1594,7 +1592,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
           <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
           <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span><span class="si">}</span><span class="p">&gt;</span>
             zero
-          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>          
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
         <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
@@ -1605,10 +1603,10 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <span class="err">###</span> <span class="nx">metodien</span> <span class="nx">k</span><span class="err">ä</span><span class="nx">ytt</span><span class="err">ö</span> <span class="nx">ja</span> <span class="nx">_this_</span>
 
-<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">visasta</span><span class="p">.</span> <span class="nx">Eriytet</span><span class="err">ää</span><span class="nx">n</span> <span class="nx">nappien</span> <span class="nx">tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ä</span> <span class="nx">omaksi</span> <span class="nx">metodeikseen</span><span class="p">:</span> 
+<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">viisasta</span><span class="p">.</span> <span class="nx">Eriytet</span><span class="err">ää</span><span class="nx">n</span> <span class="nx">nappien</span> <span class="nx">tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ä</span> <span class="nx">omaksi</span> <span class="nx">metodeikseen</span><span class="p">:</span> 
 
 <span class="s2">```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1617,11 +1615,11 @@ class App  extends React.Component {
   }
 
   kasvataYhdella() {
-    this.setState({ counter: this.state.counter+1 })
+    this.setState({ counter: this.state.counter + 1 })
   }
 
   nollaa() {
-    this.setState({ counter: 0 })  
+    this.setState({ counter: 0 })
   }
 
   render() {
@@ -1634,12 +1632,12 @@ class App  extends React.Component {
           &lt;/button&gt;
           &lt;button onClick={this.nollaa}&gt;
             zero
-          &lt;/button&gt;          
+          &lt;/button&gt;
         &lt;/div&gt;
       &lt;/div&gt;
     )
   }
-} 
+}
 </span></code></pre></div></div>
 
 <p>Komponentin määrittelemälle luokalle on nyt lisätty metodit <em>kasvataYhdella</em> ja <em>nollaa</em>. Metodeihin <em>viitataan</em> nappeja vastaavista React-elementeistä:</p>
@@ -1649,13 +1647,13 @@ class App  extends React.Component {
 
 <p>Kun testaamme nyt sovellusta, törmäämme ongelmaan. Virheilmoitus on erittäin hyvä:</p>
 
-<p><img src="http://localhost:4000/assets/1/29.png" alt="" /></p>
+<p><img src="http://localhost:4000/assets/1/28.png" alt="" /></p>
 
 <p>Eli törmäämme Javascriptin luokkien yhteydessä mainitsemaamme ongelmaan alkuperäisen <em>this</em>:in kadottamisesta.</p>
 
 <p>Kun javascriptin runtime kutsuu takaisinkutsufunktiota, <em>this</em> ei enää viittaa komponenttiin <em>App</em> vaan on arvoltaan <em>undefined</em> eli määrittelemätön:</p>
 
-<p><img src="http://localhost:4000/assets/1/6.png" alt="" /></p>
+<p><img src="http://localhost:4000/assets/1/29.png" alt="" /></p>
 
 <p>Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on aiemminkin mainitsemamme <em>bindaaminen</em>, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä <em>this</em> on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä. Eli sovellus toimii taas kun koodi muotetaan muotoon:</p>
 
@@ -1664,14 +1662,14 @@ class App  extends React.Component {
     <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)}</span><span class="o">&gt;</span>
       <span class="nx">zero</span>
-    <span class="o">&lt;</span><span class="sr">/button&gt; </span><span class="err"> 
+    <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span></code></pre></div></div>
 
 <p>Jos samaa metodia joudutaan kutsumaan useasta kohtaa koodia, on hieman ikävää kirjoittaa toistuvasti metodin bindattu muoto React-elementtien sekaan.</p>
 
 <p>Yksi mahdollisuus onkin suorittaa bindaukset konstruktorissa:</p>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">()</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
@@ -1694,38 +1692,9 @@ class App  extends React.Component {
 
 <p>Tenkisesti ottaen konstruktorissa korvataan kenttään <em>kasvataYhdella</em> alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että <em>this</em> on pysyväti bindattu olioon itseensä.</p>
 
-<p>Ehkä paras ratkaisu</p>
+<p>Ehkä paras ratkaisu <em>this</em>-ongelman estämiseen on käyttää tulevaan javascript-standardiin ehdotettua <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class properties</a> -ominaisuutta, jonka avulla voimme määritellä this:in suhteen hyvin käyttäytyviä metodeja seuraavasti:</p>
 
-<p>paras käyttää vielä standardoimatonta <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class properties</a> -featurea</p>
-
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span> <span class="p">})</span>
-  <span class="p">}</span>
-
-  <span class="nx">nollaa</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>  
-  <span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="huomio-funktion-setstate-käytöstä">huomio funktion setState käytöstä</h3>
-
-<p>älä kutsu noin…</p>
-
-<h3 id="refaktorointi">refaktorointi</h3>
-
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
-    <span class="p">}</span>
-
-    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
-      Plus
-    <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>    
-<span class="s2">```react
-
-funktio joka palauttaa funktion...
-
-```</span><span class="nx">react</span>
-<span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
   <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">super</span><span class="p">()</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
@@ -1733,34 +1702,147 @@ funktio joka palauttaa funktion...
     <span class="p">}</span>
   <span class="p">}</span>
 
-  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> 
-    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
+  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="nx">nollaa</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Näin jokainen <em>App</em>-komponentti saa kentät <em>kasvataYhdella</em> ja <em>nollaa</em> jotka ovat funktioita, joiden <em>this</em> on sidottu komponenttiin riippumatta siitä miten ja kenen toimesta metodia kutsutaan.</p>
+
+<p>Syy miksi nuolifunktiolla määritelty metodi toimii <em>this</em>:in suhteen samaan tapaan kuin esim. Javassa, on se, että nuolifunktioilla on ns. leksikaalinen (lexical) this, eli nuolifunktion <em>this</em> määräytyy sen määrittelykontekstin <em>this</em>:in mukaan. Kun metodi määritellään class propertynä, on määrittelykontekstina <em>App</em>-komponentti. Tarkempaa selitystä esim. <a href="https://medium.com/@reasoncode/javascript-es6-arrow-functions-and-lexical-this-f2a3e2a5e8c4">täällä</a>.</p>
+
+<p>Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemiseen.</p>
+
+<p><a href="https://babeljs.io/docs/plugins/transform-class-properties/">class propertyt</a> siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta creat-react-app:illa luoduissa sovelluksissa, sillä <a href="https://babeljs.io/">babel</a> osaa kääntää (eli transpiloida) ominaisuuden.</p>
+
+<p>NodeJS ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa NodeJS:llä.</p>
+
+<h3 id="huomio-funktion-setstate-käytöstä">huomio funktion setState käytöstä</h3>
+
+<p>Käytimme metodia <em>setState</em> kahteem kertaan:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="nx">nollaa</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Näistä ensimmäinen tapa <code>this.setState({ counter: this.state.counter + 1 })</code> ei ole suositeltava, sillä React ei takaa] että metodin <em>setState</em> kutsut tapahtuvat <a href="https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous">siinä järjestyksessä missä ne on kirjoitettu koodiin</a>.</p>
+
+<p>Jos halutaan määritellä uusi tila olemassaolevan tilan perusteella, on varmempi kutsua <em>setState</em>:a seuraavasti:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">((</span><span class="nx">prevState</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+  <span class="na">counter</span><span class="p">:</span> <span class="nx">prevState</span><span class="p">.</span><span class="nx">counter</span>
+<span class="p">}));</span>
+</code></pre></div></div>
+
+<p>Nyt metodin parametrina on funktio, jonka parametrina on edellinen tila <em>prevState</em> ja tilan päivitys tapahtuu varmuudella kutsuhetken edellisen tilan perusteella.</p>
+
+<p>Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni bugi.</p>
+
+<p>Asia tulee kuitenkin ehdottomasti pitää mielessä, <em>setState</em>:n vääränlainen käyttö saataa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.</p>
+
+<h3 id="refaktorointi">refaktorointi</h3>
+
+<p>Metodit <em>kasvataYhdella</em> ja <em>nollaa</em> toimivat melkein samalla tavalla, ne asettavat uuden arvon laskurille. Kannattaakin tehdä yksittäinen metodi joka sopii molempiin käyttötarkoituksiin:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
     <span class="p">}</span>
-  <span class="p">}</span> 
+
+    <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+      <span class="c1">//...</span>
+      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+        Plus
+      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>       
+      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+        Zero
+      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>  
+      <span class="c1">//...</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Huomaamme kuitenkin että muutos hajottaa sovelluksemme täysin:</p>
+
+<p><img src="http://localhost:4000/assets/1/28.png" alt="" /></p>
+
+<p>Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite <em>fuktioon</em>. Kun koodissa on</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)}</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittän kun React suorittaa metodin <em>render</em>, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin <em>setState</em> kutsun. Tämä taas aiheuttaa uuden <em>render</em>-kutsun jne…</p>
+
+<p>Tässä tilanteessa meidän onkin käytettävä yleistä Javascriptin ja yleisemminkin funktionaalisen ohjelmoinnin kikkaa, eli määritellä <em>funktio joka palauttaa funktion</em>:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="p">()</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">counter</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
   <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
             Plus
-          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>        
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
           <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
             Zero
-          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>   
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
         <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
       <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">)</span>
   <span class="p">}</span>
-<span class="p">}</span> 
-<span class="s2">```react
+<span class="p">}</span>
+</code></pre></div></div>
 
-suoraviivastus
+<p>Jos et ole aiemmin törmännyt tekniikkaan, siihen totutteluun voi mennä tovi.</p>
 
-```</span><span class="nx">react</span>
-  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>  
+<p>Olemme siis määritelleen komponentin metodin seuraavasti:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Kun <em>render</em>-metodissa määritellään tapaahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio.</p>
+
+<p>brainfuk…</p>
+
+<p>suoraviivastus</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <h3 id="tilan-vienti-alikomponenttiin">tilan vienti alikomponenttiin</h3>

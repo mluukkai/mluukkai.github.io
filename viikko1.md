@@ -1474,7 +1474,7 @@ Konstruktori määrittelee komponentin alkutilan olevan:
 }
 ```
 
-Eli tila sisältää kentän _counter_, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa _this.state_ **ei saa päivittää suoraan**, tilan päivitys on tehtävä aina funktion [setState](https://reactjs.org/docs/faq-state.html#what-does-setstate-do) avulla. Metodin kutsuminen päivittää tilan _ja_ aiheuttaa komponentin uuden renderöinnin. Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.
+Eli tila sisältää kentän _counter_, jonka arvo on 1. React-komponettien tilaa, eli muuttujaa _this.state_ **ei saa päivittää suoraan**, tilan päivitys on tehtävä aina funktion [setState](https://reactjs.org/docs/faq-state.html#what-does-setstate-do) avulla. Metodin kutsuminen päivittää tilan _ja_ aiheuttaa komponentin uuden renderöinnin (ellei sitä ole estetty viikolla 2 esiteltävällä tavalla). Uudelleenrenderöinnin yhteydessä myös kaikki komponentin sisältämät alikomponentit renderöidään.
 
 Muutetaan komponenttia _App_ siten, että konstruktorissa käynnistetään ajastin joka kutsuu funktiota _setState_ kolmen sekunnin kuluttua ja asettaa laskurin, eli _this.state.counter_:in arvoksi 1000.
 
@@ -1652,13 +1652,13 @@ Komponentin määrittelemälle luokalle on nyt lisätty metodit _kasvataYhdella_
 
 Kun testaamme nyt sovellusta, törmäämme ongelmaan. Virheilmoitus on erittäin hyvä:
 
-![]({{ "/assets/1/29.png" | absolute_url }})
+![]({{ "/assets/1/28.png" | absolute_url }})
 
 Eli törmäämme Javascriptin luokkien yhteydessä mainitsemaamme ongelmaan alkuperäisen _this_:in kadottamisesta.
 
 Kun javascriptin runtime kutsuu takaisinkutsufunktiota, _this_ ei enää viittaa komponenttiin _App_ vaan on arvoltaan _undefined_ eli määrittelemätön:
 
-![]({{ "/assets/1/6.png" | absolute_url }})
+![]({{ "/assets/1/29.png" | absolute_url }})
 
 Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on aiemminkin mainitsemamme _bindaaminen_, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä _this_ on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä. Eli sovellus toimii taas kun koodi muotetaan muotoon:
 
@@ -1700,11 +1700,45 @@ Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
 
 Tenkisesti ottaen konstruktorissa korvataan kenttään _kasvataYhdella_ alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että _this_ on pysyväti bindattu olioon itseensä.
 
-Ehkä paras ratkaisu
-
-paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/docs/plugins/transform-class-properties/) -featurea
+Ehkä paras ratkaisu _this_-ongelman estämiseen on käyttää tulevaan javascript-standardiin ehdotettua [class properties](https://babeljs.io/docs/plugins/transform-class-properties/) -ominaisuutta, jonka avulla voimme määritellä this:in suhteen hyvin käyttäytyviä metodeja seuraavasti:
 
 ```react
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 1
+    }
+  }
+
+  kasvataYhdella = () => {
+    this.setState({ counter: this.state.counter + 1 })
+  }
+
+  nollaa = () => {
+    this.setState({ counter: 0 })
+  }
+
+  render() {
+    // ...
+  }
+```
+
+Näin jokainen _App_-komponentti saa kentät _kasvataYhdella_ ja _nollaa_ jotka ovat funktioita, joiden _this_ on sidottu komponenttiin riippumatta siitä miten ja kenen toimesta metodia kutsutaan. 
+
+Syy miksi nuolifunktiolla määritelty metodi toimii _this_:in suhteen samaan tapaan kuin esim. Javassa, on se, että nuolifunktioilla on ns. leksikaalinen (lexical) this, eli nuolifunktion _this_ määräytyy sen määrittelykontekstin _this_:in mukaan. Kun metodi määritellään class propertynä, on määrittelykontekstina _App_-komponentti. Tarkempaa selitystä esim. [täällä](https://medium.com/@reasoncode/javascript-es6-arrow-functions-and-lexical-this-f2a3e2a5e8c4).
+
+Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemiseen.
+
+[class propertyt](https://babeljs.io/docs/plugins/transform-class-properties/) siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta creat-react-app:illa luoduissa sovelluksissa, sillä [babel](https://babeljs.io/) osaa kääntää (eli transpiloida) ominaisuuden.
+
+NodeJS ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa NodeJS:llä.
+
+### huomio funktion setState käytöstä
+
+Käytimme metodia _setState_ kahteem kertaan:
+
+```js
   kasvataYhdella = () => {
     this.setState({ counter: this.state.counter + 1 })
   }
@@ -1714,23 +1748,56 @@ paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/
   }
 ```
 
-### huomio funktion setState käytöstä
+Näistä ensimmäinen tapa <code>this.setState({ counter: this.state.counter + 1 })</code> ei ole suositeltava, sillä React ei takaa] että metodin _setState_ kutsut tapahtuvat [siinä järjestyksessä missä ne on kirjoitettu koodiin](https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous).
 
-älä kutsu noin...
+Jos halutaan määritellä uusi tila olemassaolevan tilan perusteella, on varmempi kutsua _setState_:a seuraavasti:
+
+```js
+this.setState((prevState) => ({
+  counter: prevState.counter
+}));
+```
+
+Nyt metodin parametrina on funktio, jonka parametrina on edellinen tila _prevState_ ja tilan päivitys tapahtuu varmuudella kutsuhetken edellisen tilan perusteella.
+
+Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni bugi.
+
+Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saataa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin. 
 
 ### refaktorointi
+
+Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asettavat uuden arvon laskurille. Kannattaakin tehdä yksittäinen metodi joka sopii molempiin käyttötarkoituksiin:
 
 ```react
     asetaArvoon = (arvo) => {
       this.setState({ counter: arvo })
     }
 
-    <button onClick={this.asetaArvoon(this.state.counter + 1)}>
-      Plus
-    </button>
-```react
+    render() {
+      //...
+      <button onClick={this.asetaArvoon(this.state.counter+1)}>
+        Plus
+      </button>       
+      <button onClick={this.asetaArvoon(0)}>
+        Zero
+      </button>  
+      //...
+    }
+```
 
-funktio joka palauttaa funktion...
+Huomaamme kuitenkin että muutos hajottaa sovelluksemme täysin:
+
+![]({{ "/assets/1/28.png" | absolute_url }})
+
+Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite _fuktioon_. Kun koodissa on 
+
+```react
+<button onClick={this.asetaArvoon(0)}>
+```
+
+tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittän kun React suorittaa metodin _render_, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin _setState_ kutsun. Tämä taas aiheuttaa uuden _render_-kutsun jne...
+
+Tässä tilanteessa meidän onkin käytettävä yleistä Javascriptin ja yleisemminkin funktionaalisen ohjelmoinnin kikkaa, eli määritellä _funktio joka palauttaa funktion_:
 
 ```react
 class App extends React.Component {
@@ -1763,7 +1830,31 @@ class App extends React.Component {
     )
   }
 }
-```react
+```
+
+Jos et ole aiemmin törmännyt tekniikkaan, siihen totutteluun voi mennä tovi.
+
+Olemme siis määritelleen komponentin metodin seuraavasti:
+
+```js
+  asetaArvoon = (arvo) => {
+    return () => {
+      this.setState({ counter: arvo })
+    }
+  }
+```  
+
+Kun _render_-metodissa määritellään tapaahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena
+
+```js
+  () => {
+    this.setState({ counter: 0 })
+  }
+ ```   
+
+eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio.
+
+brainfuk...
 
 suoraviivastus
 
