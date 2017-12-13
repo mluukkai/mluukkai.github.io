@@ -173,8 +173,7 @@ Voimme kokeilla mennä osoitteeseen <https://fullstack-exampleapp.herokuapp.com/
 
 ![]({{ "/assets/1/9.png" | absolute_url }})
 
-Osoitteesta löytyvät muistiinpanot [JSON][https://en.wikipedia.org/wiki/JSON]-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView]
-(https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
+Osoitteesta löytyvät muistiinpanot [JSON](https://en.wikipedia.org/wiki/JSON)-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
 ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:
 
 ![]({{ "/assets/1/10.png" | absolute_url }})
@@ -584,7 +583,7 @@ Chromen pitäisi aueta automaattisesti. Avaa konsoli **välittömästi**. Avaa m
 
 Sovelluksessa on hieman valmista koodia, mutta yksinkertaistetaan koodi siten, että tiedoston _index.js_ sisällöksi tulee:
 
-```js
+```react
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -606,7 +605,7 @@ Tiedosto _index.js_ määrittelee nyt React [komponentin](https://reactjs.org/do
 
 Komento 
 
-```js
+```react
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
@@ -872,7 +871,7 @@ Tällä hetkellä johtava tapa tehdä transpilointi on [Babel](https://babeljs.i
 
 [NodeJS](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen. 
 
-Koodi kirjoitetaan _.js-_päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
+Koodi kirjoitetaan <em>.js-</em>päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
 
 Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusmekanismeiltaan kielet kuitenkin poikkeavat radikaalisti. Java-taustalta tultaessa Javascriptin käyttäytyminen saattaa aiheuttaa hämmennystä, varsinkin jos kielen piirteistä ei viitsitä ottaa selvää.
 
@@ -894,7 +893,7 @@ console.log(x, y)  // tulostuu 1, teksti
 x = 4              // aiheuttaa virheen
 ```
 
-[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä varia jos ei tiedä mitä se tekee, käytä aina const:ia tai let:iä!
+[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä tällä kurssilla varia, käytä aina const:ia tai let:iä! 
 
 Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
 
@@ -1610,7 +1609,7 @@ Sovelluksemme on valmis!
 
 ### metodien käyttö ja _this_
 
-Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin visasta. 
+Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin visasta. Eriytetään nappien tapahtumankäsittelijä omaksi metodeikseen: 
 
 ```react
 class App  extends React.Component {
@@ -1647,9 +1646,23 @@ class App  extends React.Component {
 } 
 ```
 
-ei toimi, this katoaa
+Komponentin määrittelemälle luokalle on nyt lisätty metodit _kasvataYhdella_ ja _nollaa_. Metodeihin _viitataan_ nappeja vastaavista React-elementeistä:
 
-bindi
+```jsx
+<button onClick={this.kasvataYhdella}>
+```
+
+Kun testaamme nyt sovellusta, törmäämme ongelmaan. Virheilmoitus on erittäin hyvä:
+
+![]({{ "/assets/1/29.png" | absolute_url }})
+
+Eli törmäämme Javascriptin luokkien yhteydessä mainitsemaamme ongelmaan alkuperäisen _this_:in kadottamisesta.
+
+Kun javascriptin runtime kutsuu takaisinkutsufunktiota, _this_ ei enää viittaa komponenttiin _App_ vaan on arvoltaan _undefined_ eli määrittelemätön:
+
+![]({{ "/assets/1/6.png" | absolute_url }})
+
+Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on aiemminkin mainitsemamme _bindaaminen_, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä _this_ on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä. Eli sovellus toimii taas kun koodi muotetaan muotoon:
 
 ```react
     <button onClick={this.kasvataYhdella.bind(this)}>
@@ -1660,7 +1673,9 @@ bindi
     </button>  
 ```
 
-tai bindatun sijoittaminen
+Jos samaa metodia joudutaan kutsumaan useasta kohtaa koodia, on hieman ikävää kirjoittaa toistuvasti metodin bindattu muoto React-elementtien sekaan.
+
+Yksi mahdollisuus onkin suorittaa bindaukset konstruktorissa:
 
 ```react
 class App  extends React.Component {
@@ -1674,6 +1689,19 @@ class App  extends React.Component {
   }
 ```
 
+Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
+
+```react
+    <button onClick={this.kasvataYhdella}>
+      plus
+    </button>
+    <button onClick={this.nollaa}>
+      zero
+    </button>  
+```
+
+Tenkisesti ottaen konstruktorissa korvataan kenttään _kasvataYhdella_ alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että _this_ on pysyväti bindattu olioon itseensä.
+
 paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/docs/plugins/transform-class-properties/) -featurea
 
 ```react
@@ -1685,6 +1713,10 @@ paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/
     this.setState({ counter: 0 })  
   }
 ```
+
+### huomio funktion setState käytöstä
+
+älä kutsu noin...
 
 ### refaktorointi
 
@@ -1739,6 +1771,16 @@ suoraviivastus
   asetaArvoon = (arvo) => () => this.setState({ counter: arvo })  
 ```
 
-### react dev tool
+### tilan vienti alikomponenttiin
+
+### debuggaus
+
+- konsoli auki AINA
+- console.log
+- komento debug
+- debuggeri
+- react dev tool
+
+### hyödyllistä materiaalia
 
 ### react-tehtävät, osa 2
