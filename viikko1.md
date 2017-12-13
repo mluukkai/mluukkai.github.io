@@ -16,13 +16,16 @@ Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-
 
 ## alkutoimet
 
-node, git, chrome, ...
+asenna asap
+- git
+- node min versio 8.6
+- chrome canary
 
 ## viikon 1 oppimistavoitteet
 
 - ...
 
-## web-sovelluksen toimintaperiaatteita
+## web-sovelluksen toimintaperiaatteita ##
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
@@ -860,6 +863,8 @@ sivulle ei kuitenkaan tule mitään, sillä React luo sivulle ainoastaan tyhjän
 
 ### react-tehtävät, osa 1
 
+Tee nyt [nämä](../tehtavat#react-alkeet)
+
 ## Javascriptiä
 
 Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascriptiä.
@@ -1208,6 +1213,8 @@ Jos haluat tutustua todella syvällisesti Javascriptiin, löytyy internetistä i
 [egghead.io](https://egghead.io):lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.
 
 ### tehtäviä javascriptistä
+
+Tee nyt [nämä](../tehtavat#javascriptin-alkeet)
 
 ## paluu Reactin äärelle
 
@@ -2080,3 +2087,5 @@ Uuden konsolitabin avulla voidaan tarkkailla sovelluksen react-elementtejä ja n
 - Reactin [docs](https://reactjs.org/docs/hello-world.html), Reactin sivuilla oleva tutoriaali aika huono...
 
 ### react-tehtävät, osa 2
+
+Tee nyt [nämä](../tehtavat#lisää-reactia)
