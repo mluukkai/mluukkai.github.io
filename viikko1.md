@@ -27,15 +27,15 @@ node, git, chrome, ...
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
 Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikkein suositeltavinta on Chromen ns.
-[canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen. 
+[canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen.
 
 Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
 
 <div class="important">
-<h3>Web-sovelluskehityksen sääntö numero yksi</h3>  
+<h3>Web-sovelluskehityksen sääntö numero yksi</h3>
 Pidä selaimen developer-konsoli koko ajan auki
 </div>
- 
+
 Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _com_ ja _i_. Ennen kun jatkat eteenpäin, selvitä miten saat koneellasi konsolin auki ja muista pitää se auki *aina* kun teet web-sovelluksia.
 
 Konsoli näyttää seuraavalta:
@@ -57,13 +57,13 @@ Klikkaamalla näistä ensimmäistä, paljastuu tarkempaa tietoa siitä mistä on
 
 Ylimmästä osasta 'General' selviää, että selain teki [GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)-metodilla pyynnön osoitteeseen _https://fullstack-exampleapp.herokuapp.com/_ ja että pyyntö oli onnistunut, sillä pyyntöön saatiin vastaus, jonka [Status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) on 200.
 
-Pyyntöön ja palvelimen lähettämään vastaukseen liitty erinäinen määrä otsakkeita eli [headereita](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields). 
+Pyyntöön ja palvelimen lähettämään vastaukseen liittyy erinäinen määrä otsakkeita eli [headereita](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields).
 
 ![]({{ "/assets/1/4.png" | absolute_url }})
 
-Ylempänä oleva _response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken sekä sen. Tärkeä _Content-Type_ headeri kertoo että vastaus on utf-8 muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää että sen, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu joka tulee renderöidä käyttäjän selaimeen. 
+Ylempänä oleva _response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken sekä sen. Tärkeä _Content-Type_ headeri kertoo että vastaus on utf-8 muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää että sen, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu joka tulee renderöidä käyttäjän selaimeen.
 
-Välilehti _Preview_ näyttää miltä pyyntöön vastauksena lähetetty data näyttää. Kyseessä on siis normaali HTML-sivu, jonka _body_-osassa määritellään selaimessa näytettävän sivun rakenne: 
+Välilehti _Preview_ näyttää miltä pyyntöön vastauksena lähetetty data näyttää. Kyseessä on siis normaali HTML-sivu, jonka _body_-osassa määritellään selaimessa näytettävän sivun rakenne:
 
 ![]({{ "/assets/1/5.png" | absolute_url }})
 
@@ -77,43 +77,43 @@ eli pyyntö on tehty osoitteeseen _https://fullstack-exampleapp.herokuapp.com/ku
 
 ### perinteinen web-sovellus
 
-Esimerkkisovelluksen pääsivu toimii perinteisen web-sovelluksen tapaan. Mentäessä sivulle, selain hakee palvelimelta sivun muotoilun ja tekstuaalisen sisällön määrittelevän HTML-dokumentin. 
+Esimerkkisovelluksen pääsivu toimii perinteisen web-sovelluksen tapaan. Mentäessä sivulle, selain hakee palvelimelta sivun muotoilun ja tekstuaalisen sisällön määrittelevän HTML-dokumentin.
 
 Palvelin on muodostanut dokumentin jollain tavalla. Dokumentti voi olla _staattista sisältöä_ eli palvelimen hakemistossa oleva tekstitiedosto. Dokumentti voi myös olla _dynaaminen_, eli palvelin voi muodostaa HTML-dokumentit esim. tietokannassa olevien tietojen perusteella. Esimerkkisovelluksessa sivun HTML-koodi on muodostettu dynaamisesti sillä se sisältää tiedon luotujen muistiinpanojen lukumäärästä.
 
 Etusivun muodostama koodi näyttää seuraavalta:
 
 ```js
-const getFronPageHtml = (noteCount) => {
+const getFrontPageHtml = (noteCount) => {
   return(`
   <!DOCTYPE html>
     <html>
       <head>
       </head>
       <body>
-        <div class='container'>
+        <div class="container">
           <h1>Full stack -esimerkkisovellus</h1>
           <p>muistiinpanoja luotu ${noteCount} kappaletta</p>
-          <a href='/notes'>muistiinpanot</a>
-          <img src='kuva.png' width='200' />
+          <a href="/notes">muistiinpanot</a>
+          <img src="kuva.png" width="200" />
         </div>
       </body>
     </html>`)
-} 
+}
 
 app.get('/', (req, res) => {
-  const page = getFronPageHtml(notes.length)
+  const page = getFrontPageHtml(notes.length)
   res.send(page)
 })
 ```
 
 Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisältö on talletettu ns. template stringinä muuttujaan. Etusivun dynaamisesti muuttuva osa, eli muistiinpanojen lukumäärä korvataan template stringissä sen hetkisellä konkreettisella lukuarvolla.
 
-Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta  HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä, kuten [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä. Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelien toteuttamiseen. 
+Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä, kuten [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä. Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.
 
 ### selaimessa suoritettava sovelluslogiikka
 
-Pidä konsoli edelleen auki. Tyhjennä konsoloin näkymä painamalla vasemmalla olevaa &empty;-symbolia. 
+Pidä konsoli edelleen auki. Tyhjennä konsolin näkymä painamalla vasemmalla olevaa &empty;-symbolia.
 
 Kun menet nyt muistiinpanojen sivulle, selain tekee 4 HTTP-pyyntöä:
 
@@ -132,7 +132,7 @@ Ladattu javascript-koodi näyttää seuraavalta
 
 ```js
 var xhttp = new XMLHttpRequest()
-  
+
 xhttp.onreadystatechange = function () {
   if (this.readyState == 4 && this.status == 200) {
     const data = JSON.parse(this.responseText)
@@ -141,29 +141,29 @@ xhttp.onreadystatechange = function () {
     var ul = document.createElement('ul')
     ul.setAttribute('class', 'notes')
 
-    data.forEach(function(note){
+    data.forEach(function(note) {
       var li = document.createElement('li')
-      
+
       ul.appendChild(li);
       li.appendChild(document.createTextNode(note.content))
     })
 
-    document.getElementById("notes").appendChild(ul)
+    document.getElementById('notes').appendChild(ul)
   }
 }
 
-xhttp.open("GET", "/data.json", true)
+xhttp.open('GET', '/data.json', true)
 xhttp.send()
 ```
 
-Koodin yksityiskohdat eivät ole tässä vaiheessa vielä oleellisia. 
+Koodin yksityiskohdat eivät ole tässä vaiheessa vielä oleellisia.
 
-Ladattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin. 
+Ladattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin.
 
 Kaksi viimeistä riviä määrittelevät, että selain tekee GET-tyyppisen HTTP-pyynnön osoitteeseen palvelimen osoitteeseen _/data.json_:
 
 ```js
-xhttp.open("GET", "/data.json", true)
+xhttp.open('GET', '/data.json', true)
 xhttp.send()
 ```
 
@@ -173,13 +173,12 @@ Voimme kokeilla mennä osoitteeseen <https://fullstack-exampleapp.herokuapp.com/
 
 ![]({{ "/assets/1/9.png" | absolute_url }})
 
-Osoitteesta löytyvät muistiinpanot [JSON][https://en.wikipedia.org/wiki/JSON]-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView]
-(https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
+Osoitteesta löytyvät muistiinpanot [JSON](https://en.wikipedia.org/wiki/JSON)-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView plugin](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
 ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:
 
 ![]({{ "/assets/1/10.png" | absolute_url }})
 
-Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja 
+Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja
 muodostaa datan avulla selaimeen "bulletlistan" muistiinpanojen sisällöstä:
 
 Tämän saa aikaan seuraava koodi:
@@ -191,14 +190,14 @@ Tämän saa aikaan seuraava koodi:
     var ul = document.createElement('ul')
     ul.setAttribute('class', 'notes')
 
-    data.forEach(function(note){
+    data.forEach(function(note) {
       var li = document.createElement('li')
-      
+
       ul.appendChild(li);
       li.appendChild(document.createTextNode(note.content))
     })
 
-    document.getElementById("notes").appendChild(ul)
+    document.getElementById('notes').appendChild(ul)
 ```
 
 Koodi muodostaa ensin järjestämätöntä listaa edustavan [ul](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul)-tagin:
@@ -212,9 +211,9 @@ ja lisää ul:n sisään yhden [li](https://developer.mozilla.org/en-US/docs/Web
 
 
 ```js
-    data.forEach(function(note){
+    data.forEach(function(note) {
       var li = document.createElement('li')
-      
+
       ul.appendChild(li);
       li.appendChild(document.createTextNode(note.content))
     })
@@ -245,18 +244,18 @@ Koodin rakenne on hieman erikoinen:
 
 ```js
 var xhttp = new XMLHttpRequest()
-  
+
 xhttp.onreadystatechange = function () {
   // koodi, joka käsittelee palvelimen vastauksen
 }
 
-xhttp.open("GET", "/data.json", true)
+xhttp.open('GET', '/data.json', true)
 xhttp.send()
 ```
 
 eli palvelimelle tehtävä pyyntö suoritetaan vasta viimeisellä rivillä. Palvelimen vastauksen käsittelyn määrittelevä koodi on kirjoitettu jo aiemmin. Mistä on kyse?
 
-Rivillä 
+Rivillä
 ```js
 xhttp.onreadystatechange = function () {
 ```
@@ -271,7 +270,7 @@ xhttp.onreadystatechange = function () {
 }
 ```
 
-Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan [call back](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function) eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen _tapahtuman_ tapahduttua. 
+Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan [callback](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function) eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen _tapahtuman_ tapahduttua.
 
 ### Document Object Model eli DOM
 
@@ -285,7 +284,7 @@ html
   body
     div
       h1
-      div  
+      div
         ul
           li
           li
@@ -299,11 +298,11 @@ Sama puumaisuus on nähtävissä konsolin välilehdellä _Elements_
 
 ![]({{ "/assets/1/13.png" | absolute_url }})
 
-Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena. 
+Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena.
 
 Document Object Model eli [DOM](https://en.wikipedia.org/wiki/Document_Object_Model) on ohjelmointirajapinta eli _API_, jonka mahdollistaa selaimessa esitettävien web-sivujen muokkaamisen ohjelmallisesti.
 
-Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle  muistiinpanojen listan.
+Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle muistiinpanojen listan.
 
 HTML-dokumentin
 
@@ -319,7 +318,7 @@ HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään _do
 
 ![]({{ "/assets/1/14.png" | absolute_url }})
 
-Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle. 
+Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle.
 
 Lisätään nyt sivulle uusi muistiinpano suoraan konsolista.
 
@@ -343,13 +342,13 @@ lista.appendChild(uusi)
 
 ![]({{ "/assets/1/15.png" | absolute_url }})
 
-Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json>  haettavan JSON-muotoisen raakadatan perusteella. 
+Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json> haettavan JSON-muotoisen raakadatan perusteella.
 
 
 
 ### CSS
 
-Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto 
+Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
 
 Cascading Style Sheets eli CSS on kieli, jonka avulla web-sovellusten ulkoasu määritellään.
 
@@ -368,9 +367,9 @@ Ladattu css-tiedosto näyttää seuraavalta:
 
 Tiedosto määrittelee kaksi [luokkaselektoria](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors), joiden avulla valitaan tietty sivun alue ja määritellään alueelle sovellettavat tyylisäännöt.
 
-Luokkaselekotori alkaa aina pisteellä ja sisältää luokan nimen. 
+Luokkaselektori alkaa aina pisteellä ja sisältää luokan nimen.
 
-Luokat ovat [attribuuteja](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) joita voidaan liittää HTML-elementeille. 
+Luokat ovat [attribuuteja](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) joita voidaan liittää HTML-elementeille.
 
 Konsolin _Elements_-välilehti mahdollistaa class-attribuuttien tarkastelun:
 
@@ -391,7 +390,7 @@ Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudel
 
 ### lomake ja HTTP POST
 
-Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli [formin](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form). 
+Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli [formin](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form).
 
 ![]({{ "/assets/1/18.png" | absolute_url }})
 
@@ -403,7 +402,7 @@ Lomakkeen lähettäminen aiheuttaa yllättäen yhteensä viisi HTTP-pyyntöä. N
 
 ![]({{ "/assets/1/20.png" | absolute_url }})
 
-Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen _new_note_. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. uudelleenohjauspyyntö, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin _Location_ kertomaan paikkaan, eli osoitteeseen _notes_. 
+Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen _new_note_. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. uudelleenohjauspyyntö, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin _Location_ kertomaan paikkaan, eli osoitteeseen _notes_.
 
 Selain siis lataa uudelleen muistiinpanojen sivun. Sivunlataus saa aikaan myös kolme muuta HTTP-pyyntöä: tyylitiedostojen, javascriptin ja muistiinpanojen raakadatan lataamisen.
 
@@ -411,7 +410,7 @@ Network-välilehti näyttää myös lomakkeen mukana lähetetyn datan:
 
 ![]({{ "/assets/1/21.png" | absolute_url }})
 
-Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva [bugi](https://bugs.chromium.org/p/chromium/issues/detail?id=766715). Bugi on korjattu Chromen [canary-versiossa](https://www.google.fi/chrome/browser/canary.html) ja tulee korjaantumaan aikanaan myös "normaaliin" versioon. 
+Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva [bugi](https://bugs.chromium.org/p/chromium/issues/detail?id=766715). Bugi on korjattu Chromen [canary-versiossa](https://www.google.fi/chrome/browser/canary.html) ja tulee korjaantumaan aikanaan myös "normaaliin" versioon.
 
 Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_note_ form-tagiin määriteltyjen attribuuttien _action_ ja _method_ ansiosta:
 
@@ -421,7 +420,7 @@ POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
 
 ```js
 app.post('/new_note', (req, res) => {
-  notes.push( { 
+  notes.push({
     content: req.body.note,
     date: new Date()
   })
@@ -430,18 +429,18 @@ app.post('/new_note', (req, res) => {
 })
 ```
 
-POST-pyyntöihin liitettävä data lähetetään pyynnön mukana "runkona" eli [bodynä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST). Palvelin saa POST-pyynnön datan pyytämällä sitä pyyntöä vastaavan olion _req_ kentästä _req.body_. 
+POST-pyyntöihin liitettävä data lähetetään pyynnön mukana "runkona" eli [bodynä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST). Palvelin saa POST-pyynnön datan pyytämällä sitä pyyntöä vastaavan olion _req_ kentästä _req.body_.
 
 Tekstikenttään kirjoitettu data on avaimen _notes_ alla, eli palvelin viittaa siihen _req.body.note_.
 
 Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon:
 
 ```js
-  notes.push( { 
+  notes.push({
     content: req.body.note,
     date: new Date()
   })
-```  
+```
 
 Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _content_ ja luomishetken kertova _data_.
 
@@ -455,17 +454,17 @@ Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevi
 
 Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen [Single-page application](https://en.wikipedia.org/wiki/Single-page_application) (SPA) -tyyliä, missä sovelluksille ei enää tehdä esimerkkisovelluksemme tapaan erillisiä sivuja, palvelimen sille lähettämiä sivuja, vaan sovellus koostuu ainoastaan yhdestä palvelimen lähettämästä HTML-sivusta, jonka sisältöä manipuloidaan selaimessa suoritettavalla Javascriptillä.
 
-Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteista mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää _uudelleenohjauksen_ avulla selainta lataamaan muistiinpanojen sivun uudelleen. 
+Sovelluksemme muistiinpanosivu muistuttaa jo hiukan SPA-tyylistä sovellusta, sitä se ei kuitenkaan vielä ole, sillä vaikka muistiinpanojen renderöintilogiikka on toteutettu selaimessa, käyttää sivu vielä perinteistä mekanisimia uusien muistiinpanojen luomiseen. Eli se lähettää uuden muistiinpanon tiedot ja palvelin pyytää _uudelleenohjauksen_ avulla selainta lataamaan muistiinpanojen sivun uudelleen.
 
 Osoitteesta <https://fullstack-exampleapp.herokuapp.com/spa> löytyy sovelluksen single page app -versio.
 
-Sovellus näyttää ensivilkaisulta täsmälleen samalta kuin edellinen versio. 
+Sovellus näyttää ensivilkaisulta täsmälleen samalta kuin edellinen versio.
 
 HTML-koodi on lähes samanlainen, erona on ladattava javascript-tiedosto ja pieni muutos form-tagin määrittelyssä:
 
 ![]({{ "/assets/1/23.png" | absolute_url }})
 
-Avaa nyt 'Network'-tabi ja tyhjennä se  &empty;-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:
+Avaa nyt 'Network'-tabi ja tyhjennä se &empty;-symbolilla. Kun luot uuden muistiinpanon, huomaat, että selain lähettää ainoastaan yhden pyynnön palvelimelle:
 
 ![]({{ "/assets/1/24.png" | absolute_url }})
 
@@ -473,7 +472,7 @@ Pyyntö on tyypiltään POST ja se sisältää JSON-muodossa olevan uuden muisti
 
 ```js
 {
-  content: "single page app ei tee turhia sivun latauksia", 
+  content: "single page app ei tee turhia sivun latauksia",
   date: "2017-12-11T10:51:29.025Z"
 }
 ```
@@ -489,9 +488,9 @@ Palvelin vastaa kyselyyn statuskoodilla 201 [created](https://httpstatuses.com/2
 Ohjelman spa-versiossa lomakkeen tietoja ei lähetetä selaimen "normaalin" lomakkeiden lähetysmekanismin avulla, lähettämisen hoitaa selaimen lataamassa Javascript-tiedostossa määritelty koodi. Katsotaan hieman koodia vaikka yksityiskohdista ei tarvitse nytkään välittää liikaa.
 
 ```js
-  var form = document.getElementById("notes_form")
+  var form = document.getElementById('notes_form')
   form.onsubmit = function (e) {
-    e.preventDefault()
+   e.preventDefault()
 
     var note = {
       content: e.target.elements[0].value,
@@ -499,14 +498,13 @@ Ohjelman spa-versiossa lomakkeen tietoja ei lähetetä selaimen "normaalin" loma
     }
 
     notes.push(note)
-    e.target.elements[0].value = ""
+    e.target.elements[0].value = ''
     redrawNotes()
     sendToServer(note)
   }
 ```
 
-Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake "submitoidaan", eli lähetetään. Tapahtumankäsittelijä 
-kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme spa-sovelluksissa halua tapahtuvatn.
+Koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake "submitoidaan", eli lähetetään. Tapahtumankäsittelijä kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme spa-sovelluksissa halua tapahtuvan.
 
 Tämän jälkeen se luo muistiinpanon, lisää sen muistiinpanojen listalle komennolla <code>notes.push(note)</code>, piirää ruudun sisällön eli muistiinpanojen listan uudelleen ja lähettää uuden muistiinpanon palvelimelle.
 
@@ -516,8 +514,8 @@ var sendToServer = function (note) {
   var xhttpForPost = new XMLHttpRequest()
   // ...
 
-  xhttpForPost.open("POST", '/new_note_spa', true)
-  xhttpForPost.setRequestHeader("Content-type", "application/json")
+  xhttpForPost.open('POST', '/new_note_spa', true)
+  xhttpForPost.setRequestHeader('Content-type', 'application/json')
   xhttpForPost.send(JSON.stringify(note));
 }
 ```
@@ -526,29 +524,29 @@ Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritel
 
 Sovelluksen koodi on nähtävissä osoitteessa <https://github.com/mluukkai/example_app>. Kannattaa huomata, että sovellus on tarkoitettu ainoastaan kurssin käsitteistöä demonstroivaksi esimerkiksi, koodi on osin tyyliltään huonoa ja siitä ei tulee ottaa mallia omia sovelluksia tehdessä.
 
-## kirjastot 
+## kirjastot
 
-Kurssin esimerkkisovellus on tehty ns. [vanilla Javascriptillä](https://medium.freecodecamp.org/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34) eli käyttäen pelkkää DOM-apia ja Javascript-kieltä sivujen rakenteen manipulointiin. 
+Kurssin esimerkkisovellus on tehty ns. [vanilla Javascriptillä](https://medium.freecodecamp.org/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34) eli käyttäen pelkkää DOM-apia ja Javascript-kieltä sivujen rakenteen manipulointiin.
 
-Pelkän Javascriptin ja DOM-apin käytön sijaan Web-ohjelmoinnissa hyödynnetään usein kirjastoja, jotka sisältävät DOM-apia helpommin käytettäviä tykaluja sivujen muokkaukseen. Eräs tälläinen kirjasto on edelleenkin hyvin suosittu [JQuery](https://jquery.com/). 
+Pelkän Javascriptin ja DOM-apin käytön sijaan Web-ohjelmoinnissa hyödynnetään usein kirjastoja, jotka sisältävät DOM-apia helpommin käytettäviä työkaluja sivujen muokkaukseen. Eräs tälläinen kirjasto on edelleenkin hyvin suosittu [JQuery](https://jquery.com/).
 
-JQuery on kehitetty ainkana, jolloin web-sivut olivat vielä suurimmaksi osaksi perinteisiä, eli palvelin muodosti HTML-sivuja joiden toiminnallisuutta rikastettiin selaimessa JQueryllä kirjoitetun Javascript-koodin avulla. 
+JQuery on kehitetty aikana, jolloin web-sivut olivat vielä suurimmaksi osaksi perinteisiä, eli palvelin muodosti HTML-sivuja joiden toiminnallisuutta rikastettiin selaimessa JQueryllä kirjoitetun Javascript-koodin avulla.
 
-Single page app -tyylin noustua suosioon on ilmestynyt useita JQueryä "modernempia" tapoja sovellusten kehittämiseen. Googlen kehittämä [AngularJS](https://angularjs.org/) oli erittäin vielä muutama vuosi sitten erittäin suosittu. Angularin suosio kuitenkin romahti siinä vaiheessa kun Angular-tiimi [ilmoitti](https://jaxenter.com/angular-2-0-announcement-backfires-112127.html) lokakuussa 2014, että version 1 tuki lopetetaan ja Angular 2 ei tule olemaan taaksepäin yhteensopiva ykkösversion kanssa. Angular 2 ja uudemmat versiot eivät ole saaneet kovin innostunutta vastaanottoa. 
+Single page app -tyylin noustua suosioon on ilmestynyt useita JQueryä "modernimpia" tapoja sovellusten kehittämiseen. Googlen kehittämä [AngularJS](https://angularjs.org/) oli vielä muutama vuosi sitten erittäin suosittu. Angularin suosio kuitenkin romahti siinä vaiheessa kun Angular-tiimi [ilmoitti](https://jaxenter.com/angular-2-0-announcement-backfires-112127.html) lokakuussa 2014, että version 1 tuki lopetetaan ja Angular 2 ei tule olemaan taaksepäin yhteensopiva ykkösversion kanssa. Angular 2 ja uudemmat versiot eivät ole saaneet kovin innostunutta vastaanottoa.
 
 Nykyisin suosituin tapa toteuttaa web-sovellusten selainpuolen logiikka on Facebookin kehittämä [ReactJS](https://reactjs.org/)-kirjasto. Tulemme tutustumaan kurssin aikana Reactiin ja sen kanssa yleisesti käytettyyn [Redux](https://github.com/reactjs/redux)-kirjastoon.
 
-Reactin asema näyttää tällä hetkellä vahvalta, mutta Javascript-maailma ei lepää koskaan. Viime aikoina huomioita on alkanut kiinnittää mm. uudempi tulokas [VueJS](https://vuejs.org/). 
+Reactin asema näyttää tällä hetkellä vahvalta, mutta Javascript-maailma ei lepää koskaan. Viime aikoina huomioita on alkanut kiinnittää mm. uudempi tulokas [VueJS](https://vuejs.org/).
 
 ## full stack -websovelluskehitys
 
 Mitä tarkoitetaan kurssin nimellä _full stack -websovelluskehitys_? Full stack on hypen omainen termi, kaikki puhuvat siitä, mutta kukaan ei oikein tiedä mitä se tarkoittaa tai ainakaan mitään yhteneväistä määritelmää termille ei ole.
 
-Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi "kerrosta", ylempänä olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on "stack", eli pino. Websovelluskehityksen yhteydessä puhutaan usein myös "frontista" ([frontend](https://en.wikipedia.org/wiki/Front_and_back_ends)) ja "backistä" ([backend](https://en.wikipedia.org/wiki/Front_and_back_ends)). 
+Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi "kerrosta", ylempänä olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on "stack", eli pino. Websovelluskehityksen yhteydessä puhutaan usein myös "frontista" ([frontend](https://en.wikipedia.org/wiki/Front_and_back_ends)) ja "backistä" ([backend](https://en.wikipedia.org/wiki/Front_and_back_ends)).
 
-Selain on fronend ja selaimessa suoritettava javascript on fronend-koodia. Palvelimella taas pyörii backend-koodi.
+Selain on frontend ja selaimessa suoritettava javascript on frontend-koodia. Palvelimella taas pyörii backend-koodi.
 
-Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että kiinnostus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin. 
+Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että kiinnostus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin.
 
 Ohjelmoimme myös palvelinpuolta, eli backendia Javascriptilla, käyttäen [node.js](https://nodejs.org/en/)-suoritusympäristöä. Näin full stack -sovelluskehitys saa vielä uuden ulottuvuuden, käytämme samaa kieltä pinon kaikissa osissa. Full stack -sovelluskehitys ei välttämättä edellytä sitä että kaikissa sovelluksen kerroksissa on käytössä sama kieli (javascript). Termi on kuitenkin (todennäköisesti) lanseerattu vasta sen jälkeen kun Node.js mahdollisti Javascriptin käyttämisen kaikkialla.
 
@@ -556,19 +554,19 @@ Aiemmin on ollut yleisempää, että sovelluskehittäjät ovat erikoistuneet tie
 
 ## Javascript fatigue
 
-Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi. 
+Full stack -sovelluskehitys on monella tapaa haastavaa. Asioita tapahtuu monessa paikassa ja mm. debuggaaminen on oleellisesti normaalia työpöytäsovellusta hankalampaa. Javascript ei toimi aina niinkuin sen olettaisi toimivan. Verkon yli tapahtuva kommunikointi edellyttää HTTP-protokollan tuntemusta. On tunnettava myös tietokantoja ja hallittava palvelinten konfigurointia ja ylläpitoa. Hyvä olisi myös hallita riittävästi CSS:ää, jotta sovellukset saataisiin edes siedettävän näköisiksi.
 
 Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa vauhtia eteenpäin. Kirjastot, työkalut ja itse kielikin ovat jatkuvan kehityksen alla. Osa alkaa kyllästyä nopeaan kehitykseen ja sitä kuvaamaan on lanseerattu termi [Javascript](https://medium.com/@ericclemmons/javascript-fatigue-48d4011b6fc4) [fatigue](https://auth0.com/blog/how-to-manage-javascript-fatigue/) eli [Javascript](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f)-väsymys.
 
-Jaavascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.
+Javascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.
 
 ## React
 
 Alamme nyt tutustua kurssin ehkä tärkeimpään teemaan, [React](https://reactjs.org/)-kirjastoon.
 
-Tedään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.
+Tehdään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.
 
-Ehdottomasti helpoin tapa päästä alkuun on asentaa [create-react-app](https://github.com/facebookincubator/create-react-app). 
+Ehdottomasti helpoin tapa päästä alkuun on asentaa [create-react-app](https://github.com/facebookincubator/create-react-app).
 
 Luodaan sovellus nimeltään _viikko1_ ja käynnistetään se:
 
@@ -578,7 +576,7 @@ $ cd viikko1
 $ npm start
 </pre>
 
-Chromen pitäisi aueta automaattisesti. Avaa konsoli **välittömästi**. Avaa myös tekstieditori siten, että näet koodin ja web-sivun samaan aikaan ruudulla: 
+Chromen pitäisi aueta automaattisesti. Avaa konsoli **välittömästi**. Avaa myös tekstieditori siten, että näet koodin ja web-sivun samaan aikaan ruudulla:
 
 ![]({{ "/assets/1/26.png" | absolute_url }})
 
@@ -604,7 +602,7 @@ Jätä tiedosto _App.js_, tulemme tarvitsemaan sitä myöhemin.
 
 Tiedosto _index.js_ määrittelee nyt React [komponentin](https://reactjs.org/docs/components-and-props.html) nimeltään _App_.
 
-Komento 
+Komento
 
 ```js
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -669,7 +667,7 @@ const App = () => {
   )}
 ```
 
-Komponenttien sisällä on mahdollista renderöidä myös dynaamista sisältöä. 
+Komponenttien sisällä on mahdollista renderöidä myös dynaamista sisältöä.
 
 Muuta komponentti muotoon:
 
@@ -681,16 +679,17 @@ const App = () => {
   return(
     <div>
       <p>Hello world, it is {now.toString()}</p>
-      <p>{a} plus {b} is {a+b}</p>
+      <p>{a} plus {b} is {a + b}</p>
     </div>
-  )}
+  )
+}
 ```
 
 Aaltosulkeiden sisällä oleva javascript-koodi evaluoidaan ja evaluoinnin tulos upotetaan määriteltyyn kohtaan komponentin HTML-koodia.
 
 ### JSX
 
-Näyttää siltä, että React-komponetti palauttaa HTML-koodia. Näin ei kuitenkaan ole. React-komponenttien ulkoasu kirjoitetaan yleensä [JSX](https://reactjs.org/docs/introducing-jsx.html):ää käyttäen. Vaikka JSX näyttää HTML:ltä, kyseessä on kuitenkin tapa kirjoittaa javascriptiä. React komponenttien palauttaman JSX:n javascriptiksi. 
+Näyttää siltä, että React-komponetti palauttaa HTML-koodia. Näin ei kuitenkaan ole. React-komponenttien ulkoasu kirjoitetaan yleensä [JSX](https://reactjs.org/docs/introducing-jsx.html):ää käyttäen. Vaikka JSX näyttää HTML:ltä, kyseessä on kuitenkin tapa kirjoittaa javascriptiä. React komponenttien palauttaman JSX:n javascriptiksi.
 
 Käännösvaiheen jälkeen ohjelmamme näyttää seuraavalta:
 
@@ -708,7 +707,7 @@ const App = () => {
       'p', null, 'Hello world, it is ', now.toString()
     ),
     React.createElement(
-      'p', null, a,' plus ',b, ' is ', a + b
+      'p', null, a, ' plus ', b, ' is ', a + b
     )
   );
 };
@@ -716,11 +715,11 @@ const App = () => {
 ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 ```
 
-Käännksen hoitaa [Babel](https://babeljs.io/repl/). Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.
+Käännöksen hoitaa [Babel](https://babeljs.io/repl/). Create-react-app:illa luoduissa projekteissa käännös tapahtuu konepellin alla. Tulemme tutustumaan aiheeseen tarkemmin myöhemmin kurssilla.
 
-Reactia olisi myös mahdollista kirjoittaa "suoraan javascriptinä" käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee,
+Reactia olisi myös mahdollista kirjoittaa "suoraan javascriptinä" käyttämättä JSX:ää. Kukaan täysijärkinen ei kuitenkaan niin tee.
 
-Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden takaan. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.
+Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden sisälle. Käytännössä JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.
 
 ## monta komponenttia
 
@@ -732,7 +731,7 @@ const Hello = () => {
     <div>
       <p>Hello world</p>
     </div>
-  )  
+  )
 }
 
 const App = () => {
@@ -747,7 +746,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-Olemme määritelleet uuden komponentin _Hello_ jota käytetään komponentista _App_. Komponenttia voidaan luonnollisesti käyttää monta kertaa: 
+Olemme määritelleet uuden komponentin _Hello_ jota käytetään komponentista _App_. Komponenttia voidaan luonnollisesti käyttää monta kertaa:
 
 ```react
 const App = () => {
@@ -762,7 +761,7 @@ const App = () => {
 }
 ```
 
-Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuulliseti ylläpidettävänä. Reactissa on filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista. 
+Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuullisesti ylläpidettävänä. Reactissa filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.
 
 Jatkamme komponentteihin tutustumista.
 
@@ -778,11 +777,11 @@ const Hello = (props) => {
     <div>
       <p>Hello {props.name}</p>
     </div>
-  )  
+  )
 }
 ```
 
-komponentin määrittelevällä funktiolla on nyt parametri _props_. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri "propsit", jota komponentin käyttäjä määrittelee.
+komponentin määrittelevällä funktiolla on nyt parametri _props_. Parametri saa arvokseen olion, jonka kenttinä ovat kaikki eri "propsit", jotka komponentin käyttäjä määrittelee.
 
 Propsit määritellään seuraavasti:
 
@@ -791,8 +790,8 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello name='Arto' />
-      <Hello name='Pekka' />
+      <Hello name="Arto" />
+      <Hello name="Pekka" />
     </div>
   )
 }
@@ -806,7 +805,7 @@ const Hello = (props) => {
     <div>
       <p>Hello {props.name}, you are {props.age} years old</p>
     </div>
-  )  
+  )
 }
 
 const App = () => {
@@ -815,7 +814,7 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello name='Arto' age={26+10} />
+      <Hello name="Arto" age={26 + 10} />
       <Hello name={nimi} age={ika} />
     </div>
   )
@@ -826,7 +825,7 @@ const App = () => {
 
 React on konfiguroitu antamaan varsin hyviä virheilmoituksia. Kannattaa kuitenkin edetä ainakin alussa **todella pienin askelin** ja varmistaa, että jokainen muutos toimii halutulla tavalla.
 
-Konsolin tulee olla **koko ajan auki**. Jos selain ilmoittaa virheestä, ei kannata kirjoittaa sokeasti lisää koodia ja toivoa ihmettä tapahtuvaksi vaan tulee yrittää ymmärtää virheen syy ja esim. palata edelliseen toimivaan tilaan: 
+Konsolin tulee olla **koko ajan auki**. Jos selain ilmoittaa virheestä, ei kannata kirjoittaa sokeasti lisää koodia ja toivoa ihmettä tapahtuvaksi vaan tulee yrittää ymmärtää virheen syy ja esim. palata edelliseen toimivaan tilaan:
 
 ![]({{ "/assets/1/27.png" | absolute_url }})
 
@@ -849,30 +848,30 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
-      <Hello name='Arto' age={26+10} />
+      <Hello name="Arto" age={26 + 10} />
       <footer />
     </div>
   )
 }
 ```
 
-sivulle ei kuitenkaan tule mitään, sillä React ei luo sivulle ainoastaan tyhjän _div_-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.
+sivulle ei kuitenkaan tule mitään, sillä React luo sivulle ainoastaan tyhjän _div_-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.
 
 ### react-tehtävät, osa 1
 
 ## Javascriptiä
 
-Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascritpiä.
+Kurssin aikana on websovelluskehityksen rinnalla tavoite ja tarve oppia riittävässä määrin Javascriptiä.
 
 Javascript on kehittynyt viime vuosina nopeaan tahtiin, ja käytämme kurssilla kielen uusimpien versioiden piirteitä, joista osa ei ole vielä olemassa kielen standardoiduissa versiossa. Javascript-standardin virallinen nimi on [ECMAScript](https://en.wikipedia.org/wiki/ECMAScript). Tämän hetken tuorein version on kesäkuussa 2017 julkaistu [ES8](https://www.ecma-international.org/publications/standards/Ecma-262.htm), toiselta nimeltään ECMAScript 2017.
 
 Selaimet eivät vielä osaa kaikkia Javascriptin uusimpien versioiden ominaisuuksia. Tämän takia selaimessa suoritetaan useimmiten koodia joka on käännetty tai englanniksi _transpiled_ uudemmasta javascriptin versiosta johonkin vanhempaan, paremmin tuettuun versioon.
 
-Tällä hetkellä johtava tapa tehdä transpilointi on [Babel](https://babeljs.io/). Create-react-app:in avulla luodoissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen traspilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.
+Tällä hetkellä johtava tapa tehdä transpilointi on [Babel](https://babeljs.io/). Create-react-app:in avulla luoduissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen transpilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.
 
-[NodeJS](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascritpsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen. 
+[NodeJS](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.
 
-Koodi kirjoitetaan _.js-_päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
+Koodi kirjoitetaan _.js_ -päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
 
 Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusmekanismeiltaan kielet kuitenkin poikkeavat radikaalisti. Java-taustalta tultaessa Javascriptin käyttäytyminen saattaa aiheuttaa hämmennystä, varsinkin jos kielen piirteistä ei viitsitä ottaa selvää.
 
@@ -880,7 +879,7 @@ Tietyissä piireissä on myös ollut suosittua yrittää "simuloida" Javascripti
 
 ### muuttujat
 
-Javascriptissä on kolme tapaa määritellä muttujia:
+Javascriptissä on kolme tapaa määritellä muuttujia:
 
 ```js
 const x = 1
@@ -894,23 +893,23 @@ console.log(x, y)  // tulostuu 1, teksti
 x = 4              // aiheuttaa virheen
 ```
 
-[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä varia jos ei tiedä mitä se tekee, käytä aina const:ia tai let:iä!
+[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä varia jos et tiedä mitä se tekee, käytä aina const:ia tai let:iä!
 
 Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
 
 ### taulukot
 
-[Taulukko](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)  ja muutama esimerkki sen käytöstä
+[Taulukko](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) ja muutama esimerkki sen käytöstä
 
 ```js
 const t = [1, -1, 3]
 
-t.push(5) 
+t.push(5)
 
 console.log(t.length)  // tulostuu 4
 console.log(t[2])      // tuostuu -1
 
-t.forEach( (luku) => { 
+t.forEach((luku) => {
   console.log(luku)    // tulostuu 1, -1, 3 ja 5 omille riveilleen
 })
 
@@ -919,27 +918,27 @@ t[6] = 99
 console.log(t)         // tulostuu [ 1, -1, 3, 5, <2 empty items>, 99 ]
 ```
 
-Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty _const_iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.
+Huomattavaa esimerkissä on se, että taulukon sisältöä voi muuttaa vaikka sen on määritelty _const_ iksi. Koska taulukko on olio, viittaa muuttuja koko ajan samaan olioon. Olion sisältö muuttuu sitä mukaa kun talukkoon lisätään uusia alkioita.
 
 Eräs tapa käydä taulukon alkiot läpi on esimerkissä käytetty _forEach_, joka saa parametrikseen nuolisyntaksilla määritellyn _funktion_
 
 ```js
-(luku) => { 
+(luku) => {
   console.log(luku)    // tulostuu 1, -1, 3 ja 5 omille riveilleen
 }
 ```
 
 forEach kutsuu funktiota jokaiselle taulukon alkiolle antaen taulukon alkion aina parametrina. forEachin parametrina oleva funktio voi saada myös [muita parametreja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach).
 
-Taulukoille on määritelty runsaasti hyödyllisiä operaatioita, tutustumme niihin tarkemmin laskareissa. Katsotaan kuiten jo nyt pieni esimerkki operaation [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) käytöstä. 
+Taulukoille on määritelty runsaasti hyödyllisiä operaatioita, tutustumme niihin tarkemmin laskareissa. Katsotaan kuiten jo nyt pieni esimerkki operaation [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) käytöstä.
 
 ```js
 const t = [1, 2, 3, 4]
 
-const m1 = t.map((luku) => luku*2 )
+const m1 = t.map((luku) => luku * 2)
 console.log(m1) // tulostuu 2, 4, 6, 8
 
-const m2 = t.map((luku) => '<li>'+luku+'</li>')
+const m2 = t.map((luku) => '<li>' + luku + '</li>')
 console.log(m2) // tulostuu [ '<li>1</li>', '<li>2</li>', '<li>3</li>', '<li>4</li>' ]
 ```
 
@@ -964,7 +963,7 @@ const olio2 = {
 
 const olio3 = {
   nimi: {
-    etunimi: 'Jami',
+   etunimi: 'Jami',
     sukunimi: 'Kousa'
   },
   arvosanat: [2, 3, 5, 3],
@@ -972,7 +971,7 @@ const olio3 = {
 }
 ```
 
-Kentät voivat olla mielivaltaista javascriptin tyyppiä. Olioiden kenttiin viitataan pistenotaatiolla. 
+Kentät voivat olla mielivaltaista javascriptin tyyppiä. Olioiden kenttiin viitataan pistenotaatiolla.
 
 Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai kulmasulkeiden avulla:
 
@@ -987,7 +986,7 @@ Javascriptissä olioilla voi luonnollisesti olla myös metodeja. Palaamme aihees
 
 Olioita on myös mahdollista määritellä ns. konstruktorifunktioiden avulla, jolloin saadaan aikaan hieman monien ohjelmointikielten, esim. Javan luokkia (class) muistuttava mekansimi. Javascriptissä ei kuitenkaan ole luokkia samassa mielessä kuin olio-ohjelmointikieleissä. Kieleen on kuitenkin lisätty versiosta ES6 alkaen _luokkasyntaksi_, joka helpottaa tietyissä tilanteissa olio-ohjelmointikielimäisten luokkien esittämistä. Palaamme asiaan hetken kuluttua.
 
-Reactissa konstruktorifunktioihin perustuvalle olioiden määrittelyyn ei ole kovin usein tarvetta, joten sivuutamme sen ainakin toistaiseksi. 
+Reactissa konstruktorifunktioihin perustuvalle olioiden määrittelyyn ei ole kovin usein tarvetta, joten sivuutamme sen ainakin toistaiseksi.
 
 ### funktiot
 
@@ -997,7 +996,7 @@ Olemme jo tutustuneet ns. nuolifunktioiden määrittelyyn. Täydellinen tapa nuo
 const summa = (p1, p2) => {
   console.log(p1)
   console.log(p2)
-  return p1+p2
+  return p1 + p2
 }
 ```
 
@@ -1013,42 +1012,41 @@ Jos parameteja on vain yksi, voidaan sulut jättää määrittelystä pois:
 ```js
 const nelio = p => {
   console.log(p)
-  return p*p
+  return p * p
 }
 ```
 
-Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhemmin seuraavasti:
+Jos funktio sisältää ainoastaan yhden lausekkeen, ei aaltosulkeita tarvita. Tällöin funktio palauttaa ainoan lausekkeensa arvon. Eli edellinen voitaisiin ilmaista lyhyemmin seuraavasti:
 
 ```js
-const nelio = p => p*p
+const nelio = p => p * p
 ```
 
 Tämä muoto on erityisen kätevä käsiteltäessä taulukkoja esim. map-metodin avulla:
 
 ```js
 const t = [1, 2, 3]
-const tnelio = t.map(p => p*p)
-// tnelio on nyt [1, 2, 3]
+const tnelio = t.map(p => p * p)
+// tnelio on nyt [1, 4, 9]
 ```
 
-Nuolifunktio on tullut javascriptiin vasta muutama vuosi sitten version [ES6](http://es6-features.org/) myötä. Tätä ennen ja paikoin nykyäänkin funktioden määrittely tapahtui avainsanan _function_ avulla. 
+Nuolifunktio on tullut javascriptiin vasta muutama vuosi sitten version [ES6](http://es6-features.org/) myötä. Tätä ennen ja paikoin nykyäänkin funktioden määrittely tapahtui avainsanan _function_ avulla.
 
 Määrittelytapoja on kaksi, funktiolle voidaan antaa [function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function) tyyppisessä määrittelyssä _nimi_ jonka avulla funktioon voidaan viitata:
 
 ```js
 function tulo(a, b) {
-  return a*b
+  return a * b
 }
 
 const vastaus = tulo(2, 6)
 ```
 
-Toinen tapa on tehdä määrittely [funktiolausekkeena]
-(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). Tällöin funtiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:
+Toinen tapa on tehdä määrittely [funktiolausekkeena](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function). Tällöin funktiolle ei tarvitse antaa nimeä ja määrittely voi sijaita muun koodin seassa:
 
 ```js
 const keskiarvo = function(a, b) {
-  return (a + b)/2
+  return (a + b) / 2
 }
 
 const vastaus = keskiarvo(2, 5)
@@ -1056,7 +1054,7 @@ const vastaus = keskiarvo(2, 5)
 
 ### olioiden metodit ja this
 
-Kaikille kolmelle tavalle määritellä funktio on oma paikkansa. 
+Kaikille kolmelle tavalle määritellä funktio on oma paikkansa.
 
 Nuolifunktiot ja avainsanan _function_ avulla määritellyt funktiot kuitenkin poikkeavat radikaalisti siitä miten ne käyttytyvät _this_ avainsanan suhteen.
 
@@ -1105,7 +1103,7 @@ const arto = {
     console.log('hello, my name is', this.nimi)
   },
   laskeSumma: function (a, b) {
-    console.log(a+b)
+    console.log(a + b)
   }
 }
 
@@ -1126,7 +1124,7 @@ const arto = {
     console.log('hello, my name is', this.nimi)
   },
   laskeSumma: function (a, b) {
-    console.log(a+b)
+    console.log(a + b)
   }
 }
 
@@ -1136,7 +1134,7 @@ const viiteTervehdykseen = arto.tervehdi
 viiteTervehdykseen()   // tulostuu hello, my name is undefined
 ```
 
-Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen _this_. Toisin kuin melkein kaikissa muissa kielissä [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this):n arvo määrittyy sen mukaan miten olioa on kutsuttu. Kutsuttaessa metodia viitteen kautta, _this_:in arvoksi tulee ns [globaali objekti](https://developer.mozilla.org/en-US/docs/Glossary/Global_object).
+Kutsuttaessa metodia viitteen kautta, on metodi kadottanut tiedon siitä mikä oli alkuperäinen _this_. Toisin kuin melkein kaikissa muissa kielissä [this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this):n arvo määrittyy sen mukaan miten oliota on kutsuttu. Kutsuttaessa metodia viitteen kautta, _this_:in arvoksi tulee ns [globaali objekti](https://developer.mozilla.org/en-US/docs/Glossary/Global_object).
 
 Thisin menettäminen aiheuttaa Reactilla ja Nodella ohjelmoidessa monia potentiaalisia ongelmia. Eteen tulee erittäin usein tilanteita, missä Reactin/Noden (oikeammin ilmaistuna selaimen Javascript-moottorin) tulee kutsua joitan käyttäjän olioiden metodeja. Tälläinen tilanne tulee esim. jos pyytetään Artoa tervehtimään sekunnin kuluttua metodia [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) hyväksikäyttäen.
 
@@ -1167,9 +1165,9 @@ Jos haluat ymmärtää paremmin javascriptin _this_:in toimintaa, löytyy intern
 
 ### luokat
 
-Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin [luokkien](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) "simuloinnin". Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan _prototyyppiperintämekanismiin_. 
+Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin [luokkien](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) "simuloinnin". Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan _prototyyppiperintämekanismiin_.
 
-Tutustumme kuitenkin pikaisesti ES6:n myltä javascriptiin tulleeseen _luokkasyntaksiin_, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.
+Tutustumme kuitenkin pikaisesti ES6:n myötä javascriptiin tulleeseen _luokkasyntaksiin_, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.
 
 Seuraavassa on määritelyt "luokka" Henkilö ja sille kaksi Henkilö-olioa:
 
@@ -1180,7 +1178,7 @@ class Henkilo {
     this.ika = ika
   }
   tervehdi() {
-    console.log('hello, my name is', this.nimi)  
+    console.log('hello, my name is', this.nimi)
   }
 }
 
@@ -1193,20 +1191,18 @@ jami.tervehdi()
 
 Syntaksin osalta luokat ja niistä luodut oliot muistuttavat erittäin paljon esim. Javan olioita. Käyttäytymiseltäänkin ne ovat aika lähellä Javan olioita. Perimmiltään kyseessä on kuitenkin edelleen Javascriptin [prototyyppiperintään](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance) perustuvista olioista. Molempien olioiden todellinen tyyppi on _Object_ sillä javascriptissä ei perimmiltään ole muita tyyppejä kuin kuin [Boolean, Null, Undefined, Number, String, Symbol ja Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures)
 
-Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. [Not Awesome: ES6 Classes](https://github.com/joshburgess/not-awesome-es6-classes)  tai [Is “Class” In ES6 The New “Bad” Part?](https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65)
+Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. [Not Awesome: ES6 Classes](https://github.com/joshburgess/not-awesome-es6-classes) tai [Is “Class” In ES6 The New “Bad” Part?](https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65)
 
-ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkoiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.
+ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkioiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.
 
 ### Javascript-materiaalia
 
-Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat  [Mozillan javascript -materiaaliin](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+Javascriptistä löytyy suuret määrät sekä hyvää että huonoa materiaalia verkosta. Tällä sivulla lähes kaikki linkit ovat [Mozillan javascript -materiaaliin](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-Jo ennen seuraavien tehtävien tekemistä Mozzillan sivuilta kannattaa lukea välittömästi
-[A re-introduction to JavaScript (JS tutorial)]
-(https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
+Jo ennen seuraavien tehtävien tekemistä Mozillan sivuilta kannattaa lukea välittömästi [A re-introduction to JavaScript (JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
 
 
-Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä ilmaiseksi mainio kirjasarja [You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
+Jos haluat tutustua todella syvällisesti Javascriptiin, löytyy internetistä ilmaiseksi mainio kirjasarja [You-Dont-Know-JS](https://github.com/getify/You-Dont-Know-JS)
 
 [egghead.io](https://egghead.io):lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.
 
@@ -1214,7 +1210,7 @@ Jos haluat tutustua todella syvällisesti Javascritpiin, löytyy internetistä i
 
 ## paluu Reactin äärelle
 
-Palataan jälleen Reactin pariin. 
+Palataan jälleen Reactin pariin.
 
 Aiemmassa esimerkissämme käytimme funktionaalisia komponentteja, eli määrittelimme kaikki komponentit nuolifunktioiden avulla, esim:
 
@@ -1224,11 +1220,11 @@ const Hello = (props) => {
     <div>
       <p>Hello {props.name}, you are {props.age} years old</p>
     </div>
-  )  
+  )
 }
 ```
 
-Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponetti määritellään luokaksi, joka perii [React.Component](https://reactjs.org/docs/react-component.html)-luokan. 
+Toinen tapa komponenttien määrittelyyn on käyttää luokkasyntaksia. Tällöin komponentti määritellään luokaksi, joka perii [React.Component](https://reactjs.org/docs/react-component.html)-luokan.
 
 Muutetaan esimerkkisovelluksen komponentti _Hello_ seuraavasti:
 
@@ -1239,7 +1235,7 @@ class Hello extends React.Component {
       <div>
         <p>Hello {this.props.name}, you are {this.props.age} years old</p>
       </div>
-    )  
+    )
   }
 }
 ```
@@ -1254,7 +1250,7 @@ Eli koska komponenttia käytetään seuraavasti
 Päästään nimeen ja ikään käsiksi luokkamuotoisen komponentin sisällä viittaamalla _this.props.name_ ja _this.props.age_. Huomaa ero luokkamuotoiseen komponenttiin.
 
 
-Luokkakomponenteille voidaan tarvittaessa määritellä muitakin metodeja ja "oliomuuttujua", eli kenttiä. 
+Luokkakomponenteille voidaan tarvittaessa määritellä muitakin metodeja ja "oliomuuttujua", eli kenttiä.
 
 Voisimme esim. määritellä apumuuttujan seuraavasti:
 
@@ -1269,7 +1265,7 @@ class Hello extends React.Component {
       <div>
         <p>
           Hello {this.props.name}, you are {this.props.age} years old <br />
-          So you were propably born {this.bornYear()} 
+          So you were propably born {this.bornYear()}
         </p>
       </div>
     )
@@ -1291,7 +1287,7 @@ class Hello extends React.Component {
       <div>
         <p>
           Hello {this.props.name}, you are {this.props.age} years old <br />
-          So you were propably born {bornYear()} 
+          So you were propably born {bornYear()}
         </p>
       </div>
     )
@@ -1324,14 +1320,14 @@ voisimme suoraviivaistaa metodia _render_ siten, että sijoittaisimme kenttien a
       <div>
         <p>
           Hello {name}, you are {age} years old <br />
-          So you were propably born {bornYear()} 
+          So you were propably born {bornYear()}
         </p>
       </div>
     )
   }
 ```
 
-Huomaa, että oleme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.
+Huomaa, että olemme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa.
 
 Destrukturointi tekee asian vielä helpommaksi, sen avulla voimme "kerätä" olion oliomuuttujien arvot suoraan omiin yksittäisiin muuttujiin:
 
@@ -1345,7 +1341,7 @@ class Hello extends React.Component {
       <div>
         <p>
           Hello {name}, you are {age} years old <br />
-          So you were propably born {bornYear()} 
+          So you were propably born {bornYear()}
         </p>
       </div>
     )
@@ -1353,7 +1349,7 @@ class Hello extends React.Component {
 }
 ```
 
-Eli koska 
+Eli koska
 
 ```js
 this.props = {
@@ -1362,15 +1358,15 @@ this.props = {
 }
 ```
 
-saa <code const {name, age} = this.props</code>> aikaan sen, että _name_ saa arvon 'Arto Hellas' ja _age_ arvon 35. 
+saa <code> const {name, age} = this.props</code> aikaan sen, että _name_ saa arvon 'Arto Hellas' ja _age_ arvon 35.
 
-Komponentti _Hello_ on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista. 
+Komponentti _Hello_ on oikeastaan luonteeltaan sellainen, että sitä ei ole järkevää määritellä luokkasyntaksilla. Reactin best practice onkin käyttää funktioiden avulla määriteltyjä komponentteja aina kuin mahdollista.
 
 ### Sivun uudelleenrenderöinti
 
 Toistaiseksi tekemämme sovellukset ovat olleet sellaisia, että kun niiden komponentit on kerran renderöity, niiden tilaa ei ole enää voinut muuttaa. Entä jos haluaisimme toteuttaa laskurin, jonka arvo kasvaa esim. ajan kuluessa tai nappien painallusten yhteydessä?
 
-Aloitetaan seuravasta rungosta:
+Aloitetaan seuraavasta rungosta:
 
 ```react
 const App = (props) => {
@@ -1378,7 +1374,7 @@ const App = (props) => {
   return(
     <div>{counter.value}</div>
   )
-} 
+}
 
 const counter = {
   value: 1
@@ -1404,7 +1400,7 @@ const App = (props) => {
   return(
     <div>{counter.value}</div>
   )
-} 
+}
 
 const counter = {
   value: 1
@@ -1431,12 +1427,10 @@ Nyt komponentti renderöityy kolme kertaa, saaden ensin arvon 1, sitten 2 ja lop
 Hieman mielenkiintoisempaan toiminnallisuuteen pääsemme tekemällä renderöinnin ja laskurin kasvatuksen toistuvasti sekunnin välein käyttäen [SetInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)-
 
 ```js
-setInterval(
-  () => { 
-    renderoi()
-    counter.value += 1;
-  }
-  , 1000)
+setInterval(() => {
+  renderoi()
+  counter.value += 1;
+}, 1000)
 ```
 
 _ReactDOM.render_-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa päivittää komponentteja. Tutustutaan seuraavaksi järkevämpään tapaan.
@@ -1446,29 +1440,30 @@ _ReactDOM.render_-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa 
 Muutetaan esimerkkisovelluksen komponentti _App_ luokkaperustaiseksi:
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       counter: 1
     }
   }
+
   render() {
     return (
       <div>{this.state.counter}</div>
     )
   }
-} 
+}
 
 ReactDOM.render(
   <App />,
   document.getElementById('root')
-) 
+)
 ```
 
-Komponentilla on nyt metodin _render_ lisäksi _konstruktori_. Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin _props_ välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>. 
+Komponentilla on nyt metodin _render_ lisäksi _konstruktori_. Komponentin konstruktori saa parametrikseen sille välitettävät muuttujat parametrin _props_ välityksellä, konstruktorin ensimmäisen rivin on oltava kutsu <code>super(props)</code>.
 
-Luokkiin perustuvalla komponenteilla voi olla _tila_, joka talletetaan muuttujaan _state_. 
+Luokkiin perustuvalla komponenteilla voi olla _tila_, joka talletetaan muuttujaan _state_.
 
 Konstruktori määrittelee komponentin alkutilan olevan:
 
@@ -1483,7 +1478,7 @@ Eli tila sisältää kentän _counter_, jonka arvo on 1. React-komponettien tila
 Muutetaan komponenttia _App_ siten, että konstruktorissa käynnistetään ajastin joka kutsuu funktiota _setState_ kolmen sekunnin kuluttua ja asettaa laskurin, eli _this.state.counter_:in arvoksi 1000.
 
 ```render
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1499,13 +1494,13 @@ class App  extends React.Component {
       <div>{this.state.counter}</div>
     )
   }
-} 
+}
 ```
 
 Tehdään sovelluksesta vielä edistyneempi versio, missä metodia _setState_ kutsutaan toistuvasti sekunnin välein päivittäen laskurin arvoa aina yhdellä.
 
 ```render
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1521,16 +1516,16 @@ class App  extends React.Component {
       <div>{this.state.counter}</div>
     )
   }
-} 
+}
 ```
 
 ### tapahtumankäsittely
 
-Mainitsimme jo alun johdanto-osassa muutamaan kertaan _tepahtumankäsittelijät_, eli funktiot, jotka on rekisteröity kutsuttavaksi tiettyjen tapahtumien eli eventien yhteydessä. Esim. käyttäjän interaktio sivun elementtien kanssa aiheuttaa joukon erinäisiä tapahtumia. 
+Mainitsimme jo alun johdanto-osassa muutamaan kertaan _tepahtumankäsittelijät_, eli funktiot, jotka on rekisteröity kutsuttavaksi tiettyjen tapahtumien eli eventien yhteydessä. Esim. käyttäjän interaktio sivun elementtien kanssa aiheuttaa joukon erinäisiä tapahtumia.
 
-Muutetaan sovellusta siten, että laskurin kasvaminen tapahtuukin käyttäjän painaessa [button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)-elementin avulla toteutettua nappia. 
+Muutetaan sovellusta siten, että laskurin kasvaminen tapahtuukin käyttäjän painaessa [button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)-elementin avulla toteutettua nappia.
 
-Button-elementit tukevat mm. [hiiritapahtumia](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent), joista yleisin on [click](https://developer.mozilla.org/en-US/docs/Web/Events/click). 
+Button-elementit tukevat mm. [hiiritapahtumia](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent), joista yleisin on [click](https://developer.mozilla.org/en-US/docs/Web/Events/click).
 
 Reactissa funktion rekisteröiminen tapahtumankäsittelijäksi [tapahtuu](https://reactjs.org/docs/handling-events.html) tapahtumalle _click_ tapahtuu seuraavasti:
 
@@ -1546,25 +1541,25 @@ const funktio = () => { /* koodi */ }
 Tapahtumankäsittelijäfunktio voidaan myös määritellä suoraan onClick-määrittelyn yhteydessä:
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
       counter: 1
     }
-
   }
+
   render() {
     return (
       <div>
         <div>{this.state.counter}</div>
-        <button onClick={()=>console.log('clicked')}>
+        <button onClick={() => console.log('clicked')}>
           plus
         </button>
       </div>
     )
   }
-} 
+}
 ```
 
 Nyt jokainen napin _plus_ painallus tulostaa konsoliin _clicked_.
@@ -1572,7 +1567,7 @@ Nyt jokainen napin _plus_ painallus tulostaa konsoliin _clicked_.
 Muuttamalla tapahtumankäsittelijä seuraavaan muotoon
 
 ```react
-    <button onClick={()=>this.setState({ counter: this.state.counter+1 }) }>
+    <button onClick={() => this.setState({ counter: this.state.counter + 1 })}>
       plus
     </button>
 ```
@@ -1582,13 +1577,14 @@ saamme halutun toiminnallisuuden.
 Lisätään sovellukseen myös nappi laskurin nollaamiseen:
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
       counter: 1
     }
   }
+
   render() {
     return (
       <div>
@@ -1599,7 +1595,7 @@ class App  extends React.Component {
           </button>
           <button onClick={() => this.setState({ counter: 0 })}>
             zero
-          </button>          
+          </button>
         </div>
       </div>
     )
@@ -1610,10 +1606,10 @@ Sovelluksemme on valmis!
 
 ### metodien käyttö ja _this_
 
-Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin visasta. 
+Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin viisasta.
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1622,11 +1618,11 @@ class App  extends React.Component {
   }
 
   kasvataYhdella() {
-    this.setState({ counter: this.state.counter+1 })
+    this.setState({ counter: this.state.counter + 1 })
   }
 
   nollaa() {
-    this.setState({ counter: 0 })  
+    this.setState({ counter: 0 })
   }
 
   render() {
@@ -1639,12 +1635,12 @@ class App  extends React.Component {
           </button>
           <button onClick={this.nollaa}>
             zero
-          </button>          
+          </button>
         </div>
       </div>
     )
   }
-} 
+}
 ```
 
 ei toimi, this katoaa
@@ -1657,13 +1653,13 @@ bindi
     </button>
     <button onClick={this.nollaa.bind(this)}>
       zero
-    </button>  
+    </button>
 ```
 
 tai bindatun sijoittaminen
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1678,11 +1674,11 @@ paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/
 
 ```react
   kasvataYhdella = () => {
-    this.setState({ counter: this.state.counter+1 })
+    this.setState({ counter: this.state.counter + 1 })
   }
 
   nollaa = () => {
-    this.setState({ counter: 0 })  
+    this.setState({ counter: 0 })
   }
 ```
 
@@ -1690,18 +1686,18 @@ paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/
 
 ```react
     asetaArvoon = (arvo) => {
-      this.setState({ counter: arvo })  
+      this.setState({ counter: arvo })
     }
 
-    <button onClick={this.asetaArvoon(this.state.counter+1)}>
+    <button onClick={this.asetaArvoon(this.state.counter + 1)}>
       Plus
-    </button>    
+    </button>
 ```react
 
 funktio joka palauttaa funktion...
 
 ```react
-class App  extends React.Component {
+class App extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -1709,34 +1705,34 @@ class App  extends React.Component {
     }
   }
 
-  asetaArvoon = (arvo) => { 
+  asetaArvoon = (arvo) => {
     return () => {
-      this.setState({ counter: arvo })  
+      this.setState({ counter: arvo })
     }
-  } 
+  }
 
   render() {
     return (
       <div>
         <div>{this.state.counter}</div>
         <div>
-          <button onClick={this.asetaArvoon(this.state.counter+1)}>
+          <button onClick={this.asetaArvoon(this.state.counter + 1)}>
             Plus
-          </button>        
+          </button>
           <button onClick={this.asetaArvoon(0)}>
             Zero
-          </button>   
+          </button>
         </div>
       </div>
     )
   }
-} 
+}
 ```react
 
 suoraviivastus
 
 ```react
-  asetaArvoon = (arvo) => () => this.setState({ counter: arvo })  
+  asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
 
 ### react dev tool
