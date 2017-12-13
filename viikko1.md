@@ -1852,15 +1852,51 @@ Kun _render_-metodissa määritellään tapaahtumankäsittelijä kutsumalla <cod
   }
  ```   
 
-eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio.
+eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio. 
 
-brainfuk...
+Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaArvoon(this.state.counter + 1)</code>. Kun komponentti renderöidään ensimmäisen kerran, _this.state.counter_ on saanut konstruktorissa arvon 1, eli plus-napin tapahtumankäsittelijäksi tulee metodukutsun <code>this.asetaArvoon(1 + 1)</code> tulos, eli funktio
 
-suoraviivastus
+```js
+  () => {
+    this.setState({ counter: 2 })
+  }
+ ```   
 
-```react
+Vastaavasti, kun laskurin tila on esim 41, tulee plus-napin tapahtumakuuntelijaksi 
+
+```js
+  () => {
+    this.setState({ counter: 42 })
+  }
+ ```   
+
+Tarkastellaan vielä hieman metodia _asetaArvoon_:
+
+```js
+  asetaArvoon = (arvo) => {
+    return () => {
+      this.setState({ counter: arvo })
+    }
+  }
+```  
+
+Koska metodi itse sisältää ainoastaan yhden komennon, eli _returnin_, joka palauttaa funktion, voidaan hyödyntää nuolifunktion tiiviimpää muotoa:
+
+```js
+  asetaArvoon = (arvo) => 
+    () => {
+      this.setState({ counter: arvo })
+    }
+```  
+
+Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville:
+
+```js
   asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
+
+
+
 
 ### tilan vienti alikomponenttiin
 

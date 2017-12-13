@@ -1838,11 +1838,40 @@ class App extends React.Component {
 
 <p>eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio.</p>
 
-<p>brainfuk…</p>
+<p>Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaArvoon(this.state.counter + 1)</code>. Kun komponentti renderöidään ensimmäisen kerran, <em>this.state.counter</em> on saanut konstruktorissa arvon 1, eli plus-napin tapahtumankäsittelijäksi tulee metodukutsun <code>this.asetaArvoon(1 + 1)</code> tulos, eli funktio</p>
 
-<p>suoraviivastus</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">2</span> <span class="p">})</span>
+  <span class="p">}</span>
+</code></pre></div></div>
 
-<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+<p>Vastaavasti, kun laskurin tila on esim 41, tulee plus-napin tapahtumakuuntelijaksi</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">42</span> <span class="p">})</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Tarkastellaan vielä hieman metodia <em>asetaArvoon</em>:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Koska metodi itse sisältää ainoastaan yhden komennon, eli <em>returnin</em>, joka palauttaa funktion, voidaan hyödyntää nuolifunktion tiiviimpää muotoa:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> 
+    <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">asetaArvoon</span> <span class="o">=</span> <span class="p">(</span><span class="nx">arvo</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="nx">arvo</span> <span class="p">})</span>
 </code></pre></div></div>
 
 <h3 id="tilan-vienti-alikomponenttiin">tilan vienti alikomponenttiin</h3>
