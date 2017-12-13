@@ -2012,4 +2012,6 @@ Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksell
 
 ### hyödyllistä materiaalia
 
+- Reactin [docs](https://reactjs.org/docs/hello-world.html), Reactin sivuilla oleva tutoriaali aika huono...
+
 ### react-tehtävät, osa 2
