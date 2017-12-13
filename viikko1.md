@@ -32,8 +32,8 @@ Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikk
 Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
 
 <div class="important">
-<h3>Web-sovelluskehityksen sääntö numero yksi</h3>
-Pidä selaimen developer-konsoli koko ajan auki
+  <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
+  Pidä selaimen developer-konsoli koko ajan auki
 </div>
 
 Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _com_ ja _i_. Ennen kun jatkat eteenpäin, selvitä miten saat koneellasi konsolin auki ja muista pitää se auki *aina* kun teet web-sovelluksia.
@@ -1787,7 +1787,7 @@ Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asetta
 
 Huomaamme kuitenkin että muutos hajottaa sovelluksemme täysin:
 
-![]({{ "/assets/1/28.png" | absolute_url }})
+![]({{ "/assets/1/30.png" | absolute_url }})
 
 Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite _funktioon_. Kun koodissa on
 
@@ -2002,13 +2002,78 @@ Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uut
 
 Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
 
-### debuggaus
+## React-sovelluste debuggaus
 
-- konsoli auki AINA
-- console.log
-- komento debug
-- debuggeri
-- react dev tool
+Ohejlmistokehittäjän elämä koostuu pääosin debuggaamisesta. Silloin tällöin syntyy toki muutama  rivi uuttakin koodia, mutta suuri osa ajasta ihmetellään miksi joku on rikki tai miksi joku asia ylipäätään toimii. Hyvät debuggauskäytänteet ja työkalut ovatkin todella tärkeitä.
+
+Onneki React on debuggauksen suhteen jopa harvinaisen kehittäjäystävällinen työkalu.
+
+Muistutetaa vielä tärkeimmästä web-sovelluskehitykseen liittyvästä asiasta:
+
+<div class="important">
+  <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
+  <div>Pidä selaimen developer-konsoli koko ajan auki. </div>
+  <div>Välilehdistä tulee olla auki nimenomaan  _Console_ jollei ole erityistä syytä käyttää jotain muuta välilehteä.
+  </div>
+</div>
+
+Pidä myös koodi ja web-sivu **koko ajan** molemmat yhtä aikaa näkyvillä. 
+
+Jos ja kun koodi ei käänny, eli selaimessa alkaa näkyä punaista
+
+![]({{ "/assets/1/31.png" | absolute_url }})
+
+älä kirjota enää lisää koodia vaan selvitä ongelma **välittömästi**. Koodauksen historia ei tunne tilannetta, missä kääntmätön koodi alkaisi ihmeen omaisesti toimia kirjoittamalla suurta määrää lisää koodia, en usko että sellaista ihmettä nähtäisiin tälläkään kurssilla.
+
+Vanha kunnon printtaukseen perustuva debuggaus kannattaa aina. Eli jos esim. komponentissa
+
+```react
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>  
+)
+```
+
+olisi jotain ongelmia, kannattaa sovelluksesta alkaa printtailla konsoliin. Pystyäksemme printtaamaan, tulee funktio muuttaa pitempään muotoon ja kenties propsit vastaanottaa ilman destrukturointia:
+
+```react
+const Button = (props) => {
+  console.log(props)
+  const { handleClick, text } = props
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>  
+  )
+}
+```
+
+näin selviää heti onko esim. joku propsia vastaava attribuutti nimetty väärin komponentin käyttäjässä.
+
+Koodin suorituksen voi pysäyttää chrome developr konosliin rakennettuun debuggeriin kirjoittamalla mihin tahansa kohtaa koodia komennon _debugger_
+
+Koodi pysähtyy kun suoritus etenee siten että komento suoritetaan
+
+![]({{ "/assets/1/32.png" | absolute_url }})
+
+Menemällä välilehdelle _Console_ on helppo tutkia muuttujien tilaa:
+
+![]({{ "/assets/1/33.png" | absolute_url }})
+
+Kun bugi selviää, voi komennon _debugger_ poistaa ja uudelleenladata sivun. 
+
+Debuggerissa on mahdollista suorittaa koodia tarvittaessa rivi riviltä _Source_ välilehden oikealta laidalta. 
+
+Debuggeriin pääsee myös ilman komentoa _debugger_ lisäämällä _Source_-välilehdellä sopiviin kohtiin koodia _breakpointeja_. Haluttujen muuttujien arvojen tarkkailu on mahdollsita asettamalla niille _watch_:
+
+![]({{ "/assets/1/34.png" | absolute_url }})
+
+Chromeen kannattaa asentaa [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) -lisäosa, joka tuo konsoliin uuden tabin _React_:
+
+![]({{ "/assets/1/35.png" | absolute_url }})
+
+Uuden konsolitabin avulla voidaan tarkkailla sovelluksen react-elementtejä ja niiden tilaa (eli this.state:a) ja propseja.
 
 ### hyödyllistä materiaalia
 
