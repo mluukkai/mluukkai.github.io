@@ -1903,9 +1903,104 @@ Ensimmäisellä kutsulla konfuguroidaan varsinaine funktio, sijoittamalla osalle
 () => this.setState({ counter: 5 })
 ```
 
+Tässä näytetty tapa soveltaa funktioita palauttavia funktioita on oleellisesti sama asia mistä funktionaalisessa ohjelmoinnissa käytetään termiä [currying](http://www.datchley.name/currying-vs-partial-application/). Termi currying ei ole lähtöisin funktionaalisen ohjelmoinnin piiristä vaan sillä on [juuret syvällä matematiikassa](https://en.wikipedia.org/wiki/Currying)
 
+Jo muutamaan kertaan mainittu termi _funktionaalinen ohjelmointi_ ei ole välttämättä kaikille tässä vaiheessa tuttu. Asiaa avataan hiukan kurssin kuluessa sillä React tukee ja osin edellyttää funktionaalisen tyylin käyttöä.
 
 ### tilan vienti alikomponenttiin
+
+Reactissa suositaan pieniä komponentteja, joita on mahdollista uusiokäyttää monessa osissa sovellusta ja jopa useissa eri sovelluksissa. Refaktoroidaan koodiamme vielä siten, että yhden komponentin sijaan koostamme laskurin näytöstä ja kahdesta painikkeesta. Tehdään ensin näytöstä vastaava komponentti _Display_.
+
+Reactissa parhaana käytänteenä on sijoittaa tila [mahdollisimman ylös](https://reactjs.org/docs/lifting-state-up.html) komponenttihierarkiassa, mielellään sovelluksen juurikomponenttiin.
+
+Eli jätetään sovelluksen tila, eli laskimen arvo komponenttiin _App_ ja välitetään tila _props_:ien avulla komponentille _Display_:
+
+```react
+const Display = (props) => <div>{props.counter}</div>
+```
+
+Kyseessä on siis todella yksinkertainen komponentti joka kannattaa ehdottomasti määritellä funktion avulla. 
+
+Voimme hyödyntää aiemmin mainittua [destrukturointia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) myös metodien parametreissa. Eli koska olemme kiinnostuneita _props_:in kentästä _counter_, on edellinen mahdollista yksinkertaistaa seuraavaan muotoon:
+
+```react
+const Display = ({ counter }) => <div>{counter}</div>
+```
+
+Komponentin käyttö suoraviivaista, riittää että sille välitetään laskurin tila eli _this.state.counter_:  
+
+```react
+class App  extends React.Component {
+  // ...
+  render() {
+    return (
+      <div>
+        <Display counter={this.state.counter}/>
+        <div>
+          <button onClick={this.asetaArvoon(this.state.counter+1)}>
+            Plus
+          </button>       
+          <button onClick={this.asetaArvoon(0)}>
+            Zero
+          </button>   
+        </div>
+      </div>
+    )
+  }
+}  
+```
+
+Kaikki toimii edelleen. Kun nappeja painetaan ja _App_ renderöityy uudelleen, renderöityvät myös kaikki sen alikomponentit, siis myös _Display_ automaattisesti uudelleen.
+
+Tehdään seuraavaksi napeille tarkoitettu komponentti _Button_. Napille on välitettävä propsien avulla tapahtumankäsittelijä sekä napin teksti:
+
+```react
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>  
+)
+```
+
+ja hyödynnetään taas destrukturointia ottamaan _props_:in tarpeelliset kentät suoraan:
+
+```react
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>  
+)
+```
+
+Komponentin _App_ metodi _render_ muuttuu nyt muotoon:
+
+```react
+  render() {
+    return (
+      <div>
+        <Display counter={this.state.counter}/>
+        <div>
+          <Button 
+            handleClick={this.asetaArvoon(this.state.counter + 1)} 
+            text='Plus'
+          />
+          <Button
+            handleClick={this.asetaArvoon(this.state.counter - 1)}
+            text='Minus'
+          /> 
+          <Button
+            handleClick={this.asetaArvoon(0)}
+            text='Zero'
+          /> 
+        </div>
+      </div>
+    )
+  }
+```  
+
+Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uutena toiminnallisuutena nappi, jolla laskurin arvoa voi vähentää.
+
+Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
 
 ### debuggaus
 

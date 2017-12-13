@@ -1603,7 +1603,7 @@ Eli koska komponenttia käytetään seuraavasti</p>
 
 <span class="err">###</span> <span class="nx">metodien</span> <span class="nx">k</span><span class="err">ä</span><span class="nx">ytt</span><span class="err">ö</span> <span class="nx">ja</span> <span class="nx">_this_</span>
 
-<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">viisasta</span><span class="p">.</span> <span class="nx">Eriytet</span><span class="err">ää</span><span class="nx">n</span> <span class="nx">nappien</span> <span class="nx">tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ä</span> <span class="nx">omaksi</span> <span class="nx">metodeikseen</span><span class="p">:</span> 
+<span class="nx">Tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ö</span><span class="nx">iden</span> <span class="nx">m</span><span class="err">ää</span><span class="nx">rittely</span> <span class="nx">suoraan</span> <span class="nx">JSX</span><span class="o">-</span><span class="nx">templatejen</span> <span class="nx">_return_</span><span class="o">-</span><span class="nx">lauseiden</span> <span class="nx">sis</span><span class="err">ä</span><span class="nx">ll</span><span class="err">ä</span> <span class="nx">ei</span> <span class="nx">ole</span> <span class="nx">yleens</span><span class="err">ä</span> <span class="nx">kovin</span> <span class="nx">viisasta</span><span class="p">.</span> <span class="nx">Eriytet</span><span class="err">ää</span><span class="nx">n</span> <span class="nx">nappien</span> <span class="nx">tapahtumank</span><span class="err">ä</span><span class="nx">sittelij</span><span class="err">ä</span> <span class="nx">omaksi</span> <span class="nx">metodeikseen</span><span class="p">:</span>
 
 <span class="s2">```react
 class App extends React.Component {
@@ -1687,7 +1687,7 @@ class App extends React.Component {
     <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span>    <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">nollaa</span><span class="p">}</span><span class="o">&gt;</span>
       <span class="nx">zero</span>
-    <span class="o">&lt;</span><span class="sr">/button&gt; </span><span class="err"> 
+    <span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span></code></pre></div></div>
 
 <p>Tenkisesti ottaen konstruktorissa korvataan kenttään <em>kasvataYhdella</em> alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että <em>this</em> on pysyväti bindattu olioon itseensä.</p>
@@ -1721,7 +1721,7 @@ class App extends React.Component {
 
 <p>Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemiseen.</p>
 
-<p><a href="https://babeljs.io/docs/plugins/transform-class-properties/">class propertyt</a> siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta creat-react-app:illa luoduissa sovelluksissa, sillä <a href="https://babeljs.io/">babel</a> osaa kääntää (eli transpiloida) ominaisuuden.</p>
+<p><a href="https://babeljs.io/docs/plugins/transform-class-properties/">class propertyt</a> siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta create-react-app:illa luoduissa sovelluksissa, sillä <a href="https://babeljs.io/">babel</a> osaa kääntää (eli transpiloida) ominaisuuden.</p>
 
 <p>NodeJS ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa NodeJS:llä.</p>
 
@@ -1751,7 +1751,7 @@ class App extends React.Component {
 
 <p>Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni bugi.</p>
 
-<p>Asia tulee kuitenkin ehdottomasti pitää mielessä, <em>setState</em>:n vääränlainen käyttö saataa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.</p>
+<p>Asia tulee kuitenkin ehdottomasti pitää mielessä, <em>setState</em>:n vääränlainen käyttö saattaa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.</p>
 
 <h3 id="refaktorointi">refaktorointi</h3>
 
@@ -1765,10 +1765,10 @@ class App extends React.Component {
       <span class="c1">//...</span>
       <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
         Plus
-      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>       
+      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
       <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
         Zero
-      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>  
+      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
       <span class="c1">//...</span>
     <span class="p">}</span>
 </code></pre></div></div>
@@ -1777,12 +1777,12 @@ class App extends React.Component {
 
 <p><img src="http://localhost:4000/assets/1/28.png" alt="" /></p>
 
-<p>Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite <em>fuktioon</em>. Kun koodissa on</p>
+<p>Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite <em>funktioon</em>. Kun koodissa on</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)}</span><span class="o">&gt;</span>
 </code></pre></div></div>
 
-<p>tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittän kun React suorittaa metodin <em>render</em>, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin <em>setState</em> kutsun. Tämä taas aiheuttaa uuden <em>render</em>-kutsun jne…</p>
+<p>tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittäin kun React suorittaa metodin <em>render</em>, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin <em>setState</em> kutsun. Tämä taas aiheuttaa uuden <em>render</em>-kutsun jne…</p>
 
 <p>Tässä tilanteessa meidän onkin käytettävä yleistä Javascriptin ja yleisemminkin funktionaalisen ohjelmoinnin kikkaa, eli määritellä <em>funktio joka palauttaa funktion</em>:</p>
 
@@ -1829,7 +1829,7 @@ class App extends React.Component {
   <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Kun <em>render</em>-metodissa määritellään tapaahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena</p>
+<p>Kun <em>render</em>-metodissa määritellään tapahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">0</span> <span class="p">})</span>
@@ -1881,7 +1881,98 @@ class App extends React.Component {
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span> <span class="na">counter</span><span class="p">:</span> <span class="mi">5</span> <span class="p">})</span>
 </code></pre></div></div>
 
+<p>Tässä näytetty tapa soveltaa funktioita palauttavia funktioita on oleellisesti sama asia mistä funktionaalisessa ohjelmoinnissa käytetään termiä <a href="http://www.datchley.name/currying-vs-partial-application/">currying</a>. Termi currying ei ole lähtöisin funktionaalisen ohjelmoinnin piiristä vaan sillä on <a href="https://en.wikipedia.org/wiki/Currying">juuret syvällä matematiikassa</a></p>
+
+<p>Jo muutamaan kertaan mainittu termi <em>funktionaalinen ohjelmointi</em> ei ole välttämättä kaikille tässä vaiheessa tuttu. Asiaa avataan hiukan kurssin kuluessa sillä React tukee ja osin edellyttää funktionaalisen tyylin käyttöä.</p>
+
 <h3 id="tilan-vienti-alikomponenttiin">tilan vienti alikomponenttiin</h3>
+
+<p>Reactissa suositaan pieniä komponentteja, joita on mahdollista uusiokäyttää monessa osissa sovellusta ja jopa useissa eri sovelluksissa. Refaktoroidaan koodiamme vielä siten, että yhden komponentin sijaan koostamme laskurin näytöstä ja kahdesta painikkeesta. Tehdään ensin näytöstä vastaava komponentti <em>Display</em>.</p>
+
+<p>Reactissa parhaana käytänteenä on sijoittaa tila <a href="https://reactjs.org/docs/lifting-state-up.html">mahdollisimman ylös</a> komponenttihierarkiassa, mielellään sovelluksen juurikomponenttiin.</p>
+
+<p>Eli jätetään sovelluksen tila, eli laskimen arvo komponenttiin <em>App</em> ja välitetään tila <em>props</em>:ien avulla komponentille <em>Display</em>:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Display</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>Kyseessä on siis todella yksinkertainen komponentti joka kannattaa ehdottomasti määritellä funktion avulla.</p>
+
+<p>Voimme hyödyntää aiemmin mainittua <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">destrukturointia</a> myös metodien parametreissa. Eli koska olemme kiinnostuneita <em>props</em>:in kentästä <em>counter</em>, on edellinen mahdollista yksinkertaistaa seuraavaan muotoon:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Display</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">counter</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="si">{</span><span class="nx">counter</span><span class="si">}</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>Komponentin käyttö suoraviivaista, riittää että sille välitetään laskurin tila eli <em>this.state.counter</em>:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nx">App</span>  <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Display</span> <span class="na">counter=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+            Plus
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>       
+          <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="p">&gt;</span>
+            Zero
+          <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>   
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>  
+</code></pre></div></div>
+
+<p>Kaikki toimii edelleen. Kun nappeja painetaan ja <em>App</em> renderöityy uudelleen, renderöityvät myös kaikki sen alikomponentit, siis myös <em>Display</em> automaattisesti uudelleen.</p>
+
+<p>Tehdään seuraavaksi napeille tarkoitettu komponentti <em>Button</em>. Napille on välitettävä propsien avulla tapahtumankäsittelijä sekä napin teksti:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Button</span> <span class="o">=</span> <span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">handleClick</span><span class="si">}</span><span class="p">&gt;</span>
+    <span class="si">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">text</span><span class="si">}</span>
+  <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>  
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>ja hyödynnetään taas destrukturointia ottamaan <em>props</em>:in tarpeelliset kentät suoraan:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">Button</span> <span class="o">=</span> <span class="p">({</span> <span class="nx">handleClick</span><span class="p">,</span> <span class="nx">text</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">(</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onClick=</span><span class="si">{</span><span class="nx">handleClick</span><span class="si">}</span><span class="p">&gt;</span>
+    <span class="si">{</span><span class="nx">text</span><span class="si">}</span>
+  <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>  
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Komponentin <em>App</em> metodi <em>render</em> muuttuu nyt muotoon:</p>
+
+<div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nc">Display</span> <span class="na">counter=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span><span class="si">}</span><span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nc">Button</span> 
+            <span class="na">handleClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="si">}</span> 
+            <span class="na">text=</span><span class="s1">'Plus'</span>
+          <span class="p">/&gt;</span>
+          <span class="p">&lt;</span><span class="nc">Button</span>
+            <span class="na">handleClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">counter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="si">}</span>
+            <span class="na">text=</span><span class="s1">'Minus'</span>
+          <span class="p">/&gt;</span> 
+          <span class="p">&lt;</span><span class="nc">Button</span>
+            <span class="na">handleClick=</span><span class="si">{</span><span class="k">this</span><span class="p">.</span><span class="nx">asetaArvoon</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span>
+            <span class="na">text=</span><span class="s1">'Zero'</span>
+          <span class="p">/&gt;</span> 
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">)</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uutena toiminnallisuutena nappi, jolla laskurin arvoa voi vähentää.</p>
+
+<p>Tapahtumakäsittelijä välitetään napeille propsin <em>handleClick</em> välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin <a href="https://reactjs.org/tutorial/tutorial.html">tutoriaali</a> suosittelee tätä konventiota.</p>
 
 <h3 id="debuggaus">debuggaus</h3>
 
