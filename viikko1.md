@@ -894,7 +894,7 @@ console.log(x, y)  // tulostuu 1, teksti
 x = 4              // aiheuttaa virheen
 ```
 
-[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä tällä kurssilla varia, käytä aina const:ia tai let:iä! 
+[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) ei oikeastaan määrittele muuttujaa vaan _vakion_, jonka arvoa ei voi enää muuttaa. [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let) taas määrittelee normaalin muuttujan. Javascriptissa on myös mahdollista määritellä  muuttujia avainsanan [var](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var) avulla. Älä käytä tällä kurssilla varia, käytä aina const:ia tai let:iä!
 
 Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
 
@@ -1607,7 +1607,7 @@ Sovelluksemme on valmis!
 
 ### metodien käyttö ja _this_
 
-Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin viisasta. Eriytetään nappien tapahtumankäsittelijä omaksi metodeikseen: 
+Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen _return_-lauseiden sisällä ei ole yleensä kovin viisasta. Eriytetään nappien tapahtumankäsittelijä omaksi metodeikseen:
 
 ```react
 class App extends React.Component {
@@ -1695,7 +1695,7 @@ Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
     </button>
     <button onClick={this.nollaa}>
       zero
-    </button>  
+    </button>
 ```
 
 Tenkisesti ottaen konstruktorissa korvataan kenttään _kasvataYhdella_ alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että _this_ on pysyväti bindattu olioon itseensä.
@@ -1724,13 +1724,13 @@ class App extends React.Component {
   }
 ```
 
-Näin jokainen _App_-komponentti saa kentät _kasvataYhdella_ ja _nollaa_ jotka ovat funktioita, joiden _this_ on sidottu komponenttiin riippumatta siitä miten ja kenen toimesta metodia kutsutaan. 
+Näin jokainen _App_-komponentti saa kentät _kasvataYhdella_ ja _nollaa_ jotka ovat funktioita, joiden _this_ on sidottu komponenttiin riippumatta siitä miten ja kenen toimesta metodia kutsutaan.
 
 Syy miksi nuolifunktiolla määritelty metodi toimii _this_:in suhteen samaan tapaan kuin esim. Javassa, on se, että nuolifunktioilla on ns. leksikaalinen (lexical) this, eli nuolifunktion _this_ määräytyy sen määrittelykontekstin _this_:in mukaan. Kun metodi määritellään class propertynä, on määrittelykontekstina _App_-komponentti. Tarkempaa selitystä esim. [täällä](https://medium.com/@reasoncode/javascript-es6-arrow-functions-and-lexical-this-f2a3e2a5e8c4).
 
 Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemiseen.
 
-[class propertyt](https://babeljs.io/docs/plugins/transform-class-properties/) siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta creat-react-app:illa luoduissa sovelluksissa, sillä [babel](https://babeljs.io/) osaa kääntää (eli transpiloida) ominaisuuden.
+[class propertyt](https://babeljs.io/docs/plugins/transform-class-properties/) siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta create-react-app:illa luoduissa sovelluksissa, sillä [babel](https://babeljs.io/) osaa kääntää (eli transpiloida) ominaisuuden.
 
 NodeJS ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa NodeJS:llä.
 
@@ -1762,7 +1762,7 @@ Nyt metodin parametrina on funktio, jonka parametrina on edellinen tila _prevSta
 
 Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni bugi.
 
-Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saataa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin. 
+Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saattaa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.
 
 ### refaktorointi
 
@@ -1777,10 +1777,10 @@ Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asetta
       //...
       <button onClick={this.asetaArvoon(this.state.counter+1)}>
         Plus
-      </button>       
+      </button>
       <button onClick={this.asetaArvoon(0)}>
         Zero
-      </button>  
+      </button>
       //...
     }
 ```
@@ -1789,13 +1789,13 @@ Huomaamme kuitenkin että muutos hajottaa sovelluksemme täysin:
 
 ![]({{ "/assets/1/28.png" | absolute_url }})
 
-Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite _fuktioon_. Kun koodissa on 
+Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite _funktioon_. Kun koodissa on
 
 ```react
 <button onClick={this.asetaArvoon(0)}>
 ```
 
-tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittän kun React suorittaa metodin _render_, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin _setState_ kutsun. Tämä taas aiheuttaa uuden _render_-kutsun jne...
+tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittäin kun React suorittaa metodin _render_, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin _setState_ kutsun. Tämä taas aiheuttaa uuden _render_-kutsun jne...
 
 Tässä tilanteessa meidän onkin käytettävä yleistä Javascriptin ja yleisemminkin funktionaalisen ohjelmoinnin kikkaa, eli määritellä _funktio joka palauttaa funktion_:
 
@@ -1842,15 +1842,15 @@ Olemme siis määritelleen komponentin metodin seuraavasti:
       this.setState({ counter: arvo })
     }
   }
-```  
+```
 
-Kun _render_-metodissa määritellään tapaahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena
+Kun _render_-metodissa määritellään tapahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena
 
 ```js
   () => {
     this.setState({ counter: 0 })
   }
- ```   
+ ```
 
 eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio.
 
