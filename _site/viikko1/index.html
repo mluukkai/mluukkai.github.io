@@ -1694,6 +1694,8 @@ class App  extends React.Component {
 
 <p>Tenkisesti ottaen konstruktorissa korvataan kenttään <em>kasvataYhdella</em> alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että <em>this</em> on pysyväti bindattu olioon itseensä.</p>
 
+<p>Ehkä paras ratkaisu</p>
+
 <p>paras käyttää vielä standardoimatonta <a href="https://babeljs.io/docs/plugins/transform-class-properties/">class properties</a> -featurea</p>
 
 <div class="language-react highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">kasvataYhdella</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>

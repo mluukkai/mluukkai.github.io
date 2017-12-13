@@ -1702,6 +1702,8 @@ Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
 
 Tenkisesti ottaen konstruktorissa korvataan kenttään _kasvataYhdella_ alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen oodi siten, että _this_ on pysyväti bindattu olioon itseensä.
 
+Ehkä paras ratkaisu
+
 paras käyttää vielä standardoimatonta [class properties](https://babeljs.io/docs/plugins/transform-class-properties/) -featurea
 
 ```react
