@@ -492,11 +492,7 @@ Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoa
 
 Esimerkkisovelluksemme pääsivu toimii perinteisten web-sivujen tapaan, kaikki sovelluslogiikka on palvelimella, selain ainoastaan renderöi palvelimen lähettämää HTML-koodia.
 
-<<<<<<< Updated upstream
-Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevien muistiinpanojen HTML-koodin generointi on siirretty selaimen vastuulle. Selain hoita tehtävän suorittamalla palvelimelta lataamansa Javascript-koodin. Selaimella suoritettava koodi hakee ensin muistiinpanot palvelimelta JSON-muotoisena raakadatana ja lisää sivulle muistiinpanoja edustavt HTML-elementit [DOM-apia](document-object-model-eli-dom) hyödyntäen.
-=======
 Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevien muistiinpanojen HTML-koodin generointi on siirretty selaimen vastuulle. Selain hoita tehtävän suorittamalla palvelimelta lataamansa Javascript-koodin. Selaimella suoritettava koodi hakee ensin muistiinpanot palvelimelta JSON-muotoisena raakadatana ja lisää sivulle muistiinpanoja edustavat HTML-elementit [DOM-apia](document-object-model-eli-dom) hyödyntäen.
->>>>>>> Stashed changes
 
 Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen [Single-page application](https://en.wikipedia.org/wiki/Single-page_application) (SPA) -tyyliä, missä sovelluksille ei enää tehdä esimerkkisovelluksemme tapaan erillisiä, palvelimen sille lähettämiä sivuja, vaan sovellus koostuu ainoastaan yhdestä palvelimen lähettämästä HTML-sivusta, jonka sisältöä manipuloidaan selaimessa suoritettavalla Javascriptillä.
 
