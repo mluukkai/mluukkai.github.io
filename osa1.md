@@ -1,7 +1,7 @@
 ---
 layout: page
-title: viikko 1
-permalink: /viikko1/
+title: osa 1
+permalink: /osa1/
 ---
 
 ## yleistä
@@ -14,23 +14,46 @@ Osallistujilta edellytetään vahvaa ohjelmointiruutiinia, web-ohjelmoinnin ja t
 
 Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.
 
+## kurssimateriaali, suoritustapa
+
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
+
+Materiaali perustuu muutamien viikoittaisten koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
+
+Kurssi koostuu osista joita ilmestyy viikoittain. On tarkoitus että etenet seuraavaan osaan vasta kun riittävä määrä (noin 80%) edellisen osan tehtävistä on tehty. Jokaisella osalla on myös hard deadline, esim. osan 1 deadline ei kuitenkaan ole vielä viikon 1 lopussa, joten etenemiselle on jonkun verran joustoa jotta ehdit tekemään kustakin osasta tarvittavan määrän tehtäviä.
+
+Arvosana määräytyy tehtyjen tehtävien perusteella, noin 50% tehtävistä tuo arvosanan 1 ja 90% arvosanan 5. Kurssin lopussa on koe joka on suoritettava hyväksytysti, koe ei kuitenkaan vaikuta arvosanaan.
+
 ## alkutoimet
-
-asenna asap
-- git
-- node min versio 8.6
-- chrome canary
-
-## viikon 1 oppimistavoitteet
-
-- ...
-
-## web-sovelluksen toimintaperiaatteita ##
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
 Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikkein suositeltavinta on Chromen ns.
 [canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen.
+
+Kurssin tehtävät palautetaan GitHubiin, joten Git tulee olla asennettuna.
+
+Asenna myös joku järkevä webkoodausta tukeva tekstieditori, enemmän kuin suositeltava valinta on [Visual studio code](https://code.visualstudio.com/). Myös [Atom](https://atom.io/) on tarkoitukseen toimiva.
+
+Älä koodaa nanolla, notepadilla tai geditillä. Netbeanskaan ei ole omimmillaan Web-koodauksessa ja se on myös turhan raskas verrattuna esim. Visual Studio Codeen.
+
+Asenna koneeseesi heti myös [NodeJS](https://nodejs.org/en/). Materiaali on tehty versiolla 8.6, älä asenna mitään sitä vanhempaa versiota. Ubuntulla NodeJS:ää todennäköisesti _ei kannata_ asentaa pakettienhallinnasta eli _apt-get_:illä, sillä sieltä saatava versio on antiikkinen.
+
+Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmjs.com/get-npm) jota tulemme tarvitsemaan kurssin aikana aktiivisesti.
+
+## osan 1 oppimistavoitteet
+
+- Web-sovellusten toiminnan perusteet
+  - HTTP-protokolla: metodit GET ja POST, statuskoodit, headerit
+- React
+  - ...
+- Javascript
+  - ...
+
+
+## web-sovelluksen toimintaperiaatteita ##
+
+Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta, mielellään sen [canary](https://www.google.fi/chrome/browser/canary.html)-versiota. 
 
 Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
 
@@ -39,12 +62,16 @@ Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> ole
   Pidä selaimen developer-konsoli koko ajan auki
 </div>
 
-Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _com_ ja _i_. Ennen kun jatkat eteenpäin, selvitä miten saat koneellasi konsolin auki ja muista pitää se auki *aina* kun teet web-sovelluksia.
+Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _cmd_ ja _i_. 
+
+Ennen kun jatkat eteenpäin, selvitä miten saat koneellasi konsolin auki (googlaa tarvittaessa) ja muista pitää se auki *aina* kun teet web-sovelluksia.
 
 Konsoli näyttää seuraavalta:
 ![]({{ "/assets/1/1.png" | absolute_url }})
 
 Varmista, että välilehti _Network_ on avattuna ja aktivoi valinta _Disable cache_ kuten kuvassa on tehty.
+
+**HUOM:** konsolin tärkein välilehti on _Console_. Käytämme nyt johdanto-osassa kuitenkin ensin melko paljon välilehteä _Network_.
 
 ### HTTP GET
 

@@ -1,9 +1,9 @@
 # tehtävät
 
-## viikko 1
+## osa 1
 
 ### react alkeet ###
 
-### javascript ###
+### javascriptin alkeet ###
 
 ### lisää reactia ###
