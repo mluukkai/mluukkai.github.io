@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa node.js-kirjastolla toteutetuissa REST-rajapinnoissa.
+Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa node.js:llä toteutetuissa REST-rajapinnoissa.
   
 Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä NoSQL-tietokantoja.
 
