@@ -10,6 +10,8 @@ Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehityksee
 
 Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä NoSQL-tietokantoja.
 
+## oletetut esitiedot
+
 Osallistujilta edellytetään vahvaa ohjelmointiruutiinia, web-ohjelmoinnin ja tietokantojen perustuntemusta (esim. opintojakson Tietokantasovellus-suoritusta) sekä valmiutta omatoimiseen tiedonhakuun.
 
 Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.
@@ -37,7 +39,7 @@ Asenna myös joku järkevä webkoodausta tukeva tekstieditori, enemmän kuin suo
 
 Älä koodaa nanolla, notepadilla tai geditillä. Netbeanskaan ei ole omimmillaan Web-koodauksessa ja se on myös turhan raskas verrattuna esim. Visual Studio Codeen.
 
-Asenna koneeseesi heti myös [NodeJS](https://nodejs.org/en/). Materiaali on tehty versiolla 8.6, älä asenna mitään sitä vanhempaa versiota. Ubuntulla NodeJS:ää todennäköisesti _ei kannata_ asentaa pakettienhallinnasta eli _apt-get_:illä, sillä sieltä saatava versio on antiikkinen.
+Asenna koneeseesi heti myös [Node.js](https://nodejs.org/en/). Materiaali on tehty versiolla 8.6, älä asenna mitään sitä vanhempaa versiota. Ubuntulla Node.js:ää todennäköisesti _ei kannata_ asentaa pakettienhallinnasta eli _apt-get_:illä, sillä sieltä saatava versio on antiikkinen.
 
 Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmjs.com/get-npm) jota tulemme tarvitsemaan kurssin aikana aktiivisesti.
 
@@ -45,8 +47,18 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 
 - Web-sovellusten toiminnan perusteet
   - HTTP-protokolla: metodit GET ja POST, statuskoodit, headerit
+  - palvelimella suoritettavan koodin rooli
+  - selaimessa suoritettava javascript:in rooli
+  - JSON-muotoinen data
+  - DOM
+  - sivujen ulkoasun muotoilun periaate CSS:llä
+  - single page app -periaate
+- Chrome develper konsolin peruskäyttö 
 - React
-  - ...
+  - funktiona ja luokkana määriteltävät komponentit
+  - tietojen ja funktioiden välittäminen lapsikomponentteihin propseina
+  - komonentin tila
+  - tapahtumankäsittely
 - Javascript
   - ...
 
@@ -75,39 +87,43 @@ Varmista, että välilehti _Network_ on avattuna ja aktivoi valinta _Disable cac
 
 ### HTTP GET
 
-Selain ja web-palvelin kommunikoivat keskenään [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)-protokollaa käyttäen ja avoinna oleva konsolin Network-tabi kertoo miten selain ja palvelin kommunikoivat.
+Selain ja web-palvelin kommunikoivat keskenään [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)-protokollaa käyttäen. Avoinna oleva konsolin Network-tabi kertoo miten selain ja palvelin kommunikoivat.
 
-Kun nyt reloadaat selaimen, kertoo konsoli, että tapahtuu kaksi asiaa: selain hakee web-palvelimelta sivun _fullstack-exampleapp.herokuapp.com/_ sisällön ja lataa kuvan _kuva.png_.
+Kun nyt reloadaat selaimen, kertoo konsoli, että tapahtuu kaksi asiaa
+- selain hakee web-palvelimelta sivun _fullstack-exampleapp.herokuapp.com/_ sisällön
+- ja lataa kuvan _kuva.png_
 
 ![]({{ "/assets/1/2.png" | absolute_url }})
+
+Jos ruutusi on pieni, saatat joutua isontamaan konsoli-ikkunaa, jotta saat selaimen tekemät haut näkyviin.
 
 Klikkaamalla näistä ensimmäistä, paljastuu tarkempaa tietoa siitä mistä on kyse:
 
 ![]({{ "/assets/1/3.png" | absolute_url }})
 
-Ylimmästä osasta 'General' selviää, että selain teki [GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)-metodilla pyynnön osoitteeseen _https://fullstack-exampleapp.herokuapp.com/_ ja että pyyntö oli onnistunut, sillä pyyntöön saatiin vastaus, jonka [Status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) on 200.
+Ylimmästä osasta _General_ selviää, että selain teki [GET](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET)-metodilla pyynnön osoitteeseen _https://fullstack-exampleapp.herokuapp.com/_ ja että pyyntö oli onnistunut, sillä pyyntöön saatiin vastaus, jonka [Status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) on 200.
 
-Pyyntöön ja palvelimen lähettämään vastaukseen liittyy erinäinen määrä otsakkeita eli [headereita](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields).
+Pyyntöön ja palvelimen lähettämään vastaukseen liittyy erinäinen määrä otsakkeita eli [headereita](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields):
 
 ![]({{ "/assets/1/4.png" | absolute_url }})
 
-Ylempänä oleva _response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken sekä sen. Tärkeä _Content-Type_ headeri kertoo että vastaus on utf-8 muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää että sen, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu joka tulee renderöidä käyttäjän selaimeen.
+Ylempänä oleva _Response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken. Tärkeä headeri _Content-Type_ kertoo, että vastaus on [utf-8](https://en.wikipedia.org/wiki/UTF-8) muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää että sen, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu, joka tulee renderöidä käyttäjän selaimeen.
 
 Välilehti _Preview_ näyttää miltä pyyntöön vastauksena lähetetty data näyttää. Kyseessä on siis normaali HTML-sivu, jonka _body_-osassa määritellään selaimessa näytettävän sivun rakenne:
 
 ![]({{ "/assets/1/5.png" | absolute_url }})
 
-Sivu sisältää _div_-elementin, jonka sisällä on otsikko sekä tieto luotujen muistiinpanojen määrästä, linkki sivulle _muistiinpanot_ ja _img_-tagi.
+Sivu sisältää _div_-elementin, jonka sisällä on otsikko sekä tieto luotujen muistiinpanojen määrästä, linkki sivulle _muistiinpanot_ ja kuvaa vastaava _img_-tagi.
 
-img-tagin ansiosta selain tekee siis HTTP-pyynnön, jonka avulla se hakee kuvan palvelimelta. Pyynnön tiedot näyttävät seuraavalta:
+img-tagin ansiosta selain tekee HTTP-pyynnön, jonka avulla se hakee kuvan _kuva.png_ palvelimelta. Pyynnön tiedot näyttävät seuraavalta:
 
 ![]({{ "/assets/1/6.png" | absolute_url }})
 
-eli pyyntö on tehty osoitteeseen _https://fullstack-exampleapp.herokuapp.com/kuva.png_ ja se on tyypiltään HTTP GET. Vastaukseen liittyvät headerit kertovat että vastauksen koko on 89350 tavua ja vastauksen Content-type on _image/png_, eli kyseessä on png-tyyppinen kuva. Tämän tiedon ansiosta selain tietää miten kuva on sijoitettava HTML-sivulle.
+eli pyyntö on tehty osoitteeseen _https://fullstack-exampleapp.herokuapp.com/kuva.png_ ja se on tyypiltään HTTP GET. Vastaukseen liittyvät headerit kertovat että vastauksen koko on 89350 tavua ja vastauksen _Content-type_ on _image/png_, eli kyseessä on png-tyyppinen kuva. Tämän tiedon ansiosta selain tietää miten kuva on sijoitettava HTML-sivulle.
 
 ### perinteinen web-sovellus
 
-Esimerkkisovelluksen pääsivu toimii perinteisen web-sovelluksen tapaan. Mentäessä sivulle, selain hakee palvelimelta sivun muotoilun ja tekstuaalisen sisällön määrittelevän HTML-dokumentin.
+Esimerkkisovelluksen pääsivu toimii perinteisen web-sovelluksen tapaan. Mentäessä sivulle, selain hakee palvelimelta sivun strukturoinnin ja tekstuaalisen sisällön määrittelevän HTML-dokumentin.
 
 Palvelin on muodostanut dokumentin jollain tavalla. Dokumentti voi olla _staattista sisältöä_ eli palvelimen hakemistossa oleva tekstitiedosto. Dokumentti voi myös olla _dynaaminen_, eli palvelin voi muodostaa HTML-dokumentit esim. tietokannassa olevien tietojen perusteella. Esimerkkisovelluksessa sivun HTML-koodi on muodostettu dynaamisesti sillä se sisältää tiedon luotujen muistiinpanojen lukumäärästä.
 
@@ -137,9 +153,9 @@ app.get('/', (req, res) => {
 })
 ```
 
-Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisältö on talletettu ns. template stringinä muuttujaan. Etusivun dynaamisesti muuttuva osa, eli muistiinpanojen lukumäärä korvataan template stringissä sen hetkisellä konkreettisella lukuarvolla.
+Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisältö on talletettu ns. template stringinä. Etusivun dynaamisesti muuttuva osa, eli muistiinpanojen lukumäärä (koodissa _noteCount_) korvataan template stringissä sen hetkisellä konkreettisella lukuarvolla (koodissa _notes.length_).
 
-Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä, kuten [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä. Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.
+Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä tai, [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä tai [Ruby on Railsilla](http://rubyonrails.org/) Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.
 
 ### selaimessa suoritettava sovelluslogiikka
 
@@ -154,7 +170,7 @@ kyseessä on sivun HTML-koodi, joka näyttää seuraavalta:
 
 ![]({{ "/assets/1/8.png" | absolute_url }})
 
-Kun vertaamme, selaimen näyttämää sivua ja pyynnön palauttamaa HTML-koodia, huomaamme, että koodi ei sisällä ollenkaan kolme muistiinpanoa sisältävää listaa.
+Kun vertaamme, selaimen näyttämää sivua ja pyynnön palauttamaa HTML-koodia, huomaamme, että koodi ei sisällä ollenkaan kolmea muistiinpanoa sisältävää listaa.
 
 HTML-koodin _head_ osio sisältää _script_-tagin, jonka ansiosta selain lataa _main.js_-nimisen javascript-tiedoston palvelimelta.
 
@@ -188,7 +204,7 @@ xhttp.send()
 
 Koodin yksityiskohdat eivät ole tässä vaiheessa vielä oleellisia.
 
-Ladattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin.
+Heti ldattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin.
 
 Kaksi viimeistä riviä määrittelevät, että selain tekee GET-tyyppisen HTTP-pyynnön osoitteeseen palvelimen osoitteeseen _/data.json_:
 
@@ -197,20 +213,17 @@ xhttp.open('GET', '/data.json', true)
 xhttp.send()
 ```
 
-Kyseessä on neljäs Network tabin näyttämistä selaimen tekemistä pyynnöistä.
+Kyseessä on alin Network tabin näyttämistä selaimen tekemistä pyynnöistä.
 
 Voimme kokeilla mennä osoitteeseen <https://fullstack-exampleapp.herokuapp.com/data.json> suoraan selaimella:
 
 ![]({{ "/assets/1/9.png" | absolute_url }})
 
-Osoitteesta löytyvät muistiinpanot [JSON](https://en.wikipedia.org/wiki/JSON)-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc)
-
-ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:
+Osoitteesta löytyvät muistiinpanot [JSON](https://en.wikipedia.org/wiki/JSON)-muotoisena "raakadatana". Oletusarvoisesti selain ei osaa näyttää JSON-dataa kovin hyvin, mutta on olemassa lukuisia plugineja jotka hoitavat muotoilun. Asenna nyt chromeen esim. [JSONView](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) ja lataa sivu uudelleen. Data on nyt miellyttävämmin muotoiltua:
 
 ![]({{ "/assets/1/10.png" | absolute_url }})
 
-Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja
-muodostaa datan avulla selaimeen "bulletlistan" muistiinpanojen sisällöstä:
+Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoisen datan ja muodostaa datan avulla selaimeen "bulletlistan" muistiinpanojen sisällöstä:
 
 Tämän saa aikaan seuraava koodi:
 
@@ -269,7 +282,7 @@ eli vastaanotettuaan datan palvelimelta, koodi tulostaa datan konsoliin.
 
 Tulet tarvitsemaan komentoa _console.log_ kurssilla todella monta kertaa...
 
-### tapahtumankäsittelijä ja takaisinkutsu
+### tapahtumankäsittelijä ja takaisinkutsu ###
 
 Koodin rakenne on hieman erikoinen:
 
@@ -301,9 +314,9 @@ xhttp.onreadystatechange = function () {
 }
 ```
 
-Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan [callback](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function) eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen _tapahtuman_ tapahduttua.
+Tapahtumankäsittelijöihin liittyvä mekanismi koodin suorittamiseen on javascriptissä erittäin yleistä. Tapahtumankäsittelijöinä olevia javascript-funktioita kutsutaan [callback](https://developer.mozilla.org/en-US/docs/Glossary/Callback_function)- eli takaisinkutsufunktioiksi sillä sovelluksen koodi ei kutsu niitä itse vaan suoritusympäristö, eli web-selain suorittaa funktion kutsumisen sopivana ajankohtana, eli kyseisen _tapahtuman_ tapahduttua.
 
-### Document Object Model eli DOM
+### Document Object Model eli DOM ###
 
 Voimme ajatella, että HTML-sivut muodostavat implisiittisen puurakenteen
 
@@ -329,11 +342,11 @@ Sama puumaisuus on nähtävissä konsolin välilehdellä _Elements_
 
 ![]({{ "/assets/1/13.png" | absolute_url }})
 
-Selainten toiminta perustuu ideaan esittää html-elementit puurakenteena.
+Selainten toiminta perustuu ideaan esittää HTML-elementit puurakenteena.
 
 Document Object Model eli [DOM](https://en.wikipedia.org/wiki/Document_Object_Model) on ohjelmointirajapinta eli _API_, jonka mahdollistaa selaimessa esitettävien web-sivujen muokkaamisen ohjelmallisesti.
 
-Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM:ia lisätäkseen sivulle muistiinpanojen listan.
+Edellisessä luvussa esittelemämme javascript-koodi käytti nimenomaan DOM-apia lisätäkseen sivulle muistiinpanojen listan.
 
 HTML-dokumentin
 
@@ -343,13 +356,13 @@ DOM:a havainnollistava kuva Wikipedian sivulta:
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/DOM-model.svg/428px-DOM-model.svg.png)
 
-### document-olio
+### document-olio ja sivun manipulointi konsolista ###
 
 HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään _document_. Olioon pääsee käsiksi Console-välilehdeltä:
 
 ![]({{ "/assets/1/14.png" | absolute_url }})
 
-Voimme suorittaa konsolista käsin DOM:in avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle.
+Voimme suorittaa konsolista käsin DOM-apin avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle hyyödyntämällä _document_-olioa.
 
 Lisätään nyt sivulle uusi muistiinpano suoraan konsolista.
 
@@ -373,11 +386,9 @@ lista.appendChild(uusi)
 
 ![]({{ "/assets/1/15.png" | absolute_url }})
 
-Vaikka selaimen näyttävä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json> haettavan JSON-muotoisen raakadatan perusteella.
+Vaikka selaimen näyttämä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json> haettavan JSON-muotoisen raakadatan perusteella.
 
-
-
-### CSS
+### CSS ###
 
 Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
 
@@ -412,14 +423,14 @@ CSS-säännön avulla on määritelty, että _container_-luokan sisältävä ele
 
 Toinen määritelty CSS-sääntö asettaa muistiinpanojen kirjainten värin siniseksi.
 
-HTML-elementeillä on muitekin attribuutteja kuin luokkia. Muistiinpanot sisältävä _div_-elementti sisältää [id](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id)-attribuutin. Javascript-koodi hyödyntää attribuuttia elementin etsimiseen.
+HTML-elementeillä on muitakin attribuutteja kuin luokkia. Muistiinpanot sisältävä _div_-elementti sisältää [id](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id)-attribuutin. Javascript-koodi hyödyntää attribuuttia elementin etsimiseen.
 
 Konsolin _Elements_-välilehdellä on mahdollista manipuloida elementtien tyylejä:
 ![]({{ "/assets/1/17.png" | absolute_url }})
 
 Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudelleenladataan, eli jos muutokset halutaan pysyviksi, tulee ne konsolissa tehtävien kokeilujen jälkeen tallettaa palvelimella olevaan tyylitiedostoon.
 
-### lomake ja HTTP POST
+### lomake ja HTTP POST ###
 
 Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli [formin](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form).
 
@@ -429,13 +440,13 @@ Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn dat
 
 ![]({{ "/assets/1/19.png" | absolute_url }})
 
-Lomakkeen lähettäminen aiheuttaa yllättäen yhteensä viisi HTTP-pyyntöä. Näistä ensimmäinen vastaa lomakkeen lähetystapahtumaa. Tarkennetaan siihen:
+Lomakkeen lähettäminen aiheuttaa yllättäen yhteensä _viisi_ HTTP-pyyntöä. Näistä ensimmäinen vastaa lomakkeen lähetystapahtumaa. Tarkennetaan siihen:
 
 ![]({{ "/assets/1/20.png" | absolute_url }})
 
-Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen _new_note_. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. uudelleenohjauspyyntö, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin _Location_ kertomaan paikkaan, eli osoitteeseen _notes_.
+Kyseessä on siis HTTP POST -pyyntö ja se on tehty palvelimen osoitteeseen <em>new\_note</em>. Palvelin vastaa pyyntöön HTTP-statuskoodilla 302. Kyseessä on ns. [uudelleenohjauspyyntö](https://en.wikipedia.org/wiki/URL_redirection) eli redirectaus, minkä avulla palvelin kehoittaa selainta tekemään automaattisesti uuden HTTP GET -pyynnön headerin _Location_ kertomaan paikkaan, eli osoitteeseen _notes_.
 
-Selain siis lataa uudelleen muistiinpanojen sivun. Sivunlataus saa aikaan myös kolme muuta HTTP-pyyntöä: tyylitiedostojen, javascriptin ja muistiinpanojen raakadatan lataamisen.
+Selain siis lataa uudelleen muistiinpanojen sivun. Sivunlataus saa aikaan myös kolme muuta HTTP-pyyntöä: tyylitiedoston (main.css), javascript-koodin (main.js) ja muistiinpanojen raakadatan (data.json) lataamisen.
 
 Network-välilehti näyttää myös lomakkeen mukana lähetetyn datan:
 
@@ -464,7 +475,7 @@ POST-pyyntöihin liitettävä data lähetetään pyynnön mukana "runkona" eli [
 
 Tekstikenttään kirjoitettu data on avaimen _notes_ alla, eli palvelin viittaa siihen _req.body.note_.
 
-Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon:
+Palvelin luo uutta muistiinpano vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon nimeltään _notes_:
 
 ```js
   notes.push({
@@ -477,7 +488,7 @@ Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _c
 
 Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoavat aina Herokun uudelleenkäynnistäessä palvelun.
 
-## single page app
+## single page app ##
 
 Esimerkkisovelluksemme pääsivu toimii perinteisten web-sivujen tapaan, kaikki sovelluslogiikka on palvelimella, selain ainoastaan renderöi palvelimen lähettämää HTML-koodia.
 
@@ -579,7 +590,7 @@ Selain on frontend ja selaimessa suoritettava javascript on frontend-koodia. Pal
 
 Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että kiinnostus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin.
 
-Ohjelmoimme myös palvelinpuolta, eli backendia Javascriptilla, käyttäen [node.js](https://nodejs.org/en/)-suoritusympäristöä. Näin full stack -sovelluskehitys saa vielä uuden ulottuvuuden, käytämme samaa kieltä pinon kaikissa osissa. Full stack -sovelluskehitys ei välttämättä edellytä sitä että kaikissa sovelluksen kerroksissa on käytössä sama kieli (javascript). Termi on kuitenkin (todennäköisesti) lanseerattu vasta sen jälkeen kun Node.js mahdollisti Javascriptin käyttämisen kaikkialla.
+Ohjelmoimme myös palvelinpuolta, eli backendia Javascriptilla, käyttäen [Node.js](https://nodejs.org/en/)-suoritusympäristöä. Näin full stack -sovelluskehitys saa vielä uuden ulottuvuuden, käytämme samaa kieltä pinon kaikissa osissa. Full stack -sovelluskehitys ei välttämättä edellytä sitä että kaikissa sovelluksen kerroksissa on käytössä sama kieli (javascript). Termi on kuitenkin (todennäköisesti) lanseerattu vasta sen jälkeen kun Node.js mahdollisti Javascriptin käyttämisen kaikkialla.
 
 Aiemmin on ollut yleisempää, että sovelluskehittäjät ovat erikoistuneet tiettyyn sovelluksen osaan, esim. backendiin. Tekniikat backendissa ja frontendissa ovat saattaneet olla hyvin erilaisia. Full stack -trendin myötä on tullut tavanomaiseksi että sovelluskehittäjä hallitsee riittävästi kaikilta sovelluksen tasoilta. Usein full stack -kehittäjän on myös omattava riittävä määrä konfiguraatio- ja ylläpito-osaamista jotta kehittäjä pystyy operoimaan sovellustaan esim. pilvipalveluissa.
 
@@ -902,7 +913,7 @@ Selaimet eivät vielä osaa kaikkia Javascriptin uusimpien versioiden ominaisuuk
 
 Tällä hetkellä johtava tapa tehdä transpilointi on [Babel](https://babeljs.io/). Create-react-app:in avulla luoduissa React-sovelluksissa on valmiiksi konfiguroitu automaattinen transpilaus. Katsomme myöhemmin kurssilla, tarkemmin miten transpiloinnin konfigurointi tapahtuu.
 
-[NodeJS](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on NodeJS:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.
+[Node.js](https://nodejs.org/en/) on melkein missä vaan, mm. palvelimilla toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö. Harjoitellaan hieman Javascriptiä Nodella. Tässä oletetaan, että koneellasi on Node.js:stä vähintään versio _v8.6.0_. Noden tuoreet versiot osaavat suoraan javascriptin uusia versioita, joten koodin transpilaus ei ole tarpeen.
 
 Koodi kirjoitetaan <em>.js-</em>päätteiseen tiedostoon, ja suoritetaan komennolla <code>node tiedosto.js</code>
 
@@ -1226,7 +1237,7 @@ Syntaksin osalta luokat ja niistä luodut oliot muistuttavat erittäin paljon es
 
 Luokkasyntaksin tuominen javascriptiin oli osin kiistelty lisäys, ks. esim. [Not Awesome: ES6 Classes](https://github.com/joshburgess/not-awesome-es6-classes) tai [Is “Class” In ES6 The New “Bad” Part?](https://medium.com/@rajaraodv/is-class-in-es6-the-new-bad-part-6c4e6fe1ee65)
 
-ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja NodeJS:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkioiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.
+ES6:n luokkasyntaksia käytetään kuitenkin paljon Reactissa ja Node.js:ssä ja siksi mekin käytämme sitä sopivissa määrin. Olio-ohjelmointimainen luokkahierarkioiden luominen ei kuitenkaan ole Reactin eikä tämän kurssin suositeltavan hengen mukaista. Reactia ohjelmoitaessa pyritään enemmän funktionaaliseen ohjelmointityyliin.
 
 ### Javascript-materiaalia
 
@@ -1766,7 +1777,7 @@ Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemi
 
 [class propertyt](https://babeljs.io/docs/plugins/transform-class-properties/) siis eivät ole vielä mukana uusimmassa javascript-standardissa eli ES8:ssa. Voimme kuitenkin käyttää ominaisuutta create-react-app:illa luoduissa sovelluksissa, sillä [babel](https://babeljs.io/) osaa kääntää (eli transpiloida) ominaisuuden.
 
-NodeJS ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa NodeJS:llä.
+Node.js ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa Node.js:llä.
 
 ### huomio funktion setState käytöstä
 
