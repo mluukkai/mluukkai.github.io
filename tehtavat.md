@@ -4,18 +4,18 @@
 
 ### web-sovellusten perusteet ###
 
-#### 1 
+#### 1
 
-Kertaa HTML:n ja CSS:n perusteet lukemalla Mozzillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja 
+Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
 [CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
 
 #### 2
 
-Tutustu HTML:n lomakkeiden perusteisiin lukemalla Mozzillan tutoriaali [Your first form](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form)
+Tutustu HTML:n lomakkeiden perusteisiin lukemalla Mozillan tutoriaali [Your first form](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form)
 
 #### 3
 
-Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona seuraavasti: 
+Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona seuraavasti:
 
 ![]({{ "/assets/teht/1.png" | absolute_url }})
 
@@ -24,7 +24,7 @@ Kaavio on luotu [websequencediagrams](https://www.websequencediagrams.com)-palve
 <pre>
 kayttaja->selain:
 note left of selain
-kayttaja kirjottaa osoiteriville 
+kayttaja kirjottaa osoiteriville
 fullstack-exampleapp.herokuapp.com
 end note
 selain->palvelin: GET fullstack-exampleapp.herokuapp.com
@@ -38,7 +38,7 @@ selain->palvelin: GET fullstack-exampleapp.herokuapp.com/kuva.png
 palvelin->selain: status 200, kuva
 
 note left of selain
- selain näyttää palvelimen palauttaman HTML:n 
+ selain näyttää palvelimen palauttaman HTML:n
  johon on upotettu palvelimelta haettu kuva
 end note
 </pre>
@@ -87,7 +87,7 @@ const App = () => {
       <h1>{kurssi}</h1>
       <p>{osa1} {tehtavia1}</p>
       <p>{osa2} {tehtavia2}</p>
-      <p>{osa3} {tehtavia3}</p>      
+      <p>{osa3} {tehtavia3}</p>
       <p>yhteensä {tehtavia1 + tehtavia2 + tehtavia3} tehtävää</p>
     </div>
   )
@@ -96,14 +96,14 @@ const App = () => {
 ReactDOM.render(
   <App />,
   document.getElementById('root')
-) 
+)
 ```
 
 ja poista ylimääräiset tiedoston.
 
 Koko sovellus on nyt ikävästi yhdessä komponentissa. Refaktoroi sovellus siten, että se koostuu kolmesta komponentista _Otsikko_, _Sisalto_ ja _Yhteensa_. Kaikki data pidetään edelleen komponentissa _App_, joka välittää tarpeelliset tiedot kullekin komponenteille _props:_ien avulla. _Otsikko_ huolehtii kurssin nimen renderöimisestä, _Sisalto_ osista ja niiden tehtävämääristä ja _Yhteensa_ tehtävien yhteismäärästä.
 
-Komponentin _App_ runko tulee olevaan suunilleen seuraavanlainen: 
+Komponentin _App_ runko tulee olevaan suunilleen seuraavanlainen:
 
 ```react
 const App = () => {
@@ -119,7 +119,7 @@ const App = () => {
 }
 ```
 
-#### 8 
+#### 8
 
 Refaktoroi vielä komponentti _Sisalto_ siten, että se ei itse renderöi yhdenkään osan nimeä eikä sen tehtävälukumäärää vaan ainoastaan kolme _Osa_-nimistä komponenttia, joista kukin siis renderöi yhden osan nimen ja tehtävämäärän.
 
@@ -187,7 +187,7 @@ const App = () => {
     {
       nimi: 'Komponenttien tila',
       tehtavia: 14
-    } 
+    }
   ]
 
   return (
@@ -220,10 +220,10 @@ const App = () => {
       {
         nimi: 'Komponenttien tila',
         tehtavia: 14
-      } 
+      }
     ]
   }
-  
+
   return (
     <div>
       ...

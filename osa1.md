@@ -18,7 +18,7 @@ Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-
 
 ## kurssimateriaali, suoritustapa
 
-Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
 
 Materiaali perustuu muutamien viikoittaisten koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
 
@@ -53,7 +53,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
   - DOM
   - sivujen ulkoasun muotoilun periaate CSS:llä
   - single page app -periaate
-- Chrome develper konsolin peruskäyttö 
+- Chrome develper konsolin peruskäyttö
 - React
   - funktiona ja luokkana määriteltävät komponentit
   - tietojen ja funktioiden välittäminen lapsikomponentteihin propseina
@@ -65,7 +65,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 
 ## web-sovelluksen toimintaperiaatteita ##
 
-Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta, mielellään sen [canary](https://www.google.fi/chrome/browser/canary.html)-versiota. 
+Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta, mielellään sen [canary](https://www.google.fi/chrome/browser/canary.html)-versiota.
 
 Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
 
@@ -74,7 +74,7 @@ Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> ole
   Pidä selaimen developer-konsoli koko ajan auki
 </div>
 
-Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _cmd_ ja _i_. 
+Konsoli avautuu macilla painamalla yhtä aikaa _alt_ _cmd_ ja _i_.
 
 Ennen kun jatkat eteenpäin, selvitä miten saat koneellasi konsolin auki (googlaa tarvittaessa) ja muista pitää se auki *aina* kun teet web-sovelluksia.
 
@@ -155,7 +155,7 @@ app.get('/', (req, res) => {
 
 Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisältö on talletettu ns. template stringinä. Etusivun dynaamisesti muuttuva osa, eli muistiinpanojen lukumäärä (koodissa _noteCount_) korvataan template stringissä sen hetkisellä konkreettisella lukuarvolla (koodissa _notes.length_).
 
-Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä tai, [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä tai [Ruby on Railsilla](http://rubyonrails.org/) Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.
+Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä tai, [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä tai [Ruby on Railsilla](http://rubyonrails.org/). Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expresiä web-palvelimen toteuttamiseen.
 
 ### selaimessa suoritettava sovelluslogiikka
 
@@ -204,7 +204,7 @@ xhttp.send()
 
 Koodin yksityiskohdat eivät ole tässä vaiheessa vielä oleellisia.
 
-Heti ldattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin.
+Heti ladattuaan _script_-tagin sisältämän javascriptin selain suorittaa koodin.
 
 Kaksi viimeistä riviä määrittelevät, että selain tekee GET-tyyppisen HTTP-pyynnön osoitteeseen palvelimen osoitteeseen _/data.json_:
 
@@ -362,7 +362,7 @@ HTML-dokumenttia esittävän DOM-puun ylimpänä solmuna on olio nimeltään _do
 
 ![]({{ "/assets/1/14.png" | absolute_url }})
 
-Voimme suorittaa konsolista käsin DOM-apin avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle hyyödyntämällä _document_-olioa.
+Voimme suorittaa konsolista käsin DOM-apin avulla erilaisia operaatioita selaimessa näytettävälle web-sivulle hyödyntämällä _document_-olioa.
 
 Lisätään nyt sivulle uusi muistiinpano suoraan konsolista.
 
@@ -492,7 +492,7 @@ Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoa
 
 Esimerkkisovelluksemme pääsivu toimii perinteisten web-sivujen tapaan, kaikki sovelluslogiikka on palvelimella, selain ainoastaan renderöi palvelimen lähettämää HTML-koodia.
 
-Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevien muistiinpanojen HTML-koodin generointi on siirretty selaimen vastuulle. Selain hoita tehtävän suorittamalla palvelimelta lataamansa Javascript-koodin. Selaimella suoritettava koodi hakee ensin muistiinpanot palvelimelta JSON-muotoisena raakadatana ja lisää sivulle muistiinpanoja edustavt HTML-elementit [DOM-apia](document-object-model-eli-dom) hyödyntäen. 
+Muistiinpanoista huolehtivassa sivussa osa sovelluslogiikasta, eli olemassaolevien muistiinpanojen HTML-koodin generointi on siirretty selaimen vastuulle. Selain hoita tehtävän suorittamalla palvelimelta lataamansa Javascript-koodin. Selaimella suoritettava koodi hakee ensin muistiinpanot palvelimelta JSON-muotoisena raakadatana ja lisää sivulle muistiinpanoja edustavt HTML-elementit [DOM-apia](document-object-model-eli-dom) hyödyntäen.
 
 Viime aikoina on noussut esiin tyyli tehdä web-sovelukset käyttäen [Single-page application](https://en.wikipedia.org/wiki/Single-page_application) (SPA) -tyyliä, missä sovelluksille ei enää tehdä esimerkkisovelluksemme tapaan erillisiä, palvelimen sille lähettämiä sivuja, vaan sovellus koostuu ainoastaan yhdestä palvelimen lähettämästä HTML-sivusta, jonka sisältöä manipuloidaan selaimessa suoritettavalla Javascriptillä.
 
@@ -584,11 +584,11 @@ Reactin asema näyttää tällä hetkellä vahvalta, mutta Javascript-maailma ei
 
 Mitä tarkoitetaan kurssin nimellä _full stack -websovelluskehitys_? Full stack on hypen omainen termi, kaikki puhuvat siitä, mutta kukaan ei oikein tiedä mitä se tarkoittaa tai ainakaan mitään yhteneväistä määritelmää termille ei ole.
 
-Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi "kerrosta", ylempänä, eli lähempänä loppukäyttäjää olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on pino eli _stack_. 
+Käytännössä kaikki websovellukset sisältävät (ainakin) kaksi "kerrosta", ylempänä, eli lähempänä loppukäyttäjää olevan selaimen ja alla olevan palvelimen. Palvelimen alapuolella on usein vielä tietokanta. Näin websovelluksen arkkitehtuuri on pino eli _stack_.
 
 Websovelluskehityksen yhteydessä puhutaan usein myös "frontista" ([frontend](https://en.wikipedia.org/wiki/Front_and_back_ends)) ja "backistä" ([backend](https://en.wikipedia.org/wiki/Front_and_back_ends)). Selain on frontend ja selaimessa suoritettava javascript on frontend-koodia. Palvelimella taas pyörii backend-koodi.
 
-Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että fokus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin. 
+Tämän kurssin kontekstissa full stack -sovelluskehitys tarkoittaa sitä, että fokus on kaikissa sovelluksen osissa, niin frontendissä kuin backendissäkin.
 
 Ohjelmoimme myös palvelinpuolta, eli backendia Javascriptilla, käyttäen [Node.js](https://nodejs.org/en/)-suoritusympäristöä. Näin full stack -sovelluskehitys saa vielä uuden ulottuvuuden, käytämme samaa kieltä pinon kaikissa osissa. Full stack -sovelluskehitys ei välttämättä edellytä sitä,että kaikissa sovelluksen kerroksissa on käytössä sama kieli (javascript). Termi on kuitenkin (todennäköisesti) lanseerattu vasta sen jälkeen kun Node.js mahdollisti Javascriptin käyttämisen kaikkialla.
 
@@ -967,7 +967,7 @@ Eräs tapa käydä taulukon alkiot läpi on esimerkissä käytetty _forEach_, jo
 
 ```js
 (luku) => {
-  console.log(luku)    
+  console.log(luku)
 }
 ```
 
@@ -1014,7 +1014,7 @@ const olio3 = {
 }
 ```
 
-Kentät voivat olla mielivaltaista javascriptin tyyppiä. 
+Kentät voivat olla mielivaltaista javascriptin tyyppiä.
 
 Olioiden kenttiin viitataan pistenotaatiolla, tai kulmasulkeilla:
 
@@ -1292,7 +1292,7 @@ class Hello extends React.Component {
 }
 ```
 
-Luokkakomponenttien tulee määritellä ainakin metodi _render_, joka palauttaa komponentin ulkoasun määrittelevät React-elementit eli käytännössä JSX:n. 
+Luokkakomponenttien tulee määritellä ainakin metodi _render_, joka palauttaa komponentin ulkoasun määrittelevät React-elementit eli käytännössä JSX:n.
 
 Luokkakomponentissa viitataan komponentin _propseihin_ this-viitteen kautta.
 Eli koska komponenttia käytetään seuraavasti
@@ -1698,7 +1698,7 @@ Kun selaimen javascriptin runtime kutsuu takaisinkutsufunktiota, _this_ ei enä�
 
 ![]({{ "/assets/1/29.png" | absolute_url }})
 
-Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on jo [aiemmin mainittu](#olioiden-metodit-ja-this) _bindaaminen_, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä _this_ on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä. 
+Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on jo [aiemmin mainittu](#olioiden-metodit-ja-this) _bindaaminen_, eli esim. komennolla <code>this.kasvataYhdella.bind(this)</code> voimme muodostaa uuden funktion, jonka koodi on alkuperäisen funktion koodi missä _this_ on sidottu viittaamaan parametrina olevaan arvoon, eli komponenttiin itseensä.
 
 Eli sovellus toimii taas jos koodi muotetaan muotoon:
 
@@ -1800,7 +1800,7 @@ this.setState((prevState) => ({
 
 Nyt metodin parametrina on funktio, jonka parametrina on edellinen tila _prevState_ ja tilan päivitys tapahtuu varmuudella kutsuhetken edellisen tilan perusteella.
 
-Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni epäkonsistenssi (on epäselvää olisiko se sovelluksessamme edes teoriassa mahdollista). 
+Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä vaikka sovelluksessamme ilmenisikin silloin tällöin pieni epäkonsistenssi (on epäselvää olisiko se sovelluksessamme edes teoriassa mahdollista).
 
 Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saattaa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.
 
@@ -1900,15 +1900,15 @@ Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaA
   () => {
     this.setState({ counter: 2 })
   }
- ```   
+ ```
 
-Vastaavasti, kun laskurin tila on esim 41, tulee plus-napin tapahtumakuuntelijaksi 
+Vastaavasti, kun laskurin tila on esim 41, tulee plus-napin tapahtumakuuntelijaksi
 
 ```js
   () => {
     this.setState({ counter: 42 })
   }
- ```   
+ ```
 
 Tarkastellaan vielä hieman metodia _asetaArvoon_:
 
@@ -1918,16 +1918,16 @@ Tarkastellaan vielä hieman metodia _asetaArvoon_:
       this.setState({ counter: arvo })
     }
   }
-```  
+```
 
 Koska metodi itse sisältää ainoastaan yhden komennon, eli _returnin_, joka palauttaa funktion, voidaan hyödyntää nuolifunktion tiiviimpää muotoa:
 
 ```js
-  asetaArvoon = (arvo) => 
+  asetaArvoon = (arvo) =>
     () => {
       this.setState({ counter: arvo })
     }
-```  
+```
 
 Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tuloksena on "kaksi nuolta sisältävä funktio":
 
@@ -1935,7 +1935,7 @@ Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tu
   asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
 
-Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa. 
+Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa.
 
 Ensimmäisellä kutsulla "konfuguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
 
@@ -1949,7 +1949,7 @@ Jo muutamaan kertaan mainittu termi _funktionaalinen ohjelmointi_ ei ole vältt�
 
 ### tilan vieminen alikomponenttiin
 
-Reactissa suositaan pieniä komponentteja, joita on mahdollista uusiokäyttää monessa osissa sovellusta ja jopa useissa eri sovelluksissa. Refaktoroidaan koodiamme vielä siten, että yhden komponentin sijaan koostamme laskurin näytöstä ja kahdesta painikkeesta. 
+Reactissa suositaan pieniä komponentteja, joita on mahdollista uusiokäyttää monessa osissa sovellusta ja jopa useissa eri sovelluksissa. Refaktoroidaan koodiamme vielä siten, että yhden komponentin sijaan koostamme laskurin näytöstä ja kahdesta painikkeesta.
 
 Tehdään ensin näytöstä vastaava komponentti _Display_.
 
@@ -1969,7 +1969,7 @@ Voimme hyödyntää aiemmin mainittua [destrukturointia](https://developer.mozil
 const Display = ({ counter }) => <div>{counter}</div>
 ```
 
-Komponentin käyttö on suoraviivaista, riittää että sille välitetään laskurin tila eli _this.state.counter_:  
+Komponentin käyttö on suoraviivaista, riittää että sille välitetään laskurin tila eli _this.state.counter_:
 
 ```react
 class App extends React.Component {
@@ -1981,15 +1981,15 @@ class App extends React.Component {
         <div>
           <button onClick={this.asetaArvoon(this.state.counter+1)}>
             Plus
-          </button>       
+          </button>
           <button onClick={this.asetaArvoon(0)}>
             Zero
-          </button>   
+          </button>
         </div>
       </div>
     )
   }
-}  
+}
 ```
 
 Kaikki toimii edelleen. Kun nappeja painetaan ja _App_ renderöityy uudelleen, renderöityvät myös kaikki sen alikomponentit, siis myös _Display_ automaattisesti uudelleen.
@@ -2000,7 +2000,7 @@ Tehdään seuraavaksi napeille tarkoitettu komponentti _Button_. Napille on väl
 const Button = (props) => (
   <button onClick={props.handleClick}>
     {props.text}
-  </button>  
+  </button>
 )
 ```
 
@@ -2010,7 +2010,7 @@ ja hyödynnetään taas destrukturointia ottamaan _props_:in tarpeelliset kentä
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>
     {text}
-  </button>  
+  </button>
 )
 ```
 
@@ -2022,23 +2022,23 @@ Komponentin _App_ metodi _render_ muuttuu nyt muotoon:
       <div>
         <Display counter={this.state.counter}/>
         <div>
-          <Button 
-            handleClick={this.asetaArvoon(this.state.counter + 1)} 
+          <Button
+            handleClick={this.asetaArvoon(this.state.counter + 1)}
             text='Plus'
           />
           <Button
             handleClick={this.asetaArvoon(this.state.counter - 1)}
             text='Minus'
-          /> 
+          />
           <Button
             handleClick={this.asetaArvoon(0)}
             text='Zero'
-          /> 
+          />
         </div>
       </div>
     )
   }
-```  
+```
 
 Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uutena toiminnallisuutena nappi, jolla laskurin arvoa voi vähentää.
 
@@ -2054,13 +2054,13 @@ Muistutetaa vielä tärkeimmästä web-sovelluskehitykseen liittyvästä asiasta
 
 <div class="important">
   <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
-  <div>Pidä selaimen developer-konsoli koko ajan auki. </div>
+  <div>Pidä selaimen developer-konsoli koko ajan auki.</div>
   <br />
   <div>Välilehdistä tulee olla auki nimenomaan <em>Console</em> jollei ole erityistä syytä käyttää jotain muuta välilehteä.
   </div>
 </div>
 
-Pidä myös koodi ja web-sivu **koko ajan** molemmat yhtä aikaa näkyvillä. 
+Pidä myös koodi ja web-sivu **koko ajan** molemmat yhtä aikaa näkyvillä.
 
 Jos ja kun koodi ei käänny, eli selaimessa alkaa näkyä punaista
 
@@ -2074,7 +2074,7 @@ Vanha kunnon printtaukseen perustuva debuggaus kannattaa aina. Eli jos esim. kom
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>
     {text}
-  </button>  
+  </button>
 )
 ```
 
@@ -2087,7 +2087,7 @@ const Button = (props) => {
   return (
     <button onClick={handleClick}>
       {text}
-    </button>  
+    </button>
   )
 }
 ```
@@ -2104,9 +2104,9 @@ Menemällä välilehdelle _Console_ on helppo tutkia muuttujien tilaa:
 
 ![]({{ "/assets/1/33.png" | absolute_url }})
 
-Kun bugi selviää, voi komennon _debugger_ poistaa ja uudelleenladata sivun. 
+Kun bugi selviää, voi komennon _debugger_ poistaa ja uudelleenladata sivun.
 
-Debuggerissa on mahdollista suorittaa koodia tarvittaessa rivi riviltä _Source_ välilehden oikealta laidalta. 
+Debuggerissa on mahdollista suorittaa koodia tarvittaessa rivi riviltä _Source_ välilehden oikealta laidalta.
 
 Debuggeriin pääsee myös ilman komentoa _debugger_ lisäämällä _Source_-välilehdellä sopiviin kohtiin koodia _breakpointeja_. Haluttujen muuttujien arvojen tarkkailu on mahdollista määrittelemällä ne _Watch_-osassa:
 
