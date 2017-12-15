@@ -361,3 +361,5 @@ Laajenna sovellusta siten, että näytettävää anekdoottia on mahdollista ää
 Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anekdootin:
 
 <img src="/assets/teht/3b.png" height="200">
+
+## osa 2

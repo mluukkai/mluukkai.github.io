@@ -428,7 +428,275 @@ Tilaan määritelty "palceholder"-teksi ilmestyy syötekomponenttiin, tekstiä e
 
 ![]({{ "/assets/2/4.png" | absolute_url }})
 
+Koska määrittelimme syötekomponentille _value_-attribuutiksi komponentin _App_ tilassa olevan kentän, alkaa _App_ kontrolloimaan syötekomponentin toimintaa. 
 
+Jotta syötekomponentin editoiminen tulisi mahdolliseksi, täytyy sille sille rekisteröidä tapahtumankäsittelijä, joka synkronoi syötekenttään tehdyt muutokset komponentin _App_ tilaan:
+
+```react
+class App extends React.Component {
+  // ...
+
+  handleNoteChange = (e) => {
+    console.log(e.target.value)
+    this.setState({ new_note: e.target.value })
+  }
+
+  render() {
+    return(
+      <div >
+        <h1>Muistiinpanot</h1>
+        <ul>
+          {this.state.notes.map(note => <Note key={note.id} note={note} />)}
+        </ul>
+        <form onSubmit={this.addNote}>
+          <input 
+            value={this.state.new_note} 
+            onChange={this.handleNoteChange}
+          />
+          <button>tallenna</button>
+        </form>
+      </div >
+    ) 
+  }
+}
+```
+
+Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_. 
+
+```html
+    <input 
+      value={this.state.new_note} 
+      onChange={this.handleNoteChange}
+    />
+```
+
+Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain. Tapahtumankäsittelijämetodi saa pametriksi tapahtumaolion _e_ 
+
+```js
+  handleNoteChange = (e) => {
+    console.log(e.target.value)
+    this.setState({ new_note: e.target.value })
+  }
+```  
+
+Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin-kentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
+
+![]({{ "/assets/2/.5png" | absolute_url }})
+
+Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän arvoa, joten voimme viimeistellä uuden muistiinpanon lisäämisestä huolehtivan metodin _addNote_:
+
+```js
+  addNote = (e) => {
+    e.preventDefault()  
+    const noteObject = {
+      content: this.state.new_note,
+      date: new Date().new,
+      important: Math.random()>0.5
+      id: this.state.notes.length + 1 
+    }
+
+    const notes = this.state.notes.concat(noteObject)
+
+    this.setState({
+      notes: notes,
+      new_note: ''
+    })
+  }
+```
+
+Ensin luodaan uutta muistiinpanoa vastaava olio. Sen sisältökenttä saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä. 
+
+Uusi muistiinpano lisätään vanhojen joukkoon oikeaoppisesti käyttämällä [viime viikolta](/osa1#taulukon käsittelyä) tuttua metodia [concat](
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). Metodi ei muuta alkuperäistä taulukkoa _this.state.notes_ vaan luo uuden taulukon, joka sisältää myös lisättävän alkion. 
+
+Tila päivitetään uusilla muistiinpanoilla ja tyhjentämällä syötekomponentin arvoa kontrolloiva kenttä.
+
+### kehittyneempi tapa olioliteraalien kirjoittamiseen
+
+Voimme muuttaa tilan päivittämän koodin
+
+```js
+  this.setState({
+    notes: notes,
+    new_note: ''
+  })
+```
+
+muotoon
+
+```js
+  this.setState({
+    notes,
+    new_note: ''
+  })
+```
+
+Tämä johtuu siitä, että ES6:n myötä (ks. kohta [property definitions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)) javascriptiin on tullut uusi ominaisuus, joka mahdollistaa hieman tiiviimmän tavan määritellä olioita muuttujien avulla.
+
+Tarkastellaan tilannetta, jossa meillä on muuttujissa arvoja
+
+```js
+  const name: 'Leevi'
+  const age = 0
+```
+
+ja haluamme määritellä näiden perusteella olion, jolla on kentät _name_ ja _age_.
+
+Vanhassa javascritpissä olio täytyi määritellä seuraavaan tapaan
+
+```js
+  const person = {
+    name: name,
+    age: age
+  }
+```
+
+koska muuttujien ja luotavan olio kenttien nimi nyt on sama, riittää ES6:ssa kirjoittaa:
+
+```js
+  const person = { name, age }
+```
+
+lopputulos molemmilla tavoilla luotuun olioon on täsmälleen sama.
+
+## näytettävien elementtien filtteröinti
+
+Tehdään sovellukseen feature, joka mahdollistaa ainoastaan tärkeiden muistiinpanojen näyttämisen.
+
+Lisätään koponentin _App_ tilaan tieto siitä näytetäänkö muistiinpanoista kaikki vai ainoastaan tärkeät:
+
+```react
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { 
+      notes: props.notes ,
+      new_note: '',
+      showAll: true
+    }
+  }
+  // ...
+}
+```
+
+Muutetaan metodia _render_ siten, että se tallettaa muuttujaan _notesToShow_ näytettävien muistiinpanojen listan riippuen siitä tuleeko näyttää kaikki vai vain tärket:
+
+```react
+  render() {
+    const notesToShow = this.state.showAll ? 
+                          this.state.notes : 
+                          this.state.notes.filter(note=>note.important === true ) 
+
+    return(
+      <div >
+        <h1>Muistiinpanot</h1>
+        <ul>
+          {notesToShow.map(note => <Note key={note.id} note={note} />)}
+        </ul>
+        <form onSubmit={this.addNote}>
+          <input 
+            value={this.state.new_note} 
+            onChange={this.handleNoteChange}
+          />
+          <button>tallenna</button>
+        </form>
+      </div >
+    ) 
+  }
+```
+
+Muuttujan _notesToShow_ määrittely on melko kompakti
+
+```js
+  const notesToShow = this.state.showAll ? 
+                        this.state.notes : 
+                        this.state.notes.filter(note=>note.important === true ) 
+```
+
+Käytössä on monissa muissakin kielissä oleva [ehdollinen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) operaatio. 
+
+Operaatio toimi seuraavasti. Jos meillä on esim:
+
+```js
+const tulos = ehto ? val1 : val2
+```
+
+muuttujan _tulos_ arvoksi asetetaan _val1_:n arvo jos _ehto_ on tosi. Jos _ehto_ ei ole tosi, muuttujan _tulos_ arvoksi tulee _val2_:n arvo.
+
+Jos ehto _this.state.showAll_ on epätosi, muuttuja _notesToShow_ saa arvokseen vaan ne muistiinpanot, joiden _important_-kentän arvo on tosi. Filtteröinti tapahtuu taulukon metodilla [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter):
+
+```js
+this.state.notes.filter(note=>note.important === true ) 
+```
+
+vertailu-operaatio on oikeastaan turha koska _note.important_ on arvoltaan joko _true_ tai _false_, eli riittää kirjoittaa 
+
+```js
+this.state.notes.filter(note=>note.important) 
+```
+
+Tässä käytettiin kuitenkin ensin vertailua, mm. korostamaan erästä tärkeää seikkaa: Javasriptissa <code>arvo1 == arvo2</code> ei toimi kaikissa tilanteissa loogisesti ja onkin varmempi käyttää aina vertailuissa muotoa <code>arvo1 === arvo2</code>. Enemmän aiheesta [tällä](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
+
+Filtteröinnin toimivuutta voi jo nyt kokeilla vaihelemalla sitä, miten tilan kentän _showAll_ alkuarvo määritelään konstruktorissa.
+
+Lisätään sitten toiminnallisuus, mikä mahdollistaa _showAll_:in tilan muuttamisen sovelluksesta. 
+
+Oleelliset muutokset ovat seuraavassa:
+
+```react
+class App extends React.Component {
+  // ...
+
+  toggleVisible = () => {
+    this.setState({showAll: !this.state.showAll})
+  }
+
+  render() {
+    const notesToShow = this.state.showAll ? 
+                          this.state.notes : 
+                          this.state.notes.filter(note=>note.important === true ) 
+
+    const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
+
+    return(
+      <div >
+        <h1>Muistiinpanot</h1>
+
+        <div>
+          <button onClick={this.toggleVisible}>
+            näytä {label}
+          </button>
+        </div>
+
+        <ul>
+          {notesToShow.map(note => <Note key={note.id} note={note} />)}
+        </ul>
+        <form onSubmit={this.addNote}>
+          <input 
+            value={this.state.new_note} 
+            onChange={this.handleNoteChange}
+          />
+          <button>tallenna</button>
+        </form>
+      </div >
+    ) 
+  }
+}
+```
+
+Näkyviä muistiinpanoja (kaikki vai ainoastaan tärkeät) siis kontrolloidaan napin avulla. Napin tapahtumankäsittelijä on yksinkertainen, se muuttaa _this.state.showAll_:n arvon truesta falseksi ja päinvastoin:
+
+```js
+  toggleVisible = () => {
+    this.setState({showAll: !this.state.showAll})
+  }
+```
+
+Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perusteella:
+
+```js
+    const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
+```
 
 ## datan haku palvelimelta
 
