@@ -22,6 +22,12 @@ Kurssin arvostelu perustuu tehtyjen tehtävien määrään, noin 50% tehtävist�
 
 Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
 
+## ilmoittautuminen
+
+Jos osallistut kurssille siten, että tavoittelet kurssisuoritusta, ilmoittaudu mailitse mluukkai@cs.helsinki.fi
+
+Kerro ilmoittautumisen yhteydessä kuinka paljon omaat kokemusta Web-sovellusten kehittämisestä (esim. HTML, CSS, palvelinpuoli, tietokannat, react, redux, node.js).
+
 ## korjaukset ja sisältöön liittyvät ideat
 
 Jos huomaat suoraviivaisen typon, korjaa pull requestina.
