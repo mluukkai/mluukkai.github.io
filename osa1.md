@@ -46,6 +46,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 ## osan 1 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
+  - HTML:n perusteet
   - HTTP-protokolla: metodit GET ja POST, statuskoodit, headerit
   - palvelimella suoritettavan koodin rooli
   - selaimessa suoritettava javascript:in rooli
@@ -58,10 +59,17 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
   - funktiona ja luokkana määriteltävät komponentit
   - tietojen ja funktioiden välittäminen lapsikomponentteihin propseina
   - komonentin tila
-  - tapahtumankäsittely
+  - tilan päivittämisen periaatteet
+  - tapahtumankäsittelyn perusteet
 - Javascript
-  - ...
-
+  - muuttujien määrittely
+  - taulukko ja sen perusoperointi (mm push, concat, forEach, join, map) 
+  - literaalisyntaksilla määritellyt oliot
+  - funktioiden määrittely
+  - this:in käyttäytyminen
+  - funktioita palauttavat funktiot
+  - luokkasyntaksi
+  - class propertynä määritellyt metodit
 
 ## web-sovelluksen toimintaperiaatteita ##
 
