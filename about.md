@@ -12,7 +12,7 @@ Beta-versioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. 
 
-Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua.
+Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
 
 Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
 
