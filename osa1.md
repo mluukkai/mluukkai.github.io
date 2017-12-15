@@ -20,7 +20,7 @@ Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
 
-Materiaali perustuu muutamien osasta osaanv aihtuvien koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
+Materiaali perustuu muutamien osasta osaan vaihtuvien koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
 
 Kurssi koostuu osista joita ilmestyy viikoittain. On tarkoitus että etenet seuraavaan osaan vasta kun riittävä määrä (noin 80%) edellisen osan tehtävistä on tehty. Jokaisella osalla on myös hard deadline, esim. osan 1 deadline ei kuitenkaan ole vielä viikon 1 lopussa, joten etenemiselle on jonkun verran joustoa jotta ehdit tekemään kustakin osasta tarvittavan määrän tehtäviä.
 
@@ -2053,7 +2053,7 @@ Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uut
 Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
 
 ### monimutkaisemman tilan päivittäminen
- 
+
 Tarkastellaan sovellusta, jonka tila on hieman monimutkaisempi:
 
 ```react
@@ -2073,8 +2073,8 @@ class App extends React.Component {
   }
 
   klikOikea = () => {
-    this.setState({ 
-      oikea: this.state.oikea + 1 
+    this.setState({
+      oikea: this.state.oikea + 1
     })
   }
 
@@ -2083,8 +2083,8 @@ class App extends React.Component {
       <div>
         <div>
           {this.state.vasen}
-          <button onClick={this.klikVasen}>vasen</button> 
-          <button onClick={this.klikOikea}>oikea</button> 
+          <button onClick={this.klikVasen}>vasen</button>
+          <button onClick={this.klikOikea}>oikea</button>
           {this.state.oikea}
         </div>
       </div>
@@ -2093,7 +2093,7 @@ class App extends React.Component {
 }
 ```
 
-Tilassa on siis kaksi kenttää, _vasen_ ja _oikea_ jotka laskevat vastaavien nappien painalluksia. 
+Tilassa on siis kaksi kenttää, _vasen_ ja _oikea_ jotka laskevat vastaavien nappien painalluksia.
 
 Kun tilaa päivitetään riittää asettaa ainoastaan muuttuvan kentän arvo sillä React [lomittaa](https://reactjs.org/docs/state-and-lifecycle.html#state-updates-are-merged) tai "mergeää" muutokset olemassaolevaan tilaan.
 
@@ -2105,13 +2105,13 @@ Eli kun päivitämme esim. vasemman napin painalluksia, riittää seuraava koodi
       vasen: this.state.vasen+1
     })
   }
-```  
+```
 
 tilassa oleva kenttä _oikea_ jää muutoksen yhteydessä ennalleen.
 
-### taulukon käsittelyä 
+### taulukon käsittelyä
 
-Tehdään sovellukseen vielä laajennus, lisätään tilaan taulukko _kaikki_ joka muistaa kaikki näppäimenpainallukset. 
+Tehdään sovellukseen vielä laajennus, lisätään tilaan taulukko _kaikki_ joka muistaa kaikki näppäimenpainallukset.
 
 ```react
 class App extends React.Component {
@@ -2132,9 +2132,9 @@ class App extends React.Component {
   }
 
   klikOikea = () => {
-    this.setState({ 
+    this.setState({
       oikea: this.state.oikea + 1,
-      kaikki: this.state.kaikki.concat('o') 
+      kaikki: this.state.kaikki.concat('o')
     })
   }
 
@@ -2144,8 +2144,8 @@ class App extends React.Component {
       <div>
         <div>
           {this.state.vasen}
-          <button onClick={this.klikVasen}>vasen</button> 
-          <button onClick={this.klikOikea}>oikea</button> 
+          <button onClick={this.klikVasen}>vasen</button>
+          <button onClick={this.klikOikea}>oikea</button>
           {this.state.oikea}
           <div>{kaikki()}</div>
         </div>
@@ -2167,10 +2167,10 @@ eli kun esim. nappia _vasen_ painetaan, lisätään tilan taulukkoon kirjain _v_
 ```
 
 Tilan kenttä _kaikki_ saa nyt arvokseen entisen tilan, mihin on liitetty _v_ metodilla [concat](
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), joka toimii siten, että se ei muuta olemassaolevaa taulukkoa vaan luo _uuden taulukon_, mihin uusi alkio on lisätty. 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), joka toimii siten, että se ei muuta olemassaolevaa taulukkoa vaan luo _uuden taulukon_, mihin uusi alkio on lisätty.
 
 
-Javascriptissa on myös mahdollista lisätä taulukkoon metodilla [push](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push) ja sovellus näyttäisi tässä tilanteessa toimivan myös jos lisäys tapahtuisi komennolla 
+Javascriptissa on myös mahdollista lisätä taulukkoon metodilla [push](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push) ja sovellus näyttäisi tässä tilanteessa toimivan myös jos lisäys tapahtuisi komennolla
 
 ```js
 kaikki: this.state.kaikki.push('v')
@@ -2178,7 +2178,7 @@ kaikki: this.state.kaikki.push('v')
 
 mutta älä tee niin. React komponentin tilaa, eli muuttujaa _this.state_ ei saa muuttaa suoraan!
 
-**Jos tilan kentissä on monimutkaisempia olioita, älä muuta niitä vaan tee muutos aina kopioon!** 
+**Jos tilan kentissä on monimutkaisempia olioita, älä muuta niitä vaan tee muutos aina kopioon!**
 
 Katsotaan vielä tarkemmin, miten kaikkien painallusten historia renderöidään ruudulle:
 
@@ -2189,8 +2189,8 @@ Katsotaan vielä tarkemmin, miten kaikkien painallusten historia renderöidään
       <div>
         <div>
           {this.state.vasen}
-          <button onClick={this.klikVasen}>vasen</button> 
-          <button onClick={this.klikOikea}>oikea</button> 
+          <button onClick={this.klikVasen}>vasen</button>
+          <button onClick={this.klikOikea}>oikea</button>
           {this.state.oikea}
           <div>{historia()}</div>
         </div>
@@ -2228,7 +2228,7 @@ const historia = () => {
 }
 ```
 
-Nyt funktion palauttama sisältö riippuu siitä, onko näppäimiä jo panettu. Jos ei, eli taulukko <code>this.state.kaikki</code> on tyhjä, palauttaa metodi "käyttöohjeen" sisältävän elementin 
+Nyt funktion palauttama sisältö riippuu siitä, onko näppäimiä jo panettu. Jos ei, eli taulukko <code>this.state.kaikki</code> on tyhjä, palauttaa metodi "käyttöohjeen" sisältävän elementin
 
 ```html
   <div>
@@ -2244,7 +2244,7 @@ ja muussa tapauksessa näppäilyhistorian:
   </div>
 ```
 
-Komponentin _App_ ulkoasun muodostomat React-elementit siis ovat erilaisia riippuen sovelluksen tilasta, eli komponentissa on _ehdollista renderöintiä_.  
+Komponentin _App_ ulkoasun muodostomat React-elementit siis ovat erilaisia riippuen sovelluksen tilasta, eli komponentissa on _ehdollista renderöintiä_.
 
 Reactissa on monia muitakin tapoja [ehdolliseen renderöintiin](https://reactjs.org/docs/conditional-rendering.html). Katsotaan niitä tarkemmin [seuraavassa osassa](/osa2).
 
