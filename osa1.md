@@ -1305,7 +1305,7 @@ Luokkakomponenttien tulee määritellä ainakin metodi _render_, joka palauttaa 
 Luokkakomponentissa viitataan komponentin _propseihin_ this-viitteen kautta.
 Eli koska komponenttia käytetään seuraavasti
 
-```react
+```html
 <Hello name='Arto' age={36} />
 ```
 
