@@ -13,11 +13,25 @@ permalink: /osa2/
 ## osan 2 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
-  - ...
+  - lisää CSS:ää
+  - selain suoritusympäristönä
+  - selaimen ja palvelimen välisen kummunikoinnin perusteet
 - React
-  - ...
+  - taulukossa olevan datan renderöinti
+  - komponenttien määrittely moduuleissa
+  - kontrolloidut lomakkeet
+  - taulukossa olevan renderöitävän datan filtteröinti
+  - komponentin 'lifecycle'-metodit
+  - riippuvuuksien lisääminen
+  - kommunikointi palvelimen kanssa
+  - tyylien lisäämisen perusteita
+  - virtal DOM
 - Javascript
-  - ...
+  - template string
+  - olioiden käsittelyä: property shorthand notation, object assign
+  - ES6 moduulien perusteita
+  - promiset
+  - taulukoiden käsittelyä: map, filter
 
 ## kokoelmien renderöiminen
 
@@ -481,7 +495,7 @@ Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain
 
 Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin-kentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
 
-![]({{ "/assets/2/.5png" | absolute_url }})
+![]({{ "/assets/2/5.png" | absolute_url }})
 
 Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän arvoa, joten voimme viimeistellä uuden muistiinpanon lisäämisestä huolehtivan metodin _addNote_:
 
@@ -700,7 +714,107 @@ Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perustee
 
 ## datan haku palvelimelta
 
+Olemme nyt viipyneet tovin keskittyen pelkkään "frontendiin", eli selainpuolen toiminnallisuuteen. Rupeamme itse toteuttamaan "backendin", eli palvelimessa olevaa toiminnallisuutta vasta ensi viikolla, mutta otamme nyt jo askeleen sinne suuntaan tutustumalla siihen miten selaimessa suoritettava koodi kommunikoi backendin kanssa.
+
+Käytetään nyt palvelimena sovelluskehitykeen tarkoitettua [JSON Serveriä](https://github.com/typicode/json-server).
+
+[Asenna](https://github.com/typicode/json-server#install) JSON server.
+
+Tee esim. projektin juurihakemistoon tiedosto _db.json_, jolla on seuraava sisältö:
+
+```js
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "HTML on helppoa",
+      "date": "2017-12-10T17:30:31.098Z",
+      "important": true
+    },
+    {
+      "id": 2,
+      "content": "Selain pystyy suorittamaan vain javascriptiä",
+      "date": "2017-12-10T18:39:34.091Z",
+      "important": false
+    },
+    {
+      "id": 3,
+      "content": "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
+      "date": "2017-12-10T19:20:14.298Z",
+      "important": true
+    }
+  ]
+}
+```
+
+Käynnistä _json-server_ porttiin 3001:
+
+```bash
+json-server --port=3001 --watch db.json
+```
+
+Oletusarvoisesti _json-server_ käynnistyy porttiin 3000, mutta Reactin kehitys tapahtuu samassa portissa, joten sen takia joudumme nyt määrittelemään vaihtoehtoisen portin.
+
+Mene selaimella osoitteeseen <http://localhost:3001/notes>. Kuten huomaamme, _json-server_ tarjoaa osoitteessa tiedostoon tallentamamme muistiinpanot:
+
+![]({{ "/assets/2/6.png" | absolute_url }})
+
+Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, react-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin". 
+
+json-sever tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen ilman tarvetta itse ohjelmoida mitään.
+
 ### npm-riippuvuus, axios
+
+Ensimmäisenä tehtävänämme on siis hakea React-sovellukseen jo olemassaolevat mustiinpano osoitteesta <http://localhost:3001/notes>.
+
+Käytetään selaimen ja palvelimen väliseen kommunikaatioon [axios](ttps://github.com/axios/axios)-kirjastoa. Jotta saisimme kirjaston käyttöömme sovelluksen koodissa, on meidän määriteltävä se sovelluksen riippuvuudeksi. Tämä tapahtuu komentorivillä annettavalla komennolla
+
+```bash
+npm install axios --save
+```
+
+Sovelluksen riippuvuudet tallennetaan projektin juuressa olevaan tiedostoon _package.js_:
+
+```js
+{
+  "dependencies": {
+    "axios": "^0.17.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.0.17"
+  },
+  /*...*/
+}
+```
+
+Nyt voimme käyttää kirjastoa. Lisätään seuraava tiedotoon _index.js_
+
+```js
+import axios from 'axios'
+
+axios.get('http://localhost:3001/notes').then(response=>{
+  console.log(response)
+})
+```
+
+Näin tehdään _axios_-kirjaston avulla HTTP GET -pyyntö osoitteeseen 'http://localhost:3001/notes'. Metodin _then_ avulla rekisteröidään takaisinkutsufunktio, joka saa parametrikseen palvelimen vastauksen, joka tulostetaan konsoliin:
+
+![]({{ "/assets/2/7.png" | absolute_url }})
+
+Kuten näemme ...
+
+Eli periaatteessa voisimme hakea datan ja renderöidä sovelluksen juurikomponentin seuraavasti:
+
+```react
+axios.get('http://localhost:3001/notes').then(response=>{
+  console.log(response)
+
+  ReactDOM.render(
+    <App notes={response.data} />,
+    document.getElementById('root')
+  ) 
+})
+```
 
 ### selain suoritusympäristönä
 
