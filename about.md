@@ -38,7 +38,6 @@ Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina.
 
 Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/document/d/1FXO9wIcn4-7x8V0uuCVvi2hywmtKUhT0tSM5QC8tJlI/edit)
 
-Myös docsiin voi lisätä huomioita.
-
+Myös docsiin voi lisätä huomioita, mutta parempi on käyttää issueita, docsiin tehdyt kommentit jäävät helposti huomaamatta.
 
 Kannattaa huomata, että asioiden käsittelyjärjestykselle ja esitystavoille on usein pedagogisia perusteita. Esim. kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa. Kaikki huomiot kannattaa kuitenkin ehdottomasti tuoda esille.
