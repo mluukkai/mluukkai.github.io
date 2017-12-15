@@ -6,7 +6,7 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssin materiaalin betaversion on tarkoitus valmistua ennen kevään kurssin alkua, noin 10.1. mennessä. Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta joista nyt on ilmestynyt [ensimmäinen](/osa1). 
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta joista nyt on ilmestynyt [ensimmäinen](/osa1). Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua viimeistään noin 10.1. mennessä. Yksi uusi osa valmistunee keskimäärin 5 päivän välein.
 
 Betaversioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 
