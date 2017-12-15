@@ -20,7 +20,7 @@ Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
 
-Materiaali perustuu muutamien viikoittaisten koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
+Materiaali perustuu muutamien osasta osaanv aihtuvien koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
 
 Kurssi koostuu osista joita ilmestyy viikoittain. On tarkoitus että etenet seuraavaan osaan vasta kun riittävä määrä (noin 80%) edellisen osan tehtävistä on tehty. Jokaisella osalla on myös hard deadline, esim. osan 1 deadline ei kuitenkaan ole vielä viikon 1 lopussa, joten etenemiselle on jonkun verran joustoa jotta ehdit tekemään kustakin osasta tarvittavan määrän tehtäviä.
 
@@ -456,7 +456,7 @@ Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävä�
 
 Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_note_ form-tagiin määriteltyjen attribuuttien _action_ ja _method_ ansiosta:
 
-![]({{ "/assets/1/22.png" | absolute_url }})
+<img src="/assets/1/22.png" height="150">
 
 POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
 
@@ -1804,7 +1804,7 @@ Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä v
 
 Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saattaa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.
 
-### refaktorointi
+### funktio joka palauttaa funktion ###
 
 Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asettavat uuden arvon laskurille. Kannattaakin tehdä yksittäinen metodi, joka sopii molempiin käyttötarkoituksiin:
 

@@ -4,8 +4,27 @@ title: About
 permalink: /about/
 ---
 
-Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa node.js:llä toteutetuissa REST-rajapinnoissa.
+# Huomioita kurssin beta-version suorittajille ja katselmoijille
 
-Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä NoSQL-tietokantoja.
+Beta-versioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 
-[https://courses.helsinki.fi/fi/TKT21009/121540749](https://courses.helsinki.fi/fi/TKT21009/121540749)
+## suoritustapa
+
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. 
+
+Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua.
+
+Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
+
+
+## korjaukset ja sisältöön liittyvät ideat
+
+Jos huomaat suoraviivaisen typon, korjaa pull requestina.
+
+Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina.
+
+Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/document/d/1FXO9wIcn4-7x8V0uuCVvi2hywmtKUhT0tSM5QC8tJlI/edit)
+
+Myös docsiin voi lisätä huomioita. 
+
+Kannattaa huomata, että asioiden käsittelyjärjestykselle esitystavoille on usein pedagogisia perusteita. Esim kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa.

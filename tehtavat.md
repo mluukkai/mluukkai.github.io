@@ -4,20 +4,22 @@
 
 ### web-sovellusten perusteet ###
 
-#### 1
+#### 1 HTML ja CSS
 
 Kertaa HTML:n ja CSS:n perusteet lukemalla Mozzillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
 [CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
 
-#### 2
+#### 2 HTML:n lomakkeet
 
 Tutustu HTML:n lomakkeiden perusteisiin lukemalla Mozillan tutoriaali [Your first form](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form)
 
 #### 3
 
-Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona seuraavasti:
+Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona esim. seuraavasti:
 
-![]({{ "/assets/teht/1.png" | absolute_url }})
+
+<img src="/assets/teht/1.png" height="400">
+
 
 Kaavio on luotu [websequencediagrams](https://www.websequencediagrams.com)-palvelussa, seuraavasti:
 
@@ -47,7 +49,7 @@ end note
 
 Kaavion ei ole pakko olla sekvenssikaavio. Mikä tahansa järkevä kuvaustapa käy.
 
-Kaiken oleellisen tehtävän tekemiseen liittyvän informaation pitäisi olla selitettynä [osa 1](../osa1):n tekstissä. Tämän ja seuraavien 3 tehtävän ideana on, että luet tekstin vielä kerran ja mietit tarkkaan mitä missäkin tapahtuu. Ohjelman [koodin](https://github.com/mluukkai/example_app) lukemista ei näissä tehtävissä edellytetä vaikka sekin on toki mahdollista.
+Kaiken oleellisen tämän ja seuraavien 3 tehtävän tekemiseen liittyvän informaation pitäisi olla selitettynä [osa 1](../osa1):n tekstissä. Näiden tehtävien ideana on, että luet tekstin vielä kerran ja mietit tarkkaan mitä missäkin tapahtuu. Ohjelman [koodin](https://github.com/mluukkai/example_app) lukemista ei näissä tehtävissä edellytetä vaikka sekin on toki mahdollista.
 
 #### 4
 
@@ -65,7 +67,7 @@ Tee kaavio tilanteesta, missä käyttäjä luo uuden muistiinpanin single page -
 
 ### react alkeet ###
 
-#### 7
+#### 7 jako komponenteiksi
 
 Luo create-react-app:illa uusi sovellus. Muuta _index.js_ muotoon
 
@@ -101,7 +103,7 @@ ReactDOM.render(
 
 ja poista ylimääräiset tiedostot.
 
-Koko sovellus on nyt ikävästi yhdessä komponentissa. Refaktoroi sovellus siten, että se koostuu kolmesta komponentista _Otsikko_, _Sisalto_ ja _Yhteensa_. Kaikki data pidetään edelleen komponentissa _App_, joka välittää tarpeelliset tiedot kullekin komponenteille _props:_ien avulla. _Otsikko_ huolehtii kurssin nimen renderöimisestä, _Sisalto_ osista ja niiden tehtävämääristä ja _Yhteensa_ tehtävien yhteismäärästä.
+Koko sovellus on nyt ikävästi yhdessä komponentissa. Refaktoroi sovellus siten, että se koostuu kolmesta komponentista _Otsikko_, _Sisalto_ ja _Yhteensa_. Kaikki data pidetään edelleen komponentissa _App_, joka välittää tarpeelliset tiedot kullekin komponenteille _props:ien_ avulla. _Otsikko_ huolehtii kurssin nimen renderöimisestä, _Sisalto_ osista ja niiden tehtävämääristä ja _Yhteensa_ tehtävien yhteismäärästä.
 
 Komponentin _App_ runko tulee olevaan suunilleen seuraavanlainen:
 
@@ -119,7 +121,7 @@ const App = () => {
 }
 ```
 
-#### 8
+#### 8 lisää komponentteja
 
 Refaktoroi vielä komponentti _Sisalto_ siten, että se ei itse renderöi yhdenkään osan nimeä eikä sen tehtävälukumäärää vaan ainoastaan kolme _Osa_-nimistä komponenttia, joista kukin siis renderöi yhden osan nimen ja tehtävämäärän.
 
@@ -136,11 +138,11 @@ const Sisalto =  ... {
 }
 ```
 
-Sovelluksemme tiedonvälitys on tällä hetkellä todella alkukantaista sillä se perustuu yksittäisiin muuttujiin. Tilanne paranee pian
+Sovelluksemme tiedonvälitys on tällä hetkellä todella alkukantaista sillä se perustuu yksittäisiin muuttujiin. Tilanne paranee pian.
 
 ### javascriptin alkeet ###
 
-### 9
+#### 9 tieto olioissa
 
 Siirrytään käyttämään sovelluksessamme oliota. Mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat niin että se taas toimii:
 
@@ -168,9 +170,9 @@ const App = () => {
 }
 ```
 
-### 10
+#### 10 oliot taulukkoon
 
-Ja laitetaan oliot taulukkoon, eli mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti. Huomaa, että sovelluksen on toimittava ilman muutoksia riippumatta taulukossa olevien osien määrästä:
+Ja laitetaan oliot taulukkoon, eli mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti:
 
 ```react
 const App = () => {
@@ -198,9 +200,27 @@ const App = () => {
 }
 ```
 
-Pro tip: laske tehtävien summa taulukon [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)-funktiolla.
+**HUOM:** tässä vaiheessa _voit olettaa, että taulukossa on aina kolme alkiota_, eli taulukkoa ei ole pakko käydä läpi looppaamalla. Palataan taulukossa olevien olioiden perusteella tapahtuvaan komponenttien renderöintiin asiaan tarkemmin kurssin [seuraavassa osassa](../osa2).
 
-### 11
+Älä kuitenkaan välitä eri olioita komponenttien välillä (esim. komponentista _App_ komponenttiin _Yhteensa_) erillisinä propsina, vaan suoraan taulukkona:
+
+```react
+const App = () => {
+  // const-määrittelyt
+
+  return (
+    <div>
+      <Otsikko kurssi={kurssi} />
+      <Sisalto osat={osat} />
+      <Yhteensa osat={osat} />
+    </div>
+  )
+}
+```
+
+
+
+#### 11
 
 Viedään muutos vielä yhtä askelta pidemmälle, eli tehdään kurssista ja sen osista yksi Javascript-olio. Korjaa kaikki mikä menee rikki.
 
@@ -234,11 +254,58 @@ const App = () => {
 
 ### lisää reactia ###
 
-#### 12
+#### 12 unicafe osa1
 
-unicafescore
+Monien firmojen tapaan nykyään myös [Unicafe](https://www.unicafe.fi/#/9/4) kerää asiakaspalautetta. Tee Unicafelle verkossa toimiva palautesovellus. Vastausvaihtoehtoja olkoon vaan kolme: _hyvä_, neutraali ja _huono_.
 
-#### 13
+Sovelluksen tulee näyttää jokaisen palautteen lukumäärä. Sovellus voi näyttää esim. seuraavalta:
+
+<img src="/assets/teht/4a.png" height="200">
+
+#### 13 unicafe osa2
+
+Laajenna sovellusta siten, että se näyttää palautteista statistiikkaa, keskiarvon (hyvän arvo 1, neutraalin 0, huonon -1) ja sen kuinka monta prosenttia palautteista on ollut positiivisia:
+
+<img src="/assets/teht/4.png" height="250">
+
+#### 14 unicafe osa3
+
+Refaktoroi sovelluksesi siten, että se koostuu monista komponenteista. Pidä tila kuitenkin sovelluksen _juurikomponentissa_.
+
+Tee sovellukseen ainakin seuraavat komonentit:
+- _Button_ vastaa yksittäistä palautteenantonappia
+- _Statistics_ huolehtii tilastojen näyttämisestä
+- _Statistic_ huolehtii yksittäisen tilastorivin, esim. keskiarvon näyttämisestä
+
+#### 15 unicafe osa4
+
+Muuta sovellusta siten, että numeeriset tilastot näytetään ainoastaan jos palautteita on jo annettu:
+
+<img src="/assets/teht/5.png" height="180">
+
+
+#### 16 unicafe osa5
+
+Jos olet määritellyt jokaiselle napille oman tapahtumankäsittelijän, refaktoroi sovellustasi siten, että kaikki napit käyttävät samaa tapahtumankäsittelijäfunktiota samaan tapaan kuin materiaalin luvussa [funktio joka palauttaa funktion](#funktio-joka-palauttaa-funktion)
+
+#### 17 unicafe osa6
+
+Toteuta tilastojen näyttäminen HTML:n [taulukkona](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics) siten, että saat sovelluksesi näyttämään suunilleen seuraavanlaiselta
+
+<img src="/assets/teht/6.png" height="250">
+
+Muista pitää konsoli koko ajan auki. Jos saat konsoliin seuraavan warningin
+
+<img src="/assets/teht/7.png" height="100">
+
+tee tarvittavat toimenpiteet jotta saat warningin katoamaan. Googlaa tarvittaessa virhelimoituksella.
+
+**Huolehdi nyt ja jatkossa, että konsolissa ei näy mitään warningeja!**
+
+#### 18 anekdootit osa1
+
+Ohjelmistotuotannossa tunnetaan lukematon määrä
+[anekdootteja](http://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm) eli pieniä "onlinereita", jotka kieteyttävät alan ikuisia totuuksia.
 
 Laajenna seuraavaa sovellusta siten, että siihen tulee nappi, jota painamalla sovellus näyttää _satunnaisen_ ohjelmistotuotantoon liittyvän anekdootin:
 
@@ -264,7 +331,7 @@ class App extends React.Component {
 }
 
 const anecdotes = [
-  "If it hurts, fo it more often",
+  "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
   "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
   "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
@@ -282,28 +349,16 @@ Google kertoo, miten voit generoida Javascriptilla sopivia satunnaisia lukuja. M
 
 Sovellus voi näyttää esim. seuraavalta:
 
-![]({{ "/assets/teht/2.png" | absolute_url }})
+<img src="/assets/teht/2.png" height="70">
 
-#### 14
+#### 19 anekdootit osa2
 
-14: Äänten määrä kun näytetään
+Laajenna sovellusta siten, että näytettävää anekdoottia on mahdollista äänestää:
 
-15: nöyteöön myös paras, VAIKEA
+<img src="/assets/teht/3.png" height="90">
 
+#### 20 anekdootit osa3
 
-Tavoitteena on lisätä sovellukseen mahdollisuus antaa "ääni" näytettävälle anekdootille, ja näyttää näytää eniten ääniä saanut anekdootti:
+Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anekdootin:
 
-![]({{ "/assets/teht/3.png" | absolute_url }})
-
-
-Lisää sovelluksen tilaan
-
-```js
-  constructor(props) {
-    super(props)
-    this.state = {
-      selected: 0,
-      votes: []
-    }
-  }
-```  
+<img src="/assets/teht/3b.png" height="200">
