@@ -4,6 +4,9 @@ _site
 .jekyll-metadata
 Gemfile.lock
 
+osa2.md
+assets/2
+
 
 ### Gulp ###
 package.json

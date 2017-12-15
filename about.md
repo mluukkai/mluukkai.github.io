@@ -8,7 +8,7 @@ permalink: /about/
 
 Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta joista nyt on ilmestynyt [ensimmäinen](/osa1). Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua viimeistään noin 10.1. mennessä. Yksi uusi osa valmistunee keskimäärin 5 päivän välein.
 
-Betaversioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
+Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 
 ## suoritustapa
 
@@ -23,6 +23,8 @@ Kurssin arvostelu perustuu tehtyjen tehtävien määrään, noin 50% tehtävist�
 Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
 
 ## ilmoittautuminen
+
+Toistaiseksi betan osallistujamäärää ei ole rajoitettu. Jos määrä lähtee täysin käsistä, saatetaan rajoituksia harkita.
 
 Jos osallistut kurssille siten, että tavoittelet kurssisuoritusta, ilmoittaudu mailitse mluukkai@cs.helsinki.fi
 
