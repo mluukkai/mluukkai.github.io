@@ -10,13 +10,13 @@ Beta-versioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat
 
 ## suoritustapa
 
-Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. 
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia.
 
 Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
 
-Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän. 
+Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän.
 
-Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
+Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
 
 
 ## korjaukset ja sisältöön liittyvät ideat
@@ -27,6 +27,6 @@ Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina.
 
 Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/document/d/1FXO9wIcn4-7x8V0uuCVvi2hywmtKUhT0tSM5QC8tJlI/edit)
 
-Myös docsiin voi lisätä huomioita. 
+Myös docsiin voi lisätä huomioita.
 
 Kannattaa huomata, että asioiden käsittelyjärjestykselle esitystavoille on usein pedagogisia perusteita. Esim kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa.
