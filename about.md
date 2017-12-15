@@ -18,6 +18,7 @@ Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat k
 
 Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
 
+Beta-testaajien osalta deadline on periaatteessa kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
 
 ## korjaukset ja sisältöön liittyvät ideat
 
