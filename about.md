@@ -14,6 +14,8 @@ Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtävi
 
 Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
 
+Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän. 
+
 Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
 
 
