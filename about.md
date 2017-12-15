@@ -10,15 +10,15 @@ Beta-versioon liittyvää keskustelua [Telegram-kanavalla](https://t.me/joinchat
 
 ## suoritustapa
 
-Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. 
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Materiaalin seassa on linkkejä tehtäviin jotka on tarkoitettu tehtäviksi suunnilleen linkitetyissä kohdassa materiaalin opiskelua. 
 
-Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
+Beta-versiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
 
 Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän. 
 
-Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelunn kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
+Kurssin arvostelu perustuu tehtyjen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Betatestaajien oletetaan osallistuvan myös pieneen haastatteluun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei betasuorittajilla ole.
 
-Beta-testaajien osalta deadline on periaatteessa kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
+Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
 
 ## korjaukset ja sisältöön liittyvät ideat
 
@@ -30,4 +30,4 @@ Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/docume
 
 Myös docsiin voi lisätä huomioita. 
 
-Kannattaa huomata, että asioiden käsittelyjärjestykselle esitystavoille on usein pedagogisia perusteita. Esim kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa.
+Kannattaa huomata, että asioiden käsittelyjärjestykselle ja esitystavoille on usein pedagogisia perusteita. Esim. kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa. Kaikki huomiot kannattaa kuitenkin ehdottomasti tuoda esille.
