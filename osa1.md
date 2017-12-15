@@ -30,7 +30,7 @@ Arvosana määräytyy tehtyjen tehtävien perusteella, noin 50% tehtävistä tuo
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
-Erään Chromessa olevan, hieman sovelluskehitystä haittaavan bugin takia kaikkein suositeltavinta on Chromen ns.
+Erään Chromessa olevan, hieman sovelluskehitystä haittaavan [bugin](https://bugs.chromium.org/p/chromium/issues/detail?id=766715) takia kaikkein suositeltavinta on Chromen ns.
 [canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen.
 
 Kurssin tehtävät palautetaan GitHubiin, joten Git tulee olla asennettuna.
