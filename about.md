@@ -16,7 +16,7 @@ Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tul
 
 Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän.
 
-Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastattelun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
+Kurssin arvostelu perustuu tehtujen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Beta-testaajien oletetaan osallistuvan myös pieneen haastatteluun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei beta-suorittajilla ole.
 
 
 ## korjaukset ja sisältöön liittyvät ideat
