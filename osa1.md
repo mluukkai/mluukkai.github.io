@@ -63,7 +63,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
   - tapahtumankäsittelyn perusteet
 - Javascript
   - muuttujien määrittely
-  - taulukko ja sen perusoperointi (mm push, concat, forEach, join, map) 
+  - taulukko ja sen perusoperointi (mm push, concat, forEach, join, map)
   - literaalisyntaksilla määritellyt oliot
   - funktioiden määrittely
   - this:in käyttäytyminen
@@ -2126,7 +2126,7 @@ class App extends React.Component {
 
   klikVasen = ()=> {
     this.setState({
-      vasen: this.state.vasen+1,
+      vasen: this.state.vasen + 1,
       kaikki: this.state.kaikki.concat('v')
     })
   }
