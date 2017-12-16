@@ -43,20 +43,20 @@ Aloitetaan seuraavasta:
 const notes = [
   {
     id: 1,
-    content: "HTML on helppoa",
-    date: "2017-12-10T17:30:31.098Z",
+    content: 'HTML on helppoa',
+    date: '2017-12-10T17:30:31.098Z',
     important: true
   },
   {
     id: 2,
-    content: "Selain pystyy suorittamaan vain javascriptiä",
-    date: "2017-12-10T18:39:34.091Z",
+    content: 'Selain pystyy suorittamaan vain javascriptiä',
+    date: '2017-12-10T18:39:34.091Z',
     important: false
   },
   {
     id: 3,
-    content: "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
-    date: "2017-12-10T19:20:14.298Z",
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    date: '2017-12-10T19:20:14.298Z',
     important: true
   }
 ]
@@ -79,7 +79,7 @@ const App = (props) => {
 ReactDOM.render(
   <App notes={notes} />,
   document.getElementById('root')
-) 
+)
 ```
 
 Jokaiseen muistiinpanoon on merkitty myös _boolean_-arvo, joka kertoo onko muistiinpano luokiteltu tärkeäksi, sekä yksikäsitteinen tunniste _id_.
@@ -99,10 +99,10 @@ notes.map(note => <li>{note.content}</li>)
 nyt tuloksena on taulukko, jonka sisältö on joukko _li_-elementtejä
 
 ```js
-[ 
-  <li>'HTML on helppoa'</li>, 
-  <li>'Selain pystyy suorittamaan vain javascriptiä'</li>,
-  <li>'HTTP-protokollan tärkeimmät metodit ovat GET ja POST'</li>
+[
+  '<li>HTML on helppoa</li>',
+  '<li>Selain pystyy suorittamaan vain javascriptiä</li>',
+  '<li>HTTP-protokollan tärkeimmät metodit ovat GET ja POST</li>'
 ]
 ```
 
@@ -114,8 +114,7 @@ const App = (props) => {
   const rivit = () => notes.map(note => <li>{note.content}</li>)
 
   return(
-
-    <div >
+    <div>
       <h1>Muistiinpanot</h1>
       <ul>
         {notes.map(note => <li>{note.content}</li>)}
@@ -125,7 +124,7 @@ const App = (props) => {
 }
 ```
 
-Koska li-tagit generoiva koodi on javascriptia, tulee se sijoittaa JSX-templatessa aaltosulkujen sisälle kaiken muun javascript-koorin tapaan.
+Koska li-tagit generoiva koodi on javascriptia, tulee se sijoittaa JSX-templatessa aaltosulkujen sisälle kaiken muun javascript-koodin tapaan.
 
 Usein vastaavissa tilanteissa dynaamisesti generoitava sisältö eristetään omaan metodiin jota JSX-template kutsuu:
 
@@ -135,8 +134,7 @@ const App = (props) => {
   const rivit = () => notes.map(note => <li>{note.content}</li>)
 
   return(
-
-    <div >
+    <div>
       <h1>Muistiinpanot</h1>
       <ul>
         {rivit()}
@@ -146,13 +144,13 @@ const App = (props) => {
 }
 ```
 
-Vaikka sovellus näyttää toimivain, tulee konsoliin ikävä varoitus
+Vaikka sovellus näyttää toimivan, tulee konsoliin ikävä varoitus
 
 ![]({{ "/assets/2/1.png" | absolute_url }})
 
-Kuten virheilmoituksen linkittämä [sivu](https://reactjs.org/docs/lists-and-keys.html#keys) kertoo, tulee taulukossa olevilla, eli käytännössä _map_-metodilla muodostetuilla elementeillä olla uniikki avain, eli kenttä nimeltään _key_. 
+Kuten virheilmoituksen linkittämä [sivu](https://reactjs.org/docs/lists-and-keys.html#keys) kertoo, tulee taulukossa olevilla, eli käytännössä _map_-metodilla muodostetuilla elementeillä olla uniikki avain, eli kenttä nimeltään _key_.
 
-Lisätään avaimet: 
+Lisätään avaimet:
 
 ```react
 const App = (props) => {
@@ -160,8 +158,7 @@ const App = (props) => {
   const rivit = () => notes.map(note => <li key={note.id}>{note.content}</li>)
 
   return(
-
-    <div >
+    <div>
       <h1>Muistiinpanot</h1>
       <ul>
         {rivit()}
@@ -171,7 +168,7 @@ const App = (props) => {
 }
 ```
 
-Virheilmoitus katoaa. 
+Virheilmoitus katoaa.
 
 React käyttää taulukossa olevien elementtien avain-kenttiä päätellessään miten sen tulee päivittää komponentin generoimaa näkymää silloin kun komponentti uudelleenrenderöidään. Lisää aiheesta [täällä](https://reactjs.org/docs/reconciliation.html#recursing-on-children).
 
@@ -183,7 +180,7 @@ Olisimme saaneet konsolissa olevan varoituksen katoamaan myös käyttämällä a
 notes.map((note, i) => ...)
 ```
 
-näin kutsuttaessa _i_ saa arvokseen sen paikan indeksin taulukossa, missä _note_ sijaitsee. 
+näin kutsuttaessa _i_ saa arvokseen sen paikan indeksin taulukossa, missä _note_ sijaitsee.
 
 Eli virheilmoitukset poistuva tapa määritellä rivien generointi on
 
@@ -197,18 +194,18 @@ Tämä **ei kuitenkaan ole suositeltavaa** ja voi näennäisestä toimimisestaan
 
 Siistitään koodia hiukan. Koska olemme kiinnostuneita ainoastaan propsien kentästä _notes_, otetaan se vastaan suoraan [destrukturointia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) hyödyntäen.
 
-Erotetaan yksittäisen muistiinpanon esittäminen oman komponenttinsa _Note_ vastuulle: 
+Erotetaan yksittäisen muistiinpanon esittäminen oman komponenttinsa _Note_ vastuulle:
 
 ```react
 const Note = ({ note }) => {
   return (
     <li>{note.content}</li>
   )
-} 
+}
 
 const App = ({ notes }) => {
   return(
-    <div >
+    <div>
       <h1>Muistiinpanot</h1>
       <ul>
         {notes.map(note=><Note key={note.id} note={note}/>)}
@@ -218,7 +215,7 @@ const App = ({ notes }) => {
 }
 ```
 
-Huomaa, että avain-attribuutti täytyy nyt määritellä _Note_-komponenteille, eikä _li_-tageille kuten ennen muutosta. 
+Huomaa, että avain-attribuutti täytyy nyt määritellä _Note_-komponenteille, eikä _li_-tageille kuten ennen muutosta.
 
 Koko React-sovellus on mahdollista määritellä samassa tiedostossa, mutta se ei luonnollisesti ole järkevää. Usein käytäntönä on määritellä yksittäiset komponentit omassa tiedostossaan _ES6-moduuleina_.
 
@@ -232,9 +229,9 @@ import ReactDOM from 'react-dom'
 [importtaavat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) eli ottavat käyttöönsä kaksi moduulia. Moduuli _react_ sijoitetaan muuttujan _React_ ja _react-dom_ muuttujaan _ReactDOM_.
 
 
-Siirretään nyt komponentti _Note_ omaan moduliinsa. 
+Siirretään nyt komponentti _Note_ omaan moduliinsa.
 
-Pienissä sovelluksissa komponentit sijoitetaan yleensä _src_-hakemiston alle sijoitettavaan hakemistoon _components_. Konventiona on nimetä tiedosto komponentin mukaan, eli ttehdään hakemisto _components_ ja sinne tiedosto _Note.js_ jonka sisältö on seuraava:
+Pienissä sovelluksissa komponentit sijoitetaan yleensä _src_-hakemiston alle sijoitettavaan hakemistoon _components_. Konventiona on nimetä tiedosto komponentin mukaan, eli tehdään hakemisto _components_ ja sinne tiedosto _Note.js_ jonka sisältö on seuraava:
 
 ```react
 import React from 'react'
@@ -248,9 +245,9 @@ const Note = ({ note }) => {
 export default Note
 ```
 
-Koska kyseessä on React-komponentti, tulee React importata komponentissa. 
+Koska kyseessä on React-komponentti, tulee React importata komponentissa.
 
-Moduulin viimeisenä rivinä [eksportataan](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) määritelty komonentti, eli muuttuja _Note_.
+Moduulin viimeisenä rivinä [eksportataan](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) määritelty komponentti, eli muuttuja _Note_.
 
 Nyt komponenttia käyttävä tiedosto _index.js_ voi [importata](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) moduulin:
 
@@ -270,7 +267,7 @@ import Note from './components/Note'
 
 const App = ({ notes }) => {
   return (
-    <div >
+    <div>
       <h1>Muistiinpanot</h1>
       <ul>
         {notes.map(note => <Note key={note.id} note={note} />)}
@@ -296,7 +293,7 @@ const notes = [
 ReactDOM.render(
   <App notes={notes} />,
   document.getElementById('root')
-) 
+)
 ```
 Moduuleilla on paljon muutakin käyttöä kuin mahdollistaa komponenttien määritteleminen omissa tiedostoissaan, palaamme moduuleihin tarkemmin myöhemmin kurssilla.
 
@@ -310,20 +307,20 @@ Jotta saisimme sivun päivittymään uusien muistiinpanojen lisäyksen yhteydess
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      notes: props.notes 
+    this.state = {
+      notes: props.notes
     }
   }
 
   render() {
     return(
-      <div >
+      <div>
         <h1>Muistiinpanot</h1>
         <ul>
           {this.state.notes.map(note => <Note key={note.id} note={note} />)}
         </ul>
       </div>
-    ) 
+    )
   }
 }
 ```
@@ -333,11 +330,11 @@ Konstruktori asettaa nyt propseina saatavan _notes_-taulukon tilaan avaimen _not
 ```js
   constructor(props) {
     super(props)
-    this.state = { 
-      notes: props.notes 
+    this.state = {
+      notes: props.notes
     }
   }
-```  
+```
 
 tila siis näyttää seuraavalta komponentin alustuksen jälkeen seuraavalta:
 
@@ -346,8 +343,8 @@ this.state = {
   notes: [
     {
       id: 1,
-      content: "HTML on helppoa",
-      date: "2017-12-10T17:30:31.098Z",
+      content: 'HTML on helppoa',
+      date: '2017-12-10T17:30:31.098Z',
       important: true
     }
     //...
@@ -361,8 +358,8 @@ Lisätään sitten lomake uusen muistiinpanon lisäämistä varten:
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
-      notes: props.notes 
+    this.state = {
+      notes: props.notes
     }
   }
 
@@ -373,7 +370,7 @@ class App extends React.Component {
 
   render() {
     return(
-      <div >
+      <div>
         <h1>Muistiinpanot</h1>
         <ul>
           {this.state.notes.map(note => <Note key={note.id} note={note} />)}
@@ -382,8 +379,8 @@ class App extends React.Component {
           <input/>
           <button>tallenna</button>
         </form>
-      </div >
-    ) 
+      </div>
+    )
   }
 }
 ```
@@ -396,13 +393,13 @@ Tapahtumankäsittelijä on tuttuun tapaan määritelty seuraavasti:
   addNote = (e) => {
     e.preventDefault()
     console.log('nappia painettu')
-    console.log(e.target)  
+    console.log(e.target)
   }
 ```
 
-Parametrin _e_ arvona on metodin kutsun aiheuttama [tapahtuma](https://reactjs.org/docs/handling-events.html). 
+Parametrin _e_ arvona on metodin kutsun aiheuttama [tapahtuma](https://reactjs.org/docs/handling-events.html).
 
-Tapahtumankäsittelijä kutsuu heti tapahtumalle metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan joka aiheuttaisi sivun uudelleenlatautumisen. 
+Tapahtumankäsittelijä kutsuu heti tapahtumalle metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan joka aiheuttaisi sivun uudelleenlatautumisen.
 
 Tapahtuman kohde, eli _e.target_ on tulostettu konsoliin
 
@@ -420,7 +417,7 @@ Lisätään komponentin _App_ tilaan kenttä _new_note_ lomakkeen syötettä var
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       notes: props.notes,
       new_note: 'uusi muistiinpano...'
     }
@@ -432,17 +429,17 @@ class App extends React.Component {
 Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_ arvoksi:
 
 ```html
-    <form onSubmit={this.addNote}>
-      <input value={this.state.new_note} />
-      <button>tallenna</button>
-    </form>
+  <form onSubmit={this.addNote}>
+    <input value={this.state.new_note} />
+    <button>tallenna</button>
+  </form>
 ```
 
-Tilaan määritelty "palceholder"-teksi ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka keroo mistä on kyse
+Tilaan määritelty "placeholder"-teksti ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
 
 ![]({{ "/assets/2/4.png" | absolute_url }})
 
-Koska määrittelimme syötekomponentille _value_-attribuutiksi komponentin _App_ tilassa olevan kentän, alkaa _App_ kontrolloimaan syötekomponentin toimintaa. 
+Koska määrittelimme syötekomponentille _value_-attribuutiksi komponentin _App_ tilassa olevan kentän, alkaa _App_ kontrolloimaan syötekomponentin toimintaa.
 
 Jotta syötekomponentin editoiminen tulisi mahdolliseksi, täytyy sille sille rekisteröidä tapahtumankäsittelijä, joka synkronoi syötekenttään tehdyt muutokset komponentin _App_ tilaan:
 
@@ -457,41 +454,41 @@ class App extends React.Component {
 
   render() {
     return(
-      <div >
+      <div>
         <h1>Muistiinpanot</h1>
         <ul>
           {this.state.notes.map(note => <Note key={note.id} note={note} />)}
         </ul>
         <form onSubmit={this.addNote}>
-          <input 
-            value={this.state.new_note} 
+          <input
+            value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
           <button>tallenna</button>
         </form>
-      </div >
-    ) 
+      </div>
+    )
   }
 }
 ```
 
-Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_. 
+Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_.
 
 ```html
-    <input 
-      value={this.state.new_note} 
-      onChange={this.handleNoteChange}
-    />
+  <input
+    value={this.state.new_note}
+    onChange={this.handleNoteChange}
+  />
 ```
 
-Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain. Tapahtumankäsittelijämetodi saa pametriksi tapahtumaolion _e_ 
+Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain. Tapahtumankäsittelijämetodi saa parametriksi tapahtumaolion _e_
 
 ```js
   handleNoteChange = (e) => {
     console.log(e.target.value)
     this.setState({ new_note: e.target.value })
   }
-```  
+```
 
 Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin-kentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
 
@@ -501,12 +498,12 @@ Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän
 
 ```js
   addNote = (e) => {
-    e.preventDefault()  
+    e.preventDefault()
     const noteObject = {
       content: this.state.new_note,
       date: new Date().new,
-      important: Math.random()>0.5
-      id: this.state.notes.length + 1 
+      important: Math.random() > 0.5
+      id: this.state.notes.length + 1
     }
 
     const notes = this.state.notes.concat(noteObject)
@@ -518,10 +515,10 @@ Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän
   }
 ```
 
-Ensin luodaan uutta muistiinpanoa vastaava olio. Sen sisältökenttä saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä. 
+Ensin luodaan uutta muistiinpanoa vastaava olio. Sen sisältökenttä saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä.
 
 Uusi muistiinpano lisätään vanhojen joukkoon oikeaoppisesti käyttämällä [viime viikolta](/osa1#taulukon käsittelyä) tuttua metodia [concat](
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). Metodi ei muuta alkuperäistä taulukkoa _this.state.notes_ vaan luo uuden taulukon, joka sisältää myös lisättävän alkion. 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). Metodi ei muuta alkuperäistä taulukkoa _this.state.notes_ vaan luo uuden taulukon, joka sisältää myös lisättävän alkion.
 
 Tila päivitetään uusilla muistiinpanoilla ja tyhjentämällä syötekomponentin arvoa kontrolloiva kenttä.
 
@@ -556,7 +553,7 @@ Tarkastellaan tilannetta, jossa meillä on muuttujissa arvoja
 
 ja haluamme määritellä näiden perusteella olion, jolla on kentät _name_ ja _age_.
 
-Vanhassa javascritpissä olio täytyi määritellä seuraavaan tapaan
+Vanhassa javascriptissä olio täytyi määritellä seuraavaan tapaan
 
 ```js
   const person = {
@@ -577,13 +574,13 @@ lopputulos molemmilla tavoilla luotuun olioon on täsmälleen sama.
 
 Tehdään sovellukseen feature, joka mahdollistaa ainoastaan tärkeiden muistiinpanojen näyttämisen.
 
-Lisätään koponentin _App_ tilaan tieto siitä näytetäänkö muistiinpanoista kaikki vai ainoastaan tärkeät:
+Lisätään komponentin _App_ tilaan tieto siitä näytetäänkö muistiinpanoista kaikki vai ainoastaan tärkeät:
 
 ```react
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       notes: props.notes ,
       new_note: '',
       showAll: true
@@ -597,37 +594,37 @@ Muutetaan metodia _render_ siten, että se tallettaa muuttujaan _notesToShow_ n�
 
 ```react
   render() {
-    const notesToShow = this.state.showAll ? 
-                          this.state.notes : 
-                          this.state.notes.filter(note=>note.important === true ) 
+    const notesToShow = this.state.showAll ?
+                          this.state.notes :
+                          this.state.notes.filter(note => note.important === true)
 
     return(
-      <div >
+      <div>
         <h1>Muistiinpanot</h1>
         <ul>
           {notesToShow.map(note => <Note key={note.id} note={note} />)}
         </ul>
         <form onSubmit={this.addNote}>
-          <input 
-            value={this.state.new_note} 
+          <input
+            value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
           <button>tallenna</button>
         </form>
-      </div >
-    ) 
+      </div>
+    )
   }
 ```
 
 Muuttujan _notesToShow_ määrittely on melko kompakti
 
 ```js
-  const notesToShow = this.state.showAll ? 
-                        this.state.notes : 
-                        this.state.notes.filter(note=>note.important === true ) 
+  const notesToShow = this.state.showAll ?
+                        this.state.notes :
+                        this.state.notes.filter(note => note.important === true)
 ```
 
-Käytössä on monissa muissakin kielissä oleva [ehdollinen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) operaatio. 
+Käytössä on monissa muissakin kielissä oleva [ehdollinen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) operaatio.
 
 Operaatio toimi seuraavasti. Jos meillä on esim:
 
@@ -640,20 +637,20 @@ muuttujan _tulos_ arvoksi asetetaan _val1_:n arvo jos _ehto_ on tosi. Jos _ehto_
 Jos ehto _this.state.showAll_ on epätosi, muuttuja _notesToShow_ saa arvokseen vaan ne muistiinpanot, joiden _important_-kentän arvo on tosi. Filtteröinti tapahtuu taulukon metodilla [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter):
 
 ```js
-this.state.notes.filter(note=>note.important === true ) 
+this.state.notes.filter(note => note.important === true)
 ```
 
-vertailu-operaatio on oikeastaan turha koska _note.important_ on arvoltaan joko _true_ tai _false_, eli riittää kirjoittaa 
+vertailu-operaatio on oikeastaan turha koska _note.important_ on arvoltaan joko _true_ tai _false_, eli riittää kirjoittaa
 
 ```js
-this.state.notes.filter(note=>note.important) 
+this.state.notes.filter(note => note.important)
 ```
 
-Tässä käytettiin kuitenkin ensin vertailua, mm. korostamaan erästä tärkeää seikkaa: Javasriptissa <code>arvo1 == arvo2</code> ei toimi kaikissa tilanteissa loogisesti ja onkin varmempi käyttää aina vertailuissa muotoa <code>arvo1 === arvo2</code>. Enemmän aiheesta [tällä](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
+Tässä käytettiin kuitenkin ensin vertailua, mm. korostamaan erästä tärkeää seikkaa: Javasriptissa <code>arvo1 == arvo2</code> ei toimi kaikissa tilanteissa loogisesti ja onkin varmempi käyttää aina vertailuissa muotoa <code>arvo1 === arvo2</code>. Enemmän aiheesta [täällä](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
 
-Filtteröinnin toimivuutta voi jo nyt kokeilla vaihelemalla sitä, miten tilan kentän _showAll_ alkuarvo määritelään konstruktorissa.
+Filtteröinnin toimivuutta voi jo nyt kokeilla vaihtelemalla sitä, miten tilan kentän _showAll_ alkuarvo määritelään konstruktorissa.
 
-Lisätään sitten toiminnallisuus, mikä mahdollistaa _showAll_:in tilan muuttamisen sovelluksesta. 
+Lisätään sitten toiminnallisuus, mikä mahdollistaa _showAll_:in tilan muuttamisen sovelluksesta.
 
 Oleelliset muutokset ovat seuraavassa:
 
@@ -666,14 +663,14 @@ class App extends React.Component {
   }
 
   render() {
-    const notesToShow = this.state.showAll ? 
-                          this.state.notes : 
-                          this.state.notes.filter(note=>note.important === true ) 
+    const notesToShow = this.state.showAll ?
+                          this.state.notes :
+                          this.state.notes.filter(note=>note.important === true )
 
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 
     return(
-      <div >
+      <div>
         <h1>Muistiinpanot</h1>
 
         <div>
@@ -686,14 +683,14 @@ class App extends React.Component {
           {notesToShow.map(note => <Note key={note.id} note={note} />)}
         </ul>
         <form onSubmit={this.addNote}>
-          <input 
-            value={this.state.new_note} 
+          <input
+            value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
           <button>tallenna</button>
         </form>
-      </div >
-    ) 
+      </div>
+    )
   }
 }
 ```
@@ -759,9 +756,9 @@ Mene selaimella osoitteeseen <http://localhost:3001/notes>. Kuten huomaamme, _js
 
 ![]({{ "/assets/2/6.png" | absolute_url }})
 
-Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, react-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin". 
+Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, react-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin".
 
-json-sever tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen ilman tarvetta itse ohjelmoida mitään.
+json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen ilman tarvetta itse ohjelmoida mitään.
 
 ### npm-riippuvuus, axios
 
@@ -773,7 +770,7 @@ Käytetään selaimen ja palvelimen väliseen kommunikaatioon [axios](ttps://git
 npm install axios --save
 ```
 
-Sovelluksen riippuvuudet tallennetaan projektin juuressa olevaan tiedostoon _package.js_:
+Sovelluksen riippuvuudet tallennetaan projektin juuressa olevaan tiedostoon _package.json_:
 
 ```js
 {
@@ -792,7 +789,7 @@ Nyt voimme käyttää kirjastoa. Lisätään seuraava tiedotoon _index.js_
 ```js
 import axios from 'axios'
 
-axios.get('http://localhost:3001/notes').then(response=>{
+axios.get('http://localhost:3001/notes').then(response => {
   console.log(response)
 })
 ```
@@ -806,13 +803,13 @@ Kuten näemme ...
 Eli periaatteessa voisimme hakea datan ja renderöidä sovelluksen juurikomponentin seuraavasti:
 
 ```react
-axios.get('http://localhost:3001/notes').then(response=>{
+axios.get('http://localhost:3001/notes').then(response => {
   console.log(response)
 
   ReactDOM.render(
     <App notes={response.data} />,
     document.getElementById('root')
-  ) 
+  )
 })
 ```
 

@@ -18,7 +18,7 @@ Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4h
 
 ## suoritustapa
 
-Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Materiaalin seassa on linkkejä tehtäviin jotka on tarkoitettu tehtäviksi suunnilleen linkitetyissä kohdassa materiaalin opiskelua. 
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Materiaalin seassa on linkkejä tehtäviin jotka on tarkoitettu tehtäviksi suunnilleen linkitetyissä kohdassa materiaalin opiskelua.
 
 Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
 
@@ -26,7 +26,7 @@ Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat k
 
 Kurssin arvostelu perustuu tehtyjen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Betatestaajien oletetaan osallistuvan myös pieneen haastatteluun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei betasuorittajilla ole.
 
-Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa. 
+Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa.
 
 ## ilmoittautuminen
 
