@@ -1286,8 +1286,6 @@ Näin ei ole suositetavaa tehdä, sillä muuttuja _note_ on viite komponentin ti
 Kannattaa myös huomata, että uusi olio _changedNote_ on ainoastaan ns [shallow copy](https://en.wikipedia.org/wiki/Object_copying#Shallow_copy), eli uuden olion kenttien arvoina on vanan olion kenttien arvot. Jos vanhan olion kentät olisivat itsessään olioita, viittaisivat uuden olion kentät samoihin olioihin.
 
 
-
-
 Uusi muistiinpano lähetetään sitten PUT-pyynnön mukana palvelimelle, jossa se korvaa aiemman muistiinpanon. 
 
 Takaisunkutsufunktiossa asetataan komponentin _App_ tilaan kaikki vanhat muistiinpanot paitsi muuttuneesta palvelimen palauttama versio:
@@ -1314,7 +1312,7 @@ Järjestäminen onnistuu talukon metodilla [sort](https://developer.mozilla.org/
 
 Tehdään järjestäminen metodissa _render_.
 
-```js
+```react
  render() {
     // ...
 
