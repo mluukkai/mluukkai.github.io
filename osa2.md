@@ -750,27 +750,125 @@ Käynnistä _json-server_ porttiin 3001:
 json-server --port=3001 --watch db.json
 ```
 
-Oletusarvoisesti _json-server_ käynnistyy porttiin 3000, mutta Reactin kehitys tapahtuu samassa portissa, joten sen takia joudumme nyt määrittelemään vaihtoehtoisen portin.
+Oletusarvoisesti _json-server_ käynnistyy porttiin 3000, mutta create-react-app:in jäyttö varaa portin 3000 joten sen takia joudumme nyt määrittelemään vaihtoehtoisen portin.
 
 Mene selaimella osoitteeseen <http://localhost:3001/notes>. Kuten huomaamme, _json-server_ tarjoaa osoitteessa tiedostoon tallentamamme muistiinpanot:
 
 ![]({{ "/assets/2/6.png" | absolute_url }})
 
-Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, react-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin".
+Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, React-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin".
 
-json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen ilman tarvetta itse ohjelmoida mitään.
+json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen kehitysvaiheessa ilman tarvetta itse ohjelmoida mitään.
 
-### npm-riippuvuus, axios
+Tutustumme palveinpuolen toteuttamisen periaatteisiin tarkemmin kurssin [osaassa 3](/osa3). 
+
+### selain suoritusympäristönä
 
 Ensimmäisenä tehtävänämme on siis hakea React-sovellukseen jo olemassaolevat mustiinpano osoitteesta <http://localhost:3001/notes>.
 
-Käytetään selaimen ja palvelimen väliseen kommunikaatioon [axios](ttps://github.com/axios/axios)-kirjastoa. Jotta saisimme kirjaston käyttöömme sovelluksen koodissa, on meidän määriteltävä se sovelluksen riippuvuudeksi. Tämä tapahtuu komentorivillä annettavalla komennolla
+Osan 1 [esimerkkiprojektissa](osa1/#elaimessa-suoritettava-sovelluslogiikka) nähtiin jo eräs tapa hakea javascript-koodista palvelimella olevaa dataa. Esimerkin koodissa data haettiin [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) eli XHR-olion avulla muodostetulla HTTP-pyynnöllä. Kyseessä on 1999 lanseerattu tekniikka jota kaikki web-selaimet ovat jo pitkään tukeneet. 
+
+Nykyään XHR:ää ei kuitenkaan kannata juurikaan käyttää ja selaimet tukevatkin jo laajasti [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)-metodia joka perustuu XHR:n käyttämän tapahtumapohjaisen mallin sijaan ns. [Promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+
+Muistutuksena viime viikosta (oikeastaan tätä tapaa pitää lähinnä muistaa olla käyttämättä ilman painavaa syytä), XHR:llä haettiin dataa seuraavasti
+
+```bash
+const xhttp = new XMLHttpRequest()
+
+xhttp.onreadystatechange = function () {
+  if (this.readyState == 4 && this.status == 200) {
+     const data = JSON.parse(this.responseText)
+     // käsittele muuttujaan data sijoitettu kyselyn tulos
+  }
+}
+
+xhttp.open('GET', '/data.json', true)
+xhttp.send()  
+```
+
+Eli _xhttp_-oliolle rekisteröidään tapahtumankäsittelijä jota javascript runtime kutsuu kun olion tila muuttuu. Jos tilanmuutos tarkoittaa että pyynnön vastaus on saapunut, käsitellään data halutulla tavalla. Huomionarvoista on se, että tapahtumankäsittelijän koodi on määritelty jo ennen kun itse pyyntö lähetetään palvelimelle.
+
+Koodin suoritus ei etene synkronisesti "ylhäältä alas", vaan _asynkronisesti_, javascript kutsuu sille rekisteröityä käsittelijämetodia jossain vaiheessa.  
+
+Esim. Java-ohjelmoinnista tuttu synkroninen tapa tehdä kyselyjä etenisi seuraavaan tapaan (huomaa että kyse ei ole oikeasti toimivasta Java-koodista):
+
+```java
+HTTPRequest request = new HTTPRequest()
+
+Muistiinpano[] muistiinpanot = request.get('https://fullstack-exampleapp.herokuapp.com/data.json')
+
+muistiinpanot.forEach(m=>{
+  System.out.println(m.content);
+})
+```
+
+Javassa koodi etenee nyt rivi riviltä ja koodi pysähtyy odottamaan HTTP-pyynnön, eli komennon _request.get(...)_ valmistumista. Komennon palauttama data, eli muistiinpanot voidaan tallettaa muuttujaan.
+
+Javascript-enginet eli suoritusympäristöt kuitenkin noudattavat [asynkronista mallia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop), eli periaatteena on se, että kaikki [IO-operaatiot](https://en.wikipedia.org/wiki/Input/output) (poslukien muutama poikkeus) suoritetaan ei-blokkaavana, eli operaatioiden tulosta ei jäädä odottamaan vaan koodin suoritusta jatketaan heti eteenpäin.
+
+Siinä vaiheessa kun operaatio valmistuu tai tarkemmin sanoen jonain valmistumisen jälkeisenä ajanhetkenä, kutsuu Javascript-engine operaatiolle rekisteröityjä tapahtumankäsittelijöitä.
+
+Nykyisellään javascript-moottorit ovat _yksisäikeisiä_ eli ne eivät voi suorittaa rinnakkaista koodia. Tämän takia on käytännössä pakko käyttää ei-blokkaavaa maillia IO-operaatioiden suorittamiseen, sillä muuten esim. selain 'jäätyisi' siksi aikaa kun esim. palvelimelta haetaan dataa. 
+
+Javasript-moottoreiden yksisäikeisyydellä on myös sellainen seuraus, että jos koodin suoritus kestää erittäin pitkään, selain jäätyy suorituksen ajaksi. Jos lisätään jonnekin kohtaa sovellustamme, esim. konstruktoriin seuraava koodi:
+
+```
+    setTimeout(()=>{
+      console.log('loop..')
+      let i=0;
+      while(i<50000000000) { 
+        i++
+      }
+      console.log('end')
+    }, 5000)
+```
+
+Kakikki toimii 5 sekunnin ajan normaalisti. Kun _setTimeout_:in parametrina määritelty funktio suoritetaan, menee selain sivu jumiin pitkän loopin suorituksen ajaksi. Selaimen tabia ei pysty edes sulkemaan. 
+
+Eli jotta selain säilyy _responsiivisena_ eli että se reagoi koko ajan riittävän nopeasti käyttäjän haluamiin toimenpiteisiin, koodin logiikan tulee olla sellainen, että yksittäinen laskenta ei saa kestää liian kauaa.
+
+Aiheesta löytyy paljon lisämateriaalia internetistä, eräs varsin havainnollinen esitys aiheesta Philip Robertsin esitelmä [What the heck is the event loop anyway?](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
+
+## npm
+
+Palaamme jälleen asiaan, eli datan hakemiseen palvelimelta. 
+
+Voisimme käyttää datan palvelimelta hakemiseen aiemmin mainittua promiseihin perustuvaa funktiota [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
+
+Fetch on hyvä työkalu, se on standardoitu ja kaikkien modernien selaimien tukema.
+
+Käytetään selaimen ja palvelimen väliseen kommunikaatioon kuitenkin [axios](ttps://github.com/axios/axios)-kirjastoa, joka toimii samaan tapaan kuin fetch mutta on hieman mukavampikäyttöinen. Hyvä syy axios:in käytölle on myös se, että pääsemme tutustumaan siihen miten ulkopuolisia kirjastoja eli _npm-paketteja_ liitetään React-projektiin.
+
+Nykyään lähes kaikki Javascript-projektit määritellään node package managerin eli [npm](https://docs.npmjs.com/getting-started/what-is-npm):n avulla. Myös create-react-app:in avulla generoidut projektit ovat npm-muotoisia projekteja. Varma tuntomerkki siitä on projektin juuressa oleva tiedosto _package.json_:
+
+```js
+{
+  "name": "viikko1",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.0.17"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
+```
+
+Tässä vaiheessa meitä kiinnostaa osa _dependencies_, joka määrittelee mitä _riippuvuuksia_ eli ulkoisia kirjastoja projektilla on.
+
+Haluamme nyt käyttöömme axioksen. Voisimme määritellä kirjaston suoraan tiedostoon _package.json_, mutta on parempi asentaa se komentoriviltä
 
 ```bash
 npm install axios --save
 ```
 
-Sovelluksen riippuvuudet tallennetaan projektin juuressa olevaan tiedostoon _package.json_:
+Nyt axios on mukana riippuvuuksien joukossa.
 
 ```js
 {
@@ -784,41 +882,192 @@ Sovelluksen riippuvuudet tallennetaan projektin juuressa olevaan tiedostoon _pac
 }
 ```
 
-Nyt voimme käyttää kirjastoa. Lisätään seuraava tiedotoon _index.js_
+Sen lisäksi, että komento _npm install_ lisäsi axiosin riippuvuuksien joukkoon, se myös _latasi_ kirjaston koodin. Koodi löytyy muiden riippuvuuksien tapaan projektin juuren hakemistosta _node_modules_, mikä kuten huomata saattaa sisältääkin runsaasti kaikenlaista.
+
+Tutustumme npm:n tarkemmin kurssin [kolmannessa osassa](/osa3).
+
+### axios ja promiset
+
+Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä. 
+
+Kirjaston voi ottaa käyttöön samaan tapaan kuin esim. React otetaan käyttöön, eli sopivalla _import_-lauseella.
+
+Lisätään seuraava tiedotoon _index.js_
 
 ```js
 import axios from 'axios'
 
-axios.get('http://localhost:3001/notes').then(response => {
+const promise = axios.get('http://localhost:3001/notes')
+console.log(promise)  
+
+const promise2 = axios.get('http://localhost:3001/foobar')
+console.log(promise2)  
+```
+
+![]({{ "/assets/2/8.png" | absolute_url }})
+
+Axiosin metodi _get_ palauttaa [promisen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises).
+
+Mozillan dokumentaatio sanoo promisesta seuraavaa:
+> A Promise is an object representing the eventual completion or failure of an asynchronous operation. Since most people are consumers of already-created promises, this guide will explain consumption of returned promises before explaining how to create them. 
+
+Promise siis edustaa asynkronista operaatiota. Promise voi olla kolmessa eri tilassa
+* aluksi promise on _pending_, eli promisea vastaava asynkroninen operaatio ei ole vie tapahtunut
+* jos operaatio päätyy onnistuneesti, menee promise tilaan _fulfilled_ josta joskus käytetään nimitystä _resolved_
+* kolmas mahdollinen tila on _rejected_ joka edustaa epäonnistunutta operaatiota
+
+Esimerkkimme ensimmäinen promise on _fulfilled_, eli vastaa vastaa onnistunutta _axios.get('http://localhost:3001/notes')_ pyyntöä. Promiseista toinen taas on _rejected_, syy selviää konsolista, eli yritettiin tehdä HTTP GET -pyyntöä osoitteeseen, jota ei ole olemassa.
+
+Jos ja kun haluamme tietoon promisea vastaavan operaation tuloksen, tulee promiselle rekisteröidä tapahtumankuuntelija. Tämä tapahtuu metodilla _then_:
+
+```
+const promise = axios.get('http://localhost:3001/notes')
+
+promise.then(response => {
   console.log(response)
 })
 ```
 
-Näin tehdään _axios_-kirjaston avulla HTTP GET -pyyntö osoitteeseen 'http://localhost:3001/notes'. Metodin _then_ avulla rekisteröidään takaisinkutsufunktio, joka saa parametrikseen palvelimen vastauksen, joka tulostetaan konsoliin:
+Konsoliin tulostuu seuraavaa
 
-![]({{ "/assets/2/7.png" | absolute_url }})
+![]({{ "/assets/2/9.png" | absolute_url }})
 
-Kuten näemme ...
+Javascriptin suoritusympäristö kutsuu _then_-metodin avulla rekisteröityä takaisunkutsufunktiota antaen sille parametriksi olion _result_ joka sisältää kaiken oleellisen HTTP GET -pyynnön vastaukseen liittyvän, eli palautetun _datan_, _statuskoodin_ ja _headerit_.
 
-Eli periaatteessa voisimme hakea datan ja renderöidä sovelluksen juurikomponentin seuraavasti:
+Promise-olioa ei ole yleensä tarvetta tallettaa muuttujaan, ja onkin tapana ketjuttaa metodin _then_ kutsu suoraan axiosin metodin kutsun perään:
+
+js
+```
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  console.log(notes) 
+})
+```
+
+Takaisinkutsufunktio ottaa nyt vastauksen sisällä olevan datan muuttujaan ja tulostaa muistiinpanot konsoliin.
+
+Palvelimen palauttama data on pelkkää tekstiä, käytännössä yksi iso merkkijono. Asian voi todeta, esim. tekemällä HTTP-pyyntö komentoriviltä [curl](https://curl.haxx.se):illa
+
+![]({{ "/assets/2/10.png" | absolute_url }})
+
+Axios-kirjasto osaa kuitenkin parsia datan Javascript-taulukoksi, sillä palvelin on kertonut headerin _content-type_ avulla että datan muoto on _application/json; charser=utf-8 (ks ylempi kuva). 
+
+Voimme vihdoin siirtyä käyttämään sovelluksessamme palvelimelta haettavaa dataa.
+
+Tehdään se aluksi "huonosti", eli lisätään sovellusta vastaavan komponentin _App_ renderöinti takaisunkutsufunktion sisälle:
+
+axios.get('http://localhost:3001/notes').then(response => {
+  const notes = response.data
+  ReactDOM.render(
+    <App notes={notes} />,
+    document.getElementById('root')
+  ) 
+})
+
+Joissain tilanteissa tämäkin tapa voisi toimia, mutta se on hieman ongelmallinen ja päätetäänkin siirtää datan hakeminen komponenttiin _App. 
+
+Ei ole kuitenkaan ihan selvää, mihin kohtaan komponentin koodia komento_axios.get_ olisi hyvä sijoittaa.
+
+### komponenttien lifecycle-metodit
+
+Reactin luokkien avulla määritellyillä komponenteilla voidaan määritellä joukko [lifecycle]
+(https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class)-metodeita, eli metodeita, joita React kutsuu tietyssä komponentin "elinkaaren" vaiheessa.
+
+Yleinen tapa datan palvelimelta tapahtuvaan lataamiseen on suorittaa lataaminen suorittaa se metodissa [](https://reactjs.org/docs/react-component.html#componentwillmount). React kutsuu metodia sen jälkeen kun konstruktori on suoritettu ja _render_-metodia ollaan kutsumassa ensimmäistä kertaa.
+
+Muutetaan sovellusta nyt seuraavasti. Poistetaan datan hakeminen tiedostosta _index.js_
+
+```js
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
+```
+
+Komponentille _App_ ei ole enää tarvetta välittää dataa propseina.
+
+Komponentti _App_ muuttuu seuraavasti:
 
 ```react
-axios.get('http://localhost:3001/notes').then(response => {
-  console.log(response)
+import React from 'react'
+import axios from 'axios'
 
-  ReactDOM.render(
-    <App notes={response.data} />,
-    document.getElementById('root')
-  )
-})
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { 
+      notes: [],
+      new_note: '',
+      showAll: true
+    }
+    console.log('constructor')
+  }
+
+  componentWillMount() {
+    console.log('will mount')
+    axios.get('http://localhost:3001/notes').then(response => {
+      console.log('promise fulfilled')
+      this.setState({ notes: response.data })
+    })
+  }
+
+  render(){
+     console.log('render')
+    // ...
+  }
+}
 ```
 
-### selain suoritusympäristönä
+Eli konstruktorissa asetetaan tilan _notes_ kentäksi tyhjä taulukko. Lifecycle-metodi _componentWillMount_ hakee datan axiosin avulla ja rekisteröi takaisunkutsufunktion, joka promisen valmistumisen (_fulfillment_) yhteydessä päivittää tilaa asettamalla palvelimen palauttamat muistiinpanot kentän _notes_ arvoksi.
 
-### promise
+Koodiin on myös lisätty muutama aputulostus, jotka auttavat hahmottamaan miten suoritus etenee.
 
-### elinsyklimetodi
+konsoliin tulostuu
+
+<pre>
+constructor
+will mount
+render
+promise fulfilled
+render
+</pre>
+
+Ensin siis suoritetaan konstruktori, ja sen jälkeen metodi _componentWillMount_. Tämän jälkeen kutsutaan kuitenkin metodia _render_, miksi näin?
+
+Metodissa _componentWillMount_ suoritetaan axiosin avulla HTTP GET -pyyntö ja samalla _rekisteröidään_ pyynnön palauttamalle promiselle tapahtumankäsittelijä:
+
+```js
+  axios.get('http://localhost:3001/notes').then(response => {
+    console.log('promise fulfilled')
+    this.setState({ notes: response.data })
+  }) 
+```
+
+Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponenentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
+
+Emme kuitenkaan ehdi huomaammaan asiaa, sillä palvelimen vastaus tulee pian, ja se taas saa aikaan tapahtumankäsittelijän suorituksen. Tapahtumankäsittelijä päivittää komponentin tilaa kutsumalla _setState_ ja tämä saa aikaan komponentin uudelleenrenderöinnin.
+
+Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on erittäin tärkeää! 
+
+Huomaa, että olisimme voineet kirjoittaa koodin myös seuraavasti:
+
+```js
+  const tapahtumankasittelija = (response) => {
+    console.log('promise fulfilled')
+    this.setState({ notes: response.data })
+  }
+
+  const promise = axios.get('http://localhost:3001/notes')
+  
+  promise.then(tapahtumankasittelija) 
+```
+
+Muuttujaan _tapahtumankasittelija_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisunkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja, joka viittaa käsittelijäfunktioon. 
+
+React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.org/docs/react-component.html), palaamme niihin myöhemmin.
 
 ## datan lähetys
+
+### promise ja virheet
 
 ## tyylien lisääminen
