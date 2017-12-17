@@ -1686,7 +1686,7 @@ Normaalissa HTML:ssä luokat määritellään elementtien attribuutin _class_  a
 Reactissa tulee kuitenkin classin sijaan käyttää attribuuttia
 [className](https://reactjs.org/docs/dom-elements.html#classname), eli muutetaan komponenttia _Note_ seuraavasti:
 
-```js
+```react
 const Note = ({ note, toggleImportance}) => {
   const label = note.important ? 'make not important' : 'make important'
   return (
@@ -1709,6 +1709,98 @@ Luokkaselektori määritellään syntaksilla _.classname_, eli :
 
 Jos nyt lisäät sovellukseen muita li-elementtejä, ne eivät saa muistiinpanoille määriteltyjä tyylejä.
 
-### flash
+### parempi virheilmoitus
 
-### flexbox
+Toteutimme äsken olemassaolemattoman muistiinpanon tärkeyden muutokseen liittyvän virheilmoituksen _alert_-metodilla. Toteutetaan se nyt Reactilla omana komponenttinaan.
+
+Komponentti on yksinkertainen:
+
+```react
+const Notification = ({ message }) => {
+  if ( message===null ) {
+    return null
+  } 
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+```
+
+Jos propsin _message_ arvo on _null_ ei reneröidä mitään, mussa tapauksessa renderöidään viesti div-elementtiin. Elementille on liitetty tyylien lisäämistä varten luokka _error_.
+
+Lisätään komponentin _App_ tilaan kenttä _error_ virheviestiä varten, laitetaan kentelle jotain sisältöä, jotta pääse mmeheti testaamaan komponenttia:
+
+```js
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { 
+      notes: [],
+      new_note: '',
+      showAll: true,
+      error: 'something went wrong...'
+    }
+  }
+  // ...
+}
+```
+
+Renderöidään uusi komponentti:
+
+```react
+class App extends React.Component {
+  render() {
+    //...
+
+    return(
+      <div>
+        <h1>Muistiinpanot</h1>
+
+        <Notification message={this.state.error}/>
+
+        ...
+      </div>
+    )
+  }
+}
+```
+
+Lisätään sitten virheviestille sopiva tyyli:
+
+```error
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+```
+
+Nyt olemme valmiina lisäämään virheviestin logiikan. Alustetaan virheviesti konstruktorissa arvoon _null_ ja muutetaan metodia _toggleImportanceOf_ seraavasti:
+
+```js
+  toggleImportanceOf = (id) => {
+    return () => {
+      //...
+
+      noteService.update(id, changedNote).then(changedNote => {
+        // ...
+      }).catch(error => {
+        this.setState({ 
+          error: `muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`,
+          notes: this.state.notes.filter(n => n.id !== id) 
+        })
+        setTimeout(()=>{
+          this.setState({error: null})
+        }, 5000)
+      })
+    }
+  }
+```
+
+Eli virheen yhteydessä asetetaan tilan kenttään _error_ sopiva virheviesti. Samalla käynnistetään ajastin, joka asettaa 5 sekunnin kuluttua tilan _error_-kentän  arvoksi _null_.
