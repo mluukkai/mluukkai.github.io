@@ -1347,4 +1347,63 @@ Tässä vaiheessa tutustumisemme promiseihin on ollut vielä varsin pintapuolist
 
 ## refaktoroi kommunikointi moduuliin
 
+_App_-komponentti ...
+
+Luodaan hakemisto _src/services_ ja sinne tiedosto _notes.js_:
+
+```js
+import axios from 'axios'
+const baseUrl = 'http://localhost:3001/notes'
+
+const getAll = () => axios.get(baseUrl)
+
+const create = (newObject) => axios.post(baseUrl, newObject)
+
+const update = (id, newObject) => axios.put(`${baseUrl}/${id}`, newObject)
+
+export default { getAll, create, update }
+```
+
+Appi:
+
+
+```js
+import noteService from './services/notes'
+
+App extends React.Component {
+
+  componentWillMount() {
+    noteService.getAll().then(response => {
+      this.setState({notes: response.data})
+    })
+  }
+
+  addNote = (e) => {
+    // ...
+
+    noteService.create(noteObject).then(response => {
+      this.setState({
+        notes: this.state.notes.concat(response.data),
+        new_note: ''
+      })
+    })
+  }
+
+  toggleImportanceOf = (id) => {
+    return () => {
+      // ...
+      
+      noteService.update(id, changedNote).then(response => {
+        const notes = this.state.notes.filter(n => n.id !== id)
+        this.setState({
+          notes: notes.concat(response.data),
+        })
+      }) 
+    }
+  }
+
+}
+```
+
+
 ## tyylien lisääminen

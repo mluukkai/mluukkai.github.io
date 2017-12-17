@@ -73,9 +73,13 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 
 ## web-sovelluksen toimintaperiaatteita ##
 
+Käymme aluksi läpi web-sovellusten toimintaperiaatteita tarkastelemalla osoitteessa <https://fullstack-exampleapp.herokuapp.com/> olevaa esimerkkisovellusta. Sovelluksen olemassaolon tarkoitus on ainoastaan havainnollistaa kurssin peruskäsitteistöä, sovellus ei ole missään tapauksessa esimerkki siitä _miten_ web-sovelluksia kannattaisi kehittää, päinvastoin, sovellus käyttää eräitä vanhentuneita tekniikoita sekä huonoja käytänteitä. 
+
+Paremman koodin kirjoittaminen alkaa luvusta [React](#react). 
+
 Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta, mielellään sen [canary](https://www.google.fi/chrome/browser/canary.html)-versiota.
 
-Avataan selaimella osoitteessa <https://fullstack-exampleapp.herokuapp.com/> oleva esimerkkisovellus.
+Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/>) 
 
 <div class="important">
   <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
