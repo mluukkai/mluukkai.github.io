@@ -120,7 +120,7 @@ const App = (props) => {
       <ul>
         {notes.map(note => <li>{note.content}</li>)}
       </ul>
-    </div >
+    </div>
   )
 }
 ```
@@ -140,7 +140,7 @@ const App = (props) => {
       <ul>
         {rivit()}
       </ul>
-    </div >
+    </div>
   )
 }
 ```
@@ -164,7 +164,7 @@ const App = (props) => {
       <ul>
         {rivit()}
       </ul>
-    </div >
+    </div>
   )
 }
 ```
@@ -203,7 +203,7 @@ const App = ({ notes }) => {
       <ul>
         {rivit()}
       </ul>
-    </div >
+    </div>
   )
 }
 ```
@@ -224,7 +224,7 @@ const App = ({ notes }) => {
       <ul>
         {notes.map(note=><Note key={note.id} note={note}/>)}
       </ul>
-    </div >
+    </div>
   )
 }
 ```
@@ -286,7 +286,7 @@ const App = ({ notes }) => {
       <ul>
         {notes.map(note => <Note key={note.id} note={note} />)}
       </ul>
-    </div >
+    </div>
   )
 }
 
@@ -311,7 +311,7 @@ ReactDOM.render(
 ```
 Moduuleilla on paljon muutakin käyttöä kuin mahdollistaa komponenttien määritteleminen omissa tiedostoissaan, palaamme moduuleihin tarkemmin myöhemmin kurssilla.
 
-### tehtävieä kokoelmien renderöinnistä
+### tehtäviä kokoelmien renderöinnistä
 
 Tee nyt [tehtävät 21 - 25](../tehtavat#kokoelmien-renderöinti)
 
@@ -681,9 +681,10 @@ class App extends React.Component {
   }
 
   render() {
-    const notesToShow = this.state.showAll ?
-                          this.state.notes :
-                          this.state.notes.filter(note=>note.important === true )
+    const notesToShow =
+      this.state.showAll ?
+        this.state.notes :
+        this.state.notes.filter(note=>note.important === true )
 
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 
@@ -782,13 +783,14 @@ Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli täs
 
 json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen kehitysvaiheessa ilman tarvetta itse ohjelmoida mitään.
 
-Tutustumme palveinpuolen toteuttamisen periaatteisiin tarkemmin kurssin [osaassa 3](/osa3). 
+Tutustumme palveinpuolen toteuttamisen periaatteisiin tarkemmin kurssin [osaassa 3](/osa3).
 
 ### selain suoritusympäristönä
 
 Ensimmäisenä tehtävänämme on siis hakea React-sovellukseen jo olemassaolevat mustiinpano osoitteesta <http://localhost:3001/notes>.
 
-Osan 1 [esimerkkiprojektissa](osa1/#elaimessa-suoritettava-sovelluslogiikka) nähtiin jo eräs tapa hakea javascript-koodista palvelimella olevaa dataa. Esimerkin koodissa data haettiin [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) eli XHR-olion avulla muodostetulla HTTP-pyynnöllä. Kyseessä on 1999 lanseerattu tekniikka, jota kaikki web-selaimet ovat jo pitkään tukeneet. 
+
+Osan 1 [esimerkkiprojektissa](osa1/#elaimessa-suoritettava-sovelluslogiikka) nähtiin jo eräs tapa hakea javascript-koodista palvelimella olevaa dataa. Esimerkin koodissa data haettiin [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) eli XHR-olion avulla muodostetulla HTTP-pyynnöllä. Kyseessä on 1999 lanseerattu tekniikka, jota kaikki web-selaimet ovat jo pitkään tukeneet.
 
 Nykyään XHR:ää ei kuitenkaan kannata juurikaan käyttää ja selaimet tukevatkin jo laajasti [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)-metodia, joka perustuu XHR:n käyttämän tapahtumapohjaisen mallin sijaan ns. [promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
@@ -799,18 +801,18 @@ const xhttp = new XMLHttpRequest()
 
 xhttp.onreadystatechange = function () {
   if (this.readyState == 4 && this.status == 200) {
-     const data = JSON.parse(this.responseText)
-     // käsittele muuttujaan data sijoitettu kyselyn tulos
+    const data = JSON.parse(this.responseText)
+    // käsittele muuttujaan data sijoitettu kyselyn tulos
   }
 }
 
 xhttp.open('GET', '/data.json', true)
-xhttp.send()  
+xhttp.send()
 ```
 
-Heti alussa HTTP-pyyntöä vastaavalle _xhttp_-oliolle rekisteröidään tapahtumankäsittelijä, jota javascript runtime kutsuu kun _xhttp_-olion tila muuttuu. Jos tilanmuutos tarkoittaa että pyynnön vastaus on saapunut, käsitellään data halutulla tavalla. 
+Heti alussa HTTP-pyyntöä vastaavalle _xhttp_-oliolle rekisteröidään tapahtumankäsittelijä, jota javascript runtime kutsuu kun _xhttp_-olion tila muuttuu. Jos tilanmuutos tarkoittaa että pyynnön vastaus on saapunut, käsitellään data halutulla tavalla.
 
-Huomionarvoista on se, että tapahtumankäsittelijän koodi on määritelty jo ennen kun itse pyyntö lähetetään palvelimelle. Tapahtumankäsittelijäfunktio tullaan kuitenkin suorittamaan vasta jossain myöhäisemmässä vaiheessa. Koodin suoritus ei siis etene synkronisesti "ylhäältä alas", vaan _asynkronisesti_, javascript kutsuu sille rekisteröityä tapahtumankäsittelijäfunktiota jossain vaiheessa.  
+Huomionarvoista on se, että tapahtumankäsittelijän koodi on määritelty jo ennen kun itse pyyntö lähetetään palvelimelle. Tapahtumankäsittelijäfunktio tullaan kuitenkin suorittamaan vasta jossain myöhäisemmässä vaiheessa. Koodin suoritus ei siis etene synkronisesti "ylhäältä alas", vaan _asynkronisesti_, javascript kutsuu sille rekisteröityä tapahtumankäsittelijäfunktiota jossain vaiheessa.
 
 Esim. Java-ohjelmoinnista tuttu synkroninen tapa tehdä kyselyjä etenisi seuraavaan tapaan (huomaa että kyse ei ole oikeasti toimivasta Java-koodista):
 
@@ -835,10 +837,10 @@ Nykyisellään javascript-moottorit ovat _yksisäikeisiä_ eli ne eivät voi suo
 Javasript-moottoreiden yksisäikeisyydellä on myös sellainen seuraus, että jos koodin suoritus kestää erittäin pitkään, selain jäätyy suorituksen ajaksi. Jos lisätään jonnekin kohtaa sovellustamme, esim. konstruktoriin seuraava koodi:
 
 ```
-    setTimeout(()=>{
+    setTimeout(() => {
       console.log('loop..')
-      let i=0;
-      while(i<50000000000) { 
+      let i = 0
+      while(i < 50000000000) {
         i++
       }
       console.log('end')
@@ -855,7 +857,7 @@ Nykyään selaimissa on mahdollisuus suorittaa myös rinnakkaista koodia ns. [we
 
 ## npm
 
-Palaamme jälleen asiaan, eli datan hakemiseen palvelimelta. 
+Palaamme jälleen asiaan, eli datan hakemiseen palvelimelta.
 
 Voisimme käyttää datan palvelimelta hakemiseen aiemmin mainittua promiseihin perustuvaa funktiota [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Fetch on hyvä työkalu, se on standardoitu ja kaikkien modernien selaimien (poislukien IE) tukema.
 
@@ -910,7 +912,7 @@ Tutustumme npm:n tarkemmin kurssin [kolmannessa osassa](/osa3).
 
 ### axios ja promiset
 
-Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä portissa 3001. 
+Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä portissa 3001.
 
 Kirjaston voi ottaa käyttöön samaan tapaan kuin esim. React otetaan käyttöön, eli sopivalla _import_-lauseella.
 
@@ -920,10 +922,10 @@ Lisätään seuraava tiedotoon _index.js_
 import axios from 'axios'
 
 const promise = axios.get('http://localhost:3001/notes')
-console.log(promise)  
+console.log(promise)
 
 const promise2 = axios.get('http://localhost:3001/foobar')
-console.log(promise2)  
+console.log(promise2)
 ```
 
 ![]({{ "/assets/2/8.png" | absolute_url }})
@@ -931,7 +933,7 @@ console.log(promise2)
 Axiosin metodi _get_ palauttaa [promisen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises).
 
 Mozillan dokumentaatio sanoo promisesta seuraavaa:
-> A Promise is an object representing the eventual completion or failure of an asynchronous operation. Since most people are consumers of already-created promises, this guide will explain consumption of returned promises before explaining how to create them. 
+> A Promise is an object representing the eventual completion or failure of an asynchronous operation. Since most people are consumers of already-created promises, this guide will explain consumption of returned promises before explaining how to create them.
 
 Promise siis edustaa asynkronista operaatiota. Promise voi olla kolmessa eri tilassa:
 * aluksi promise on _pending_, eli promisea vastaava asynkroninen operaatio ei ole vie tapahtunut
@@ -962,7 +964,7 @@ Promise-olioa ei ole yleensä tarvetta tallettaa muuttujaan, ja onkin tapana ket
 ```js
 axios.get('http://localhost:3001/notes').then(response => {
   const notes = response.data
-  console.log(notes) 
+  console.log(notes)
 })
 ```
 
@@ -972,7 +974,8 @@ Palvelimen palauttama data on pelkkää tekstiä, käytännössä yksi iso merkk
 
 ![]({{ "/assets/2/10.png" | absolute_url }})
 
-Axios-kirjasto osaa kuitenkin parsia datan Javascript-taulukoksi, sillä palvelin on kertonut headerin _content-type_ avulla että datan muoto on _application/json; charser=utf-8_ (ks ylempi kuva). 
+
+Axios-kirjasto osaa kuitenkin parsia datan Javascript-taulukoksi, sillä palvelin on kertonut headerin _content-type_ avulla että datan muoto on _application/json; charser=utf-8_ (ks ylempi kuva).
 
 Voimme vihdoin siirtyä käyttämään sovelluksessamme palvelimelta haettavaa dataa.
 
@@ -984,11 +987,11 @@ axios.get('http://localhost:3001/notes').then(response => {
   ReactDOM.render(
     <App notes={notes} />,
     document.getElementById('root')
-  ) 
+  )
 })
 ```
 
-Joissain tilanteissa tämäkin tapa voisi olla ok, mutta se on hieman ongelmallinen ja päätetäänkin siirtää datan hakeminen komponenttiin _App_. 
+Joissain tilanteissa tämäkin tapa voisi olla ok, mutta se on hieman ongelmallinen ja päätetäänkin siirtää datan hakeminen komponenttiin _App_.
 
 Ei ole kuitenkaan ihan selvää, mihin kohtaan komponentin koodia komento _axios.get_ olisi hyvä sijoittaa.
 
@@ -998,7 +1001,7 @@ Reactin luokkien avulla määritellyillä komponenteilla voidaan määritellä j
 
 Yleinen tapa datan palvelimelta tapahtuvaan lataamiseen onsuorittaa se metodissa [componentWillMount](https://reactjs.org/docs/react-component.html#componentwillmount). React kutsuu metodia sen jälkeen kun konstruktori on suoritettu ja _render_-metodia ollaan kutsumassa ensimmäistä kertaa.
 
-Muutetaan sovellusta nyt seuraavasti. 
+Muutetaan sovellusta nyt seuraavasti.
 
 Poistetaan datan hakeminen tiedostosta _index.js_:
 
@@ -1020,7 +1023,7 @@ import axios from 'axios'
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       notes: [],
       new_note: '',
       showAll: true
@@ -1030,14 +1033,15 @@ class App extends React.Component {
 
   componentWillMount() {
     console.log('will mount')
-    axios.get('http://localhost:3001/notes').then(response => {
-      console.log('promise fulfilled')
-      this.setState({ notes: response.data })
-    })
+    axios.get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        this.setState({ notes: response.data })
+      })
   }
 
   render(){
-     console.log('render')
+    console.log('render')
     // ...
   }
 }
@@ -1065,14 +1069,14 @@ Metodissa _componentWillMount_ suoritetaan axiosin avulla HTTP GET -pyyntö ja s
   axios.get('http://localhost:3001/notes').then(response => {
     console.log('promise fulfilled')
     this.setState({ notes: response.data })
-  }) 
+  })
 ```
 
 Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponenentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
 
 Emme kuitenkaan ehdi huomaammaan asiaa, sillä palvelimen vastaus tulee pian, ja se taas saa aikaan tapahtumankäsittelijän suorituksen. Tapahtumankäsittelijä päivittää komponentin tilaa kutsumalla _setState_ ja tämä saa aikaan komponentin uudelleenrenderöinnin.
 
-Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on erittäin tärkeää! 
+Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on erittäin tärkeää!
 
 Huomaa, että olisimme voineet kirjoittaa koodin myös seuraavasti:
 
@@ -1083,11 +1087,11 @@ Huomaa, että olisimme voineet kirjoittaa koodin myös seuraavasti:
   }
 
   const promise = axios.get('http://localhost:3001/notes')
-  
-  promise.then(eventHandler) 
+
+  promise.then(eventHandler)
 ```
 
-Muuttujaan _eventHandler_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisunkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja _eventHandler_, joka viittaa käsittelijäfunktioon. 
+Muuttujaan _eventHandler_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisunkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja _eventHandler_, joka viittaa käsittelijäfunktioon.
 
 React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.org/docs/react-component.html), palaamme niihin myöhemmin.
 
@@ -1097,7 +1101,7 @@ Tee nyt tehtävä [31-33](../tehtavat#datan-hakeminen-palvelimelta)
 
 ## REST API:n käyttö
 
-Kun sovelluksella luodaan uusia muistiinpanoja, täytyy ne tallentaa palvelimelle. 
+Kun sovelluksella luodaan uusia muistiinpanoja, täytyy ne tallentaa palvelimelle.
 
 json-server mainitsee olevansa ns. REST tai RESTful API
 
@@ -1111,7 +1115,7 @@ REST:issä yksittäisi asioita esim. meidän tapauksessamme muistiinpanoja kutsu
 
 Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id-kentän arvo on 3. Kun taan HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
 
-Uuden muistiinpanoa vastaavan resurssin luominen tapahtuu json-serverin RESTful-konventiossa tekemällä HTTP POST -pyyntö, joka kohdistuu myös samaan osoiteeseen _notes_. Pyynnön mukana sen runkona eli _bodynä_ lähetetään luotavan muistiinpanon tiedot. 
+Uuden muistiinpanoa vastaavan resurssin luominen tapahtuu json-serverin RESTful-konventiossa tekemällä HTTP POST -pyyntö, joka kohdistuu myös samaan osoiteeseen _notes_. Pyynnön mukana sen runkona eli _bodynä_ lähetetään luotavan muistiinpanon tiedot.
 
 json-server vaatii, että tiedot lähetetään JSON-muodossa, eli käytännössä sopivasti muotoiltuna merkkijonona ja asettamalla headerille _Content-Type_ arvo _application/json_.
 
@@ -1121,17 +1125,17 @@ Muutetaan nyt uuden muistiinpanon lisäämisestä huolehtivaa tapahtumankäsitte
 
 ```js
   addNote = (e) => {
-    e.preventDefault()  
+    e.preventDefault()
     const noteObject = {
       content: this.state.new_note,
       date: new Date().new,
       important: Math.random()>0.5,
     }
 
-    axios.post('http://localhost:3001/notes', noteObject).then(response => {
-      console.log(response)
-    })
-
+    axios.post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        console.log(response)
+      })
   }
 ```
 
@@ -1143,7 +1147,7 @@ Kun nyt kokeillaan luoda uusi muistiinpano, konsoliin tulostus näyttää seuraa
 
 ![]({{ "/assets/2/11.png" | absolute_url }})
 
-Uusi muistiinpano on siis _response_-olion kentän _data_ arvona. Palvelin on lisännyt muistiinpanolle tunnisteen, eli _id_-kentän. 
+Uusi muistiinpano on siis _response_-olion kentän _data_ arvona. Palvelin on lisännyt muistiinpanolle tunnisteen, eli _id_-kentän.
 
 Joskus on hyödyllistä tarkastella HTTP-pyyntöjä [osan 1 alussa](osa1/#HTTP-GET) paljon käytetyn konsolin _Network_-välilehden kautta:
 
@@ -1157,19 +1161,20 @@ Uusi muistiinpano ei vielä renderöidy ruudulle, sillä emme aseta komponentill
 
 ```js
   addNote = (e) => {
-    e.preventDefault()  
+    e.preventDefault()
     const noteObject = {
       content: this.state.new_note,
       date: new Date(),
       important: Math.random()>0.5,
     }
 
-    axios.post('http://localhost:3001/notes', noteObject).then(response => {
-      this.setState({
-        notes: this.state.notes.concat(response.data),
-        new_note: ''
+    axios.post('http://localhost:3001/notes', noteObject)
+      .then(response => {
+        this.setState({
+          notes: this.state.notes.concat(response.data),
+          new_note: ''
+        })
       })
-    })
   }
 ```
 
@@ -1214,15 +1219,17 @@ Tapahtumankäsittelijän alustava versio on määritelty komponentissa _App_ seu
 
 Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisälttöön kohta.
 
-Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle tapahtumankäsittelijäfunktio: 
+Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle tapahtumankäsittelijäfunktio:
 
 ```html
   <ul>
-    {notesToShow.map(note => <Note 
-                                key={note.id} 
-                                note={note} 
-                                toggleImportance={this.toggleImportanceOf(note.id)}
-                              />)}
+    {notesToShow.map(note =>
+      <Note
+        key={note.id}
+        note={note}
+        toggleImportance={this.toggleImportanceOf(note.id)}
+      />
+    )}
   </ul>
 ```
 
@@ -1234,7 +1241,7 @@ Jokaisen muistiinpanon tapahtumankäsittelijä on nyt _yksilöllinen_, sillä se
 }
 ```
 
-Eli komponentin _App_ metodi _toggleImportanceOf_ ei itsessään ole tapahtumankäsittelijä, vaan _tehdas_, jonka avulla kullekin muistiinpanolle luodaan oma tapahtumanksittelijä.
+Eli komponentin _App_ metodi _toggleImportanceOf_ ei itsessään ole tapahtumankäsittelijä, vaan _tehdas_, jonka avulla kullekin muistiinpanolle luodaan oma tapahtumankäsittelijä.
 
 Pieni huomio tähän väliin. Tapahtumankäsittelijän koodin tulostuksessa muodostetaan tulostettava merkkijono Javan tyyliin plussaamalla stringejä:
 
@@ -1262,20 +1269,21 @@ Metodi on seuraavassa:
       const url = `http://localhost:3001/notes/${id}`
       const note = this.state.notes.find(n => n.id === id)
       const changedNote = { ...note, important: !note.important }
-      
-      axios.put(url, changedNote).then(response => {
-        const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
-        this.setState({
-          notes: nonchangedNotes.concat(response.data),
-        })
-      }) 
+
+      axios.put(url, changedNote)
+        .then(response => {
+          const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
+          this.setState({
+            notes: nonchangedNotes.concat(response.data)
+          })
+      })
     }
   }
 ```
 
-Melkein joka riville sisältyy tärkeitä yksityiskohtia. Ensimmäinen rivi määrittelee jokaiselle muistiinpanolle id-kenttään perustuvan yksilöivän url:in. 
+Melkein joka riville sisältyy tärkeitä yksityiskohtia. Ensimmäinen rivi määrittelee jokaiselle muistiinpanolle id-kenttään perustuvan yksilöivän url:in.
 
-Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan viite siihen muuttujaan _note_. 
+Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan viite siihen muuttujaan _note_.
 
 Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sisältö poislukien kenttä important. Luominen näyttää hieman erikoiselta:
 
@@ -1283,7 +1291,7 @@ Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sis�
   const changedNote = { ...note, important: !note.important }
 ```
 
-Kyseessä on vielä standardoimattoman [object spread](https://github.com/tc39/proposal-object-rest-spread) -operaation soveltaminen.  
+Kyseessä on vielä standardoimattoman [object spread](https://github.com/tc39/proposal-object-rest-spread) -operaation soveltaminen.
 
 Käytännössä <code>{...note}</code> luo olion, jolla on kenttinään kopiot olion _note_ kenttien arvoista. Kun aaltosulkeisiin lisätään asioita, esim. <code>{ ...note, important: true }</code>, tulee uuden olion kenttä _important_ saamaan arvon _true_. Eli esimerkissämme _important_ saa uudessa oliossa vanhan arvonsa käänteisarvon.
 
@@ -1293,13 +1301,13 @@ Uusi olio olisi voitu luodan myös vanhemmalla komennolla [Object.assign](https:
   const changedNote = Object.assign({}, note, {important: !note.important} }
 ```
 
-Object spread -syntaksi on kuitenkin yleisesti käytössä Reactissa, joten mekin käytämme sitä. 
+Object spread -syntaksi on kuitenkin yleisesti käytössä Reactissa, joten mekin käytämme sitä.
 
 Pari huomioita. Miksi teimme muutettavasta oliosta kopion vaikka myös seuraava koodi näyttää toimivan:
 
 ```js
   const note = this.state.notes.find(n => n.id === id)
-  note.important = !note.important 
+  note.important = !note.important
 
   axios.put(url, changedNote).then(response => {
 ```
@@ -1309,21 +1317,22 @@ Näin ei ole suositetavaa tehdä, sillä muuttuja _note_ on viite komponentin ti
 Kannattaa myös huomata, että uusi olio _changedNote_ on ainoastaan ns [shallow copy](https://en.wikipedia.org/wiki/Object_copying#Shallow_copy), eli uuden olion kenttien arvoina on vanhan olion kenttien arvot. Jos vanhan olion kentät olisivat itsessään olioita, viittaisivat uuden olion kentät samoihin olioihin.
 
 
-Uusi muistiinpano lähetetään sitten PUT-pyynnön mukana palvelimelle, jossa se korvaa aiemman muistiinpanon. 
+Uusi muistiinpano lähetetään sitten PUT-pyynnön mukana palvelimelle, jossa se korvaa aiemman muistiinpanon.
 
 Takaisunkutsufunktiossa asetataan komponentin _App_ tilaan kaikki vanhat muistiinpanot paitsi muuttuneen, josta tilaan asetetaan palvelimen palauttama versio:
 
 ```js
-  axios.put(url, changedNote).then(response => {
-    const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
-    this.setState({
-      notes: nonchangedNotes.concat(response.data),
+  axios.put(url, changedNote)
+    .then(response => {
+      const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
+      this.setState({
+        notes: nonchangedNotes.concat(response.data)
+      })
     })
-  }) 
 ```
 
 Ensin muut vanhat muistiinpanot paitsi muutunut otetaan tilasta taulukon muuttujan
-[filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) avulla. 
+[filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) avulla.
 
 Tila päivitetään [concatenoimalla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) avulla vanhat muuttumattomat ja palvelimen palauttama muuttunut muistiinpano.
 
@@ -1342,7 +1351,7 @@ Tehdään järjestäminen metodissa _render_.
     const byId = (note1, note2) => note1.id - note2.id
 
     return(
-      <div >
+      <div>
         // ...
 
         {notesToShow.sort(byId).map(note => <Note
@@ -1352,8 +1361,8 @@ Tehdään järjestäminen metodissa _render_.
         />)}
 
         // ...
-      </div >
-    ) 
+      </div>
+    )
   }
 }
 ```
@@ -1389,7 +1398,7 @@ const update = (id, newObject) => {
 export default { getAll, create, update }
 ```
 
-Moduuli palauttaa nyt olion, jonka kenttinä on kolme muistiinpanojen käsittelyä hoitavaa funktiota. Funktiot palauttavat suoraan axiosin metodien palauttaman promisen. 
+Moduuli palauttaa nyt olion, jonka kenttinä on kolme muistiinpanojen käsittelyä hoitavaa funktiota. Funktiot palauttavat suoraan axiosin metodien palauttaman promisen.
 
 Komponentti _App_ saa moduuli käyttöön _import_-lauseella
 
@@ -1403,30 +1412,33 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 
 ```js
   componentWillMount() {
-    noteService.getAll().then(response => {
-      this.setState({notes: response.data})
-    })
+    noteService.getAll()
+      .then(response => {
+        this.setState({notes: response.data})
+      })
   }
 
   addNote = (e) => {
     // ...
-    noteService.create(noteObject).then(response => {
-      this.setState({
-        notes: this.state.notes.concat(response.data),
-        new_note: ''
+    noteService.create(noteObject)
+      .then(response => {
+        this.setState({
+          notes: this.state.notes.concat(response.data),
+          new_note: ''
+        })
       })
-    })
   }
 
   toggleImportanceOf = (id) => {
     return () => {
-      // ...   
-      noteService.update(id, changedNote).then(response => {
-        const notes = this.state.notes.filter(n => n.id !== id)
-        this.setState({
-          notes: notes.concat(response.data),
+      // ...
+      noteService.update(id, changedNote)
+        .then(response => {
+          const notes = this.state.notes.filter(n => n.id !== id)
+          this.setState({
+            notes: notes.concat(response.data)
+          })
         })
-      }) 
     }
   }
 
@@ -1436,27 +1448,30 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 Voisimme viedä ratkaisua vielä askeleen pidemmälle, sillä käyttäessään modulin funktioita komponentti _App_ saa olion, joka sisältää koko HTTP-pyynnön vastauksen:
 
 ```js
-  noteService.getAll().then(response => {
-    this.setState({notes: response.data})
-  })
+  noteService.getAll()
+    .then(response => {
+      this.setState({notes: response.data})
+    })
 ```
 
-Eli asia mistä _App_ on kiinnostunut on parametrin kentässä _response.data_. 
+Eli asia mistä _App_ on kiinnostunut on parametrin kentässä _response.data_.
 
 Moduulia olisi miellyttävämpi käyttää, jos se HTTP-pyynnön vastauksen sijaan palauttaisi suoraan muistiinpanot sisältävän taulukon. Tällöin moduulin käyttö näyttäisi seuraavalta
 
 ```js
-  noteService.getAll().then(notes => {
-    this.setState({notes: notes})
-  })
+  noteService.getAll()
+    .then(notes => {
+      this.setState({notes: notes})
+    })
 ```
 
 joka voitaisiin [ilmaista hieman tiiviimmin](#kehittyneempi-tapa-olioliteraalien-kirjoittamiseen) seuraavasti:
 
 ```js
-  noteService.getAll().then(notes => {
-    this.setState({notes})
-  })
+  noteService.getAll()
+    .then(notes => {
+      this.setState({notes})
+    })
 ```
 
 Tämä onnistuu muuttamalla moduulin koodia seuraavasti (koodiin jää ikävästi copy-pastea, emme kuitenkaan nyt välitä siitä):
@@ -1501,7 +1516,7 @@ const getAll = () => {
 }
 ```
 
-Myös nyt funktio _getAll_ palauttaa promisen, sillä promisen metodi _then_ [palauttaa promisen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then). 
+Myös nyt funktio _getAll_ palauttaa promisen, sillä promisen metodi _then_ [palauttaa promisen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then).
 
 Koska _then_:in parametri palauttaa suoraan arvon _response.data_, on funktion _getAll_ palauttama promise sellainen, että jos HTTP-kutsu onnistuu, antaa promise takaisinkutsulleen HTTP-pyynnön mukana olleen datan, eli se toimii juuri niin kuin haluamme.
 
@@ -1509,33 +1524,35 @@ Moduulin muutoksen jälkeen täytyy komonentti _App_ muokata _noteService_:n met
 
 ```js
 class App extends React.component {
-    
+
   addNote = (e) => {
     // ...
-    noteService.create(noteObject).then(newNote => {
-      this.setState({
-        notes: this.state.notes.concat(newNote),
-        new_note: ''
+    noteService.create(noteObject)
+      .then(newNote => {
+        this.setState({
+          notes: this.state.notes.concat(newNote),
+          new_note: ''
+        })
       })
-    })
   }
 
   toggleImportanceOf = (id) => {
     return () => {
       // ...
-      
-      noteService.update(id, changedNote).then(changedNote => {
-        const notes = this.state.notes.filter(n => n.id !== id)
-        this.setState({
-          notes: notes.concat(changedNote),
+
+      noteService.update(id, changedNote)
+        .then(changedNote => {
+          const notes = this.state.notes.filter(n => n.id !== id)
+          this.setState({
+            notes: notes.concat(changedNote)
+          })
         })
-      }) 
     }
   }
 }
 ```
 
-Tämä kaikki on hieman monimutkaista ja asian selittäminen varmaan vaan vaikeuttaa sen ymmärtämistä. Internetistä löytyy paljon vaihtelevatasoista materiaala aiheesta, esim. [tämä](https://javascript.info/promise-chaining). 
+Tämä kaikki on hieman monimutkaista ja asian selittäminen varmaan vaan vaikeuttaa sen ymmärtämistä. Internetistä löytyy paljon vaihtelevatasoista materiaala aiheesta, esim. [tämä](https://javascript.info/promise-chaining).
 
 [You do not know JS](https://github.com/getify/You-Dont-Know-JS) sarjan kirja "Async and performance" selittää asian [hyvin](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch3.md) mutta tarvitsee selitykseen kohtuullisen määrän sivuja.
 
@@ -1543,7 +1560,7 @@ Promisejen ymmärtäminen on keskeistä modernissa Javascript-sovelluskehitykses
 
 ## promise ja virheet
 
-Jos sovelluksemme mahdollistaisi muistiinpanojen poistamisen, voisi syntyä tilanne, missä käyttäjä yrittää muuttaa sellaisen muistiinpanon tärkeyttä, joka on jo poistettu järjestelmästä. 
+Jos sovelluksemme mahdollistaisi muistiinpanojen poistamisen, voisi syntyä tilanne, missä käyttäjä yrittää muuttaa sellaisen muistiinpanon tärkeyttä, joka on jo poistettu järjestelmästä.
 
 Simulidaan tälläistä tilannetta "kovakoodaamalla" noteServiceen funktioon _getAll_ muistiinpano, jota ei ole todellisuudessa (eli palvelimella) olemassa:
 
@@ -1552,15 +1569,15 @@ const getAll = () => {
   const request = axios.get(baseUrl)
   const nonExisting = {
     id: 10000,
-    content: "Tätä muistiinpanoa ei ole palvelimelta",
-    date: "2017-12-10T17:30:31.098Z",
+    content: 'Tätä muistiinpanoa ei ole palvelimelta',
+    date: '2017-12-10T17:30:31.098Z',
     important: true
   }
   return request.then(response => response.data.concat(nonExisting))
 }
-```  
+```
 
-Kun valemuisiinpanon tärkeyttä yritetään muuttaa, kosoliin tulee virheilmoitus, joka kertoo palvelimen vastanneen muutosta vastaavaan urliin _/notes/10000_ tehtyynHTTP PUT -pyyntöön statuskoodilla 404:
+Kun valemuistiinpanon tärkeyttä yritetään muuttaa, konsoliin tulee virheilmoitus, joka kertoo palvelimen vastanneen muutosta vastaavaan urliin _/notes/10000_ tehtyyn HTTP PUT -pyyntöön statuskoodilla 404:
 
 ![]({{ "/assets/2/14.png" | absolute_url }})
 
@@ -1568,21 +1585,20 @@ Sovelluksen tulisi pystyä käsittelemään tilanne hallitusti. Jos konsoli ei o
 
 Jo [aiemmin](#axios-ja-promiset) mainittiin, että promisella voi olla kolme tilaa. Kun HTTP-pyyntö epäonnistuu, menee pyyntöä vastaava promise tilaan _reject_. Emme tällä hetkellä käsittele koodissamme promisen epäonnistumista mitenkään.
 
-Promisen epäonnistuminen [käsitellään](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises ) antamalla _then_ metodille parametriksi myös toinen takaisinkutsufunktio, jota kutsutaan siinä tapauksessa jos promise epäonnistuu.
+Promisen epäonnistuminen [käsitellään](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) antamalla _then_ metodille parametriksi myös toinen takaisinkutsufunktio, jota kutsutaan siinä tapauksessa jos promise epäonnistuu.
 
-EHkä yleisempi tapa kuin kahden tapahtumankäsittelijän käyttö on liittää promiseen epäonnistumistilanteen käsittelijä kutsualla metodia
-[catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch). 
+Ehkä yleisempi tapa kuin kahden tapahtumankäsittelijän käyttö on liittää promiseen epäonnistumistilanteen käsittelijä kutsumalla metodia [catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch).
 
 Käytännössä virhetilanteen käsittelijän tekisteröiminen tapahtuisi seuraavasti
 
 ```js
   axios.get('http://example.com/propably_will_fail')
-  .then(response => {
-    console.log('success!') 
-  })
-  .catch(error => {
-    console.log('fail')  
-  })
+    .then(response => {
+      console.log('success!')
+    })
+    .catch(error => {
+      console.log('fail')
+    })
 ```
 
 Jos pyyntö epäonnistuu, menee kutsutaan _catch_-metdoin avulla rekisteröityä käsittelijää.
@@ -1593,23 +1609,23 @@ Kun sovelluksemme tekee HTTP-operaation syntyy oleellisesti ottaen [promiseketju
 
 ```js
   axios.put(`${baseUrl}/${id}`, newObject)
-  .then(response => response.data)
-  .then(changedNote => {
-    // ...
-  }) 
+    .then(response => response.data)
+    .then(changedNote => {
+      // ...
+    })
 ```
 
 Metodilla _catch_ voidaan määritellä ketjun lopussa käsittelijäfunktio, jota kutsutaan siinä vaiheessa jos mikä tahansa ketjun promisesta epäonnistuu, eli menee tilaan _rejected_:
 
 ```js
   axios.put(`${baseUrl}/${id}`, newObject)
-  .then(response => response.data)
-  .then(changedNote => {
-    // ...
-  }) 
-  .catch(error => {
-    console.log('fail')  
-  })
+    .then(response => response.data)
+    .then(changedNote => {
+      // ...
+    })
+    .catch(error => {
+      console.log('fail')
+    })
 ```
 
 Hyödynnetään tätä ominaisuutta, ja sijoitetaan virheenkäsittelijä komponenttiin _App_:
@@ -1619,21 +1635,23 @@ Hyödynnetään tätä ominaisuutta, ja sijoitetaan virheenkäsittelijä kompone
     return () => {
       const note = this.state.notes.find(n => n.id === id)
       const changedNote = { ...note, important: !note.important }
-      
-      noteService.update(id, changedNote).then(changedNote => {
-        const notes = this.state.notes.filter(n => n.id !== id)
-        this.setState({
-          notes: notes.concat(changedNote),
+
+      noteService.update(id, changedNote)
+        .then(changedNote => {
+          const notes = this.state.notes.filter(n => n.id !== id)
+          this.setState({
+            notes: notes.concat(changedNote)
+          })
         })
-      }).catch(error => {
-        alert(`muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`)
-        this.setState({ notes: this.state.notes.filter(n => n.id !== id) })
-      })
+        .catch(error => {
+          alert(`muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`)
+          this.setState({ notes: this.state.notes.filter(n => n.id !== id) })
+        })
     }
   }
 ```
 
-Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)-dialogin avulla ja alvelimelta poistettu muistiinpano poistetaan tilasta. 
+Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)-dialogin avulla ja alvelimelta poistettu muistiinpano poistetaan tilasta.
 
 Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme myöhemmin kehittyneempiä menetelmiä käyttäjille tarkoitettujen muistutusten antamiseen.
 
@@ -1663,7 +1681,7 @@ h1 {
 
 CSS-säännöt koostuvat valitsimesta, eli _selektorista_ ja määrittelystä eli _deklaraatiosta_. Valitsin määrittelee, mihin elementteihin sääntö kohdistuu. Valitsimena on nyt _h1_, eli kaikki sovelluksessa käytetyt _h1_-otsikkotägit.
 
-Määrittelyosa asettaa ominaisuuden _color_, eli fontin värin arvoksi vihreän, eli _green_. 
+Määrittelyosa asettaa ominaisuuden _color_, eli fontin värin arvoksi vihreän, eli _green_.
 
 Sääntö voi sisältää mielivaltaisen määrän määrittelyjä. Muutetaan edellistä siten, että tekstistä tulee kursivoitua, eli fontin tyyliksi asetetaan _italics_:
 
@@ -1674,7 +1692,7 @@ h1 {
 }
 ```
 
-Erilaisia selektoreja eli tapoja valita tyylien kohde on [lukuisia](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors). 
+Erilaisia selektoreja eli tapoja valita tyylien kohde on [lukuisia](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors).
 
 Jos haluamme kohdistaa, tyylejä esim. jokaiseen muistiinpanoon voisimme nyt käyttää selektoria _li_, sillä muistiinpanot ovat _li_-tagien sisällä:
 
@@ -1697,14 +1715,14 @@ li {
 }
 ```
 
-Tyylien kohdistaminen elementtityypin sijaan on kuitenkin hieman ongelmallista, jos sovelluksessa olisi myös muita _li_-tageja, kaikki saisivat samat tyylit. 
+Tyylien kohdistaminen elementtityypin sijaan on kuitenkin hieman ongelmallista, jos sovelluksessa olisi myös muita _li_-tageja, kaikki saisivat samat tyylit.
 
 Jos haluamme kohistaa tyylit nimenomaan muistiinpanoihin, on parempi käyttää [class selectoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors).
 
-Normaalissa HTML:ssä luokat määritellään elementtien attribuutin _class_  arvona:
+Normaalissa HTML:ssä luokat määritellään elementtien attribuutin _class_ arvona:
 
 ```html
-  <li class='note'>
+  <li class="note">
     tekstiä
   </li>
 ```
@@ -1716,7 +1734,7 @@ Reactissa tulee kuitenkin classin sijaan käyttää attribuuttia
 const Note = ({ note, toggleImportance}) => {
   const label = note.important ? 'make not important' : 'make important'
   return (
-    <li className='note'>
+    <li className="note">
       {note.content} <button onClick={toggleImportance}>{label}</button>
     </li>
   )
@@ -1743,11 +1761,11 @@ Komponentti on yksinkertainen:
 
 ```react
 const Notification = ({ message }) => {
-  if ( message===null ) {
+  if (message === null) {
     return null
-  } 
+  }
   return (
-    <div className='error'>
+    <div className="error">
       {message}
     </div>
   )
@@ -1762,7 +1780,7 @@ Lisätään komponentin _App_ tilaan kenttä _error_ virheviestiä varten, laite
 class App extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { 
+    this.state = {
       notes: [],
       new_note: '',
       showAll: true,
@@ -1807,29 +1825,32 @@ Lisätään sitten virheviestille sopiva tyyli:
 }
 ```
 
-Nyt olemme valmiina lisäämään virheviestin logiikan. Alustetaan virheviesti konstruktorissa arvoon _null_ ja muutetaan metodia _toggleImportanceOf_ seraavasti:
+Nyt olemme valmiina lisäämään virheviestin logiikan. Alustetaan virheviesti konstruktorissa arvoon _null_ ja muutetaan metodia _toggleImportanceOf_ seuraavasti:
 
 ```js
   toggleImportanceOf = (id) => {
     return () => {
       //...
 
-      noteService.update(id, changedNote).then(changedNote => {
-        // ...
-      }).catch(error => {
-        this.setState({ 
-          error: `muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`,
-          notes: this.state.notes.filter(n => n.id !== id) 
+      noteService
+        .update(id, changedNote)
+        .then(changedNote => {
+          // ...
         })
-        setTimeout(()=>{
-          this.setState({error: null})
-        }, 5000)
-      })
+        .catch(error => {
+          this.setState({
+            error: `muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`,
+            notes: this.state.notes.filter(n => n.id !== id)
+          })
+          setTimeout(() => {
+            this.setState({error: null})
+          }, 5000)
+        })
     }
   }
 ```
 
-Eli virheen yhteydessä asetetaan tilan kenttään _error_ sopiva virheviesti. Samalla käynnistetään ajastin, joka asettaa 5 sekunnin kuluttua tilan _error_-kentän  arvoksi _null_.
+Eli virheen yhteydessä asetetaan tilan kenttään _error_ sopiva virheviesti. Samalla käynnistetään ajastin, joka asettaa 5 sekunnin kuluttua tilan _error_-kentän arvoksi _null_.
 
 
 ### loppuhuipennus

@@ -55,7 +55,7 @@ Kaiken oleellisen tämän ja seuraavien 3 tehtävän tekemiseen liittyvän infor
 
 Tee kaavio tilanteesta, missä käyttäjä luo uuden muistiinpanon, eli kirjoittaa tekstikenttään jotain ja painaa nappia _tallenna_
 
-Kirjoita tarvittaessa pavelimella tai  selaimessa tapahtuvat operaatiot sopivina kommentteina kaavion sekaan.
+Kirjoita tarvittaessa palvelimella tai selaimessa tapahtuvat operaatiot sopivina kommentteina kaavion sekaan.
 
 #### 5
 
@@ -126,7 +126,7 @@ const App = () => {
 Refaktoroi vielä komponentti _Sisalto_ siten, että se ei itse renderöi yhdenkään osan nimeä eikä sen tehtävälukumäärää vaan ainoastaan kolme _Osa_-nimistä komponenttia, joista kukin siis renderöi yhden osan nimen ja tehtävämäärän.
 
 ```react
-const Sisalto =  ... {
+const Sisalto = ... {
   return(
     <div>
       <Osa .../>
@@ -148,7 +148,7 @@ Siirrytään käyttämään sovelluksessamme oliota. Mutta _App_:in muuttujamä�
 
 ```react
 const App = () => {
-  const kurssi = "Half Stack -sovelluskehitys"
+  const kurssi = 'Half Stack -sovelluskehitys'
   const osa1 = {
     nimi: 'Reactin perusteet',
     tehtavia: 10,
@@ -176,8 +176,8 @@ Ja laitetaan oliot taulukkoon, eli mutta _App_:in muuttujamäärittelyt seuraava
 
 ```react
 const App = () => {
-  const kurssi = "Half Stack -sovelluskehitys"
-  const osat =  [
+  const kurssi = 'Half Stack -sovelluskehitys'
+  const osat = [
     {
       nimi: 'Reactin perusteet',
       tehtavia: 10,
@@ -302,7 +302,7 @@ tee tarvittavat toimenpiteet jotta saat warningin katoamaan. Googlaa tarvittaess
 
 #### 18 anekdootit osa1
 
-Ohjelmistotuotannossa tunnetaan lukematon määrä [anekdootteja](http://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm) eli pieniä "onlinereita", jotka kiteyttävät alan ikuisia totuuksia.
+Ohjelmistotuotannossa tunnetaan lukematon määrä [anekdootteja](http://www.comp.nus.edu.sg/~damithch/pages/SE-quotes.htm) eli pieniä "onelinereita", jotka kiteyttävät alan ikuisia totuuksia.
 
 Laajenna seuraavaa sovellusta siten, että siihen tulee nappi, jota painamalla sovellus näyttää _satunnaisen_ ohjelmistotuotantoon liittyvän anekdootin:
 
@@ -373,7 +373,7 @@ Muutetaan sovelluskomponenttia hiukan sen datan osalta:
 ```react
 const App = () => {
   const kurssi = {
-    nimi: "Half Stack -sovelluskehitys",
+    nimi: 'Half Stack -sovelluskehitys',
     osat: [
       {
         nimi: 'Reactin perusteet',
@@ -411,13 +411,13 @@ App
       Osa
       Osa
       ...
-</pre>  
+</pre>
 
 ja renderöityvä sivu voi näyttää esim. seuraavalta:
 
 <img src="/assets/teht/8.png" height="150">
 
-Sovelluksen täytyy luonnollisesti toimia riippumatta kurssissa olevien osien määrästä. 
+Sovelluksen täytyy luonnollisesti toimia riippumatta kurssissa olevien osien määrästä.
 
 Varmista, että konsolissa ei näy mitään virheilmoituksia!
 
@@ -429,8 +429,7 @@ Ilmoita myös kurssin yhteenlaskettu tehtävien lukumäärä
 
 #### 23 reduce
 
-Jos et jo niin tehnyt, laske koodissasi tehtävien määrä taulkon metodilla
-[reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+Jos et jo niin tehnyt, laske koodissasi tehtävien määrä taulkon metodilla [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 
 #### 24 monta kurssia
 
@@ -440,7 +439,7 @@ Laajennetaan sovellusta siten, että kursseja voi olla _mielivaltainen määrä_
 const App = () => {
   const kurssit = [
     {
-      nimi: "Half Stack -sovelluskehitys",
+      nimi: 'Half Stack -sovelluskehitys',
       id: 1,
       osat: [
         {
@@ -461,7 +460,7 @@ const App = () => {
       ]
     },
     {
-      nimi: "Node.js",
+      nimi: 'Node.js',
       id: 2,
       osat: [
         {
@@ -491,7 +490,7 @@ Sovelluksen ulkoasu voi olla esim seuraava:
 
 #### 25 erillinen moduuli
 
-Määrittele komponentti _Kurssi_ omana moduulinaan, jonka komponentti _App_ importtaa. Voit sisällyttää kaikki kurssin alikomponentit samaan moduuliin. 
+Määrittele komponentti _Kurssi_ omana moduulinaan, jonka komponentti _App_ importtaa. Voit sisällyttää kaikki kurssin alikomponentit samaan moduuliin.
 
 ### lomakkeet
 
@@ -533,7 +532,7 @@ class App extends React.Component {
 }
 ```
 
-Tilassa oleva kenttä _newName_ on tarkoitettu lomakkeen kentän kontrollointiin. 
+Tilassa oleva kenttä _newName_ on tarkoitettu lomakkeen kentän kontrollointiin.
 
 Joskus tilan muuttujia ja tarvittaessa muitakin voi olla hyödyllistä renderöidä debugatessa komponenttiin, eli voi lisätä tilapäisesti lisätä komponentin metodin _render_ palauttamaan koodiin esim. seuraavan:
 
@@ -549,7 +548,7 @@ Sovellus voi näyttää tässä vaiheessa seuraavalta
 
 <img src="/assets/teht/10.png" height="200">
 
-**Huom:** 
+**Huom:**
 * voit käyttää kentän _key_ arvona henkilön nimeä
 * muista estää lomakkeen lähetyksen oletusarvoinen toiminta!
 
@@ -569,7 +568,7 @@ Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset si
     </div>
     <div>
       numero: <input />
-    </div>    
+    </div>
     <div>
       <button>lisää</button>
     </div>
@@ -605,9 +604,9 @@ Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-e
       filter: ''
     }
   }
-```  
+```
 
-Näin vältytään turhalta manualliselta työltä, missä testaaminen edellyttäisi myös testiaineiston syöttämistä käsin soveluksen lomakkeen kautta.
+Näin vältytään turhalta manuaaliselta työltä, missä testaaminen edellyttäisi myös testiaineiston syöttämistä käsin soveluksen lomakkeen kautta.
 
 Kurssin seuraavasta osasta alkaen alamme määrittelemään sovelluksemme _testejä_ jotka tietyissä tapauksissa hoitavat kovakoodatun apusyötteen roolia.
 
@@ -650,7 +649,7 @@ Talleta sovelluksen alkutila projektin juureen sijoitettavaan tiedostoon _db.jso
 
 Käynnistä json-server porttiin 3001 ja varmista selaimella, että palvelin palauttaa henkilölistan.
 
-Muuta sovellusta siten, että datan alkutila haetaan _axios_-lirjaston avulla palvelimelta. Hoida datan hakeminen [lifecyclemetodissa](/osa2#komponenttien-lifecycle-metodit) _componentWillMount_.
+Muuta sovellusta siten, että datan alkutila haetaan _axios_-kirjaston avulla palvelimelta. Hoida datan hakeminen [lifecyclemetodissa](/osa2#komponenttien-lifecycle-metodit) _componentWillMount_.
 
 #### 32 maiden tiedot
 
@@ -658,23 +657,23 @@ Rajapinta [https://restcountries.eu](https://restcountries.eu) tarjoaa paljon er
 
 Tee sovellus, jonka avulla toit tarkastella eri maiden tietoja. Sovelluksen kannattaa hakea tiedot endpointista [all](https://restcountries.eu/#api-endpoints-all)
 
-Sovelluksen käyttöliittymä on yksinkertainen. Näytettävä maa haetaan kirjoittamalla hakuehto etsintäkenttään. 
+Sovelluksen käyttöliittymä on yksinkertainen. Näytettävä maa haetaan kirjoittamalla hakuehto etsintäkenttään.
 
 Jos ehdon täyttäviä maita on liikaa (yli 10), kehoitetaan tarkentamaan hakuehtoa
 
 <img src="/assets/teht/13.png" height="300">
 
-Jos maita on alle kymmenen, mutta yli 1 näyttetään hakuehdon täyttävät maat
+Jos maita on alle kymmenen, mutta yli 1 näytetään hakuehdon täyttävät maat
 
 <img src="/assets/teht/14.png" height="300">
 
-Kun ehdon täyttäviä maita on enää yksi, näytetän maan lippu sekä perustiedot:
+Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perustiedot:
 
 <img src="/assets/teht/15.png" height="300">
 
 #### 33 maiden tiedot klikkaamalla
 
-Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen kilkkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
+Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen klikkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
 
 Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävään elementtiin, esim. diviin klikkaustenkuuntelijan:
 
@@ -682,7 +681,7 @@ Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävää
   <div onClick={...}>
     {country.name}
   </div>
-```    
+```
 ### palvelimella olevan datan päivitäminen
 
 #### 34 puhelinluettelo osa 7
@@ -703,11 +702,11 @@ Tee ohjelmaan mahdollisuus yhteystietojen poistamiseen. Poistaminen voi tapahtua
 
 Pavelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
 
-[Axios](https://github.com/axios/axios)-kirjaston avulla HTTP DELETE -pyyntö tehdään samaan tapaan kuin muutkin pyynnöt.  
+[Axios](https://github.com/axios/axios)-kirjaston avulla HTTP DELETE -pyyntö tehdään samaan tapaan kuin muutkin pyynnöt.
 
 #### 37 puhelinluettelo osa 10
 
-Muuta toiminnallisuutta siten, että jos jo olemassaolevalle henkilölle lisätään numero, korvaa lisätty numero aiemman numeron. Huolehdi siitä, että yhteystietojen listan järjestys ei muuttuile muutosten myötä.
+Muuta toiminnallisuutta siten, että jos jo olemassaolevalle henkilölle lisätään numero, korvaa lisätty numero aiemman numeron. Huolehdi siitä, että yhteystietojen listan järjestys ei muutu muutosten myötä.
 
 ### tyylit
 
