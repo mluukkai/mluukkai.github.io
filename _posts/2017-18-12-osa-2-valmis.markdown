@@ -5,7 +5,8 @@ date:   2017-12-18 23:55:08 +0200
 categories: jekyll 
 ---
 
-Aikataulu pitää edelleen [osa 2]({{ "/osa2" | absolute_url }}) valmiina testattavaksi. 
+Aikataulu pitää edelleen, [osa 2]({{ "/osa2" | absolute_url }}) on nyt valmiina testattavaksi. 
+
 Materiaalia on generoitunut niin paljon, että alkuperäisestä sisältösuunnitelmasta jotain on pitänyt siirtää myöhempiin osiin. Viikolla 2 oli sen verran käsitteellisesti haastavaa asiaa, että esim. testaus ei mahtunut millään mukaan.
 
 Osassa 3 päästäänkin vihdoin backendiin pariin.
