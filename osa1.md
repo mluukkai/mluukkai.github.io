@@ -55,7 +55,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 - React
   - funktiona ja luokkana määriteltävät komponentit
   - tietojen ja funktioiden välittäminen lapsikomponentteihin propseina
-  - komonentin tila
+  - komponentin tila
   - tilan päivittämisen periaatteet
   - tapahtumankäsittelyn perusteet
 - Javascript
@@ -805,7 +805,7 @@ const App = () => {
 }
 ```
 
-Komonenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuullisesti ylläpidettävänä. Reactissa filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.
+Komponenttien tekeminen Reactissa on helppoa ja komponentteja yhdistelemällä monimutkaisempikin sovellus on mahdollista pitää kohtuullisesti ylläpidettävänä. Reactissa filosofiana onkin koostaa sovellus useista, pieneen asiaan keskittyvistä uudelleenkäytettävistä komponenteista.
 
 Jatkamme komponentteihin tutustumista.
 
