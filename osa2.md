@@ -1412,7 +1412,8 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 
 ```js
   componentWillMount() {
-    noteService.getAll()
+    noteService
+      .getAll()
       .then(response => {
         this.setState({notes: response.data})
       })
@@ -1420,7 +1421,8 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 
   addNote = (e) => {
     // ...
-    noteService.create(noteObject)
+    noteService
+      .create(noteObject)
       .then(response => {
         this.setState({
           notes: this.state.notes.concat(response.data),
@@ -1432,7 +1434,8 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
   toggleImportanceOf = (id) => {
     return () => {
       // ...
-      noteService.update(id, changedNote)
+      noteService
+        .update(id, changedNote)
         .then(response => {
           const notes = this.state.notes.filter(n => n.id !== id)
           this.setState({
@@ -1448,7 +1451,8 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 Voisimme viedä ratkaisua vielä askeleen pidemmälle, sillä käyttäessään modulin funktioita komponentti _App_ saa olion, joka sisältää koko HTTP-pyynnön vastauksen:
 
 ```js
-  noteService.getAll()
+  noteService
+    .getAll()
     .then(response => {
       this.setState({notes: response.data})
     })
@@ -1459,7 +1463,8 @@ Eli asia mistä _App_ on kiinnostunut on parametrin kentässä _response.data_.
 Moduulia olisi miellyttävämpi käyttää, jos se HTTP-pyynnön vastauksen sijaan palauttaisi suoraan muistiinpanot sisältävän taulukon. Tällöin moduulin käyttö näyttäisi seuraavalta
 
 ```js
-  noteService.getAll()
+  noteService
+    .getAll()
     .then(notes => {
       this.setState({notes: notes})
     })
@@ -1468,7 +1473,8 @@ Moduulia olisi miellyttävämpi käyttää, jos se HTTP-pyynnön vastauksen sija
 joka voitaisiin [ilmaista hieman tiiviimmin](#kehittyneempi-tapa-olioliteraalien-kirjoittamiseen) seuraavasti:
 
 ```js
-  noteService.getAll()
+  noteService
+    .getAll()
     .then(notes => {
       this.setState({notes})
     })
@@ -1527,7 +1533,8 @@ class App extends React.component {
 
   addNote = (e) => {
     // ...
-    noteService.create(noteObject)
+    noteService
+      .create(noteObject)
       .then(newNote => {
         this.setState({
           notes: this.state.notes.concat(newNote),
@@ -1540,7 +1547,8 @@ class App extends React.component {
     return () => {
       // ...
 
-      noteService.update(id, changedNote)
+      noteService
+        .update(id, changedNote)
         .then(changedNote => {
           const notes = this.state.notes.filter(n => n.id !== id)
           this.setState({
@@ -1556,7 +1564,7 @@ Tämä kaikki on hieman monimutkaista ja asian selittäminen varmaan vaan vaikeu
 
 [You do not know JS](https://github.com/getify/You-Dont-Know-JS) sarjan kirja "Async and performance" selittää asian [hyvin](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch3.md) mutta tarvitsee selitykseen kohtuullisen määrän sivuja.
 
-Promisejen ymmärtäminen on keskeistä modernissa Javascript-sovelluskehityksessä, joten asiaan kannattaa uhrata kohtuullisessa määrin aikaa.
+Promisejen ymmärtäminen on erittäin keskeistä modernissa Javascript-sovelluskehityksessä, joten asiaan kannattaa uhrata kohtuullisessa määrin aikaa.
 
 ## promise ja virheet
 
@@ -1583,7 +1591,7 @@ Kun valemuistiinpanon tärkeyttä yritetään muuttaa, konsoliin tulee virheilmo
 
 Sovelluksen tulisi pystyä käsittelemään tilanne hallitusti. Jos konsoli ei ole auki, ei käyttäjä huomaa mitään muuta kun sen, että muistiinpanon tärkeys ei vaihdu napin painelusta huolimatta.
 
-Jo [aiemmin](#axios-ja-promiset) mainittiin, että promisella voi olla kolme tilaa. Kun HTTP-pyyntö epäonnistuu, menee pyyntöä vastaava promise tilaan _reject_. Emme tällä hetkellä käsittele koodissamme promisen epäonnistumista mitenkään.
+Jo [aiemmin](#axios-ja-promiset) mainittiin, että promisella voi olla kolme tilaa. Kun HTTP-pyyntö epäonnistuu, menee pyyntöä vastaava promise tilaan _rejected_. Emme tällä hetkellä käsittele koodissamme promisen epäonnistumista mitenkään.
 
 Promisen epäonnistuminen [käsitellään](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) antamalla _then_ metodille parametriksi myös toinen takaisinkutsufunktio, jota kutsutaan siinä tapauksessa jos promise epäonnistuu.
 
@@ -1601,14 +1609,15 @@ Käytännössä virhetilanteen käsittelijän tekisteröiminen tapahtuisi seuraa
     })
 ```
 
-Jos pyyntö epäonnistuu, menee kutsutaan _catch_-metdoin avulla rekisteröityä käsittelijää.
+Jos pyyntö epäonnistuu, kutsutaan _catch_-metdoin avulla rekisteröityä käsittelijää.
 
 Metodia _catch_ hyödynnetän usen siten, että se sijoitetaan syvemmälle promiseketjuun.
 
 Kun sovelluksemme tekee HTTP-operaation syntyy oleellisesti ottaen [promiseketju](https://javascript.info/promise-chaining):
 
 ```js
-  axios.put(`${baseUrl}/${id}`, newObject)
+  axios
+    .put(`${baseUrl}/${id}`, newObject)
     .then(response => response.data)
     .then(changedNote => {
       // ...
@@ -1618,7 +1627,8 @@ Kun sovelluksemme tekee HTTP-operaation syntyy oleellisesti ottaen [promiseketju
 Metodilla _catch_ voidaan määritellä ketjun lopussa käsittelijäfunktio, jota kutsutaan siinä vaiheessa jos mikä tahansa ketjun promisesta epäonnistuu, eli menee tilaan _rejected_:
 
 ```js
-  axios.put(`${baseUrl}/${id}`, newObject)
+  axios
+    .put(`${baseUrl}/${id}`, newObject)
     .then(response => response.data)
     .then(changedNote => {
       // ...
@@ -1636,7 +1646,8 @@ Hyödynnetään tätä ominaisuutta, ja sijoitetaan virheenkäsittelijä kompone
       const note = this.state.notes.find(n => n.id === id)
       const changedNote = { ...note, important: !note.important }
 
-      noteService.update(id, changedNote)
+      noteService
+        .update(id, changedNote)
         .then(changedNote => {
           const notes = this.state.notes.filter(n => n.id !== id)
           this.setState({
@@ -1651,7 +1662,7 @@ Hyödynnetään tätä ominaisuutta, ja sijoitetaan virheenkäsittelijä kompone
   }
 ```
 
-Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)-dialogin avulla ja alvelimelta poistettu muistiinpano poistetaan tilasta.
+Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)-dialogin avulla ja palvelimelta poistettu muistiinpano poistetaan tilasta.
 
 Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme myöhemmin kehittyneempiä menetelmiä käyttäjille tarkoitettujen muistutusten antamiseen.
 
@@ -1661,9 +1672,9 @@ Tee nyt tehtävät [34-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
 
 ## tyylien lisääminen
 
-Sovelluksemme ulkoasu on tällä hetkellä hyvin vaatimaton. Osaan 1 liittyvissä [tehtävässä 1](tehtavat/#1-HTML-ja-CSS) oli tarkoitus tutustua Mozzillan [CSS-tutoriaaliin](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
+Sovelluksemme ulkoasu on tällä hetkellä hyvin vaatimaton. Osaan 1 liittyvissä [tehtävässä 1](tehtavat/#1-HTML-ja-CSS) oli tarkoitus tutustua Mozzllan [CSS-tutoriaaliin](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics).
 
-Katsotaan vielä osan lopussa nopeasti erästä tapaa liittää tyylejä React-sovellukseen. Tapoja on useita ja tulemme tarkastelemaan muita myöhemmin. Liitämme nyt CSS:n sovellukseemme vanhan kansan tapaan yksittäisenä käsin, ilman [esiprosessorien](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor) apua kirjoitettuna tiedostona (tämä ei itseasiassa ole täysin totta, kuten myöhemmin tulemme huomaamaan).
+Katsotaan vielä tämän osan lopussa nopeasti erästä tapaa liittää tyylejä React-sovellukseen. Tapoja on useita ja tulemme tarkastelemaan muita myöhemmin. Liitämme nyt CSS:n sovellukseemme vanhan kansan tapaan yksittäisenä, käsin eli ilman [esiprosessorien](https://developer.mozilla.org/en-US/docs/Glossary/CSS_preprocessor) apua kirjoitettuna tiedostona (tämä ei itseasiassa ole täysin totta, kuten myöhemmin tulemme huomaamaan).
 
 Tehdään sovelluksen hakemistoon _src_ tiedosto _index.css_ ja liitetään se sovellukseen lisäämällä tiedostoon _index.js_ seuraava import:
 
@@ -1774,7 +1785,7 @@ const Notification = ({ message }) => {
 
 Jos propsin _message_ arvo on _null_ ei reneröidä mitään, mussa tapauksessa renderöidään viesti div-elementtiin. Elementille on liitetty tyylien lisäämistä varten luokka _error_.
 
-Lisätään komponentin _App_ tilaan kenttä _error_ virheviestiä varten, laitetaan kentelle jotain sisältöä, jotta pääse mmeheti testaamaan komponenttia:
+Lisätään komponentin _App_ tilaan kenttä _error_ virheviestiä varten, laitetaan kentälle jotain sisältöä, jotta pääsemme heti testaamaan komponenttia:
 
 ```js
 class App extends React.Component {
