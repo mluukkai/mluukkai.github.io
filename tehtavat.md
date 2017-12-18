@@ -706,17 +706,23 @@ Pavelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELE
 
 #### 37 puhelinluettelo osa 10
 
-muutos
+Muuta toiminnallisuutta siten, että jos jo olemassaolevalle henkilölle lisätään numero, korvaa lisätty numero aiemman numeron. Huolehdi siitä, että yhteystietojen listan järjestys ei muuttuile muutosten myötä.
 
 ### tyylit
 
 #### 38 puhelinluettelo osa 11
 
-flash
+Toteuta osan 2 esimerkin [parempi virheilmoitus](osa#parempi-virheilmoitus) tyyliin ruudulla muutaman sekunnin näkyvä ilmoitus, joka kertoo onnistuneista operaatioista (henkilön lisäys ja poisto, sekä numeron muutos):
+
+<img src="/assets/teht/17.png" height="300">
 
 #### 39 puhelinluettelo osa 12
 
-virheiden käsittely
+Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muuttaa henkilön numeroa_ toisesta selaimesta, tapahtuu virhetilanne:
+
+<img src="/assets/teht/18.png" height="300">
+
+Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
 ### datan käsittelyä
 
