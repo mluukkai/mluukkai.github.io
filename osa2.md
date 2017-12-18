@@ -972,7 +972,7 @@ Palvelimen palauttama data on pelkkää tekstiä, käytännössä yksi iso merkk
 
 ![]({{ "/assets/2/10.png" | absolute_url }})
 
-Axios-kirjasto osaa kuitenkin parsia datan Javascript-taulukoksi, sillä palvelin on kertonut headerin _content-type_ avulla että datan muoto on _application/json; charser=utf-8 (ks ylempi kuva). 
+Axios-kirjasto osaa kuitenkin parsia datan Javascript-taulukoksi, sillä palvelin on kertonut headerin _content-type_ avulla että datan muoto on _application/json; charser=utf-8_ (ks ylempi kuva). 
 
 Voimme vihdoin siirtyä käyttämään sovelluksessamme palvelimelta haettavaa dataa.
 
@@ -988,16 +988,15 @@ axios.get('http://localhost:3001/notes').then(response => {
 })
 ```
 
-Joissain tilanteissa tämäkin tapa voisi toimia, mutta se on hieman ongelmallinen ja päätetäänkin siirtää datan hakeminen komponenttiin _App. 
+Joissain tilanteissa tämäkin tapa voisi olla ok, mutta se on hieman ongelmallinen ja päätetäänkin siirtää datan hakeminen komponenttiin _App_. 
 
-Ei ole kuitenkaan ihan selvää, mihin kohtaan komponentin koodia komento_axios.get_ olisi hyvä sijoittaa.
+Ei ole kuitenkaan ihan selvää, mihin kohtaan komponentin koodia komento _axios.get_ olisi hyvä sijoittaa.
 
 ### komponenttien lifecycle-metodit
 
-Reactin luokkien avulla määritellyillä komponenteilla voidaan määritellä joukko [lifecycle]
-(https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class)-metodeita, eli metodeita, joita React kutsuu tietyssä komponentin "elinkaaren" vaiheessa.
+Reactin luokkien avulla määritellyillä komponenteilla voidaan määritellä joukko [lifecycle](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class)-metodeita, eli metodeita, joita React kutsuu tietyssä komponentin "elinkaaren" vaiheessa.
 
-Yleinen tapa datan palvelimelta tapahtuvaan lataamiseen on suorittaa lataaminen suorittaa se metodissa [componentwillmount](https://reactjs.org/docs/react-component.html#componentwillmount). React kutsuu metodia sen jälkeen kun konstruktori on suoritettu ja _render_-metodia ollaan kutsumassa ensimmäistä kertaa.
+Yleinen tapa datan palvelimelta tapahtuvaan lataamiseen onsuorittaa se metodissa [componentWillMount](https://reactjs.org/docs/react-component.html#componentwillmount). React kutsuu metodia sen jälkeen kun konstruktori on suoritettu ja _render_-metodia ollaan kutsumassa ensimmäistä kertaa.
 
 Muutetaan sovellusta nyt seuraavasti. 
 
@@ -1044,7 +1043,7 @@ class App extends React.Component {
 }
 ```
 
-Eli konstruktorissa asetetaan tilan _notes_ kentäksi tyhjä taulukko. Lifecycle-metodi _componentWillMount_ hakee datan axiosin avulla ja rekisteröi takaisunkutsufunktion, joka promisen valmistumisen (_fulfillment_) yhteydessä päivittää tilaa asettamalla palvelimen palauttamat muistiinpanot kentän _notes_ arvoksi.
+Eli konstruktorissa asetetaan tilan _notes_ kentäksi tyhjä taulukko. Lifecycle-metodi _componentWillMount_ hakee datan axiosin avulla ja rekisteröi takaisunkutsufunktion, joka promisen valmistumisen (_fulfillment_) yhteydessä päivittää komponentin tilan asettamalla palvelimen palauttamat muistiinpanot tilan kentän _notes_ arvoksi.
 
 Koodiin on myös lisätty muutama aputulostus, jotka auttavat hahmottamaan miten suoritus etenee.
 
@@ -1078,17 +1077,17 @@ Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on eritt
 Huomaa, että olisimme voineet kirjoittaa koodin myös seuraavasti:
 
 ```js
-  const tapahtumankasittelija = (response) => {
+  const eventHandler = (response) => {
     console.log('promise fulfilled')
     this.setState({ notes: response.data })
   }
 
   const promise = axios.get('http://localhost:3001/notes')
   
-  promise.then(tapahtumankasittelija) 
+  promise.then(eventHandler) 
 ```
 
-Muuttujaan _tapahtumankasittelija_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisunkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja, joka viittaa käsittelijäfunktioon. 
+Muuttujaan _eventHandler_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisunkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja _eventHandler_, joka viittaa käsittelijäfunktioon. 
 
 React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.org/docs/react-component.html), palaamme niihin myöhemmin.
 
@@ -1106,15 +1105,15 @@ json-server mainitsee olevansa ns. REST tai RESTful API
 
 Ihan alkuperäisen [määritelmän](https://en.wikipedia.org/wiki/Representational_state_transfer) mukainen RESTful API json-server ei ole, mutta ei ole kovin moni muukaan itseään REST:iksi kutsuva rajapinta.
 
-Tutustumme REST:iin tarkemmin seuraavassa osassa, mutta jo nyt on tärkeä ymmärtää minkälaista [konventiota](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) json-server ja yleisemminkin REST API:t käyttävät [reittien](https://github.com/typicode/json-server#routes), eli URL:ien ja käytettävien HTTP-pyyntöjen tyyppien suhteen.
+Tutustumme REST:iin tarkemmin kurssin [seuraavassa osassa](/osa3), mutta jo nyt on tärkeä ymmärtää minkälaista [konventiota](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) json-server ja yleisemminkin REST API:t käyttävät [reittien](https://github.com/typicode/json-server#routes), eli URL:ien ja käytettävien HTTP-pyyntöjen tyyppien suhteen.
 
 REST:issä yksittäisi asioita esim. meidän tapauksessamme muistiinpanoja kutsutaan _resursseiksi_. Jokaisella resurssilla on yksilöivä osoite eli URL. json-serverin noudattaman yleisen konvention mukaan yksittäisen muistiinpanoa kuvaavan resurssin URL on muotoa _notes/3_, missä 3 on resurssin tunniste. Osoite _notes_ taas vastaa kaikkien yksittäisten muistiinpanojen kokoelmaa.
 
-Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id.kentän arvo on 3. Kun taan HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
+Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id-kentän arvo on 3. Kun taan HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
 
 Uuden muistiinpanoa vastaavan resurssin luominen tapahtuu json-serverin RESTful-konventiossa tekemällä HTTP POST -pyyntö, joka kohdistuu myös samaan osoiteeseen _notes_. Pyynnön mukana sen runkona eli _bodynä_ lähetetään luotavan muistiinpanon tiedot. 
 
-Tiedot tulee lähtetää JSON-muodossa, eli käytännössä sopivasti muotoiltuna merkkijonona ja asettamalla headeri _Content-Type: application/json_.
+json-server vaatii, että tiedot lähetetään JSON-muodossa, eli käytännössä sopivasti muotoiltuna merkkijonona ja asettamalla headerille _Content-Type_ arvo _application/json_.
 
 ## datan lähetys palvelimelle
 
@@ -1146,7 +1145,7 @@ Kun nyt kokeillaan luoda uusi muistiinpano, konsoliin tulostus näyttää seuraa
 
 Uusi muistiinpano on siis _response_-olion kentän _data_ arvona. Palvelin on lisännyt muistiinpanolle tunnisteen, eli _id_-kentän. 
 
-Joskun on hyödyllistä tarkastella HTTP-pyyntöjä osan 1 alussa paljon käytetyn konsolin _Network_-välilehden kautta:
+Joskus on hyödyllistä tarkastella HTTP-pyyntöjä [osan 1 alussa](osa1/#HTTP-GET) paljon käytetyn konsolin _Network_-välilehden kautta:
 
 ![]({{ "/assets/2/12.png" | absolute_url }})
 
@@ -1174,9 +1173,9 @@ Uusi muistiinpano ei vielä renderöidy ruudulle, sillä emme aseta komponentill
   }
 ```
 
-Palvelimen palauttama uusi muistiinpano siis lisätään tilaan ja tyhjennetään lomakkeen teksti.
+Palvelimen palauttama uusi muistiinpano siis lisätään tilassa olevien muiden muistiinpanojen joukkoon (kannattaa [muistaa tärkeä detalji](osa1/#taulukon-käsittelyä) siitä, että metodi _concat_ ei muuta komponentin alkuperäistä tilaa, vaan luo uuden uuden taulukon) ja tyhjennetään lomakkeen teksti.
 
-Kun palvelimella oleva data alkaa vaikuttaa web-sovelluksen toimintalogiikkaan, tulee sovelluskehitykseen heti iso joukko uusia haasteita, joita tuovat mukanaan mm. kommunikoinnin asynkroonisuus. Debuggaamiseenin tarvitaan uusia strategiota, debug-printtaukset ym muuttuvat vain tärkeämmäksi, myös javascriptin runtimen periaatteita ja React-komponenttien elinkaarta on pakko tuntea riittävällä tasolla, arvaileminen ei riitä.
+Kun palvelimella oleva data alkaa vaikuttaa web-sovelluksen toimintalogiikkaan, tulee sovelluskehitykseen heti iso joukko uusia haasteita, joita tuo mukanaan mm. kommunikoinnin asynkroonisuus. Debuggaamiseenin tarvitaan uusia strategiota, debug-printtaukset ym muuttuvat vain tärkeämmäksi, myös javascriptin runtimen periaatteita ja React-komponenttien elinkaarta on pakko tuntea riittävällä tasolla, arvaileminen ei riitä.
 
 Palvelimen tilaa kannattaa tarkastella myös suoraan, esim. selaimella:
 
@@ -1217,7 +1216,7 @@ Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisälttö�
 
 Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle tapahtumankäsittelijäfunktio: 
 
-```js
+```html
   <ul>
     {notesToShow.map(note => <Note 
                                 key={note.id} 
@@ -1227,7 +1226,7 @@ Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle ta
   </ul>
 ```
 
-Jokaisen muistiinpanon tapahtumankäsittelijä on nyt _yksilöllinen_, sillä se sisältää muistiinpanon _id:n_. Esim., jos _note.id_ on 3 tulee tapahtumankäsittelijäksi _this.toggleImportance(note.id)_ eli käytännössä:
+Jokaisen muistiinpanon tapahtumankäsittelijä on nyt _yksilöllinen_, sillä se sisältää muistiinpanon _id:n_. Esim. jos _note.id_ on 3 tulee tapahtumankäsittelijäksi _this.toggleImportance(note.id)_ eli käytännössä:
 
 ```js
 () => {
@@ -1235,7 +1234,7 @@ Jokaisen muistiinpanon tapahtumankäsittelijä on nyt _yksilöllinen_, sillä se
 }
 ```
 
-Eli komponentin _App_ metodi _toggleImportanceOf_ ei itsessään ole tapahtumankäsittelijä, vaan _tehdas_, jonka avulla kullekin muistiinpanolle luodaan oma tapahtumanksittelijä, 
+Eli komponentin _App_ metodi _toggleImportanceOf_ ei itsessään ole tapahtumankäsittelijä, vaan _tehdas_, jonka avulla kullekin muistiinpanolle luodaan oma tapahtumanksittelijä.
 
 Pieni huomio tähän väliin. Tapahtumankäsittelijän koodin tulostuksessa muodostetaan tulostettava merkkijono Javan tyyliin plussaamalla stringejä:
 
@@ -1253,7 +1252,7 @@ Merkkijonon sisälle voi nyt määritellä "dollari-aaltosulku"-syntaksilla koht
 
 Yksittäistä json-serverillä olevaa muistiinpanoa voi muutta kahdella tavalla, joko _korvaamalla_ sen tekemällä HTTP PUT -pyyntö muistiinpanon yksilöivään osoitteeseen tai muu muuttamalla ainoastaan joidenkin muistiinpanon kenttien arvoja HTTP PATCH -pyynnöllä.
 
-Korvaamme nyt muistiinpanon kokonaan sillä samalla tulee esille muutama tärkeä React:iin ja Javascriptiin liittyvä seikka.
+Korvaamme nyt muistiinpanon kokonaan, sillä samalla tulee esille muutama tärkeä React:iin ja Javascriptiin liittyvä seikka.
 
 Metodi on seuraavassa:
 
@@ -1265,9 +1264,9 @@ Metodi on seuraavassa:
       const changedNote = { ...note, important: !note.important }
       
       axios.put(url, changedNote).then(response => {
-        const notes = this.state.notes.filter(n => n.id !== id)
+        const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
         this.setState({
-          notes: notes.concat(response.data),
+          notes: nonchangedNotes.concat(response.data),
         })
       }) 
     }
@@ -1276,7 +1275,7 @@ Metodi on seuraavassa:
 
 Melkein joka riville sisältyy tärkeitä yksityiskohtia. Ensimmäinen rivi määrittelee jokaiselle muistiinpanolle id-kenttään perustuvan yksilöivän url:in. 
 
-Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan viite siihen muuttujaan _note_.
+Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan viite siihen muuttujaan _note_. 
 
 Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sisältö poislukien kenttä important. Luominen näyttää hieman erikoiselta:
 
@@ -1284,7 +1283,7 @@ Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sis�
   const changedNote = { ...note, important: !note.important }
 ```
 
-Kyseessä on vielä standardoimattoman [object spread](https://github.com/tc39/proposal-object-rest-spread)-operaation soveltaminen.  
+Kyseessä on vielä standardoimattoman [object spread](https://github.com/tc39/proposal-object-rest-spread) -operaation soveltaminen.  
 
 Käytännössä <code>{...note}</code> luo olion, jolla on kenttinään kopiot olion _note_ kenttien arvoista. Kun aaltosulkeisiin lisätään asioita, esim. <code>{ ...note, important: true }</code>, tulee uuden olion kenttä _important_ saamaan arvon _true_. Eli esimerkissämme _important_ saa uudessa oliossa vanhan arvonsa käänteisarvon.
 
@@ -1307,20 +1306,20 @@ Pari huomioita. Miksi teimme muutettavasta oliosta kopion vaikka myös seuraava 
 
 Näin ei ole suositetavaa tehdä, sillä muuttuja _note_ on viite komponentin tilassa, eli _this.state.notes_-taulukossa olevaan olioon, ja kuten muistamme tilaa ei Reactissa saa muuttaa suoraan!
 
-Kannattaa myös huomata, että uusi olio _changedNote_ on ainoastaan ns [shallow copy](https://en.wikipedia.org/wiki/Object_copying#Shallow_copy), eli uuden olion kenttien arvoina on vanan olion kenttien arvot. Jos vanhan olion kentät olisivat itsessään olioita, viittaisivat uuden olion kentät samoihin olioihin.
+Kannattaa myös huomata, että uusi olio _changedNote_ on ainoastaan ns [shallow copy](https://en.wikipedia.org/wiki/Object_copying#Shallow_copy), eli uuden olion kenttien arvoina on vanhan olion kenttien arvot. Jos vanhan olion kentät olisivat itsessään olioita, viittaisivat uuden olion kentät samoihin olioihin.
 
 
 Uusi muistiinpano lähetetään sitten PUT-pyynnön mukana palvelimelle, jossa se korvaa aiemman muistiinpanon. 
 
-Takaisunkutsufunktiossa asetataan komponentin _App_ tilaan kaikki vanhat muistiinpanot paitsi muuttuneesta palvelimen palauttama versio:
+Takaisunkutsufunktiossa asetataan komponentin _App_ tilaan kaikki vanhat muistiinpanot paitsi muuttuneen, josta tilaan asetetaan palvelimen palauttama versio:
 
 ```js
-    axios.put(url, changedNote).then(response => {
-      const notes = this.state.notes.filter(n => n.id !== id)
-      this.setState({
-        notes: notes.concat(response.data),
-      })
-    }) 
+  axios.put(url, changedNote).then(response => {
+    const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
+    this.setState({
+      notes: nonchangedNotes.concat(response.data),
+    })
+  }) 
 ```
 
 Ensin muut vanhat muistiinpanot paitsi muutunut otetaan tilasta taulukon muuttujan
@@ -1330,9 +1329,9 @@ Tila päivitetään [concatenoimalla](https://developer.mozilla.org/en-US/docs/W
 
 ### kiinteä järjestys
 
-Sovelluksemme toimii, mutta uusi toiminnallisuutemme vaihtele ikävästi muistiinpanojen järjestystä. Korjataan asia järjestämällä muistiinpanot aina id-kentän perusteella.
+Sovelluksemme toimii, mutta uusi toiminnallisuus vaihtele ikävästi muistiinpanojen järjestystä. Korjataan asia järjestämällä muistiinpanot aina id-kentän perusteella.
 
-Järjestäminen onnistuu talukon metodilla [sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Järjestäminen onnistuu taulukon metodilla [sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 
 Tehdään järjestäminen metodissa _render_.
 
@@ -1367,9 +1366,7 @@ notesToShow.sort(byId).map.map(note => <Note ... />)
 
 ## palvelimen kanssa tapahtuvan komunikoinnin eristäminen omaan moduuliin
 
-_App_-komponentti alkaa kasvaa uhkaavasti kun myös palvelimen kanssa kommunikointi tapahtuu komponentissa. 
-
-Kommunikointi onkin viisainta eristää omaan [moduuliinsa](#refaktorointia---moduulit)
+_App_-komponentti alkaa kasvaa uhkaavasti kun myös palvelimen kanssa kommunikointi tapahtuu komponentissa. [Single responsibility](https://en.wikipedia.org/wiki/Single_responsibility_principle) -periaatteen hengessä kommunikointi onkin viisainta eristää omaan [moduuliinsa](#refaktorointia---moduulit).
 
 Luodaan hakemisto _src/services_ ja sinne tiedosto _notes.js_:
 
