@@ -908,9 +908,41 @@ const App = () => {
 
 sivulle ei kuitenkaan tule mitään, sillä React luo sivulle ainoastaan tyhjän _div_-elementin. Jos muutat komponentin nimen alkamaan isolla kirjaimella, kaikki toimii taas.
 
+Kannattaa pitää mielessä, että React-komponentin sisällön tulee (yleensä) sisältää **yksi juurielementti**. Eli jos yrittäisimme määritellä komponentin _App_ ilman uloimmaistaa _div_-elementtiä:
+
+```react
+const App = () => {
+  return (
+      <h1>Greetings</h1>
+      <Hello name="Arto" age={26 + 10} />
+      <footer />
+  )
+}
+```
+
+seurauksena on virheilmoitus:
+
+![]({{ "/assets/1/27a.png" | absolute_url }})
+
+Raectin versiosta 0.16 asti juurielementin käyttö ei ole ollut enää ainoa toimiva vaihtoehto, myös _taulukollinen_ komponentteja on validi tapa:
+
+```react
+const App = () => {
+  return (
+    [
+      <h1>Greetings</h1>,
+      <Hello name="Arto" age={26 + 10} />,
+      <footer />
+    ]
+  )
+}
+```
+
+Määritellessä sovelluksen juurikomponenttia, tämä ei kuitenkaan ole järkevää ja näyttää koodissakin hirveältä.
+
 ### react-tehtävät, osa 1
 
-Tee nyt [tehtävät 7 ja 8](../tehtavat#react-alkeet)
+Tee nyt [tehtävät 7 ja 8](../tehtavat#kokoelmien renderöinti)
 
 ## Javascriptiä
 
@@ -1616,7 +1648,7 @@ Nyt jokainen napin _plus_ painallus tulostaa konsoliin _clicked_.
 
 Muuttamalla tapahtumankäsittelijä seuraavaan muotoon
 
-```react
+```html
     <button onClick={() => this.setState({ counter: this.state.counter + 1 })}>
       plus
     </button>
@@ -1714,7 +1746,7 @@ Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on jo [aiemmin mainittu
 
 Eli sovellus toimii taas jos koodi muotetaan muotoon:
 
-```react
+```html
     <button onClick={this.kasvataYhdella.bind(this)}>
       plus
     </button>
@@ -1741,7 +1773,7 @@ class App extends React.Component {
 
 Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
 
-```react
+```html
     <button onClick={this.kasvataYhdella}>
       plus
     </button>

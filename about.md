@@ -38,9 +38,10 @@ Kerro ilmoittautumisen yhteydessä kuinka paljon omaat kokemusta Web-sovellusten
 
 ## korjaukset ja sisältöön liittyvät ideat
 
-Jos huomaat suoraviivaisen typon, korjaa pull requestina.
+Jos huomaat suoraviivaisen typon, korjaa pull requestina repositorioon
+https://github.com/mluukkai/mluukkai.github.io
 
-Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina.
+Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina
 
 Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/document/d/1FXO9wIcn4-7x8V0uuCVvi2hywmtKUhT0tSM5QC8tJlI/edit)
 

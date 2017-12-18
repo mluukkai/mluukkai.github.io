@@ -297,6 +297,10 @@ ReactDOM.render(
 ```
 Moduuleilla on paljon muutakin käyttöä kuin mahdollistaa komponenttien määritteleminen omissa tiedostoissaan, palaamme moduuleihin tarkemmin myöhemmin kurssilla.
 
+### tehtävieä kokoelmien renderöinnistä
+
+Tee nyt [tehtävät 21 - 25](../tehtavat#kokoelmien-renderöinti)
+
 ## lomakkeet
 
 Jatketaan sovelluksen laajentamista siten, että se mahdollistaa uusien muistiinpanojen lisäämisen.
@@ -709,6 +713,10 @@ Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perustee
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 ```
 
+### tehtäviä lomakkeista
+
+Tee nyt tehtävät [26-30](../tehtavat#lomakkeet)
+
 ## datan haku palvelimelta
 
 Olemme nyt viipyneet tovin keskittyen pelkkään "frontendiin", eli selainpuolen toiminnallisuuteen. Rupeamme itse toteuttamaan "backendin", eli palvelimessa olevaa toiminnallisuutta vasta ensi viikolla, mutta otamme nyt jo askeleen sinne suuntaan tutustumalla siihen miten selaimessa suoritettava koodi kommunikoi backendin kanssa.
@@ -1070,6 +1078,10 @@ Muuttujaan _tapahtumankasittelija_ on sijoitettu viite funktioon. Axiosin metodi
 
 React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.org/docs/react-component.html), palaamme niihin myöhemmin.
 
+### tehtäviä datan hakemisesta palvelimelta
+
+Tee nyt tehtävä [31-33](../tehtavat#datan-hakeminen-palvelimelta)
+
 ## REST API:n käyttö
 
 Kun sovelluksella luodaan uusia muistiinpanoja, täytyy ne tallentaa palvelimelle. 
@@ -1338,7 +1350,6 @@ Järjestämistä varten on nyt määritelty muuttujaan _byId_ apufunktio, jota k
 ```js
 notesToShow.sort(byId).map.map(note => <Note ... />)
 ```
-
 
 ## palvelimen kanssa tapahtuvan komunikoinnin eristäminen omaan moduuliin
 
@@ -1615,6 +1626,10 @@ Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US
 
 Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme myöhemmin kehittyneempiä menetelmiä käyttäjille tarkoitettujen muistutusten antamiseen.
 
+### tehtäviä palvelimen tilan päivittämisestä
+
+Tee nyt tehtävät [34-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
+
 ## tyylien lisääminen
 
 Sovelluksemme ulkoasu on tällä hetkellä hyvin vaatimaton. Osaan 1 liittyvissä [tehtävässä 1](tehtavat/#1-HTML-ja-CSS) oli tarkoitus tutustua Mozzillan [CSS-tutoriaaliin](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
@@ -1804,3 +1819,8 @@ Nyt olemme valmiina lisäämään virheviestin logiikan. Alustetaan virheviesti 
 ```
 
 Eli virheen yhteydessä asetetaan tilan kenttään _error_ sopiva virheviesti. Samalla käynnistetään ajastin, joka asettaa 5 sekunnin kuluttua tilan _error_-kentän  arvoksi _null_.
+
+
+### loppuhuipennus
+
+Tee nyt tehtävät [38-42](../tehtavat#tyylit)

@@ -218,8 +218,6 @@ const App = () => {
 }
 ```
 
-
-
 #### 11
 
 Viedään muutos vielä yhtä askelta pidemmälle, eli tehdään kurssista ja sen osista yksi Javascript-olio. Korjaa kaikki mikä menee rikki.
@@ -228,7 +226,7 @@ Viedään muutos vielä yhtä askelta pidemmälle, eli tehdään kurssista ja se
 const App = () => {
   const kurssi =  {
     nimi: "Half Stack -sovelluskehitys",
-    osat = [
+    osat: [
       {
         nimi: 'Reactin perusteet',
         tehtavia: 10,
@@ -363,3 +361,369 @@ Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anek
 <img src="/assets/teht/3b.png" height="200">
 
 ## osa 2
+
+### kokoelmien renderöinti
+
+#### 21 kurssien sisältö
+
+Viimeistellään nyt tehtävien 7-11 kurssin sisältöjä renderöivä koodi.
+
+Muutetaan sovelluskomponenttia hiukan sen datan osatala:
+
+```react
+const App = () => {
+  const kurssi = {
+    nimi: "Half Stack -sovelluskehitys",
+    osat: [
+      {
+        nimi: 'Reactin perusteet',
+        tehtavia: 10,
+        id: 1,
+      },
+      {
+        nimi: 'Tiedonvälitys propseilla',
+        tehtavia: 7,
+        id: 2,
+      },
+      {
+        nimi: 'Komponenttien tila',
+        tehtavia: 14,
+        id: 3,
+      }
+    ]
+  }
+
+  return (
+    <div>
+      <Kurssi kurssi={kurssi} />
+    </div>
+  )
+}
+```
+
+Määrittele sovellukseen myös yksittäisen muotoilusta huolehtiva komponentti _Kurssi_. Komponenttirakenne voi olla esim. seuraava
+
+<pre>
+App
+  Kurssi
+    kurssin nimi
+    Sisalto
+      Osa
+      Osa
+      ...
+</pre>  
+
+ja renderöityvä sivu voi näyttää esim. seuraavalta:
+
+<img src="/assets/teht/8.png" height="150">
+
+Sovelluksen täytyy luonnollisesti toimia riippumatta kurssissa olevien osien määrästä. 
+
+Varmista, että konsolissa ei näy mitään virheilmoituksia!
+
+#### 22 tehtävien määrä
+
+Ilmoita myös kurssin yhteenlaskettu tehtävien lukumäärä
+
+<img src="/assets/teht/9.png" height="145">
+
+#### 23 reduce
+
+Jos et jo niin tehnyt, laske koodissasi tehtävien määrä taulkon metodilla
+[reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+
+#### 24 monta kurssia
+
+Laajennetaan sovellusta siten, että kursseja voi olla _mielivaltainen määrä_:
+
+```react
+const App = () => {
+  const kurssit = [
+    {
+      nimi: "Half Stack -sovelluskehitys",
+      id: 1,
+      osat: [
+        {
+          nimi: 'Reactin perusteet',
+          tehtavia: 10,
+          id: 1,
+        },
+        {
+          nimi: 'Tiedonvälitys propseilla',
+          tehtavia: 7,
+          id: 2,
+        },
+        {
+          nimi: 'Komponenttien tila',
+          tehtavia: 14,
+          id: 3,
+        }
+      ]
+    },
+    {
+      nimi: "Node.js",
+      id: 2,
+      osat: [
+        {
+          nimi: 'Routing',
+          tehtavia: 3,
+          id: 1,
+        },
+        {
+          nimi: 'Middlewaret',
+          tehtavia: 7,
+          id: 2,
+        },
+      ]
+    }
+  ]
+
+  return (
+    <div>
+    </div>
+  )
+}
+```
+
+Sovelluksen ulkoasu voi olla esim seuraava:
+
+<img src="/assets/teht/10.png" height="400">
+
+#### 25 erillinen moduuli
+
+Määrittele komponentti _Kurssi_ omana moduulinaan, jonka komponentti _App_ importtaa. Voit sisällyttää kaikki kurssin alikomponentit samaan moduuliin. 
+
+### lomakkeet
+
+#### 26 puhelinluettelo osa 1
+
+Toteutetaan yksinkertainen puhelinluettelo. Aluksi lisätään luetteloon vaan nimiä.
+
+Voit ottaa sovelluksesi pohjaksi seuraavan:
+
+```react
+class App extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      persons: [
+        { name: 'Arto Hellas' }
+      ],
+      newName: ''
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Puhelinluettelo</h2>
+        <form>
+          <div>
+            nimi: <input />
+          </div>
+          <div>
+            <button>lisää</button>
+          </div>
+        </form>
+        <h2>Numerot</h2>
+        ...
+      </div>
+    )
+  }
+}
+```
+
+Tilassa oleva kenttä _newName_ on tarkoitettu lomakkeen kentän kontrollointiin. 
+
+Joskus tilan muuttujia ja tarvittaessa muitakin voi olla hyödyllistä renderöidä debugatessa komponenttiin, eli voi lisätä tilapäisesti lisätä komponentin metodin _render_ palauttamaan koodiin esim. seuraavan:
+
+```js
+<div>
+debug: {this.state.newName}
+</div>
+```
+
+Muista myös osan 1 luku [React-sovellusten debuggaus](#React-sovellusten-debuggaus), erityisesti [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) on välillä todella kätevä tilan komponentin tilan muutosten seuraamisessa.
+
+Sovellus voi näyttää tässä vaiheessa seuraavalta
+
+<img src="/assets/teht/10.png" height="200">
+
+**Huom:** 
+* voit käyttää kentän _key_ arvona henkilön nimeä
+* muista estää lomakkeen lähetyksen oletusarvoinen toiminta!
+
+#### 27 puhelinluettelo osa 2
+
+Jos lisättävä nimi on jo sovelluksen tiedossa, estä lisäys. Taulukolla on lukuisia sopivia [metodeja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) tehtävän tekemiseen.
+
+Voit antaa halutessasi virheilmoituksen esim. komennolla _alert()_. Se ei kuitenkaan ole tarpeen.
+
+#### 28 puhelinluettelo osa 3
+
+Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset siis lomakkeeseen myös toisen _input_-elementin (ja sille oman muutoksenkäsittelijän):
+
+```html
+    <div>
+      nimi: <input />
+    </div>
+    <div>
+      numero: <input />
+    </div>    
+    <div>
+      <button>lisää</button>
+    </div>
+  </form>
+```
+
+Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):in tarjoama näkymä komponentin _App_ tilaan:
+
+<img src="/assets/teht/11.png" height="300">
+
+#### 29 puhelinluettelo osa 4
+
+Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
+
+<img src="/assets/teht/12.png" height="300">
+
+Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-elementtinä. Kuvassa rajausehdosta on tehty _caseinsensitiivinen_ eli ehto _arto_ löytää isolla kirjaimella kirjoitetun Arton.
+
+**Huom:** Kun toteutat jotain uutta toiminnallisuutta, on usein hyötyä 'kovakoodata' sovellukseen jotain sisältöä, esim.
+
+```js
+  constructor(props){
+    super(props)
+    this.state = {
+      persons: [
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Martti Tienari', number: '040-123456' },
+        { name: 'Arto Järvinen', number: '040-123456' },
+        { name: 'Lea Kutvonen', number: '040-123456' }
+      ],
+      newName: '',
+      newNumber: '',
+      filter: ''
+    }
+  }
+```  
+
+Näin vältytään turhalta manualliselta työltä, missä testaaminen edellyttäisi myös testiaineiston syöttämistä käsin soveluksen lomakkeen kautta.
+
+Kurssin seuraavasta osasta alkaen alamme määrittelemään sovelluksemme _testejä_ jotka tietyissä tapauksissa hoitavat kovakoodatun apusyötteen roolia.
+
+#### 30 puhelinluettelo osa 5
+
+Jos koko sovelluksesi on tehty yhteen komponenttiin, refaktoroi sitä eriyttämällä sopivia komponentteja. Pidä kuitenkin edelleen kaikki tila juurikomponentissa.
+
+### datan hakeminen palvelimelta
+
+#### 31 puhelinluettelo osa 6
+
+Talleta sovelluksen alkutila projektin juureen sijoitettavaan tiedostoon _db.json_
+
+```json
+{
+	"persons": [{
+			"name": "Arto Hellas",
+			"number": "040-123456",
+			"id": 1
+		},
+		{
+			"name": "Martti Tienari",
+			"number": "040-123456",
+			"id": 2
+		},
+		{
+			"name": "Arto Järvinen",
+			"number": "040-123456",
+			"id": 3
+		},
+		{
+			"name": "Lea Kutvonen",
+			"number": "040-123456",
+			"id": 4
+		}
+	]
+}
+```
+
+Käynnistä json-server porttiin 3001 ja varmista selaimella, että palvelin palauttaa henkilölistan.
+
+Muuta sovellusta siten, että datan alkutila haetaan _axios_-lirjaston avulla palvelimelta. Hoida datan hakeminen [lifecyclemetodissa](/osa2#komponenttien-lifecycle-metodit) _componentWillMount_.
+
+#### 32 maiden tiedot
+
+Rajapinta [https://restcountries.eu](https://restcountries.eu) tarjoaa paljon eri maihin liittyvää tietoa koneluettavassa muodossa REST-apina.
+
+Tee sovellus, jonka avulla toit tarkastella eri maiden tietoja. Sovelluksen kannattaa hakea tiedot endpointista [all](https://restcountries.eu/#api-endpoints-all)
+
+Sovelluksen käyttöliittymä on yksinkertainen. Näytettävä maa haetaan kirjoittamalla hakuehto etsintäkenttään. 
+
+Jos ehdon täyttäviä maita on liikaa (yli 10), kehoitetaan tarkentamaan hakuehtoa
+
+<img src="/assets/teht/13.png" height="300">
+
+Jos maita on alle kymmenen, mutta yli 1 näyttetään hakuehdon täyttävät maat
+
+<img src="/assets/teht/14.png" height="300">
+
+Kun ehdon täyttäviä maita on enää yksi, näytetän maan lippu sekä perustiedot:
+
+<img src="/assets/teht/15.png" height="300">
+
+#### 33 maiden tiedot klikkaamalla
+
+Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen kilkkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
+
+Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävään elementtiin, esim. diviin klikkaustenkuuntelijan:
+
+```
+  <div onClick={...}>
+    {country.name}
+  </div>
+```    
+### palvelimella olevan datan päivitäminen
+
+#### 34 puhelinluettelo osa 7
+
+Palataan jälleen puhelinluettelon pariin.
+
+Tällä hetkellä luetteloon lisättäviä uusia numeroita ei synkronoida palvelimelle. Korjaa tilanne.
+
+#### 35 puhelinluettelo osa 8
+
+Siirrä palvelimen kanssa kommunikoinnista vastaava toiminnallisuus omaan monduuliin osan 2 [esimerkin](#palvelimen-kanssa-tapahtuvan-komunikoinnin-eristäminen-omaan-moduuliin) tapaan.
+
+#### 35 puhelinluettelo osa 9
+
+Tee ohjelmaan mahdollisuus yhteystietojen poistamiseen. Poistaminen voi tapahtua esim. nimen yhteyteen liitetyllä napilla. Poiston suorittaminen voidaan varmistaa käyttäjältä [window.confirm](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)-metodilla:
+
+<img src="/assets/teht/16.png" height="300">
+
+Pavelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
+
+[Axios](https://github.com/axios/axios)-kirjaston avulla HTTP DELETE -pyyntö tehdään samaan tapaan kuin muutkin pyynnöt.  
+
+#### 37 puhelinluettelo osa 10
+
+muutos
+
+### tyylit
+
+#### 38 puhelinluettelo osa 11
+
+flash
+
+#### 39 puhelinluettelo osa 12
+
+virheiden käsittely
+
+### datan käsittelyä
+
+#### 40 maiden tiedot, osa 3
+
+- sorttaus
+
+#### 41 maiden tiedot, osa 4
+
+- haku
