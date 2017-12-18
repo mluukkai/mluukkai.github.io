@@ -1433,7 +1433,7 @@ moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seura
 }
 ```
 
-Voisimme viedä ratkaisua vielä askeleen pidemmälle, sillä käyttäessääm modulin funktioita komponentti _App_ saa olion, joka sisältää koko HTTP-pyynnön vastauksen:
+Voisimme viedä ratkaisua vielä askeleen pidemmälle, sillä käyttäessään modulin funktioita komponentti _App_ saa olion, joka sisältää koko HTTP-pyynnön vastauksen:
 
 ```js
   noteService.getAll().then(response => {
@@ -1459,7 +1459,7 @@ joka voitaisiin [ilmaista hieman tiiviimmin](#kehittyneempi-tapa-olioliteraalien
   })
 ```
 
-Tämä onnistuu muuttamalla mudouulin koodia seuraavasti (koodiin jää ikävästi copy-pastea, emme kuitenkaan nyt välitä siitä):
+Tämä onnistuu muuttamalla moduulin koodia seuraavasti (koodiin jää ikävästi copy-pastea, emme kuitenkaan nyt välitä siitä):
 
 ```js
 import axios from 'axios'
