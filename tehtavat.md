@@ -724,12 +724,4 @@ Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muutt
 
 Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
-### datan käsittelyä
-
-#### 40 maiden tiedot, osa 3
-
-- sorttaus
-
-#### 41 maiden tiedot, osa 4
-
-- haku
+## osa 3

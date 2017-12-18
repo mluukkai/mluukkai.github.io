@@ -4,12 +4,6 @@ title: osa 2
 permalink: /osa2/
 ---
 
-
-
-<div class="important">
-  <h1>KESKEN, ÄLÄ LUE</h1>
-</div>
-
 ## osan 2 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
