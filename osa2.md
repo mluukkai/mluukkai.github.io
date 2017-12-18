@@ -25,21 +25,23 @@ permalink: /osa2/
   - riippuvuuksien lisääminen
   - kommunikointi palvelimen kanssa
   - tyylien lisäämisen perusteita
-  - virtal DOM
 - Javascript
   - template string
   - olioiden käsittelyä: property shorthand notation, object assign
   - ES6 moduulien perusteita
   - promiset
-  - taulukoiden käsittelyä: map, filter
+  - taulukoiden käsittelyä: map, filter, find
 
 ## kokoelmien renderöiminen
 
-Tehdään nyt reactilla [ensimmäisen osan](/osa1) alussa käytettyä esimerkkisovelluksen [Single page app -versiota](https://fullstack-exampleapp.herokuapp.com/spa) vastaava sovellus.
+Tehdään nyt Reactilla [ensimmäisen osan](/osa1) alussa käytettyä esimerkkisovelluksen [Single page app -versiota](https://fullstack-exampleapp.herokuapp.com/spa) vastaavan sovelluksen 'frontend' eli selainpuolen koodi.
 
 Aloitetaan seuraavasta:
 
 ```react
+import React from 'react'
+import ReactDOM from 'react-dom'
+
 const notes = [
   {
     id: 1,
@@ -82,7 +84,7 @@ ReactDOM.render(
 )
 ```
 
-Jokaiseen muistiinpanoon on merkitty myös _boolean_-arvo, joka kertoo onko muistiinpano luokiteltu tärkeäksi, sekä yksikäsitteinen tunniste _id_.
+Jokaiseen muistiinpanoon on merkitty tekstuaalisen sisällön ja aikaleiman lisäksi myös _boolean_-arvo, joka kertoo onko muistiinpano luokiteltu tärkeäksi, sekä yksikäsitteinen tunniste _id_.
 
 Koodin toiminta perustuu siihen, että taulukossa on tasan kolme muistiinpanoa, yksittäiset muitiinpanot renderöidään 'kovakoodatusti' viittaamalla suoraan taulukossa oleviin olioihin:
 
@@ -111,7 +113,6 @@ jotka voidaan sijoittaa _ul_-tagien sisälle:
 ```react
 const App = (props) => {
   const { notes } = props;
-  const rivit = () => notes.map(note => <li>{note.content}</li>)
 
   return(
     <div>
@@ -126,12 +127,12 @@ const App = (props) => {
 
 Koska li-tagit generoiva koodi on javascriptia, tulee se sijoittaa JSX-templatessa aaltosulkujen sisälle kaiken muun javascript-koodin tapaan.
 
-Usein vastaavissa tilanteissa dynaamisesti generoitava sisältö eristetään omaan metodiin jota JSX-template kutsuu:
+Usein vastaavissa tilanteissa dynaamisesti generoitava sisältö eristetään omaan metodiin, jota JSX-template kutsuu:
 
 ```react
 const App = (props) => {
   const { notes } = props;
-  const rivit = () => notes.map(note => <li>{note.content}</li>)
+  const rivit = () => notes.map(note => {<li>{note.content}</li>)
 
   return(
     <div>
@@ -170,7 +171,7 @@ const App = (props) => {
 
 Virheilmoitus katoaa.
 
-React käyttää taulukossa olevien elementtien avain-kenttiä päätellessään miten sen tulee päivittää komponentin generoimaa näkymää silloin kun komponentti uudelleenrenderöidään. Lisää aiheesta [täällä](https://reactjs.org/docs/reconciliation.html#recursing-on-children).
+React käyttää taulukossa olevien elementtien key-kenttiä päätellessään miten sen tulee päivittää komponentin generoimaa näkymää silloin kun komponentti uudelleenrenderöidään. Lisää aiheesta [täällä](https://reactjs.org/docs/reconciliation.html#recursing-on-children).
 
 ### antipattern: taulukon indeksit avaimina
 
@@ -188,11 +189,24 @@ Eli virheilmoitukset poistuva tapa määritellä rivien generointi on
 const rivit = () => notes.map((note, i) => <li key={i}>{note.content}</li>)
 ```
 
-Tämä **ei kuitenkaan ole suositeltavaa** ja voi näennäisestä toimimisestaan aiheuttaa joissakin tilanteissa pahoja ongelmia. Lue lisää esim. [täältä](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318)
+Tämä **ei kuitenkaan ole suositeltavaa** ja voi näennäisestä toimimisestaan aiheuttaa joissakin tilanteissa pahoja ongelmia. Lue lisää esim. [täältä](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318).
 
 ### refaktorointia - moduulit
 
-Siistitään koodia hiukan. Koska olemme kiinnostuneita ainoastaan propsien kentästä _notes_, otetaan se vastaan suoraan [destrukturointia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) hyödyntäen.
+Siistitään koodia hiukan. Koska olemme kiinnostuneita ainoastaan propsien kentästä _notes_, otetaan se vastaan suoraan [destrukturointia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) hyödyntäen:
+
+```react
+const App = ({ notes }) => {
+  return(
+    <div>
+      <h1>Muistiinpanot</h1>
+      <ul>
+        {rivit()}
+      </ul>
+    </div >
+  )
+}
+```
 
 Erotetaan yksittäisen muistiinpanon esittäminen oman komponenttinsa _Note_ vastuulle:
 
@@ -215,7 +229,7 @@ const App = ({ notes }) => {
 }
 ```
 
-Huomaa, että avain-attribuutti täytyy nyt määritellä _Note_-komponenteille, eikä _li_-tageille kuten ennen muutosta.
+Huomaa, että _key_-attribuutti täytyy nyt määritellä _Note_-komponenteille, eikä _li_-tageille kuten ennen muutosta.
 
 Koko React-sovellus on mahdollista määritellä samassa tiedostossa, mutta se ei luonnollisesti ole järkevää. Usein käytäntönä on määritellä yksittäiset komponentit omassa tiedostossaan _ES6-moduuleina_.
 
@@ -340,7 +354,7 @@ Konstruktori asettaa nyt propseina saatavan _notes_-taulukon tilaan avaimen _not
   }
 ```
 
-tila siis näyttää seuraavalta komponentin alustuksen jälkeen seuraavalta:
+tila siis näyttää komponentin alustuksen jälkeen seuraavalta:
 
 ```js
 this.state = {
@@ -350,7 +364,7 @@ this.state = {
       content: 'HTML on helppoa',
       date: '2017-12-10T17:30:31.098Z',
       important: true
-    }
+    },
     //...
   ]
 }
@@ -391,7 +405,7 @@ class App extends React.Component {
 
 Lomakkeelle on lisätty myös tapahtumankäsittelijäksi metodi _addNote_ reagoimaan sen "lähettämiseen", eli napin painamiseen.
 
-Tapahtumankäsittelijä on tuttuun tapaan määritelty seuraavasti:
+Tapahtumankäsittelijä on [osasta 1](/osa1#tapahtumankäsittely) tuttuun tapaan määritelty seuraavasti:
 
 ```js
   addNote = (e) => {
@@ -403,7 +417,7 @@ Tapahtumankäsittelijä on tuttuun tapaan määritelty seuraavasti:
 
 Parametrin _e_ arvona on metodin kutsun aiheuttama [tapahtuma](https://reactjs.org/docs/handling-events.html).
 
-Tapahtumankäsittelijä kutsuu heti tapahtumalle metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan joka aiheuttaisi sivun uudelleenlatautumisen.
+Tapahtumankäsittelijä kutsuu heti tapahtuman metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan, joka aiheuttaisi mm. sivun uudelleenlatautumisen.
 
 Tapahtuman kohde, eli _e.target_ on tulostettu konsoliin
 
@@ -439,13 +453,13 @@ Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_
   </form>
 ```
 
-Tilaan määritelty "placeholder"-teksti ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
+Tilaan määritelty "placeholder"-teksti  _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
 
 ![]({{ "/assets/2/4.png" | absolute_url }})
 
-Koska määrittelimme syötekomponentille _value_-attribuutiksi komponentin _App_ tilassa olevan kentän, alkaa _App_ kontrolloimaan syötekomponentin toimintaa.
+Koska määrittelimme syötekomponentille _value_-attribuutiksi komponentin _App_ tilassa olevan kentän, alkaa _App_ [kontrolloimaan](https://reactjs.org/docs/forms.html#controlled-components)  syötekomponentin toimintaa.
 
-Jotta syötekomponentin editoiminen tulisi mahdolliseksi, täytyy sille sille rekisteröidä tapahtumankäsittelijä, joka synkronoi syötekenttään tehdyt muutokset komponentin _App_ tilaan:
+Jotta kontrolloidun syötekomponentin editoiminen olisi mahdollista, täytyy sille rekisteröidä _tapahtumankäsittelijä_, joka synkronoi syötekenttään tehdyt muutokset komponentin _App_ tilaan:
 
 ```react
 class App extends React.Component {
@@ -476,7 +490,7 @@ class App extends React.Component {
 }
 ```
 
-Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_.
+Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_:
 
 ```html
   <input
@@ -494,7 +508,7 @@ Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain
   }
 ```
 
-Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin-kentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
+Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin syötekentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
 
 ![]({{ "/assets/2/5.png" | absolute_url }})
 
@@ -519,10 +533,10 @@ Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän
   }
 ```
 
-Ensin luodaan uutta muistiinpanoa vastaava olio. Sen sisältökenttä saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä.
+Ensin luodaan uutta muistiinpanoa vastaava olio _noteObject_, jonka sisältökentän arvo saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä.
 
-Uusi muistiinpano lisätään vanhojen joukkoon oikeaoppisesti käyttämällä [viime viikolta](/osa1#taulukon käsittelyä) tuttua metodia [concat](
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). Metodi ei muuta alkuperäistä taulukkoa _this.state.notes_ vaan luo uuden taulukon, joka sisältää myös lisättävän alkion.
+Uusi muistiinpano lisätään vanhojen joukkoon oikeaoppisesti käyttämällä [osasta 1](/osa1#taulukon käsittelyä) tuttua taulukon metodia [concat](
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat). Metodi ei muuta alkuperäistä taulukkoa _this.state.notes_ vaan luo uuden taulukon, joka sisältää myös lisättävän alkion. Tämä on tärkeää, sillä Reactin tilaa [ei saa muuttaa suoraan](https://reactjs.org/docs/state-and-lifecycle.html#using-state-correctly)!
 
 Tila päivitetään uusilla muistiinpanoilla ja tyhjentämällä syötekomponentin arvoa kontrolloiva kenttä.
 
@@ -650,7 +664,7 @@ vertailu-operaatio on oikeastaan turha koska _note.important_ on arvoltaan joko 
 this.state.notes.filter(note => note.important)
 ```
 
-Tässä käytettiin kuitenkin ensin vertailua, mm. korostamaan erästä tärkeää seikkaa: Javasriptissa <code>arvo1 == arvo2</code> ei toimi kaikissa tilanteissa loogisesti ja onkin varmempi käyttää aina vertailuissa muotoa <code>arvo1 === arvo2</code>. Enemmän aiheesta [täällä](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
+Tässä käytettiin kuitenkin ensin vertailuoperaattoria, mm. korostamaan erästä tärkeää seikkaa: Javascriptissa <code>arvo1 == arvo2</code> ei toimi kaikissa tilanteissa loogisesti ja onkin varmempi käyttää aina vertailuissa muotoa <code>arvo1 === arvo2</code>. Enemmän aiheesta [täällä](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness).
 
 Filtteröinnin toimivuutta voi jo nyt kokeilla vaihtelemalla sitä, miten tilan kentän _showAll_ alkuarvo määritelään konstruktorissa.
 
@@ -710,7 +724,7 @@ Näkyviä muistiinpanoja (kaikki vai ainoastaan tärkeät) siis kontrolloidaan n
 Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perusteella:
 
 ```js
-    const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
+  const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 ```
 
 ### tehtäviä lomakkeista
@@ -719,13 +733,13 @@ Tee nyt tehtävät [26-30](../tehtavat#lomakkeet)
 
 ## datan haku palvelimelta
 
-Olemme nyt viipyneet tovin keskittyen pelkkään "frontendiin", eli selainpuolen toiminnallisuuteen. Rupeamme itse toteuttamaan "backendin", eli palvelimessa olevaa toiminnallisuutta vasta ensi viikolla, mutta otamme nyt jo askeleen sinne suuntaan tutustumalla siihen miten selaimessa suoritettava koodi kommunikoi backendin kanssa.
+Olemme nyt viipyneet tovin keskittyen pelkkään "frontendiin", eli selainpuolen toiminnallisuuteen. Rupeamme itse toteuttamaan "backendin", eli palvelinpuolen  toiminnallisuutta vasta kurssin kolmannessa osassa, mutta otamme nyt jo askeleen sinne suuntaan tutustumalla siihen miten selaimessa suoritettava koodi kommunikoi backendin kanssa.
 
-Käytetään nyt palvelimena sovelluskehitykeen tarkoitettua [JSON Serveriä](https://github.com/typicode/json-server).
+Käytetään nyt palvelimena sovelluskehitykseen tarkoitettua [JSON Serveriä](https://github.com/typicode/json-server).
 
 [Asenna](https://github.com/typicode/json-server#install) JSON server.
 
-Tee esim. projektin juurihakemistoon tiedosto _db.json_, jolla on seuraava sisältö:
+Tee projektin juurihakemistoon tiedosto _db.json_, jolla on seuraava sisältö:
 
 ```js
 {
@@ -758,13 +772,13 @@ Käynnistä _json-server_ porttiin 3001:
 json-server --port=3001 --watch db.json
 ```
 
-Oletusarvoisesti _json-server_ käynnistyy porttiin 3000, mutta create-react-app:in jäyttö varaa portin 3000 joten sen takia joudumme nyt määrittelemään vaihtoehtoisen portin.
+Oletusarvoisesti _json-server_ käynnistyy porttiin 3000, mutta create-react-app:illa luodut projektit varaavat portin 3000, joten joudumme nyt määrittelemään json-server:ille vaihtoehtoisen portin.
 
-Mene selaimella osoitteeseen <http://localhost:3001/notes>. Kuten huomaamme, _json-server_ tarjoaa osoitteessa tiedostoon tallentamamme muistiinpanot:
+Mennään selaimella osoitteeseen <http://localhost:3001/notes>. Kuten huomaamme, _json-server_ tarjoaa osoitteessa tiedostoon tallentamamme muistiinpanot:
 
 ![]({{ "/assets/2/6.png" | absolute_url }})
 
-Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi sitten lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, React-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin".
+Ideana jatkossa onkin se, että muistiinpanot talletetaan palvelimelle, eli tässä vaiheessa _json-server_:ille. React-koodi lataa muistiinpanot palvelimelta ja renderöi ne ruudulle. Kun sovellukseen lisätään uusi muistiinpano, React-koodi lähettää sen myös palvelimelle, jotta uudet muistiinpanot jäävät pysyvästi "muistiin".
 
 json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json_. Todellisuudessa data tullaan tallentamaan johonkin tietokantaan. json-server on kuitenkin käyttökelpoinen apuväline, joka mahdollistaa palvelinpuolen toiminnallisuuden käyttämisen kehitysvaiheessa ilman tarvetta itse ohjelmoida mitään.
 
@@ -774,11 +788,11 @@ Tutustumme palveinpuolen toteuttamisen periaatteisiin tarkemmin kurssin [osaassa
 
 Ensimmäisenä tehtävänämme on siis hakea React-sovellukseen jo olemassaolevat mustiinpano osoitteesta <http://localhost:3001/notes>.
 
-Osan 1 [esimerkkiprojektissa](osa1/#elaimessa-suoritettava-sovelluslogiikka) nähtiin jo eräs tapa hakea javascript-koodista palvelimella olevaa dataa. Esimerkin koodissa data haettiin [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) eli XHR-olion avulla muodostetulla HTTP-pyynnöllä. Kyseessä on 1999 lanseerattu tekniikka jota kaikki web-selaimet ovat jo pitkään tukeneet. 
+Osan 1 [esimerkkiprojektissa](osa1/#elaimessa-suoritettava-sovelluslogiikka) nähtiin jo eräs tapa hakea javascript-koodista palvelimella olevaa dataa. Esimerkin koodissa data haettiin [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) eli XHR-olion avulla muodostetulla HTTP-pyynnöllä. Kyseessä on 1999 lanseerattu tekniikka, jota kaikki web-selaimet ovat jo pitkään tukeneet. 
 
-Nykyään XHR:ää ei kuitenkaan kannata juurikaan käyttää ja selaimet tukevatkin jo laajasti [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)-metodia joka perustuu XHR:n käyttämän tapahtumapohjaisen mallin sijaan ns. [Promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+Nykyään XHR:ää ei kuitenkaan kannata juurikaan käyttää ja selaimet tukevatkin jo laajasti [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)-metodia, joka perustuu XHR:n käyttämän tapahtumapohjaisen mallin sijaan ns. [promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-Muistutuksena viime viikosta (oikeastaan tätä tapaa pitää lähinnä muistaa olla käyttämättä ilman painavaa syytä), XHR:llä haettiin dataa seuraavasti
+Muistutuksena viime viikosta (oikeastaan tätä tapaa pitää lähinnä _muistaa olla käyttämättä_ ilman painavaa syytä), XHR:llä haettiin dataa seuraavasti
 
 ```bash
 const xhttp = new XMLHttpRequest()
@@ -794,29 +808,29 @@ xhttp.open('GET', '/data.json', true)
 xhttp.send()  
 ```
 
-Eli _xhttp_-oliolle rekisteröidään tapahtumankäsittelijä jota javascript runtime kutsuu kun olion tila muuttuu. Jos tilanmuutos tarkoittaa että pyynnön vastaus on saapunut, käsitellään data halutulla tavalla. Huomionarvoista on se, että tapahtumankäsittelijän koodi on määritelty jo ennen kun itse pyyntö lähetetään palvelimelle.
+Heti alussa HTTP-pyyntöä vastaavalle _xhttp_-oliolle rekisteröidään tapahtumankäsittelijä, jota javascript runtime kutsuu kun _xhttp_-olion tila muuttuu. Jos tilanmuutos tarkoittaa että pyynnön vastaus on saapunut, käsitellään data halutulla tavalla. 
 
-Koodin suoritus ei etene synkronisesti "ylhäältä alas", vaan _asynkronisesti_, javascript kutsuu sille rekisteröityä käsittelijämetodia jossain vaiheessa.  
+Huomionarvoista on se, että tapahtumankäsittelijän koodi on määritelty jo ennen kun itse pyyntö lähetetään palvelimelle. Tapahtumankäsittelijäfunktio tullaan kuitenkin suorittamaan vasta jossain myöhäisemmässä vaiheessa. Koodin suoritus ei siis etene synkronisesti "ylhäältä alas", vaan _asynkronisesti_, javascript kutsuu sille rekisteröityä tapahtumankäsittelijäfunktiota jossain vaiheessa.  
 
 Esim. Java-ohjelmoinnista tuttu synkroninen tapa tehdä kyselyjä etenisi seuraavaan tapaan (huomaa että kyse ei ole oikeasti toimivasta Java-koodista):
 
 ```java
 HTTPRequest request = new HTTPRequest()
 
-Muistiinpano[] muistiinpanot = request.get('https://fullstack-exampleapp.herokuapp.com/data.json')
+List<Muistiinpano> muistiinpanot = request.get("https://fullstack-exampleapp.herokuapp.com/data.json");
 
 muistiinpanot.forEach(m=>{
   System.out.println(m.content);
 })
 ```
 
-Javassa koodi etenee nyt rivi riviltä ja koodi pysähtyy odottamaan HTTP-pyynnön, eli komennon _request.get(...)_ valmistumista. Komennon palauttama data, eli muistiinpanot voidaan tallettaa muuttujaan.
+Javassa koodi etenee nyt rivi riviltä ja koodi pysähtyy odottamaan HTTP-pyynnön, eli komennon _request.get(...)_ valmistumista. Komennon palauttama data, eli muistiinpanot talletetaan muuttujaan ja dataa aletaan käsittelemään halutulla tavalla.
 
 Javascript-enginet eli suoritusympäristöt kuitenkin noudattavat [asynkronista mallia](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop), eli periaatteena on se, että kaikki [IO-operaatiot](https://en.wikipedia.org/wiki/Input/output) (poslukien muutama poikkeus) suoritetaan ei-blokkaavana, eli operaatioiden tulosta ei jäädä odottamaan vaan koodin suoritusta jatketaan heti eteenpäin.
 
 Siinä vaiheessa kun operaatio valmistuu tai tarkemmin sanoen jonain valmistumisen jälkeisenä ajanhetkenä, kutsuu Javascript-engine operaatiolle rekisteröityjä tapahtumankäsittelijöitä.
 
-Nykyisellään javascript-moottorit ovat _yksisäikeisiä_ eli ne eivät voi suorittaa rinnakkaista koodia. Tämän takia on käytännössä pakko käyttää ei-blokkaavaa maillia IO-operaatioiden suorittamiseen, sillä muuten esim. selain 'jäätyisi' siksi aikaa kun esim. palvelimelta haetaan dataa. 
+Nykyisellään javascript-moottorit ovat _yksisäikeisiä_ eli ne eivät voi suorittaa rinnakkaista koodia. Tämän takia on käytännössä pakko käyttää ei-blokkaavaa maillia IO-operaatioiden suorittamiseen, sillä muuten esim. selain 'jäätyisi' siksi aikaa kun esim. palvelimelta haetaan dataa.
 
 Javasript-moottoreiden yksisäikeisyydellä on myös sellainen seuraus, että jos koodin suoritus kestää erittäin pitkään, selain jäätyy suorituksen ajaksi. Jos lisätään jonnekin kohtaa sovellustamme, esim. konstruktoriin seuraava koodi:
 
@@ -831,27 +845,27 @@ Javasript-moottoreiden yksisäikeisyydellä on myös sellainen seuraus, että jo
     }, 5000)
 ```
 
-Kakikki toimii 5 sekunnin ajan normaalisti. Kun _setTimeout_:in parametrina määritelty funktio suoritetaan, menee selain sivu jumiin pitkän loopin suorituksen ajaksi. Selaimen tabia ei pysty edes sulkemaan. 
+Kaikki toimii 5 sekunnin ajan normaalisti. Kun _setTimeout_:in parametrina määritelty funktio suoritetaan, menee selaimen sivu jumiin pitkän loopin suorituksen ajaksi. Ainakaan Chromessa selaimen tabia ei pysty edes sulkemaan luupin suorituksen aikana.
 
 Eli jotta selain säilyy _responsiivisena_ eli että se reagoi koko ajan riittävän nopeasti käyttäjän haluamiin toimenpiteisiin, koodin logiikan tulee olla sellainen, että yksittäinen laskenta ei saa kestää liian kauaa.
 
 Aiheesta löytyy paljon lisämateriaalia internetistä, eräs varsin havainnollinen esitys aiheesta Philip Robertsin esitelmä [What the heck is the event loop anyway?](https://www.youtube.com/watch?v=8aGhZQkoFbQ)
 
+Nykyään selaimissa on mahdollisuus suorittaa myös rinnakkaista koodia ns. [web workerien](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) avulla. Yksittäisen selainikkunan koodin ns. event loopista huolehtii kuitenkin edelleen [vain yksi säie](https://medium.com/techtrument/multithreading-javascript-46156179cf9a).
+
 ## npm
 
 Palaamme jälleen asiaan, eli datan hakemiseen palvelimelta. 
 
-Voisimme käyttää datan palvelimelta hakemiseen aiemmin mainittua promiseihin perustuvaa funktiota [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
+Voisimme käyttää datan palvelimelta hakemiseen aiemmin mainittua promiseihin perustuvaa funktiota [fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Fetch on hyvä työkalu, se on standardoitu ja kaikkien modernien selaimien (poislukien IE) tukema.
 
-Fetch on hyvä työkalu, se on standardoitu ja kaikkien modernien selaimien tukema.
-
-Käytetään selaimen ja palvelimen väliseen kommunikaatioon kuitenkin [axios](ttps://github.com/axios/axios)-kirjastoa, joka toimii samaan tapaan kuin fetch mutta on hieman mukavampikäyttöinen. Hyvä syy axios:in käytölle on myös se, että pääsemme tutustumaan siihen miten ulkopuolisia kirjastoja eli _npm-paketteja_ liitetään React-projektiin.
+Käytetään selaimen ja palvelimen väliseen kommunikaatioon kuitenkin [axios](ttps://github.com/axios/axios)-kirjastoa, joka toimii samaan tapaan kuin fetch, mutta on hieman mukavampikäyttöinen. Hyvä syy axios:in käytölle on myös se, että pääsemme tutustumaan siihen miten ulkopuolisia kirjastoja eli _npm-paketteja_ liitetään React-projektiin.
 
 Nykyään lähes kaikki Javascript-projektit määritellään node package managerin eli [npm](https://docs.npmjs.com/getting-started/what-is-npm):n avulla. Myös create-react-app:in avulla generoidut projektit ovat npm-muotoisia projekteja. Varma tuntomerkki siitä on projektin juuressa oleva tiedosto _package.json_:
 
 ```js
 {
-  "name": "viikko1",
+  "name": "osa2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -896,7 +910,7 @@ Tutustumme npm:n tarkemmin kurssin [kolmannessa osassa](/osa3).
 
 ### axios ja promiset
 
-Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä. 
+Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä portissa 3001. 
 
 Kirjaston voi ottaa käyttöön samaan tapaan kuin esim. React otetaan käyttöön, eli sopivalla _import_-lauseella.
 
@@ -919,10 +933,10 @@ Axiosin metodi _get_ palauttaa [promisen](https://developer.mozilla.org/en-US/do
 Mozillan dokumentaatio sanoo promisesta seuraavaa:
 > A Promise is an object representing the eventual completion or failure of an asynchronous operation. Since most people are consumers of already-created promises, this guide will explain consumption of returned promises before explaining how to create them. 
 
-Promise siis edustaa asynkronista operaatiota. Promise voi olla kolmessa eri tilassa
+Promise siis edustaa asynkronista operaatiota. Promise voi olla kolmessa eri tilassa:
 * aluksi promise on _pending_, eli promisea vastaava asynkroninen operaatio ei ole vie tapahtunut
-* jos operaatio päätyy onnistuneesti, menee promise tilaan _fulfilled_ josta joskus käytetään nimitystä _resolved_
-* kolmas mahdollinen tila on _rejected_ joka edustaa epäonnistunutta operaatiota
+* jos operaatio päätyy onnistuneesti, menee promise tilaan _fulfilled_, josta joskus käytetään nimitystä _resolved_
+* kolmas mahdollinen tila on _rejected_, joka edustaa epäonnistunutta operaatiota
 
 Esimerkkimme ensimmäinen promise on _fulfilled_, eli vastaa vastaa onnistunutta _axios.get('http://localhost:3001/notes')_ pyyntöä. Promiseista toinen taas on _rejected_, syy selviää konsolista, eli yritettiin tehdä HTTP GET -pyyntöä osoitteeseen, jota ei ole olemassa.
 
@@ -940,7 +954,7 @@ Konsoliin tulostuu seuraavaa
 
 ![]({{ "/assets/2/9.png" | absolute_url }})
 
-Javascriptin suoritusympäristö kutsuu _then_-metodin avulla rekisteröityä takaisunkutsufunktiota antaen sille parametriksi olion _result_ joka sisältää kaiken oleellisen HTTP GET -pyynnön vastaukseen liittyvän, eli palautetun _datan_, _statuskoodin_ ja _headerit_.
+Javascriptin suoritusympäristö kutsuu _then_-metodin avulla rekisteröityä takaisunkutsufunktiota antaen sille parametriksi olion _result_, joka sisältää kaiken oleellisen HTTP GET -pyynnön vastaukseen liittyvän, eli palautetun _datan_, _statuskoodin_ ja _headerit_.
 
 Promise-olioa ei ole yleensä tarvetta tallettaa muuttujaan, ja onkin tapana ketjuttaa metodin _then_ kutsu suoraan axiosin metodin kutsun perään:
 

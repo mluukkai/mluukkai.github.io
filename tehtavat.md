@@ -368,7 +368,7 @@ Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anek
 
 Viimeistellään nyt tehtävien 7-11 kurssin sisältöjä renderöivä koodi.
 
-Muutetaan sovelluskomponenttia hiukan sen datan osatala:
+Muutetaan sovelluskomponenttia hiukan sen datan osalta:
 
 ```react
 const App = () => {

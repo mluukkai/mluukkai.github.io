@@ -30,9 +30,6 @@ Arvosana määräytyy tehtyjen tehtävien perusteella, noin 50% tehtävistä tuo
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
-Erään Chromessa olevan, hieman sovelluskehitystä haittaavan [bugin](https://bugs.chromium.org/p/chromium/issues/detail?id=766715) takia kaikkein suositeltavinta on Chromen ns.
-[canary-version](https://www.google.fi/chrome/browser/canary.html) käyttäminen.
-
 Kurssin tehtävät palautetaan GitHubiin, joten Git tulee olla asennettuna.
 
 Asenna myös joku järkevä webkoodausta tukeva tekstieditori, enemmän kuin suositeltava valinta on [Visual studio code](https://code.visualstudio.com/). Myös [Atom](https://atom.io/) on tarkoitukseen toimiva.
@@ -77,7 +74,7 @@ Käymme aluksi läpi web-sovellusten toimintaperiaatteita tarkastelemalla osoitt
 
 Kurssin suosittelevan tyylisen koodin kirjoittaminen alkaa luvusta [React](#react). 
 
-Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta, mielellään sen [canary](https://www.google.fi/chrome/browser/canary.html)-versiota.
+Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta.
 
 Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/>) 
 
@@ -464,7 +461,7 @@ Network-välilehti näyttää myös lomakkeen mukana lähetetyn datan:
 
 ![]({{ "/assets/1/21.png" | absolute_url }})
 
-Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva [bugi](https://bugs.chromium.org/p/chromium/issues/detail?id=766715). Bugi on korjattu Chromen [canary-versiossa](https://www.google.fi/chrome/browser/canary.html) ja tulee korjaantumaan aikanaan myös "normaaliin" versioon.
+Jos käytät normaalia Chrome-selainta, ei konsoli ehkä näytä lähetettävää dataa. Kyseessä on eräissä Chromen versioissa oleva [bugi](https://bugs.chromium.org/p/chromium/issues/detail?id=766715). Bugi on korjattu Chromen uusimpaan versioon.
 
 Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_note_ form-tagiin määriteltyjen attribuuttien _action_ ja _method_ ansiosta:
 
