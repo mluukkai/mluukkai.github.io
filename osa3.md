@@ -637,18 +637,38 @@ app.post('/notes', (request, response) => {
 
 uuden muistiinpanon id:ksi asetetaan olemassaolevien id:iden maksi+1.
 
-Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä  
+Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä olioita. Parannellaan sovellusta siten, että kenttä _content_ vaaditaan. Kentille _important_ ja _date_ asetetaan oletusarvot. Kaikki muut kentät hylätään: 
 
 
 ```js
+const generateId = () => {
+  const maxId = notes.length > 0 ? notes.map(n => n.id).sort().reverse()[0] : 1
+  return maxId + 1
+}
+
 app.post('/notes', (request, response) => {
-  const note = request.body
+  const body = request.body
+
+  if (body.content===undefined){
+    response.status(400).json({error: 'content missing'}) 
+  }
+
+  const note = {
+    content: body.content,
+    important: body.important || false,
+    date: body.date || new Date(),
+    id: generateId()
+  }
 
   notes = notes.concat(note)
 
   response.json(note)
-}) 
+})
 ```
+
+Tunnisteena toimivan id-kentän arvon generointilogiikka on eriytetty funktioon _generateId_. 
+
+Jos kenttä _content_ puuttuu, vastataan statuskoodilla [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1). Muussa tapauksessa luodaan muistiinpanio syötteen perusteella. Jos kenttä _important_ tai _date_ puuttuvat, generoidaan niille oletusarvo.
 
 ## middlewaret
 
@@ -670,8 +690,6 @@ app.post('/notes', (request, response) => {
 ## async/await
 
 ## mongoose
-
-
 
 ## testaus
 

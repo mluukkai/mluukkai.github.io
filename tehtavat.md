@@ -565,6 +565,7 @@ Voit antaa halutessasi virheilmoituksen esim. komennolla _alert()_. Se ei kuiten
 Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset siis lomakkeeseen myös toisen _input_-elementin (ja sille oman muutoksenkäsittelijän):
 
 ```html
+  <form>
     <div>
       nimi: <input />
     </div>
