@@ -6,7 +6,7 @@
 
 #### 1 HTML ja CSS ####
 
-Kertaa HTML:n ja CSS:n perusteet lukemalla Mozzillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
+Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
 [CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
 
 #### 2 HTML:n lomakkeet
@@ -270,7 +270,7 @@ Laajenna sovellusta siten, että se näyttää palautteista statistiikkaa, keski
 
 Refaktoroi sovelluksesi siten, että se koostuu monista komponenteista. Pidä tila kuitenkin sovelluksen _juurikomponentissa_.
 
-Tee sovellukseen ainakin seuraavat komonentit:
+Tee sovellukseen ainakin seuraavat komponentit:
 - _Button_ vastaa yksittäistä palautteenantonappia
 - _Statistics_ huolehtii tilastojen näyttämisestä
 - _Statistic_ huolehtii yksittäisen tilastorivin, esim. keskiarvon näyttämisestä
