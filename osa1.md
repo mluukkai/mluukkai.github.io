@@ -140,8 +140,8 @@ Etusivun muodostama koodi näyttää seuraavalta:
 
 ```js
 const getFrontPageHtml = (noteCount) => {
-  return(`
-  <!DOCTYPE html>
+  return (`
+    <!DOCTYPE html>
     <html>
       <head>
       </head>
@@ -153,7 +153,8 @@ const getFrontPageHtml = (noteCount) => {
           <img src="kuva.png" width="200" />
         </div>
       </body>
-    </html>`)
+    </html>
+  `)
 }
 
 app.get('/', (req, res) => {
@@ -237,39 +238,39 @@ Ylläoleva javascript-koodi siis lataa muistiinpanot sisältävän JSON-muotoise
 Tämän saa aikaan seuraava koodi:
 
 ```js
-    const data = JSON.parse(this.responseText)
-    console.log(data)
+const data = JSON.parse(this.responseText)
+console.log(data)
 
-    var ul = document.createElement('ul')
-    ul.setAttribute('class', 'notes')
+var ul = document.createElement('ul')
+ul.setAttribute('class', 'notes')
 
-    data.forEach(function(note) {
-      var li = document.createElement('li')
+data.forEach(function(note) {
+  var li = document.createElement('li')
 
-      ul.appendChild(li);
-      li.appendChild(document.createTextNode(note.content))
-    })
+  ul.appendChild(li);
+  li.appendChild(document.createTextNode(note.content))
+})
 
-    document.getElementById('notes').appendChild(ul)
+document.getElementById('notes').appendChild(ul)
 ```
 
 Koodi muodostaa ensin järjestämätöntä listaa edustavan [ul](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul)-tagin:
 
 ```js
-    var ul = document.createElement('ul')
-    ul.setAttribute('class', 'notes')
+var ul = document.createElement('ul')
+ul.setAttribute('class', 'notes')
 ```
 
 ja lisää ul:n sisään yhden [li](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/li)-elementin kutakin muistiinpanoa kohti. Ainoastaan muistiinpanon _content_-kenttä tulee li-elementin sisällöksi, raakadatassa olevia aikaleimoja ei käytetä mihinkään.
 
 
 ```js
-    data.forEach(function(note) {
-      var li = document.createElement('li')
+data.forEach(function(note) {
+  var li = document.createElement('li')
 
-      ul.appendChild(li);
-      li.appendChild(document.createTextNode(note.content))
-    })
+  ul.appendChild(li);
+  li.appendChild(document.createTextNode(note.content))
+})
 ```
 
 Avaa nyt konsolin _Console_-välilehti:
@@ -283,8 +284,8 @@ Painamalla rivin alussa olevaa kolmiota saat laajennettua konsolissa olevan rivi
 Konsoliin ilmestynyt tulostus johtuu siitä, että koodiin oli lisätty komento _console.log_:
 
 ```js
-    const data = JSON.parse(this.responseText)
-    console.log(data)
+const data = JSON.parse(this.responseText)
+console.log(data)
 ```
 
 eli vastaanotettuaan datan palvelimelta, koodi tulostaa datan konsoliin.
@@ -408,7 +409,7 @@ Ladattu css-tiedosto näyttää seuraavalta:
 ```css
 .container {
   padding: 10px;
-  border: 1px solid
+  border: 1px solid;
 }
 
 .notes {
@@ -487,10 +488,10 @@ Tekstikenttään kirjoitettu data on avaimen _note_ alla, eli palvelin viittaa s
 Palvelin luo uutta muistiinpanoa vastaavan olion ja laittaa sen muistiinpanot sisältävään taulukkoon nimeltään _notes_:
 
 ```js
-  notes.push({
-    content: req.body.note,
-    date: new Date()
-  })
+notes.push({
+  content: req.body.note,
+  date: new Date()
+})
 ```
 
 Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _content_ ja luomishetken kertova _date_.
@@ -539,20 +540,20 @@ Palvelin vastaa kyselyyn statuskoodilla [201 created](https://httpstatuses.com/2
 Ohjelman single page app -versiossa lomakkeen tietoja ei lähetetä selaimen "normaalin" lomakkeiden lähetysmekanismin avulla, lähettämisen hoitaa selaimen lataamassa Javascript-tiedostossa määritelty koodi. Katsotaan hieman koodia vaikka yksityiskohdista ei tarvitse nytkään välittää liikaa.
 
 ```js
-  var form = document.getElementById('notes_form')
-  form.onsubmit = function (e) {
-   e.preventDefault()
+var form = document.getElementById('notes_form')
+form.onsubmit = function (e) {
+ e.preventDefault()
 
-    var note = {
-      content: e.target.elements[0].value,
-      date: new Date()
-    }
-
-    notes.push(note)
-    e.target.elements[0].value = ''
-    redrawNotes()
-    sendToServer(note)
+  var note = {
+    content: e.target.elements[0].value,
+    date: new Date()
   }
+
+  notes.push(note)
+  e.target.elements[0].value = ''
+  redrawNotes()
+  sendToServer(note)
+}
 ```
 
 Komennolla <code>document.getElementById('notes_form')</code> koodi hakee sivulta lomake-elementin ja rekisteröi sille tapahtumankäsittelijän hoitamaan tilanteen, missä lomake "submitoidaan", eli lähetetään. Tapahtumankäsittelijä kutsuu heti metodia <code>e.preventDefault()</code> jolla se estää lomakkeen lähetyksen oletusarvoisen toiminnan. Oletusarvoinen toiminta aiheuttaisi lomakkeen lähettämisen ja sivun uuden lataamisen, sitä emme single page -sovelluksissa halua tapahtuvan.
@@ -694,7 +695,7 @@ Koska funktio koostuu vain yhdestä lausekkeesta, on käytössämme lyhennysmerk
 
 ```react
 const App = () => {
-  return(
+  return (
     <div>
       <p>Hello world</p>
     </div>
@@ -708,7 +709,7 @@ Komponentin määrittelevä funktio voi sisältää mitä tahansa javascript-koo
 ```react
 const App = () => {
   console.log('Hello from komponentti')
-  return(
+  return (
     <div>
       <p>Hello world</p>
     </div>
@@ -724,7 +725,7 @@ const App = () => {
   const now = new Date()
   const a = 10
   const b = 20
-  return(
+  return (
     <div>
       <p>Hello world, it is {now.toString()}</p>
       <p>{a} plus {b} is {a + b}</p>
@@ -887,7 +888,7 @@ Kannattaa pitää mielessä, että **React-komponenttien nimien tulee alkaa isol
 
 ```react
 const footer = () => {
-  return(
+  return (
     <div>greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a></div>
   )
 }
@@ -1243,7 +1244,7 @@ const arto = {
   nimi: 'Arto Hellas',
   tervehdi: function () {
     console.log('hello, my name is', this.nimi)
-  },
+  }
 }
 
 setTimeout(arto.tervehdi, 1000)
@@ -1413,20 +1414,20 @@ this.props = {
 voisimme suoraviivaistaa metodia _render_ siten, että sijoittaisimme kenttien arvot muuttujiin _name_ ja _age_ joita voisimme sitten hyödyntää
 
 ```react
-  render() {
-    const name = this.props.name
-    const age = this.props.age
-    const bornYear = () => 1900 + new Date().getYear() - age
+render() {
+  const name = this.props.name
+  const age = this.props.age
+  const bornYear = () => 1900 + new Date().getYear() - age
 
-    return (
-      <div>
-        <p>
-          Hello {name}, you are {age} years old <br />
-          So you were propably born {bornYear()}
-        </p>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <p>
+        Hello {name}, you are {age} years old <br />
+        So you were propably born {bornYear()}
+      </p>
+    </div>
+  )
+}
 ```
 
 Huomaa, että olemme myös hyödyntäneet nuolifunktion kompaktimpaa kirjoitustapaa metodin _bornYear_ määrittelyssä.
@@ -1473,7 +1474,7 @@ Aloitetaan seuraavasta rungosta:
 ```react
 const App = (props) => {
   const {counter} = props
-  return(
+  return (
     <div>{counter.value}</div>
   )
 }
@@ -1499,7 +1500,7 @@ ei komponenttia kuitenkaan renderöidä uudelleen. Voimme saada komponentin uude
 ```react
 const App = (props) => {
   const {counter} = props
-  return(
+  return (
     <div>{counter.value}</div>
   )
 }
@@ -1650,9 +1651,9 @@ Nyt jokainen napin _plus_ painallus tulostaa konsoliin _clicked_.
 Muuttamalla tapahtumankäsittelijä seuraavaan muotoon
 
 ```html
-    <button onClick={() => this.setState({ counter: this.state.counter + 1 })}>
-      plus
-    </button>
+<button onClick={() => this.setState({ counter: this.state.counter + 1 })}>
+  plus
+</button>
 ```
 
 saamme halutun toiminnallisuuden.
@@ -1748,12 +1749,12 @@ Ongelmaan on useita erilaisia ratkaisuja. Eräs näistä on jo [aiemmin mainittu
 Eli sovellus toimii taas jos koodi muotetaan muotoon:
 
 ```html
-    <button onClick={this.kasvataYhdella.bind(this)}>
-      plus
-    </button>
-    <button onClick={this.nollaa.bind(this)}>
-      zero
-    </button>
+<button onClick={this.kasvataYhdella.bind(this)}>
+  plus
+</button>
+<button onClick={this.nollaa.bind(this)}>
+  zero
+</button>
 ```
 
 Jos samaa metodia joudutaan kutsumaan useasta kohtaa koodia, on hieman ikävää kirjoittaa toistuvasti metodin bindattu muoto React-elementtien sekaan.
@@ -1775,12 +1776,12 @@ class App extends React.Component {
 Nyt riittää viitata metodeihin "normaalisti", ilman bindiä:
 
 ```html
-    <button onClick={this.kasvataYhdella}>
-      plus
-    </button>
-    <button onClick={this.nollaa}>
-      zero
-    </button>
+<button onClick={this.kasvataYhdella}>
+  plus
+</button>
+<button onClick={this.nollaa}>
+  zero
+</button>
 ```
 
 Teknisesti ottaen konstruktorissa korvataan kenttään _kasvataYhdella_ alunperin määritelty metodi uudella metodilla, jolla on alkuperäisen metodin koodi siten, että _this_ on pysyväti bindattu komponenttiin.
@@ -1824,13 +1825,13 @@ Node.js ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koo
 Käytimme metodia _setState_ kahteen kertaan:
 
 ```js
-  kasvataYhdella = () => {
-    this.setState({ counter: this.state.counter + 1 })
-  }
+kasvataYhdella = () => {
+  this.setState({ counter: this.state.counter + 1 })
+}
 
-  nollaa = () => {
-    this.setState({ counter: 0 })
-  }
+nollaa = () => {
+  this.setState({ counter: 0 })
+}
 ```
 
 Näistä ensimmäinen tapa <code>this.setState({ counter: this.state.counter + 1 })</code> ei ole kaikissa tilanteissa suositeltava, sillä React ei takaa että metodin _setState_ kutsut tapahtuvat [siinä järjestyksessä missä ne on kirjoitettu koodiin](https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous).
@@ -1854,20 +1855,20 @@ Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlaine
 Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asettavat uuden arvon laskurille. Kannattaakin tehdä yksittäinen metodi, joka sopii molempiin käyttötarkoituksiin:
 
 ```react
-    asetaArvoon = (arvo) => {
-      this.setState({ counter: arvo })
-    }
+asetaArvoon = (arvo) => {
+  this.setState({ counter: arvo })
+}
 
-    render() {
-      //...
-      <button onClick={this.asetaArvoon(this.state.counter+1)}>
-        Plus
-      </button>
-      <button onClick={this.asetaArvoon(0)}>
-        Zero
-      </button>
-      //...
-    }
+render() {
+  //...
+  <button onClick={this.asetaArvoon(this.state.counter+1)}>
+    Plus
+  </button>
+  <button onClick={this.asetaArvoon(0)}>
+    Zero
+  </button>
+  //...
+}
 ```
 
 Huomaamme kuitenkin että muutos hajottaa sovelluksemme täysin:
@@ -1922,67 +1923,67 @@ Jos et ole aiemmin törmännyt tekniikkaan, siihen totutteluun voi mennä tovi.
 Olemme siis määritelleen komponentin metodin seuraavasti:
 
 ```js
-  asetaArvoon = (arvo) => {
-    return () => {
-      this.setState({ counter: arvo })
-    }
+asetaArvoon = (arvo) => {
+  return () => {
+    this.setState({ counter: arvo })
   }
+}
 ```
 
 Kun _render_-metodissa määritellään tapahtumankäsittelijä kutsumalla <code>this.asetaArvoon(0)</code>, on lopputuloksena
 
 ```js
-  () => {
-    this.setState({ counter: 0 })
-  }
- ```
+() => {
+  this.setState({ counter: 0 })
+}
+```
 
 eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio!
 
 Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaArvoon(this.state.counter + 1)</code>. Kun komponentti renderöidään ensimmäisen kerran, _this.state.counter_ on saanut konstruktorissa arvon 1, eli plus-napin tapahtumankäsittelijäksi tulee metodukutsun <code>this.asetaArvoon(1 + 1)</code> tulos, eli funktio
 
 ```js
-  () => {
-    this.setState({ counter: 2 })
-  }
- ```
+() => {
+  this.setState({ counter: 2 })
+}
+```
 
 Vastaavasti, kun laskurin tila on esim 41, tulee plus-napin tapahtumakuuntelijaksi
 
 ```js
-  () => {
-    this.setState({ counter: 42 })
-  }
- ```
+() => {
+  this.setState({ counter: 42 })
+}
+```
 
 Tarkastellaan vielä hieman metodia _asetaArvoon_:
 
 ```js
-  asetaArvoon = (arvo) => {
-    return () => {
-      this.setState({ counter: arvo })
-    }
+asetaArvoon = (arvo) => {
+  return () => {
+    this.setState({ counter: arvo })
   }
+}
 ```
 
 Koska metodi itse sisältää ainoastaan yhden komennon, eli _returnin_, joka palauttaa funktion, voidaan hyödyntää nuolifunktion tiiviimpää muotoa:
 
 ```js
-  asetaArvoon = (arvo) =>
-    () => {
-      this.setState({ counter: arvo })
-    }
+asetaArvoon = (arvo) =>
+  () => {
+    this.setState({ counter: arvo })
+  }
 ```
 
 Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tuloksena on "kaksi nuolta sisältävä funktio":
 
 ```js
-  asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
+asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
 
 Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa.
 
-Ensimmäisellä kutsulla "konfuguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
+Ensimmäisellä kutsulla "konfiguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
 
 ```js
 () => this.setState({ counter: 5 })
@@ -2062,27 +2063,27 @@ const Button = ({ handleClick, text }) => (
 Komponentin _App_ metodi _render_ muuttuu nyt muotoon:
 
 ```react
-  render() {
-    return (
+render() {
+  return (
+    <div>
+      <Display counter={this.state.counter}/>
       <div>
-        <Display counter={this.state.counter}/>
-        <div>
-          <Button
-            handleClick={this.asetaArvoon(this.state.counter + 1)}
-            text='Plus'
-          />
-          <Button
-            handleClick={this.asetaArvoon(this.state.counter - 1)}
-            text='Minus'
-          />
-          <Button
-            handleClick={this.asetaArvoon(0)}
-            text='Zero'
-          />
-        </div>
+        <Button
+          handleClick={this.asetaArvoon(this.state.counter + 1)}
+          text='Plus'
+        />
+        <Button
+          handleClick={this.asetaArvoon(this.state.counter - 1)}
+          text='Minus'
+        />
+        <Button
+          handleClick={this.asetaArvoon(0)}
+          text='Zero'
+        />
       </div>
-    )
-  }
+    </div>
+  )
+}
 ```
 
 Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uutena toiminnallisuutena nappi, jolla laskurin arvoa voi vähentää.
@@ -2103,9 +2104,9 @@ class App extends React.Component {
     }
   }
 
-  klikVasen = ()=> {
+  klikVasen = () => {
     this.setState({
-      vasen: this.state.vasen+1
+      vasen: this.state.vasen + 1
     })
   }
 
@@ -2115,8 +2116,8 @@ class App extends React.Component {
     })
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <div>
           {this.state.vasen}
@@ -2137,11 +2138,11 @@ Kun tilaa päivitetään riittää asettaa ainoastaan muuttuvan kentän arvo sil
 Eli kun päivitämme esim. vasemman napin painalluksia, riittää seuraava koodi
 
 ```js
-  klikVasen = ()=> {
-    this.setState({
-      vasen: this.state.vasen+1
-    })
-  }
+klikVasen = () => {
+  this.setState({
+    vasen: this.state.vasen + 1
+  })
+}
 ```
 
 tilassa oleva kenttä _oikea_ jää muutoksen yhteydessä ennalleen.
@@ -2161,7 +2162,7 @@ class App extends React.Component {
     }
   }
 
-  klikVasen = ()=> {
+  klikVasen = () => {
     this.setState({
       vasen: this.state.vasen + 1,
       kaikki: this.state.kaikki.concat('v')
@@ -2175,9 +2176,9 @@ class App extends React.Component {
     })
   }
 
-  render(){
+  render() {
     const kaikki = () => this.state.kaikki.join(' ')
-    return(
+    return (
       <div>
         <div>
           {this.state.vasen}
@@ -2195,12 +2196,12 @@ class App extends React.Component {
 eli kun esim. nappia _vasen_ painetaan, lisätään tilan taulukkoon kirjain _v_:
 
 ```js
-  klikVasen = ()=> {
-    this.setState({
-      vasen: this.state.vasen+1,
-      kaikki: this.state.kaikki.concat('v')
-    })
-  }
+klikVasen = () => {
+  this.setState({
+    vasen: this.state.vasen + 1,
+    kaikki: this.state.kaikki.concat('v')
+  })
+}
 ```
 
 Tilan kenttä _kaikki_ saa nyt arvokseen entisen tilan, mihin on liitetty _v_ metodilla [concat](
@@ -2220,20 +2221,20 @@ mutta älä tee niin. React komponentin tilaa, eli muuttujaa _this.state_ ei saa
 Katsotaan vielä tarkemmin, miten kaikkien painallusten historia renderöidään ruudulle:
 
 ```react
-  render(){
-    const historia = () => this.state.kaikki.join(' ')
-    return(
+render() {
+  const historia = () => this.state.kaikki.join(' ')
+  return (
+    <div>
       <div>
-        <div>
-          {this.state.vasen}
-          <button onClick={this.klikVasen}>vasen</button>
-          <button onClick={this.klikOikea}>oikea</button>
-          {this.state.oikea}
-          <div>{historia()}</div>
-        </div>
+        {this.state.vasen}
+        <button onClick={this.klikVasen}>vasen</button>
+        <button onClick={this.klikOikea}>oikea</button>
+        {this.state.oikea}
+        <div>{historia()}</div>
       </div>
-    )
-  }
+    </div>
+  )
+}
 ```
 
 Metodiin _render_ on nyt määritelty apufunktio:
@@ -2250,14 +2251,14 @@ Muutetaan apufunktiota hiukan:
 
 ```react
 const historia = () => {
-  if (this.state.kaikki.length===0) {
-    return(
+  if (this.state.kaikki.length === 0) {
+    return (
       <div>
         <em>sovellusta käytetään nappeja painelemalla</em>
       </div>
     )
   }
-  return(
+  return (
     <div>
       näppäilyhistoria: {this.state.kaikki.join(' ')}
     </div>
@@ -2268,17 +2269,17 @@ const historia = () => {
 Nyt funktion palauttama sisältö riippuu siitä, onko näppäimiä jo panettu. Jos ei, eli taulukko <code>this.state.kaikki</code> on tyhjä, palauttaa metodi "käyttöohjeen" sisältävän elementin
 
 ```html
-  <div>
-    <em>sovellusta käytetään nappeja painelemalla</em>
-  </div>
+<div>
+  <em>sovellusta käytetään nappeja painelemalla</em>
+</div>
 ```
 
 ja muussa tapauksessa näppäilyhistorian:
 
 ```html
-  <div>
-    näppäilyhistoria: {this.state.kaikki.join(' ')}
-  </div>
+<div>
+  näppäilyhistoria: {this.state.kaikki.join(' ')}
+</div>
 ```
 
 Komponentin _App_ ulkoasun muodostomat React-elementit siis ovat erilaisia riippuen sovelluksen tilasta, eli komponentissa on _ehdollista renderöintiä_.
@@ -2293,11 +2294,11 @@ Olemme nyt esitelleet kaksi eri tapaa komonenttien määrittelemiseen. Kumpaa tu
 
 Jos komponentti tarvitsee tilaa, on luokkasyntaksin käyttäminen välttämätöntä. Kannattaa kuitenkin muistaa, että Reactin filosofian mukaista on sijoittaa tila  [mahdollisimman ylös](https://reactjs.org/docs/lifting-state-up.html) komponenttihierarkiaan, mielellään ainoastaan sovelluksen juurikomponenttiin. Näin tilallisten komponenttien potentiaalinen tarvekin on vähäisempi.
 
-Joskus komponenttien on käytettävä osassa 2 esiteltäviä [osa2/#komponenttien-lifecycle-metodit], myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja. 
+Joskus komponenttien on käytettävä osassa 2 esiteltäviä [osa2/#komponenttien-lifecycle-metodit], myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
 
 Yleisohjeena on siis se, että käytä funktionaalisia komponentteja ellet aivan pakosti tarvitse jotain luokkasyntaksin omaavien komponenttien ominaisuuksia.
 
-Internetistä löytyy kyllä aiheesta päinvastaisiakin mielipitetiä, esim. [7 Reasons to Outlaw React’s Functional Components](https://medium.freecodecamp.org/7-reasons-to-outlaw-reacts-functional-components-ff5b5ae09b7c) 
+Internetistä löytyy kyllä aiheesta päinvastaisiakin mielipitetiä, esim. [7 Reasons to Outlaw React’s Functional Components](https://medium.freecodecamp.org/7-reasons-to-outlaw-reacts-functional-components-ff5b5ae09b7c)
 
 ## React-sovellusten debuggaus
 

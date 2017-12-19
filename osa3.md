@@ -240,7 +240,7 @@ Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektim
 Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_ versiomerkinnän edessä oleva väkänen, eli miksi muoto on
 
 ```json
-  "express": "^4.16.2"
+"express": "^4.16.2"
 ```
 
 npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
@@ -250,13 +250,13 @@ Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetä
 Voimme päivittää projektin riippuvuudet komennolla
 
 ```bash
-  npm update
+npm update
 ```
 
 Vastaavasti jos aloitamme projektin koodaamisen toisella koneella, saamme haettua ajantasaiset, _package.json_:in määrittelyn mukaiset riippuvuudet haettua komennolla
 
 ```bash
-  npm install
+npm install
 ```
 
 Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
@@ -306,19 +306,19 @@ app.get('/notes', (request, response) => {
 })
 ```
 
-Pyyntöön vastataan metodilla [json](http://expressjs.com/en/4x/api.html#res.json), joka lähettää HTTP-pyynnön vastaukseksi parametrina olevaa javascript-olioa (eli taulukko _notes_) vastaavan JSON-merkkijonon. Content-type-headerin arvoksi tulee _application/json_. 
+Pyyntöön vastataan metodilla [json](http://expressjs.com/en/4x/api.html#res.json), joka lähettää HTTP-pyynnön vastaukseksi parametrina olevaa javascript-olioa (eli taulukko _notes_) vastaavan JSON-merkkijonon. Content-type-headerin arvoksi tulee _application/json_.
 
 Pieni huomio JSON-muodossa palautettavasta datasta.
 
 Aiemmassa, pelkkää nodea käyttämässämme versiossa, jouduimme muuttamaan palautettavan datan json-muotoon metodilla _JSON.stringify_:
 
 ```js
-  response.end(JSON.stringify(notes))
+response.end(JSON.stringify(notes))
 ```
 
 Expressiä käyttässä tämä ei ole tarpeen, sillä muunnos tapahtuu automaattisesti.
 
-Kannattaa huomata, että [JSON](https://en.wikipedia.org/wiki/JSON) on merkkijono, eikä javascript-olio kuten muuttuja _notes_. 
+Kannattaa huomata, että [JSON](https://en.wikipedia.org/wiki/JSON) on merkkijono, eikä javascript-olio kuten muuttuja _notes_.
 
 Seuraava interaktiivsessa [node-repl](https://nodejs.org/docs/latest-v8.x/api/repl.html):issä suoritettu kokeilu havainnollistaa asiaa:
 
@@ -343,7 +343,7 @@ npm install --save-dev nodemon
 Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 
 ```json
-{ 
+{
   //...
   "dependencies": {
     "express": "^4.16.2"
@@ -394,17 +394,17 @@ Laajennetaan sovellusta siten, että se toteuttaa samanlaisen [RESTful]()-periaa
 
 ### REST
 
-Representational State Transfer eli REST on Roy Fieldingin vuonna 2000 ilmestyneessä [väitöskirjassa](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) määritelty skaalautuvien web-sovellusten rakentamiseksi tarkoitettu arkkitehtuurityyli. 
+Representational State Transfer eli REST on Roy Fieldingin vuonna 2000 ilmestyneessä [väitöskirjassa](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) määritelty skaalautuvien web-sovellusten rakentamiseksi tarkoitettu arkkitehtuurityyli.
 
 Emme nyt rupea määrittelemään REST:iä Fieldingiläisittäin tai rupea väittämään mitä REST on tai mitä se ei ole vaan otamme hieman [kapeamman näkökulman](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) miten REST tai RESTful API:t yleensä tulkitaan Web-sovelluksissa. Alkuperäinen REST-periaate ei edes rajoitu sinänsä Web-sovelluksiin.
 
-Mainitsimme jo [edellisestä osassa](osa3/#REST-API:n-käyttö), että yksttäisiä asioita, meidän tapauksessamme muistiinpanoja kutsutaan RESTful-ajattelussa _resursseiksi_. Jokaisella resurssilla on sen yksilöivä osoite. 
+Mainitsimme jo [edellisestä osassa](osa3/#REST-API:n-käyttö), että yksttäisiä asioita, meidän tapauksessamme muistiinpanoja kutsutaan RESTful-ajattelussa _resursseiksi_. Jokaisella resurssilla on sen yksilöivä osoite.
 
-Erittäin yleinen konventio on muodostaa resurssien yksilöivät urlit liittäen resurssityypin nimi ja resurssin yksilöivä tunniste. 
+Erittäin yleinen konventio on muodostaa resurssien yksilöivät urlit liittäen resurssityypin nimi ja resurssin yksilöivä tunniste.
 
 Oletetaan että palvelumme juuriosoite on _www.example.com/api_
 
-Jos nimitämme muistiinpanoja _note_-resursseiksi, yksilöidään yksittäinen muistiinpano, jonka tunniste on 10 urlilla _www.example.com/api/notes/10_. 
+Jos nimitämme muistiinpanoja _note_-resursseiksi, yksilöidään yksittäinen muistiinpano, jonka tunniste on 10 urlilla _www.example.com/api/notes/10_.
 
 Kaikkia muistiinpanoja edustavan kokoelmaresurssin url taas on _www.example.com/api/notes_
 
@@ -418,11 +418,11 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 | notes/10 | DELETE &nbsp;&nbsp;    | poistaa yksilöidyn resurssin |
 | notes/10 | PUT         | korvaa yksilöidyn resurssin pyynnön mukana olevalla datalla |
 | notes/10 | PATCH       | korvaa yksilöidyn resurssin osan pyynnön mukana olevalla datalla |
-|          |  |  | 
+|          |  |  |
 
 Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
-Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2] (https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valta osa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää. 
+Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2] (https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valta osa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää.
 
 Jotkut asiantuntijat (**VIITE**) nimittävätkin edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a REST:in sijaan resurssipohjaiseksi apiksi.
 
@@ -442,7 +442,7 @@ app.get('/notes/:id', (request, response) => {
 })
 ```
 
-Nyt _app.get('/notes/:id', ...)_ käsittelee kaikki HTTP GET -pyynnötä, jotka ovat muotoa _note/<jotain>_, missä _<jotain>_ on mielivaltainen merkkijono.  
+Nyt _app.get('/notes/:id', ...)_ käsittelee kaikki HTTP GET -pyynnötä, jotka ovat muotoa _note/<jotain>_, missä _<jotain>_ on mielivaltainen merkkijono.
 
 Polun parametrin _id_ arvoon päästään käsisiksi olion _request_ kautta:
 
@@ -495,7 +495,7 @@ Jokaisesta vertailufunktion kutsusta tulostetaan nyt monta asiaa. Konsoliin tulo
 3 'number' '1' 'string' false
 </pre>
 
-eli vika selviää, muuttujassa _id_ on talletettu merkkijono '1' kun taas muistiinpanojen id:t ovat numeroita. Javascriptissä === vertailu katsoo kaikki eri tyyppiset arvot oletusarvoisesti erisuuriksi, joten 1 ei ole '1'. 
+eli vika selviää, muuttujassa _id_ on talletettu merkkijono '1' kun taas muistiinpanojen id:t ovat numeroita. Javascriptissä === vertailu katsoo kaikki eri tyyppiset arvot oletusarvoisesti erisuuriksi, joten 1 ei ole '1'.
 
 Korjataan ongelma, muuttamalla parametrina oleva id numeroksi:
 
@@ -504,7 +504,7 @@ app.get('/notes/:id', (request, response) => {
   const id = Number(request.params.id)
   const note = notes.find(note => note.id === id)
   response.json(note)
-}) 
+})
 ```
 
 ja nyt yksittäisen resurssin hakeminen toimii
@@ -564,13 +564,13 @@ Herää kysymys miten voimme testata operaatiota? HTTP GET -pyyntöjä on helppo
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
-Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä työkalua. Asennetaan postman ja kokeillaan 
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä työkalua. Asennetaan postman ja kokeillaan
 
 <img src="/assets/3/8.png" height="200">
 
-Postmanin käyttö on tässä tilanteessa suhteellisen ykinkertaista, riitää määritellä url ja valita oikea pyyntötyyppi. 
+Postmanin käyttö on tässä tilanteessa suhteellisen ykinkertaista, riitää määritellä url ja valita oikea pyyntötyyppi.
 
-Palvelin näyttää vastaavan oiken. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla. 
+Palvelin näyttää vastaavan oiken. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla.
 
 Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
 
@@ -603,11 +603,11 @@ app.post('/notes', (request, response) => {
 })
 ```
 
-Reitin tapahtumankäsittelijäfunktio pääsee dataan käsiksi viitaamalla _request.body_. 
+Reitin tapahtumankäsittelijäfunktio pääsee dataan käsiksi viitaamalla _request.body_.
 
 Ilman body-parser-kirjaston määrittelyä pyynnön kentässä _body_ olisi ollut määrittelemätön. body-parserin toimintaperiaatteena onkin se, että se ottaa pyynnön mukana olevan JSON-muotoisen datan, muuttaa sen Javascript-olioksi ja sijoittaa  _request_-olion kenttään ennen kuin routen käsittelijää kutsutaan.
 
-Toistaiseksi sovellus ei vielä tee vastaanotetulle datalle, mitään muuta kuin tulostaa sen konsoliin ja palauttaa sen pyynnön vastauksessa. 
+Toistaiseksi sovellus ei vielä tee vastaanotetulle datalle, mitään muuta kuin tulostaa sen konsoliin ja palauttaa sen pyynnön vastauksessa.
 
 Ennen toimintalogiikan viimeistelyä varmistetaan ensin postmanilla että, lähetetty tieto menee varmasti perille. Pyyntötyypin ja urlin lisäksi on määriteltävä myös pyynnön mukana menevä data eli _body_:
 
@@ -628,7 +628,7 @@ app.post('/notes', (request, response) => {
   const note = request.body
   const maxId = notes.length>0 ? notes.map(n => n.id).sort().reverse()[0] : 1
   note.id = maxId + 1
-  
+
   notes = notes.concat(note)
 
   response.json(note)
@@ -637,7 +637,7 @@ app.post('/notes', (request, response) => {
 
 uuden muistiinpanon id:ksi asetetaan olemassaolevien id:iden maksi+1.
 
-Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä  
+Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä
 
 
 ```js
@@ -647,7 +647,7 @@ app.post('/notes', (request, response) => {
   notes = notes.concat(note)
 
   response.json(note)
-}) 
+})
 ```
 
 ## middlewaret

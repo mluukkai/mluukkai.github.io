@@ -60,7 +60,7 @@ const notes = [
 const App = (props) => {
   const { notes } = props;
 
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -108,7 +108,7 @@ jotka voidaan sijoittaa _ul_-tagien sisälle:
 const App = (props) => {
   const { notes } = props;
 
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -128,7 +128,7 @@ const App = (props) => {
   const { notes } = props;
   const rivit = () => notes.map(note => <li>{note.content}</li>)
 
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -152,7 +152,7 @@ const App = (props) => {
   const { notes } = props;
   const rivit = () => notes.map(note => <li key={note.id}>{note.content}</li>)
 
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -191,7 +191,7 @@ Siistitään koodia hiukan. Koska olemme kiinnostuneita ainoastaan propsien kent
 
 ```react
 const App = ({ notes }) => {
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -212,7 +212,7 @@ const Note = ({ note }) => {
 }
 
 const App = ({ notes }) => {
-  return(
+  return (
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
@@ -325,7 +325,7 @@ class App extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <h1>Muistiinpanot</h1>
         <ul>
@@ -381,7 +381,7 @@ class App extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <h1>Muistiinpanot</h1>
         <ul>
@@ -402,11 +402,11 @@ Lomakkeelle on lisätty myös tapahtumankäsittelijäksi metodi _addNote_ reagoi
 Tapahtumankäsittelijä on [osasta 1](/osa1#tapahtumankäsittely) tuttuun tapaan määritelty seuraavasti:
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    console.log('nappia painettu')
-    console.log(e.target)
-  }
+addNote = (e) => {
+  e.preventDefault()
+  console.log('nappia painettu')
+  console.log(e.target)
+}
 ```
 
 Parametrin _e_ arvona on metodin kutsun aiheuttama [tapahtuma](https://reactjs.org/docs/handling-events.html).
@@ -441,10 +441,10 @@ class App extends React.Component {
 Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_ arvoksi:
 
 ```html
-  <form onSubmit={this.addNote}>
-    <input value={this.state.new_note} />
-    <button>tallenna</button>
-  </form>
+<form onSubmit={this.addNote}>
+  <input value={this.state.new_note} />
+  <button>tallenna</button>
+</form>
 ```
 
 Tilaan määritelty "placeholder"-teksti  _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
@@ -465,7 +465,7 @@ class App extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <h1>Muistiinpanot</h1>
         <ul>
@@ -487,19 +487,19 @@ class App extends React.Component {
 Lomakkeen _input_-komponentille on nyt rekisteröity tapahtumankäsittelijä tilanteeseen _onChange_:
 
 ```html
-  <input
-    value={this.state.new_note}
-    onChange={this.handleNoteChange}
-  />
+<input
+  value={this.state.new_note}
+  onChange={this.handleNoteChange}
+/>
 ```
 
 Tapahtumankäsittelijää kutsutaan aina kun syötekomponentissa tapahtuu jotain. Tapahtumankäsittelijämetodi saa parametriksi tapahtumaolion _e_
 
 ```js
-  handleNoteChange = (e) => {
-    console.log(e.target.value)
-    this.setState({ new_note: e.target.value })
-  }
+handleNoteChange = (e) => {
+  console.log(e.target.value)
+  this.setState({ new_note: e.target.value })
+}
 ```
 
 Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e.target.value_ viittaa inputin syötekentän arvoon. Voit seurata konsolista miten tapahtumankäsittelijää kutsutaan:
@@ -509,22 +509,22 @@ Tapahtumaolion kenttä _target_ vastaa nyt kontrolloitua _input_-kenttää ja _e
 Nyt komponentin _App_ tilan kenttä _new_note_ heijastaa koko ajan syötekentän arvoa, joten voimme viimeistellä uuden muistiinpanon lisäämisestä huolehtivan metodin _addNote_:
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    const noteObject = {
-      content: this.state.new_note,
-      date: new Date().new,
-      important: Math.random() > 0.5
-      id: this.state.notes.length + 1
-    }
-
-    const notes = this.state.notes.concat(noteObject)
-
-    this.setState({
-      notes: notes,
-      new_note: ''
-    })
+addNote = (e) => {
+  e.preventDefault()
+  const noteObject = {
+    content: this.state.new_note,
+    date: new Date().new,
+    important: Math.random() > 0.5
+    id: this.state.notes.length + 1
   }
+
+  const notes = this.state.notes.concat(noteObject)
+
+  this.setState({
+    notes: notes,
+    new_note: ''
+  })
+}
 ```
 
 Ensin luodaan uutta muistiinpanoa vastaava olio _noteObject_, jonka sisältökentän arvo saadaan komponentin tilasta _this.state.new_note_. Yksikäsitteinen tunnus eli _id_ generoidaan kaikkien muistiinpanojen lukumäärän perusteella. Koska muistiinpanoja ei poisteta, menetelmä toimii sovelluksessamme. Komennon <code>Math.random()</code> avulla muistiinpanosta tulee 50% todennäköisyydellä tärkeä.
@@ -539,19 +539,19 @@ Tila päivitetään uusilla muistiinpanoilla ja tyhjentämällä syötekomponent
 Voimme muuttaa tilan päivittämän koodin
 
 ```js
-  this.setState({
-    notes: notes,
-    new_note: ''
-  })
+this.setState({
+  notes: notes,
+  new_note: ''
+})
 ```
 
 muotoon
 
 ```js
-  this.setState({
-    notes,
-    new_note: ''
-  })
+this.setState({
+  notes,
+  new_note: ''
+})
 ```
 
 Tämä johtuu siitä, että ES6:n myötä (ks. kohta [property definitions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer)) javascriptiin on tullut uusi ominaisuus, joka mahdollistaa hieman tiiviimmän tavan määritellä olioita muuttujien avulla.
@@ -559,8 +559,8 @@ Tämä johtuu siitä, että ES6:n myötä (ks. kohta [property definitions](http
 Tarkastellaan tilannetta, jossa meillä on muuttujissa arvoja
 
 ```js
-  const name: 'Leevi'
-  const age = 0
+const name: 'Leevi'
+const age = 0
 ```
 
 ja haluamme määritellä näiden perusteella olion, jolla on kentät _name_ ja _age_.
@@ -568,16 +568,16 @@ ja haluamme määritellä näiden perusteella olion, jolla on kentät _name_ ja 
 Vanhassa javascriptissä olio täytyi määritellä seuraavaan tapaan
 
 ```js
-  const person = {
-    name: name,
-    age: age
-  }
+const person = {
+  name: name,
+  age: age
+}
 ```
 
 koska muuttujien ja luotavan olio kenttien nimi nyt on sama, riittää ES6:ssa kirjoittaa:
 
 ```js
-  const person = { name, age }
+const person = { name, age }
 ```
 
 lopputulos molemmilla tavoilla luotuun olioon on täsmälleen sama.
@@ -605,37 +605,37 @@ class App extends React.Component {
 Muutetaan metodia _render_ siten, että se tallettaa muuttujaan _notesToShow_ näytettävien muistiinpanojen listan riippuen siitä tuleeko näyttää kaikki vai vain tärkeät:
 
 ```react
-  render() {
-    const notesToShow =
-      this.state.showAll ?
-        this.state.notes :
-        this.state.notes.filter(note => note.important === true)
+render() {
+  const notesToShow =
+    this.state.showAll ?
+      this.state.notes :
+      this.state.notes.filter(note => note.important === true)
 
-    return(
-      <div>
-        <h1>Muistiinpanot</h1>
-        <ul>
-          {notesToShow.map(note => <Note key={note.id} note={note} />)}
-        </ul>
-        <form onSubmit={this.addNote}>
-          <input
-            value={this.state.new_note}
-            onChange={this.handleNoteChange}
-          />
-          <button>tallenna</button>
-        </form>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <h1>Muistiinpanot</h1>
+      <ul>
+        {notesToShow.map(note => <Note key={note.id} note={note} />)}
+      </ul>
+      <form onSubmit={this.addNote}>
+        <input
+          value={this.state.new_note}
+          onChange={this.handleNoteChange}
+        />
+        <button>tallenna</button>
+      </form>
+    </div>
+  )
+}
 ```
 
 Muuttujan _notesToShow_ määrittely on melko kompakti
 
 ```js
-  const notesToShow =
-    this.state.showAll ?
-      this.state.notes :
-      this.state.notes.filter(note => note.important === true)
+const notesToShow =
+  this.state.showAll ?
+    this.state.notes :
+    this.state.notes.filter(note => note.important === true)
 ```
 
 Käytössä on monissa muissakin kielissä oleva [ehdollinen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) operaatio.
@@ -684,7 +684,7 @@ class App extends React.Component {
 
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 
-    return(
+    return (
       <div>
         <h1>Muistiinpanot</h1>
 
@@ -713,15 +713,15 @@ class App extends React.Component {
 Näkyviä muistiinpanoja (kaikki vai ainoastaan tärkeät) siis kontrolloidaan napin avulla. Napin tapahtumankäsittelijä on yksinkertainen, se muuttaa _this.state.showAll_:n arvon truesta falseksi ja päinvastoin:
 
 ```js
-  toggleVisible = () => {
-    this.setState({showAll: !this.state.showAll})
-  }
+toggleVisible = () => {
+  this.setState({showAll: !this.state.showAll})
+}
 ```
 
 Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perusteella:
 
 ```js
-  const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
+const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 ```
 
 ### tehtäviä lomakkeista
@@ -817,7 +817,7 @@ HTTPRequest request = new HTTPRequest()
 
 List<Muistiinpano> muistiinpanot = request.get("https://fullstack-exampleapp.herokuapp.com/data.json");
 
-muistiinpanot.forEach(m=>{
+muistiinpanot.forEach(m => {
   System.out.println(m.content);
 })
 ```
@@ -833,14 +833,14 @@ Nykyisellään javascript-moottorit ovat _yksisäikeisiä_ eli ne eivät voi suo
 Javasript-moottoreiden yksisäikeisyydellä on myös sellainen seuraus, että jos koodin suoritus kestää erittäin pitkään, selain jäätyy suorituksen ajaksi. Jos lisätään jonnekin kohtaa sovellustamme, esim. konstruktoriin seuraava koodi:
 
 ```
-  setTimeout(() => {
-    console.log('loop..')
-    let i = 0
-    while(i < 50000000000) {
-      i++
-    }
-    console.log('end')
-  }, 5000)
+setTimeout(() => {
+  console.log('loop..')
+  let i = 0
+  while(i < 50000000000) {
+    i++
+  }
+  console.log('end')
+}, 5000)
 ```
 
 Kaikki toimii 5 sekunnin ajan normaalisti. Kun _setTimeout_:in parametrina määritelty funktio suoritetaan, menee selaimen sivu jumiin pitkän loopin suorituksen ajaksi. Ainakaan Chromessa selaimen tabia ei pysty edes sulkemaan luupin suorituksen aikana.
@@ -1036,7 +1036,7 @@ class App extends React.Component {
       })
   }
 
-  render(){
+  render() {
     console.log('render')
     // ...
   }
@@ -1062,10 +1062,10 @@ Ensin siis suoritetaan konstruktori, ja sen jälkeen metodi _componentWillMount_
 Metodissa _componentWillMount_ suoritetaan axiosin avulla HTTP GET -pyyntö ja samalla _rekisteröidään_ pyynnön palauttamalle promiselle tapahtumankäsittelijä:
 
 ```js
-  axios.get('http://localhost:3001/notes').then(response => {
-    console.log('promise fulfilled')
-    this.setState({ notes: response.data })
-  })
+axios.get('http://localhost:3001/notes').then(response => {
+  console.log('promise fulfilled')
+  this.setState({ notes: response.data })
+})
 ```
 
 Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponenentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
@@ -1077,14 +1077,14 @@ Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on eritt
 Huomaa, että olisimme voineet kirjoittaa koodin myös seuraavasti:
 
 ```js
-  const eventHandler = (response) => {
-    console.log('promise fulfilled')
-    this.setState({ notes: response.data })
-  }
+const eventHandler = (response) => {
+  console.log('promise fulfilled')
+  this.setState({ notes: response.data })
+}
 
-  const promise = axios.get('http://localhost:3001/notes')
+const promise = axios.get('http://localhost:3001/notes')
 
-  promise.then(eventHandler)
+promise.then(eventHandler)
 ```
 
 Muuttujaan _eventHandler_ on sijoitettu viite funktioon. Axiosin metodin get palauttama promise on talletettu muuttujaan _promise_. Takaisinkutsun rekisteröinti tapahtuu antamalla promisen then-metodin parametrina muuttuja _eventHandler_, joka viittaa käsittelijäfunktioon.
@@ -1120,19 +1120,19 @@ json-server vaatii, että tiedot lähetetään JSON-muodossa, eli käytännöss�
 Muutetaan nyt uuden muistiinpanon lisäämisestä huolehtivaa tapahtumankäsittelijää seuraavasti:
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    const noteObject = {
-      content: this.state.new_note,
-      date: new Date().new,
-      important: Math.random()>0.5,
-    }
-
-    axios.post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        console.log(response)
-      })
+addNote = (e) => {
+  e.preventDefault()
+  const noteObject = {
+    content: this.state.new_note,
+    date: new Date().new,
+    important: Math.random() > 0.5,
   }
+
+  axios.post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      console.log(response)
+    })
+}
 ```
 
 eli luodaan muistiinpanoa vastaava olio, ei kuitenkaan lisätä sille kenttää _id_, parempi jättää id:n generointi palvelimen vastuulle!
@@ -1156,22 +1156,22 @@ Koska POST-pyynnössä lähettämämme data oli javascrip-olio, osasi axios auto
 Uusi muistiinpano ei vielä renderöidy ruudulle, sillä emme aseta komponentille _App_ uutta tilaa muistiinpanon luomisen yhteydessä. Viimeistellään sovellus vielä tältä osin:
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    const noteObject = {
-      content: this.state.new_note,
-      date: new Date(),
-      important: Math.random()>0.5,
-    }
-
-    axios.post('http://localhost:3001/notes', noteObject)
-      .then(response => {
-        this.setState({
-          notes: this.state.notes.concat(response.data),
-          new_note: ''
-        })
-      })
+addNote = (e) => {
+  e.preventDefault()
+  const noteObject = {
+    content: this.state.new_note,
+    date: new Date(),
+    important: Math.random() > 0.5,
   }
+
+  axios.post('http://localhost:3001/notes', noteObject)
+    .then(response => {
+      this.setState({
+        notes: this.state.notes.concat(response.data),
+        new_note: ''
+      })
+    })
+}
 ```
 
 Palvelimen palauttama uusi muistiinpano siis lisätään tilassa olevien muiden muistiinpanojen joukkoon (kannattaa [muistaa tärkeä detalji](osa1/#taulukon-käsittelyä) siitä, että metodi _concat_ ei muuta komponentin alkuperäistä tilaa, vaan luo uuden uuden taulukon) ja tyhjennetään lomakkeen teksti.
@@ -1206,11 +1206,11 @@ Komponentissa on nappi, jolle on rekisteröity klikkaustapahtuman käsittelijäk
 Tapahtumankäsittelijän alustava versio on määritelty komponentissa _App_ seuraavasti:
 
 ```js
-  toggleImportanceOf = (id) => {
-    return () => {
-      console.log('importance of '+id+' needs to be toggled')
-    }
+toggleImportanceOf = (id) => {
+  return () => {
+    console.log('importance of '+id+' needs to be toggled')
   }
+}
 ```
 
 Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisälttöön kohta.
@@ -1218,15 +1218,15 @@ Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisälttö�
 Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle tapahtumankäsittelijäfunktio:
 
 ```html
-  <ul>
-    {notesToShow.map(note =>
-      <Note
-        key={note.id}
-        note={note}
-        toggleImportance={this.toggleImportanceOf(note.id)}
-      />
-    )}
-  </ul>
+<ul>
+  {notesToShow.map(note =>
+    <Note
+      key={note.id}
+      note={note}
+      toggleImportance={this.toggleImportanceOf(note.id)}
+    />
+  )}
+</ul>
 ```
 
 Jokaisen muistiinpanon tapahtumankäsittelijä on nyt _yksilöllinen_, sillä se sisältää muistiinpanon _id:n_. Esim. jos _note.id_ on 3 tulee tapahtumankäsittelijäksi _this.toggleImportance(note.id)_ eli käytännössä:
@@ -1260,21 +1260,21 @@ Korvaamme nyt muistiinpanon kokonaan, sillä samalla tulee esille muutama tärke
 Metodi on seuraavassa:
 
 ```js
-  toggleImportanceOf = (id) => {
-    return () => {
-      const url = `http://localhost:3001/notes/${id}`
-      const note = this.state.notes.find(n => n.id === id)
-      const changedNote = { ...note, important: !note.important }
+toggleImportanceOf = (id) => {
+  return () => {
+    const url = `http://localhost:3001/notes/${id}`
+    const note = this.state.notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
 
-      axios.put(url, changedNote)
-        .then(response => {
-          const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
-          this.setState({
-            notes: nonchangedNotes.concat(response.data)
-          })
-      })
-    }
+    axios.put(url, changedNote)
+      .then(response => {
+        const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
+        this.setState({
+          notes: nonchangedNotes.concat(response.data)
+        })
+    })
   }
+}
 ```
 
 Melkein joka riville sisältyy tärkeitä yksityiskohtia. Ensimmäinen rivi määrittelee jokaiselle muistiinpanolle id-kenttään perustuvan yksilöivän url:in.
@@ -1284,7 +1284,7 @@ Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScrip
 Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sisältö poislukien kenttä important. Luominen näyttää hieman erikoiselta:
 
 ```js
-  const changedNote = { ...note, important: !note.important }
+const changedNote = { ...note, important: !note.important }
 ```
 
 Kyseessä on vielä standardoimattoman [object spread](https://github.com/tc39/proposal-object-rest-spread) -operaation soveltaminen.
@@ -1294,7 +1294,7 @@ Käytännössä <code>{...note}</code> luo olion, jolla on kenttinään kopiot o
 Uusi olio olisi voitu luodan myös vanhemmalla komennolla [Object.assign](https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
 
 ```js
-  const changedNote = Object.assign({}, note, {important: !note.important} }
+const changedNote = Object.assign({}, note, {important: !note.important} }
 ```
 
 Object spread -syntaksi on kuitenkin yleisesti käytössä Reactissa, joten mekin käytämme sitä.
@@ -1302,10 +1302,10 @@ Object spread -syntaksi on kuitenkin yleisesti käytössä Reactissa, joten meki
 Pari huomioita. Miksi teimme muutettavasta oliosta kopion vaikka myös seuraava koodi näyttää toimivan:
 
 ```js
-  const note = this.state.notes.find(n => n.id === id)
-  note.important = !note.important
+const note = this.state.notes.find(n => n.id === id)
+note.important = !note.important
 
-  axios.put(url, changedNote).then(response => {
+axios.put(url, changedNote).then(response => {
 ```
 
 Näin ei ole suositetavaa tehdä, sillä muuttuja _note_ on viite komponentin tilassa, eli _this.state.notes_-taulukossa olevaan olioon, ja kuten muistamme tilaa ei Reactissa saa muuttaa suoraan!
@@ -1318,13 +1318,13 @@ Uusi muistiinpano lähetetään sitten PUT-pyynnön mukana palvelimelle, jossa s
 Takaisinkutsufunktiossa asetataan komponentin _App_ tilaan kaikki vanhat muistiinpanot paitsi muuttuneen, josta tilaan asetetaan palvelimen palauttama versio:
 
 ```js
-  axios.put(url, changedNote)
-    .then(response => {
-      const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
-      this.setState({
-        notes: nonchangedNotes.concat(response.data)
-      })
+axios.put(url, changedNote)
+  .then(response => {
+    const nonchangedNotes = this.state.notes.filter(n => n.id !== id)
+    this.setState({
+      notes: nonchangedNotes.concat(response.data)
     })
+  })
 ```
 
 Ensin muut vanhat muistiinpanot paitsi muutunut otetaan tilasta taulukon muuttujan [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) avulla.
@@ -1340,27 +1340,26 @@ Järjestäminen onnistuu taulukon metodilla [sort](https://developer.mozilla.org
 Tehdään järjestäminen metodissa _render_.
 
 ```react
- render() {
-    // ...
+render() {
+  // ...
 
-    const byId = (note1, note2) => note1.id - note2.id
+  const byId = (note1, note2) => note1.id - note2.id
 
-    return(
-      <div>
-        // ...
+  return (
+    <div>
+      // ...
 
-        {notesToShow.sort(byId).map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={this.toggleImportanceOf(note.id)}
-          />
-        )}
+      {notesToShow.sort(byId).map(note =>
+        <Note
+          key={note.id}
+          note={note}
+          toggleImportance={this.toggleImportanceOf(note.id)}
+        />
+      )}
 
-        // ...
-      </div>
-    )
-  }
+      // ...
+    </div>
+  )
 }
 ```
 
@@ -1408,51 +1407,49 @@ App extends React.Component {
 moduulin funktioita käytetään importatun muuttujan _noteService_ kautta seuraavasti:
 
 ```js
-  componentWillMount() {
-    noteService
-      .getAll()
-      .then(response => {
-        this.setState({notes: response.data})
-      })
-  }
+componentWillMount() {
+  noteService
+    .getAll()
+    .then(response => {
+      this.setState({notes: response.data})
+    })
+}
 
-  addNote = (e) => {
+addNote = (e) => {
+  // ...
+  noteService
+    .create(noteObject)
+    .then(response => {
+      this.setState({
+        notes: this.state.notes.concat(response.data),
+        new_note: ''
+      })
+    })
+}
+
+toggleImportanceOf = (id) => {
+  return () => {
     // ...
     noteService
-      .create(noteObject)
+      .update(id, changedNote)
       .then(response => {
+        const notes = this.state.notes.filter(n => n.id !== id)
         this.setState({
-          notes: this.state.notes.concat(response.data),
-          new_note: ''
+          notes: notes.concat(response.data)
         })
       })
   }
-
-  toggleImportanceOf = (id) => {
-    return () => {
-      // ...
-      noteService
-        .update(id, changedNote)
-        .then(response => {
-          const notes = this.state.notes.filter(n => n.id !== id)
-          this.setState({
-            notes: notes.concat(response.data)
-          })
-        })
-    }
-  }
-
 }
 ```
 
 Voisimme viedä ratkaisua vielä askeleen pidemmälle, sillä käyttäessään moduulin funktioita komponentti _App_ saa olion, joka sisältää koko HTTP-pyynnön vastauksen:
 
 ```js
-  noteService
-    .getAll()
-    .then(response => {
-      this.setState({notes: response.data})
-    })
+noteService
+  .getAll()
+  .then(response => {
+    this.setState({notes: response.data})
+  })
 ```
 
 Eli asia mistä _App_ on kiinnostunut on parametrin kentässä _response.data_.
@@ -1460,21 +1457,21 @@ Eli asia mistä _App_ on kiinnostunut on parametrin kentässä _response.data_.
 Moduulia olisi miellyttävämpi käyttää, jos se HTTP-pyynnön vastauksen sijaan palauttaisi suoraan muistiinpanot sisältävän taulukon. Tällöin moduulin käyttö näyttäisi seuraavalta
 
 ```js
-  noteService
-    .getAll()
-    .then(notes => {
-      this.setState({notes: notes})
-    })
+noteService
+  .getAll()
+  .then(notes => {
+    this.setState({notes: notes})
+  })
 ```
 
 joka voitaisiin [ilmaista hieman tiiviimmin](#kehittyneempi-tapa-olioliteraalien-kirjoittamiseen) seuraavasti:
 
 ```js
-  noteService
-    .getAll()
-    .then(notes => {
-      this.setState({notes})
-    })
+noteService
+  .getAll()
+  .then(notes => {
+    this.setState({notes})
+  })
 ```
 
 Tämä onnistuu muuttamalla moduulin koodia seuraavasti (koodiin jää ikävästi copy-pastea, emme kuitenkaan nyt välitä siitä):
@@ -1597,13 +1594,13 @@ Ehkä yleisempi tapa kuin kahden tapahtumankäsittelijän käyttö on liittää 
 Käytännössä virhetilanteen käsittelijän tekisteröiminen tapahtuisi seuraavasti
 
 ```js
-  axios.get('http://example.com/propably_will_fail')
-    .then(response => {
-      console.log('success!')
-    })
-    .catch(error => {
-      console.log('fail')
-    })
+axios.get('http://example.com/propably_will_fail')
+  .then(response => {
+    console.log('success!')
+  })
+  .catch(error => {
+    console.log('fail')
+  })
 ```
 
 Jos pyyntö epäonnistuu, kutsutaan _catch_-metodin avulla rekisteröityä käsittelijää.
@@ -1613,50 +1610,50 @@ Metodia _catch_ hyödynnetän usen siten, että se sijoitetaan syvemmälle promi
 Kun sovelluksemme tekee HTTP-operaation syntyy oleellisesti ottaen [promiseketju](https://javascript.info/promise-chaining):
 
 ```js
-  axios
-    .put(`${baseUrl}/${id}`, newObject)
-    .then(response => response.data)
-    .then(changedNote => {
-      // ...
-    })
+axios
+  .put(`${baseUrl}/${id}`, newObject)
+  .then(response => response.data)
+  .then(changedNote => {
+    // ...
+  })
 ```
 
 Metodilla _catch_ voidaan määritellä ketjun lopussa käsittelijäfunktio, jota kutsutaan siinä vaiheessa jos mikä tahansa ketjun promisesta epäonnistuu, eli menee tilaan _rejected_:
 
 ```js
-  axios
-    .put(`${baseUrl}/${id}`, newObject)
-    .then(response => response.data)
-    .then(changedNote => {
-      // ...
-    })
-    .catch(error => {
-      console.log('fail')
-    })
+axios
+  .put(`${baseUrl}/${id}`, newObject)
+  .then(response => response.data)
+  .then(changedNote => {
+    // ...
+  })
+  .catch(error => {
+    console.log('fail')
+  })
 ```
 
 Hyödynnetään tätä ominaisuutta, ja sijoitetaan virheenkäsittelijä komponenttiin _App_:
 
 ```js
-  toggleImportanceOf = (id) => {
-    return () => {
-      const note = this.state.notes.find(n => n.id === id)
-      const changedNote = { ...note, important: !note.important }
+toggleImportanceOf = (id) => {
+  return () => {
+    const note = this.state.notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
 
-      noteService
-        .update(id, changedNote)
-        .then(changedNote => {
-          const notes = this.state.notes.filter(n => n.id !== id)
-          this.setState({
-            notes: notes.concat(changedNote)
-          })
+    noteService
+      .update(id, changedNote)
+      .then(changedNote => {
+        const notes = this.state.notes.filter(n => n.id !== id)
+        this.setState({
+          notes: notes.concat(changedNote)
         })
-        .catch(error => {
-          alert(`muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`)
-          this.setState({ notes: this.state.notes.filter(n => n.id !== id) })
-        })
-    }
+      })
+      .catch(error => {
+        alert(`muistiinpano '${note.content}' on jo valitettavasti poistettu palvelimelta`)
+        this.setState({ notes: this.state.notes.filter(n => n.id !== id) })
+      })
   }
+}
 ```
 
 Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US/docs/Web/API/Window/alert)-dialogin avulla ja palvelimelta poistettu muistiinpano poistetaan tilasta.
@@ -1730,9 +1727,9 @@ Jos haluamme kohdistaa tyylit nimenomaan muistiinpanoihin, on parempi käyttää
 Normaalissa HTML:ssä luokat määritellään elementtien attribuutin _class_ arvona:
 
 ```html
-  <li class="note">
-    tekstiä
-  </li>
+<li class="note">
+  tekstiä
+</li>
 ```
 
 Reactissa tulee kuitenkin classin sijaan käyttää attribuuttia [className](https://reactjs.org/docs/dom-elements.html#classname), eli muutetaan komponenttia _Note_ seuraavasti:
@@ -1805,7 +1802,7 @@ class App extends React.Component {
   render() {
     //...
 
-    return(
+    return (
       <div>
         <h1>Muistiinpanot</h1>
 
