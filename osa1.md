@@ -493,7 +493,7 @@ Palvelin luo uutta muistiinpanoa vastaavan olion ja laittaa sen muistiinpanot si
   })
 ```
 
-Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _content_ ja luomishetken kertova _data_.
+Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _content_ ja luomishetken kertova _date_.
 
 Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoavat aina Herokun uudelleenkäynnistäessä palvelun.
 
