@@ -8,32 +8,32 @@ permalink: /osa3/
   <h1>KESKEN, ÄLÄ LUE</h1>
 </div>
 
-## osan 2 oppimistavoitteet
+## osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
   - RESTful routing
 - node.js
   - ...
 - Javascript
-  - aync/await
+  - async/await
 - muu
-  - npm  
+  - npm
 
 ## Node.js
 
-Siirrämme tässä osassa fokuksen backendiin, eli palvelimella olevaan toiminnallisuuteen. 
+Siirrämme tässä osassa fokuksen backendiin, eli palvelimella olevaan toiminnallisuuteen.
 
-Backendin toiminnallisuuteen hyödynnämme [Node.js](https://nodejs.org/en/):ää, jokaon melkein missä vaan, erityisesti palvelimilla ja omallakin koneellasi toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö. 
+Backendin toiminnallisuuteen hyödynnämme [Node.js](https://nodejs.org/en/):ää, joka on melkein missä vaan, erityisesti palvelimilla ja omallakin koneellasi toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö.
 
-Kurssimateriaalia tehdessä on ollut käytössä Node.js:n versio _v8.6.0_. Huolehdi että omasi on vähintää yhtä tuore (ks. komentoriviltä _node -v_). 
+Kurssimateriaalia tehdessä on ollut käytössä Node.js:n versio _v8.6.0_. Huolehdi että omasi on vähintää yhtä tuore (ks. komentoriviltä _node -v_).
 
-Kuten [osassa 1](osa1#Javascriptiä) todettiin, selaimet eivät vielä osaa uusimpia javasriptin ominaisuuksia ja siksi selainpuolen koodi täytyy kääntää eli _transpiloida_ esim  [babel](https://babeljs.io/):illa. Backendissa tilanne on kuitenkin toinen, uusin node hallitsee riittävissä määrin myös javascriptin uusia versioita (muutamia vielä standardoimattomia ominaisuuksia lukuunottamatta), joten suoritamme nodella suoraan kirjoittamaamme koodia ilman transpilointivaihetta.
+Kuten [osassa 1](osa1#Javascriptiä) todettiin, selaimet eivät vielä osaa uusimpia javascriptin ominaisuuksia ja siksi selainpuolen koodi täytyy kääntää eli _transpiloida_ esim [babel](https://babeljs.io/):illa. Backendissa tilanne on kuitenkin toinen, uusin node hallitsee riittävissä määrin myös javascriptin uusia versioita (muutamia vielä standardoimattomia ominaisuuksia lukuunottamatta), joten suoritamme nodella suoraan kirjoittamaamme koodia ilman transpilointivaihetta.
 
 Tavoitteenamme on tehdä nodella [osan 2](/osa2) muistiinpano-sovellukseen sopiva backend. Aloitetaan kuitenkin ensin perusteiden läpikäyminen toteuttamalla perinteinen "hello world"-sovellus.
 
 Osassa 2 oli jo puhe [npm](osa2#npm):stä, eli javascript-projektien hallintaan liittyvästä, alunperin node-ekosysteeminstä kotoisin olevasta työkalusta. Mennään sopivaan hakemistoon ja luodaan projektimme runko komennolla _npm init_. Vastaillaan kysymyksiin sopivasti ja tuloksena on hakemiston juureen sijoitettu projektin tietoja kuvaava tiedosto _package.json_
 
-```js
+```json
 {
   "name": "muistiinpanot-backend",
   "version": "0.0.1",
@@ -47,11 +47,11 @@ Osassa 2 oli jo puhe [npm](osa2#npm):stä, eli javascript-projektien hallintaan 
 }
 ```
 
-Tiedosto määrittelee mm. että ohjelmamme käynnistyspiste on tiedosto _index.js_. 
+Tiedosto määrittelee mm. että ohjelmamme käynnistyspiste on tiedosto _index.js_.
 
 Tehdään avaimen _scripts_ alle pieni lisäys:
 
-```js
+```json
 {
   // ...
   "scripts": {
@@ -114,7 +114,7 @@ app.listen(port)
 console.log(`Server running on port ${port}`)
 ```
 
-Konsoliin tulostuu 
+Konsoliin tulostuu
 
 ```bash
 Server running on port 3001
@@ -142,7 +142,7 @@ Selaimen puolella käytetään (nykyään) ES6:n moduuleita, eli moduulit määr
 
 Node.js kuitenkin käyttää oletusarvoisesti ns. [CommonJS](https://en.wikipedia.org/wiki/CommonJS)-moduuleja. Syy tälle on siinä, että node-ekosysteemillä oli tarve moduuleihin jo pitkä aika ennen kuin Javascript tuki kielen tasolla moduuleja. Node ei toistaiseksi tue ES-moduuleja, mutta tuki on todennäköisesti jossain vaiheessa [tulossa](https://nodejs.org/api/esm.html).
 
-CommonJS-moduulit toimivat kohtuullisessa määrin samaan tapaan kuin ES6-moduulit, ainakin tämän kurssin tarpeiden puitteissa. 
+CommonJS-moduulit toimivat kohtuullisessa määrin samaan tapaan kuin ES6-moduulit, ainakin tämän kurssin tarpeiden puitteissa.
 
 Koodi jatkuu seuraavasti:
 
@@ -155,9 +155,9 @@ const app = http.createServer( (req, res) => {
 
 koodi luo [http](https://nodejs.org/docs/latest-v8.x/api/http.html)-palvelimen metodilla _createServer_ web-palvelimen, jolle se rekisteröi tapahtumankäsittelijän, joka suoritetaan _jokaisen_ osoitteen <http:/localhost:3000/> alle tulevan HTTP-pyynnön yhteydessä.
 
-Pyyntään vastataan statuskoodilla 200, asettamalla _Content-Type_-headerille arvo ja laittamalla sivun sisällöksi merkkijono _Hello World_.
+Pyyntöön vastataan statuskoodilla 200, asettamalla _Content-Type_-headerille arvo ja laittamalla sivun sisällöksi merkkijono _Hello World_.
 
-Viimeiset rivit sitovat muuttujaan _app_ sijoitetun http-palvelimen kuuntelemaan porttiin 3001 tulevia HTTP-pyyntöjä: 
+Viimeiset rivit sitovat muuttujaan _app_ sijoitetun http-palvelimen kuuntelemaan porttiin 3001 tulevia HTTP-pyyntöjä:
 
 ```js
 const port = 3001
@@ -202,7 +202,7 @@ Kun avaamme selaimen, on tulostusasu sama kuin [osassa 3](osa2/#datan-haku-palve
 
 ![]({{ "/assets/3/2.png" | absolute_url }})
 
-Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-fronendin kanssa. Mutta vasta melkein, jos käynnistämme fronendin, tulee konsoliin virheilmoitus
+Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-frontendin kanssa. Mutta vasta melkein, jos käynnistämme frontendin, tulee konsoliin virheilmoitus
 
 ![]({{ "/assets/3/3.png" | absolute_url }})
 
@@ -210,14 +210,14 @@ Syy virheelle selviää pian, parantelemme kuitenkin ensin koodia muista osin.
 
 ## express
 
-Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta hieman työlästä. 
+Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta hieman työlästä.
 
-Nodella tapahtuvaa web-sovellusten ohjelmointia helpottamaan onkin kehitelty useita  _http_:tä miellyttävämmän ohjelmoitirajapinnan tarjoamia kirjastoja. Näistä ehdoton [express](http://expressjs.com).
+Nodella tapahtuvaa web-sovellusten ohjelmointia helpottamaan onkin kehitelty useita _http_:tä miellyttävämmän ohjelmoitirajapinnan tarjoamia kirjastoja. Näistä ehdoton [express](http://expressjs.com).
 
-Otetaan express käyttöön määrittelemällä se projektimme riippuvuudeksi komennolla 
+Otetaan express käyttöön määrittelemällä se projektimme riippuvuudeksi komennolla
 
 ```bash
-npm install express --save 
+npm install express --save
 ```
 
 Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
@@ -231,11 +231,11 @@ Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 }
 ```
 
-Riippuvuuen koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin
+Riippuvuuden koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin
 
 <img src="/assets/3/4.png" height="200">
 
-Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektimme [transittiiviset riippuvuudet](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/).
+Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektimme [transitiiviset riippuvuudet](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/).
 
 Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_ versiomerkinnän edessä oleva väkänen, eli miksi muoto on
 
@@ -243,7 +243,7 @@ Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_
   "express": "^4.16.2"
 ```
 
-npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning). 
+npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
 
 Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
 
