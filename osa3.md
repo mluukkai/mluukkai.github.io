@@ -189,9 +189,9 @@ const notes = [
   }
 ]
 
-const app = http.createServer( (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify(notes))
+const app = http.createServer( (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'application/json' })
+  response.end(JSON.stringify(notes))
 })
 ```
 
@@ -233,7 +233,7 @@ Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 
 Riippuvuuen koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin
 
-![]({{ "/assets/3/4.png" | absolute_url }})
+<img src="/assets/3/4.png" height="200">
 
 Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektimme [transittiiviset riippuvuudet](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/).
 
@@ -285,6 +285,272 @@ Sovellus ei muutu paljoa. Heti alussa otetaan käyttöön _express_ joka on täl
 const express = require('express')
 const app = express()
 ```
+
+Seuraavaksi määritellään sovellukselle kaksi _routea_. Näistä ensimmäinen näistä määrittelee tapahtumankäsittelijän joka hoitaa sovelluksen juureen eli polkuun _/_ tulevia HTTP GET -pyyntöjä:
+
+```js
+app.get('/', (request, response) => {
+  response.send("Hello World!")
+})
+```
+
+Tapahtumankäsittelijäfunktiolla on kaksi parametria, [request](http://expressjs.com/en/4x/api.html#req) joka sisältää kaikki HTTP-pyynnön tiedot ja [response](http://expressjs.com/en/4x/api.html#res) jonka avulla määritellään, miten pyyntöön vastataan.
+
+Pyyntöön vastataan käyttäen _request_-olion metodia [send](http://expressjs.com/en/4x/api.html#res.send), joka aiheuttaa sen, että parametrina palvelin vastaa HTTP-pyyntöön lähettämällä vastaukseksi parametrina olevan merkkijonon. Koska parametri on merkkijono, metodi asettaa vastauksen _content-type_-headerille arvoksi _text/html_, statuskoodiksi tulee oletusarvoisesti 200.
+
+Routeista toinen määrittelee tapahtumankäsittelijän joka hoitaa sovelluksen polkuun _notes_ tulevia HTTP GET -pyyntöjä:
+
+```js
+app.get('/notes', (request, response) => {
+  response.json(notes)
+})
+```
+
+Pyyntöön vastataan metodilla [json](http://expressjs.com/en/4x/api.html#res.json), joka lähettää HTTP-pyynnön vastaukseksi parametrina olevaa javascript-olioa (eli taulukko _notes_) vastaavan JSON-merkkijonon. Content-type-headerin arvoksi tulee _application/json_. 
+
+Pieni huomio JSON-muodossa palautettavasta datasta.
+
+Aiemmassa, pelkkää nodea käyttämässämme versiossa, jouduimme muuttamaan palautettavan datan json-muotoon metodilla _JSON.stringify_:
+
+```js
+  response.end(JSON.stringify(notes))
+```
+
+Expressiä käyttässä tämä ei ole tarpeen, sillä muunnos tapahtuu automaattisesti.
+
+Kannattaa huomata, että [JSON](https://en.wikipedia.org/wiki/JSON) on merkkijono, eikä javascript-olio kuten muuttuja _notes_. 
+
+Seuraava interaktiivsessa [node-repl](https://nodejs.org/docs/latest-v8.x/api/repl.html):issä suoritettu kokeilu havainnollistaa asiaa:
+
+<img src="/assets/3/5.png" height="200">
+
+Saat käynnistettyä interaktiivisen node-repl:in kirjoittamalla komentoriville _node_. Esim. joidenkin komentojen toimivuuttaa on koodatessa kätevä tarkastaa konsolissa, suosittelen!
+
+## nodemon
+
+Jos muutamme sovelluksen koodia, joudumme sammuttamaan (konsolista ctrl+c) uudelleenkäynnistämään sen, jotta muutokset tulevat voimaan. Verrattuna Reactin mukavaan workflowhun missä selain päivittyi automaattisesti koodin muuttuessa tuntuu uudelleenkäynnistely kömpelöltä.
+
+Onneksi ongelmaan löytyy ratkaisu [nodemon](https://github.com/remy/nodemon):
+
+> nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
+
+Asennetaan nodemon määrittelemällä se _kehitysaikaiseksi riippuvuudeksi_ (development dependency) komennolla:
+
+```bash
+npm install --save-dev nodemon
+```
+
+Tiedoston _package.json_ sisältö muuttuu seuraavasti:
+
+```json
+{ 
+  //...
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.13.3"
+  }
+}
+```
+
+Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen _nodemon_.
+
+Kun sovellusta suoritetaan tuotantomoodissa, eli samoin kun sitä tullaan suorittamaan tuotantopalvelimella (esim. Herokussa, mihin tulemme kohta siirtämään sovelluksemme), ei kehitysaikaisia riippuvuuksia tarvita.
+
+Voimme nyt käynnistää ohjelman _nodemon_:illa seuraavasti:
+
+```bash
+node_modules/.bin/nodemon index.js
+```
+
+Sovelluksen koodin muutokset aiheuttavat nyt automaattisen palvelimen uudelleenkäynnistyksen. Kannattaa huomata, että vaikka palvelin käynnistyy automaattisesti, selain täytyy kuitenin refreshata, sillä toisin kuin Reactin yhteydessä, meillä ei nyt ole eikä tässä skenaariossa (missä palautamme JSON-muotoista dataa) edes voisi kaan olla selainta päivittävää [hot reload](https://gaearon.github.io/react-hot-loader/getstarted/) -toiminnallisuutta.
+
+Komento on ikävä, joten määritellään sitä varten _npm-skripti_ tiedostoon _package.json_:
+
+```json
+{
+  // ..
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  // ..
+}
+```
+
+Voimme nyt käynnistää palvelimen sovelluskehitysmoodissa komennolla
+
+```bash
+npm run watch
+```
+
+Toisin kuin skriptejä _start_ tai _test_ suoritettaessa, joudumme sanomaan myös _run_.
+
+## lisää routeja
+
+Laajennetaan sovellusta siten, että se toteuttaa samanlaisen [RESTful]()-periaatteeseen nojaavan HTTP-rajapinnan kun [json-server](https://github.com/typicode/json-server#routes)
+
+### REST
+
+Representational State Transfer eli REST on Roy Fieldingin vuonna 2000 ilmestyneessä [väitöskirjassa](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) määritelty skaalautuvien web-sovellusten rakentamiseksi tarkoitettu arkkitehtuurityyli. 
+
+Emme nyt rupea määrittelemään REST:iä Fieldingiläisittäin tai rupea väittämään mitä REST on tai mitä se ei ole vaan otamme hieman [kapeamman näkökulman](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) miten REST tai RESTful API:t yleensä tulkitaan Web-sovelluksissa. Alkuperäinen REST-periaate ei edes rajoitu sinänsä Web-sovelluksiin.
+
+Mainitsimme jo [edellisestä osassa](osa3/#REST-API:n-käyttö), että yksttäisiä asioita, meidän tapauksessamme muistiinpanoja kutsutaan RESTful-ajattelussa _resursseiksi_. Jokaisella resurssilla on sen yksilöivä osoite. 
+
+Erittäin yleinen konventio on muodostaa resurssien yksilöivät urlit liittäen resurssityypin nimi ja resurssin yksilöivä tunniste. 
+
+Oletetaan että palvelumme juuriosoite on _www.example.com/api_
+
+Jos nimitämme muistiinpanoja _note_-resursseiksi, yksilöidään yksittäinen muistiinpano, jonka tunniste on 10 urlilla _www.example.com/api/notes/10_. 
+
+Kaikkia muistiinpanoja edustavan kokoelmaresurssin url taas on _www.example.com/api/notes_
+
+Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation määrittelee HTTP-operaation tyyppi jota kutsutaan usein myös _verbiksi_:
+
+| URL | verbi           |  toiminnallisuus |
+|------- | --- | --- |
+| notes/10 &nbsp;&nbsp;  | GET | hakee yksittäisen resurssin |
+| notes    | GET         | hakee kokoelman kaikki resurssit |
+| notes    | POST        | luo uuden resurssin pyynnön mukana olevasta datasta |
+| notes/10 | DELETE &nbsp;&nbsp;    | poistaa yksilöidyn resurssin |
+| notes/10 | PUT         | korvaa yksilöidyn resurssin pyynnön mukana olevalla datalla |
+| notes/10 | PATCH       | korvaa yksilöidyn resurssin osan pyynnön mukana olevalla datalla |
+|          |  |  | 
+
+Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
+
+Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2] (https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valta osa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää. 
+
+Jotkut asiantuntijat (**VIITE**) nimittävätkin edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a REST:in sijaan resurssipohjaiseksi apiksi.
+
+### lisää routeja: yksittäisen resurssin haku
+
+Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensi route yksittäisen resurssin katsomista varten.
+
+Yksittäisen muistiinpanon identifioi url, joka on muotoa _notes/10_, missä lopussa oleva numero vastaa resurssin muistiinpanon id:tä.
+
+Voimme määritellä expressin routejen poluille [parametreja](http://expressjs.com/en/guide/routing.html) käyttämällä kaksoispistesyntaksia:
+
+```js
+app.get('/notes/:id', (request, response) => {
+  const id = request.params.id
+  const note = notes.find(note => note.id === id )
+  response.json(note)
+})
+```
+
+Nyt _app.get('/notes/:id', ...)_ käsittelee kaikki HTTP GET -pyynnötä, jotka ovat muotoa _note/<jotain>_, missä _<jotain>_ on mielivaltainen merkkijono.  
+
+Polun parametrin _id_ arvoon päästään käsisiksi olion _request_ kautta:
+
+```js
+const id = request.params.id
+```
+
+Jo tutuksi tulleella taulukon _find_-metodilla haetaan taulukosta parametria vastaava muistiinpano ja palautetaan se pyynnön tekijälle.
+
+Kun nyt sovellusta testataa selaimella menemällä osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan. Vanha keino on alkaa lisäillä koodiin _console.log_-komentoja:
+
+```js
+app.get('/notes/:id', (request, response) => {
+  const id = request.params.id
+  console.log(id)
+  const note = notes.find(note => note.id === id)
+  console.lod(note)
+  response.json(note)
+})
+```
+
+Konsoliin tulostuu
+
+<pre>
+1
+undefined
+</pre>
+
+eli halutun muistiinpanon id välittyy sovellukseen aivan oikein, mutta _find_ komento ei löydä mitään.
+
+Päätetään tulostella konsoliin myös _find_-komennon sisällä olevasta vertailijafunktiosta, joka onnistuu helposti kun tiiviissä muodossa oleva funktio <code>note => note.id === id)</code> kirjoitetaan eksplisiittisen returnin sisältävässä muodossa:
+
+```js
+app.get('/notes/:id', (request, response) => {
+  const id = request.params.id
+  const note = notes.find(note => {
+    console.log(note.id, typeof note.id, id, typeof id, note.id === id)
+    return note.id === id
+  })
+  console.log(note)
+  response.json(note)
+})
+```
+
+Jokaisesta vertailufunktion kutsusta tulostetaan nyt monta asiaa. Konsoliin tulostus on seuraava:
+
+<pre>
+1 'number' '1' 'string' false
+2 'number' '1' 'string' false
+3 'number' '1' 'string' false
+</pre>
+
+eli vika selviää, muuttujassa _id_ on talletettu merkkijono '1' kun taas muistiinpanojen id:t ovat numeroita. Javascriptissä === vertailu katsoo kaikki eri tyyppiset arvot oletusarvoisesti erisuuriksi, joten 1 ei ole '1'. 
+
+Korjataan ongelma, muuttamalla parametrina oleva id numeroksi:
+
+```js
+app.get('/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const note = notes.find(note => note.id === id
+  )
+  response.json(note)
+}) 
+```
+
+ja nyt yksittäisen resurssin hakeminen toimii
+
+<img src="/assets/3/5.png" height="200">
+
+toiminnallisuuteen jää kuitenkin pari ongelmaa.
+
+väärä indeksi
+
+nollaindeksi
+
+### delli yms
+
+
+npm install body-parser --save
+
+
+## postman
+
+## middlewaret
+
+- konsepti
+- oma: logger
+- static
+- cors
+
+## frontti
+
+## heroku
+
+## debug
+
+## mongo
+
+## async/await
+
+## mongoose
+
+
+
+## testaus
+
+- ava/supertest
+
 
 
 
