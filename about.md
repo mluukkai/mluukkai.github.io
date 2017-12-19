@@ -6,10 +6,10 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta joista nyt on ilmestynyt [ensimmäinen](/osa1). Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua. Tämän hetken tavoiteaikataulu on
-- osa 2 ma 18.12
-- osa 3 la 23.12
-- osa 4 pe 29.12
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt [ensimmäinen](/osa1) ja [toinen](/osa2) . Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua. Tämän hetken tavoiteaikataulu on
+
+- osa 3 pe 22.12
+- osa 4 to 28.12
 - osa 5 ti 2.1
 - osa 6 la 6.1
 - osa 7 ke 10.1
