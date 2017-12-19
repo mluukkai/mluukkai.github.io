@@ -168,7 +168,7 @@ console.log(`Server running on port ${port}`)
 Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frondille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun JSON-muotoisia muistiinpanoja:
 
 ```js
-const notes = [
+let notes = [
   {
     id: 1,
     content: 'HTML on helppoa',
@@ -502,31 +502,157 @@ Korjataan ongelma, muuttamalla parametrina oleva id numeroksi:
 ```js
 app.get('/notes/:id', (request, response) => {
   const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id
-  )
+  const note = notes.find(note => note.id === id)
   response.json(note)
 }) 
 ```
 
 ja nyt yksittäisen resurssin hakeminen toimii
 
-<img src="/assets/3/5.png" height="200">
+<img src="/assets/3/6.png" height="200">
 
-toiminnallisuuteen jää kuitenkin pari ongelmaa.
+toiminnallisuuteen jää kuitenkin pieni ongelma.
 
-väärä indeksi
+Jos haemme muistiinpanoa sellaisella indeksillä, mitä vastaavaa muistiinpanoa ei ole olemassa, vastaa palvelin seuraavasti
 
-nollaindeksi
+<img src="/assets/3/7.png" height="200">
 
-### delli yms
+HTTP-statuskoodi on onnistumisesta kertova 200. Vastaukseen ei liity dataa, sillä headerin _content-length_ arvo on 0, ja samaa todistaa selain: mitään ei näy.
+
+Syynä tälle käyttäytymiselle on se, että muuttujan _note_ arvoksi tulee _undefined_ jos muistiinpanoa ei löydy. Tilanne tulisi käsitellä palvelimella järkevämmin, eli statuskoodin 200 sijaan tulee vastata [statuskoodilla](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5) _404 not found_. Tehdään muutos
+
+```js
+app.get('/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const note = notes.find(note => note.id === id)
+
+  if ( note ) {
+    response.json(note)
+  } else {
+    response.status(404).end()
+  }
+})
+```
+
+Koska vastaukseen ei nyt liity mitään dataa käytetään statuskoodin asettavan metodin [status](http://expressjs.com/en/4x/api.html#res.status) lisäksi metodia [end](http://expressjs.com/en/4x/api.html#res.end) ilmoittamaan siitä, että pyyntöön voidaan vastata ilman dataa.
+
+Koodin haaratumisessa hyväksikäytetään sitä, että mikä tahansa Javascript-olio on [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), eli katsotaan todeksi vertailuoperaatiossa. undefined taas on [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) eli epätosi.
+
+Nyt sovellus toimii, eli palauttaa oikean virhekoodin. Sovellus ei kuitenkaan palauta mitään käyttäjälle näytettävää kuten web-sovellukset yleensä tekevät jos mennään osoitteeseen jota ei ole olemassa. Emme kuitenkaan tarvitse nyt mitään näytettävää, sillä REST API:t ovat ohjelmalliseen käyttöön tarkoitettuja rajapintoja ja pyyntöön liitetty virheestä kertova statuskoodi on riittävä.
+
+### resurssin poisto
+
+Toteutetaan seuraavaksi resurssin poistava route. Poisto tapahtuu tekemällä HTTP DELETE -pyyntö resurssin urliin:
 
 
+```js
+app.delete('/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  notes = notes.filter(note => note.id !== id)
+
+  response.status(204).end()
+})
+```
+
+Jos poisto onnistuu, eli poistettava muistiinpano on olemassa, vastataan statuskoodilla [204 no content](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.5) sillä mukaan ei lähetetä mitään dataa.
+
+Ei ole täyttä yksimielisyyttä siitä mikä statuskoodi DELETE-pyynnöstä pitäisi palauttaa jos poistettavaa resurssia ei ole olemassa. Vaihtoehtoja ovat lähinnä 204 ja 404. Yksinkertaisuuden vuoksi sovellus palauttaa nyt molemmissa tilanteissa statuskoodin 204.
+
+### postman
+
+Herää kysymys miten voimme testata operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa uutta deletointia, mutta jokaiseen mahdolliseen tilanteeseen tesikoodinkaan tekeminen ei ole aina paras ratkaisu.
+
+On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
+
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä työkalua. Asennetaan postman ja kokeillaan 
+
+<img src="/assets/3/8.png" height="200">
+
+Postmanin käyttö on tässä tilanteessa suhteellisen ykinkertaista, riitää määritellä url ja valita oikea pyyntötyyppi. 
+
+Palvelin näyttää vastaavan oiken. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla. 
+
+Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
+
+### datan vastaanottaminen
+
+Toteutetaan seuraavana uusien muistiinpanojen lisäys, joka siis tapahtuu tekemällä HTTP POST -pyyntö osoitteeseen _http://localhost:3001/notes_ ja liittämällä pyynnön mukaan eli [bodyyn]https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7) luotavan muistiinpanon tiedot JSON-muodossa.
+
+Jotta pääsisimme pyynnön mukana lähetettyyn dataan helposti käsiksi tarvitsemme [body-parser ](https://github.com/expressjs/body-parser)-kirjaston apua. Määritellään kirjasto projektin riippuvuudeksi
+
+```bash
 npm install body-parser --save
+```
+
+Otetaan sitten body-parser käyttöön ja luodaan alustava määrittely HTTP POST -operaation käsittelyyn
+
+```js
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
+
+//...
+
+app.post('/notes', (request, response) => {
+  const note = request.body
+  console.log(note)
+
+  response.json(note)
+})
+```
+
+Reitin tapahtumankäsittelijäfunktio pääsee dataan käsiksi viitaamalla _request.body_. 
+
+Ilman body-parser-kirjaston määrittelyä pyynnön kentässä _body_ olisi ollut määrittelemätön. body-parserin toimintaperiaatteena onkin se, että se ottaa pyynnön mukana olevan JSON-muotoisen datan, muuttaa sen Javascript-olioksi ja sijoittaa  _request_-olion kenttään ennen kuin routen käsittelijää kutsutaan.
+
+Toistaiseksi sovellus ei vielä tee vastaanotetulle datalle, mitään muuta kuin tulostaa sen konsoliin ja palauttaa sen pyynnön vastauksessa. 
+
+Ennen toimintalogiikan viimeistelyä varmistetaan ensin postmanilla että, lähetetty tieto menee varmasti perille. Pyyntötyypin ja urlin lisäksi on määriteltävä myös pyynnön mukana menevä data eli _body_:
+
+<img src="/assets/3/9.png" height="200">
+
+Näyttää kuitenkin siltä, että mitään ei mene perille, palvelin vastaanottaa ainoastaan tyhjän olion. Missä on vika? Olemme unohtaneet määritellä headerlille  _Content-Type_ oikean arvon:
+
+<img src="/assets/3/10.png" height="200">
+
+Nyt kaikki toimii! Ilman oikeaa headerin arvoa palvelin ei osaa parsia dataa oikeaan muotoon. Se ei edes yritä arvella mitä data on, sillä potentiaalisia datan lähetysmuotoja eli _Content-Typejä_ on olemassa [suuri määrä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
+
+Välillä debugatessa tulee vastaan tilanteita, joissa backendissä on tarve selvittää mitä headereja HTTP-pyynnöille on asetettu. Eräs menetelmä tähän on _request_-olion melko kehonosti nimetty metodin [get](http://expressjs.com/en/4x/api.html#req.get), jonka avulla voi selvittää yksittäisen headerin arvon. _request_-oliolla on myös kenttä _headers_, jonka arvona ovat kaikki pyyntöön liittyvät headerit.
+
+Saamme nyt sovelluslogiikan viimeisteltyä helposti:
+
+```js
+app.post('/notes', (request, response) => {
+  const note = request.body
+  const maxId = notes.length>0 ? notes.map(n => n.id).sort().reverse()[0] : 1
+  note.id = maxId + 1
+  
+  notes = notes.concat(note)
+
+  response.json(note)
+})
+```
+
+uuden muistiinpanon id:ksi asetetaan olemassaolevien id:iden maksi+1.
+
+Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä  
 
 
-## postman
+```js
+app.post('/notes', (request, response) => {
+  const note = request.body
+
+  notes = notes.concat(note)
+
+  response.json(note)
+}) 
+```
 
 ## middlewaret
+
+ body-parser on expressin _middleware_
 
 - konsepti
 - oma: logger
@@ -551,7 +677,7 @@ npm install body-parser --save
 
 - ava/supertest
 
-
+## rest safe, idemponet...
 
 
 
