@@ -165,10 +165,7 @@ app.listen(port)
 console.log(`Server running on port ${port}`)
 ```
 
-
-
-
-Muutetaan 
+Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frondille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun JSON-muotoisia muistiinpanoja:
 
 ```js
 const notes = [
@@ -198,4 +195,41 @@ const app = http.createServer( (req, res) => {
 })
 ```
 
-![]({{ "/assets/3/1.png" | absolute_url }})
+Headerin _'Content-Type'_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
+
+
+Kun avaamme selaimen, on tulostusasu sama kuin [osassa 3](osa2/#datan-haku-palvelimelta) käytetyn [json-serverin](https://github.com/typicode/json-server) käytettäessä:
+
+![]({{ "/assets/3/2.png" | absolute_url }})
+
+Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-fronendin kanssa. Mutta vasta melkein, jos käynnistämme fronendin, tulee konsoliin virheilmoitus
+
+![]({{ "/assets/3/3.png" | absolute_url }})
+
+Syy virheelle selviää pian, parantelemme kuitenkin ensin koodia muista osin.
+
+## express
+
+Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta hieman työlästä. 
+
+Nodella tapahtuvaa web-sovellusten ohjelmointia helpottamaan onkin kehitelty useita  _http_:tä miellyttävämmän ohjelmoitirajapinnan tarjoamia kirjastoja. Näistä ehdoton [express](http://expressjs.com).
+
+Otetaan express käyttöön määrittelemällä se projektimme riippuvuudeksi komennolla 
+
+```bash
+npm install express --save 
+```
+
+Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
+
+json
+```
+{
+  // ...
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
+```
+
+npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
