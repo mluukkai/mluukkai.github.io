@@ -857,7 +857,7 @@ Voisimme käyttää datan palvelimelta hakemiseen aiemmin mainittua promiseihin 
 
 Käytetään selaimen ja palvelimen väliseen kommunikaatioon kuitenkin [axios](ttps://github.com/axios/axios)-kirjastoa, joka toimii samaan tapaan kuin fetch, mutta on hieman mukavampikäyttöinen. Hyvä syy axios:in käytölle on myös se, että pääsemme tutustumaan siihen miten ulkopuolisia kirjastoja eli _npm-paketteja_ liitetään React-projektiin.
 
-Nykyään lähes kaikki Javascript-projektit määritellään node package managerin eli [npm](https://docs.npmjs.com/getting-started/what-is-npm):n avulla. Myös create-react-app:in avulla generoidut projektit ovat npm-muotoisia projekteja. Varma tuntomerkki siitä on projektin juuressa oleva tiedosto _package.json_:
+Nykyään lähes kaikki Javascript-projektit määritellään node "pakkausmanagerin" eli [npm](https://docs.npmjs.com/getting-started/what-is-npm):n avulla. Myös create-react-app:in avulla generoidut projektit ovat npm-muotoisia projekteja. Varma tuntomerkki siitä on projektin juuressa oleva tiedosto _package.json_:
 
 ```js
 {
@@ -886,7 +886,7 @@ Haluamme nyt käyttöömme axioksen. Voisimme määritellä kirjaston suoraan ti
 npm install axios --save
 ```
 
-Nyt axios on mukana riippuvuuksien joukossa.
+Nyt axios on mukana riippuvuuksien joukossa:
 
 ```js
 {
