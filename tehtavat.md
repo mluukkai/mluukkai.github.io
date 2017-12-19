@@ -127,7 +127,7 @@ Refaktoroi vielä komponentti _Sisalto_ siten, että se ei itse renderöi yhdenk
 
 ```react
 const Sisalto = ... {
-  return(
+  return (
     <div>
       <Osa .../>
       <Osa .../>
@@ -224,8 +224,8 @@ Viedään muutos vielä yhtä askelta pidemmälle, eli tehdään kurssista ja se
 
 ```react
 const App = () => {
-  const kurssi =  {
-    nimi: "Half Stack -sovelluskehitys",
+  const kurssi = {
+    nimi: 'Half Stack -sovelluskehitys',
     osat: [
       {
         nimi: 'Reactin perusteet',
@@ -523,7 +523,7 @@ class App extends React.Component {
             nimi: <input />
           </div>
           <div>
-            <button>lisää</button>
+            <button type="submit">lisää</button>
           </div>
         </form>
         <h2>Numerot</h2>
@@ -540,7 +540,7 @@ Joskus tilan muuttujia ja tarvittaessa muitakin voi olla hyödyllistä renderöi
 
 ```js
 <div>
-debug: {this.state.newName}
+  debug: {this.state.newName}
 </div>
 ```
 
@@ -565,17 +565,17 @@ Voit antaa halutessasi virheilmoituksen esim. komennolla _alert()_. Se ei kuiten
 Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset siis lomakkeeseen myös toisen _input_-elementin (ja sille oman muutoksenkäsittelijän):
 
 ```html
-  <form>
-    <div>
-      nimi: <input />
-    </div>
-    <div>
-      numero: <input />
-    </div>
-    <div>
-      <button>lisää</button>
-    </div>
-  </form>
+<form>
+  <div>
+    nimi: <input />
+  </div>
+  <div>
+    numero: <input />
+  </div>
+  <div>
+    <button type="submit">lisää</button>
+  </div>
+</form>
 ```
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):in tarjoama näkymä komponentin _App_ tilaan:
@@ -593,20 +593,20 @@ Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-e
 **Huom:** Kun toteutat jotain uutta toiminnallisuutta, on usein hyötyä 'kovakoodata' sovellukseen jotain sisältöä, esim.
 
 ```js
-  constructor(props){
-    super(props)
-    this.state = {
-      persons: [
-        { name: 'Arto Hellas', number: '040-123456' },
-        { name: 'Martti Tienari', number: '040-123456' },
-        { name: 'Arto Järvinen', number: '040-123456' },
-        { name: 'Lea Kutvonen', number: '040-123456' }
-      ],
-      newName: '',
-      newNumber: '',
-      filter: ''
-    }
+constructor(props){
+  super(props)
+  this.state = {
+    persons: [
+      { name: 'Arto Hellas', number: '040-123456' },
+      { name: 'Martti Tienari', number: '040-123456' },
+      { name: 'Arto Järvinen', number: '040-123456' },
+      { name: 'Lea Kutvonen', number: '040-123456' }
+    ],
+    newName: '',
+    newNumber: '',
+    filter: ''
   }
+}
 ```
 
 Näin vältytään turhalta manuaaliselta työltä, missä testaaminen edellyttäisi myös testiaineiston syöttämistä käsin soveluksen lomakkeen kautta.
@@ -681,9 +681,9 @@ Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riitt�
 Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävään elementtiin, esim. diviin klikkaustenkuuntelijan:
 
 ```
-  <div onClick={...}>
-    {country.name}
-  </div>
+<div onClick={...}>
+  {country.name}
+</div>
 ```
 ### palvelimella olevan datan päivitäminen
 

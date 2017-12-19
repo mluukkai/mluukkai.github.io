@@ -240,7 +240,7 @@ Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektim
 Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_ versiomerkinnän edessä oleva väkänen, eli miksi muoto on
 
 ```json
-  "express": "^4.16.2"
+"express": "^4.16.2"
 ```
 
 npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
@@ -250,13 +250,13 @@ Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetä
 Voimme päivittää projektin riippuvuudet komennolla
 
 ```bash
-  npm update
+npm update
 ```
 
 Vastaavasti jos aloitamme projektin koodaamisen toisella koneella, saamme haettua ajantasaiset, _package.json_:in määrittelyn mukaiset riippuvuudet haettua komennolla
 
 ```bash
-  npm install
+npm install
 ```
 
 Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
@@ -313,7 +313,7 @@ Pieni huomio JSON-muodossa palautettavasta datasta.
 Aiemmassa, pelkkää nodea käyttämässämme versiossa, jouduimme muuttamaan palautettavan datan json-muotoon metodilla _JSON.stringify_:
 
 ```js
-  response.end(JSON.stringify(notes))
+response.end(JSON.stringify(notes))
 ```
 
 Expressiä käyttässä tämä ei ole tarpeen, sillä muunnos tapahtuu automaattisesti.
@@ -422,7 +422,8 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 
 Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
-Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää.
+
+Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi.  Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää.
 
 Jotkut asiantuntijat (**VIITE**) nimittävätkin edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a REST:in sijaan resurssipohjaiseksi apiksi.
 
@@ -443,6 +444,7 @@ app.get('/notes/:id', (request, response) => {
 ```
 
 Nyt _app.get('/notes/:id', ...)_ käsittelee kaikki HTTP GET -pyynnöt, jotka ovat muotoa _note/<jotain>_, missä _<jotain>_ on mielivaltainen merkkijono.
+
 
 Polun parametrin _id_ arvoon päästään käsiksi olion _request_ kautta:
 
@@ -638,7 +640,6 @@ app.post('/notes', (request, response) => {
 uuden muistiinpanon id:ksi asetetaan yhtä suurempi olemassaolevien id:iden maksimi.
 
 Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä olioita. Parannellaan sovellusta siten, että kenttä _content_ vaaditaan. Kentille _important_ ja _date_ asetetaan oletusarvot. Kaikki muut kentät hylätään: 
-
 
 ```js
 const generateId = () => {
