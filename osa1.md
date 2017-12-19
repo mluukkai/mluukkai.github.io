@@ -611,6 +611,10 @@ Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa v
 
 Javascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.
 
+### tehtäviä web-sovelluksen perusteista
+
+Ennen reactiin siirtymistä [tehtävät 1-6](../tehtavat#web-sovellusten-perusteet)
+
 ## React
 
 Alamme nyt tutustua kurssin ehkä tärkeimpään teemaan, [React](https://reactjs.org/)-kirjastoon. Tehdään nyt yksinkertainen React-sovellus ja tutustutaan samalla Reactin peruskäsitteistöön.

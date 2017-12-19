@@ -222,8 +222,7 @@ npm install express --save
 
 Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 
-json
-```
+```json
 {
   // ...
   "dependencies": {
@@ -232,4 +231,63 @@ json
 }
 ```
 
-npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
+Riippuvuuen koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin
+
+![]({{ "/assets/3/4.png" | absolute_url }})
+
+Kyseessä ovat expressin riippuvuudet ja niiden riippuvuudet ym... eli projektimme [transittiiviset riippuvuudet](https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/).
+
+Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_ versiomerkinnän edessä oleva väkänen, eli miksi muoto on
+
+```json
+  "express": "^4.16.2"
+```
+
+npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning). 
+
+Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
+
+Voimme päivittää projektin riippuvuudet komennolla
+
+```bash
+  npm update
+```
+
+Vastaavasti jos aloitamme projektin koodaamisen toisella koneella, saamme haettua ajantasaiset, _package.json_:in määrittelyn mukaiset riippuvuudet haettua komennolla
+
+```bash
+  npm install
+```
+
+Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
+
+```js
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => {
+  res.send("Hello World!")
+})
+
+app.get('/notes', (req, res) => {
+  res.json(notes)
+})
+
+const port = 3001
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`)
+})
+```
+
+Sovellus ei muutu paljoa. Heti alussa otetaan käyttöön _express_ joka on tällä kertaa _funktio_, jota kutsumalla luodaan express-sovellusta vastaava olio:
+
+```js
+const express = require('express')
+const app = express()
+```
+
+
+
+
+
+
