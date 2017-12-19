@@ -389,7 +389,7 @@ class App extends React.Component {
         </ul>
         <form onSubmit={this.addNote}>
           <input/>
-          <button>tallenna</button>
+          <button type="submit">tallenna</button>
         </form>
       </div>
     )
@@ -443,7 +443,7 @@ Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_
 ```html
 <form onSubmit={this.addNote}>
   <input value={this.state.new_note} />
-  <button>tallenna</button>
+  <button type="submit">tallenna</button>
 </form>
 ```
 
@@ -476,7 +476,7 @@ class App extends React.Component {
             value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
-          <button>tallenna</button>
+          <button type="submit" type="submit">tallenna</button>
         </form>
       </div>
     )
@@ -622,7 +622,7 @@ render() {
           value={this.state.new_note}
           onChange={this.handleNoteChange}
         />
-        <button>tallenna</button>
+        <button type="submit">tallenna</button>
       </form>
     </div>
   )
@@ -702,7 +702,7 @@ class App extends React.Component {
             value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
-          <button>tallenna</button>
+          <button type="submit">tallenna</button>
         </form>
       </div>
     )

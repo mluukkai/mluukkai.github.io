@@ -523,7 +523,7 @@ class App extends React.Component {
             nimi: <input />
           </div>
           <div>
-            <button>lisää</button>
+            <button type="submit">lisää</button>
           </div>
         </form>
         <h2>Numerot</h2>
@@ -565,16 +565,17 @@ Voit antaa halutessasi virheilmoituksen esim. komennolla _alert()_. Se ei kuiten
 Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset siis lomakkeeseen myös toisen _input_-elementin (ja sille oman muutoksenkäsittelijän):
 
 ```html
-    <div>
-      nimi: <input />
-    </div>
-    <div>
-      numero: <input />
-    </div>
-    <div>
-      <button>lisää</button>
-    </div>
-  </form>
+<form>
+  <div>
+    nimi: <input />
+  </div>
+  <div>
+    numero: <input />
+  </div>
+  <div>
+    <button type="submit">lisää</button>
+  </div>
+</form>
 ```
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):in tarjoama näkymä komponentin _App_ tilaan:
