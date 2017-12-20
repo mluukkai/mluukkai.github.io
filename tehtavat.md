@@ -144,7 +144,7 @@ Sovelluksemme tiedonvälitys on tällä hetkellä todella alkukantaista sillä s
 
 #### 9 tieto olioissa
 
-Siirrytään käyttämään sovelluksessamme oliota. Mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat niin että se taas toimii:
+Siirrytään käyttämään sovelluksessamme oliota. Muuta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat niin että se taas toimii:
 
 ```react
 const App = () => {
@@ -172,7 +172,7 @@ const App = () => {
 
 #### 10 oliot taulukkoon
 
-Ja laitetaan oliot taulukkoon, eli mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti:
+Ja laitetaan oliot taulukkoon, eli muuta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti:
 
 ```react
 const App = () => {
