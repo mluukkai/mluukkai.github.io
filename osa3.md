@@ -753,8 +753,106 @@ Nyt fronend toimii! Tosin muistiinpanojen tärkeäksi muuttavaa toiminnallisuutt
 
 CORS:ista voi lukea tarkemmin esim. [Mozillan sivuilta](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
+## sovellus internettiin
 
-## heroku
+Kun koko stacki on saatu vihdoin kunton, siirretään sovellus internettiin. Viime aikoina on tullut uusia mielenkiintoisa sovellusten hostausmahdollisuuksia, esim [Zeit](https://zeit.co). Käytetään seuraavassa vanhaa kunnon [Herokua](https://www.heroku.com)
+
+Lisätään projektin juureen tiedosto _Procfile_, joka kertoo herokulle, miten sovellus käynnistetään
+
+´´´bash
+web: node index.js
+´´´
+
+Muutetaan tiedoston _index.js_ lopussa olevaa sovelluksen käyttämän portin määrittelyä seuraavasti:
+
+´´´js
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+´´´
+
+Nyt käyttöön tulee [ympäristämuuttujassa](https://en.wikipedia.org/wiki/Environment_variable) _PORT_ määritelty portti tai 3001 jos ympäristömuuttuja _PORT_ ei ole määritelty. Heroku konfiguroi sovelluksen portin ympöristömuuttujan avulla.
+
+Tehdään projektihakemistosta git-repositorio, lisätään _.gitignore_ jolla seuraava sisältö
+
+´´´bash
+node_modules
+´´´
+
+Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennolla _git push heroku master_.
+
+Jos kaikki meni hyvin, sovellus toimii. Jos ei, vikaa voi selvittää herokun lokeja lukemalla, eli komennolla _heroku logs_.
+
+Esim. tätä materiaalia tehdessä törmättiin ongelmaan joka aiheutti seuraavan tulostuksen lokeihin
+
+<img src="/assets/3/11.png" height="200">
+
+Syynä ongelmalle oli se, että middlewarea _cors_ asennettaessa oli unohtunut antaa optio __--save__, joka tallentaa tiedon riippuvuudesta tiedostoon _package.json_. Koska näin kävi, ei Heroku ollut asentanut corsia sovelluksen käyttöön.
+
+Myös fronend toimii herokussa olevan backendin avulla. 
+
+Seuraavaksi herää kysymys miten saamme myös fronendin internettiin? Vaihtoehtoja on muutamia. 
+
+### frontendin tuotantoversio
+
+Olemme toistaiseksi suorittaneet React-koodia _sovelluskehitysmoodissa_, missä sovellus on konfiguroitu anatamaan havainnollisia virheilmoituksia, päivittämään koodiin tehdyt muutokset automaattisesti selaimeen ym.
+
+Kun sovellus viedään tuotantoon, täytyy siitä tehdä [production build](https://reactjs.org/docs/optimizing-performance.html#use-the-production-build)
+eli tuotantoa varten optimoitu versio. 
+
+create-react-app:in avulla tehdyistä sovelluksista saadaan muodostettua tuotantoversio komennolla [npm run build](https://github.com/facebookincubator/create-react-app#npm-run-build-or-yarn-build)
+
+Komennon seurauksena syntyy hakemistoon _build_ (joka sisältää jo sovelluksen ainoan html-tiedoston _index.html_) sisään hakemisto _static_, minkä alle generoituu sovelluksen javascript-koodin [minifioitu](https://en.wikipedia.org/wiki/Minification_(programming))  versio. Vaikka sovelluksen koodi on kirjoitettu useaan kirjastoon, tulee kaikki javascript yhteen tiedostoon, samaan tiedostoon tulee itseasiassa myös kaikkien sovelluksen koodin tarvitsemien riippuvuuksien koodi.
+
+Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraavalta:
+
+```js
+!function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/",t(t.s=12)}([function(e,t,n){"use strict";function r(e){return"[object Array]"===E.call(e)}function o(e){return"[object ArrayBuffer]"===E.call(e)}function a(e){return"undefined"!==typeof FormData&&e instanceof FormData}function i(e){return"undefined"!==typeof ArrayBuffer&&ArrayBuffer.isView?ArrayBuffer.isView(e):e&&e.buffer&&e.buffer instanceof ArrayBuffer}function u(e){return"string"===typeof e}function l(e){return"number"===typeof e}function s(e){return"undefined"===typeof e}function c(e){return null!==e&&"object"===typeof
+```
+
+### statattisten tiedostojen tarjoaminen backendistä
+
+Eräs mahdollisuus frontendin tuotantoonviemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin hakemiston sisään ja määritellä backend näyttämään pääsivunaan fronendin _pääsivu_, eli tiedosto _build/index.html_.
+
+Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym tarvitsemme expressiin sisäänrakennettua midlewarea [static](http://expressjs.com/en/starter/static-files.html) 
+
+Kun lisäämme muiden middlewarejen määrittelyn yhteyteen seuraavan
+
+```js
+app.use(express.static('build'))
+```
+
+tarkastaa express pyyntöjen yhteydessä ensin löytyykö pyynnön polkua vastaavan nimistä tiedostoa hakemistosta _build_, jos löytyy palauttaa express tiedoston.
+
+Nyt HTTP GET -pyyntö osoitteeseen _www.palvelimenosoite.com/index.html_ tai _www.palvelimenosoite.com_ näyttää Reactilla tehdyn fronendin. GET-pyynnön esim. osoitteeseen _www.palvelimenosoite.com/notes_ hoitaa backendin koodi.
+
+Koska tässä tapauksessa sekä frontend että backend toimivat samassa osoitteessa, voidaan React-sovelluksessa tapahtuva backendin _baseUrl_ määritellä [suhtellisena](https://www.w3.org/TR/WD-html40-970917/htmlweb.html#h-5.1.2) URL:ina, eli ilman palvelinta yksilöivää osaa: 
+
+```js
+import axios from 'axios'
+const baseUrl = '/notes'
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
+// ...
+```
+
+Muutoksen jälkeen on luotava uusi production build ja kopioitava se backendin repositorioin juureen.
+
+Kun sovellus pushataan uudelleen herokuun, [se](https://radiant-plateau-25399.herokuapp.com) toimii moitteettomasti lukuunottamatta vielä backendiin toteuttamatonta muistiinpanon tärkeyden muuttamista. 
+
+Sovelluksemme tallettama tieto ei ole ikuisesti pysyvää, sillä sovellus tallettaa muistiinpanot muuttujaan. Jos sovellus kaatuu tai se uudelleenkäynnistetään, kaikki tiedot katoavat. 
+
+Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa katsotaan kuitenkin vielä muutamaa asiaa.
+
+### proxy
+
+### erillinen sovellus
+
 
 ## debug
 
