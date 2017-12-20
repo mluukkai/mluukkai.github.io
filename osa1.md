@@ -36,9 +36,11 @@ Asenna myös joku järkevä webkoodausta tukeva tekstieditori, enemmän kuin suo
 
 Älä koodaa nanolla, notepadilla tai geditillä. Netbeanskaan ei ole omimmillaan Web-koodauksessa ja se on myös turhan raskas verrattuna esim. Visual Studio Codeen.
 
-Asenna koneeseesi heti myös [Node.js](https://nodejs.org/en/). Materiaali on tehty versiolla 8.6, älä asenna mitään sitä vanhempaa versiota. Ubuntulla Node.js:ää todennäköisesti _ei kannata_ asentaa pakettienhallinnasta eli _apt-get_:illä, sillä sieltä saatava versio on antiikkinen.
+Asenna koneeseesi heti myös [Node.js](https://nodejs.org/en/). Materiaali on tehty versiolla 8.6, älä asenna mitään sitä vanhempaa versiota. 
 
 Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmjs.com/get-npm) jota tulemme tarvitsemaan kurssin aikana aktiivisesti.
+
+Asennusohjeita on koottu [tännne](https://github.com/mluukkai/mluukkai.github.io/wiki/asennusohjeita). Sivu on kaikkien editoitavissa, eli tee muokkauksia ja lisäyksiä tarpeen vaatiessa.
 
 ## osan 1 oppimistavoitteet
 
