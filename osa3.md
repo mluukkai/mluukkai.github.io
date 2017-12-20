@@ -849,10 +849,49 @@ Sovelluksemme tallettama tieto ei ole ikuisesti pysyvää, sillä sovellus talle
 
 Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa katsotaan kuitenkin vielä muutamaa asiaa.
 
+### backendin urlit
+
+Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen joukko ym. Koska backendin roolina on tarjota fronendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_. 
+
+Tehdään muutos ensin muuttamalla käsin kaikki backendin routet:
+
+```js
+//...
+app.get('/api/notes', (request, response) => {
+  response.json(notes)
+})
+//...
+```
+
+Frontendin koodiin riittää seuraava muutos
+
+```js
+import axios from 'axios'
+const baseUrl = '/api/notes'
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
+
+// ...
+```
+
+Joskus API:n ulissa ilmaistaan myös API:n versio. Eri versioita saatetaan tarvita, jos aikojen kuluessa API:n tehdään laajennuksia jotka ilman versiointia hajoittaisivat olemassaolevia osia ohjelmista. Versioinnin avulla voidaan tuoda vanhojen rinnalle uusia, hieman eritavalla voimivia versioita API:sta. 
+
+API:n version ilmaiseminen URL:issa ei kuitenkaan ole välttämättä, ainakaan kaikkien mielstä järkevää vaikka tapaa paljon käytetäänkin. Oikeasta tavasta API:n versiointiin [kiistellään ympäri internettiä](https://stackoverflow.com/questions/389169/best-practices-for-api-versioning).
+
 ### proxy
+
+lokaali hajoaa.. ei hyvä
+
+### deployment pipeline
+
+one click push...
 
 ### erillinen sovellus
 
+ei mennä siihen
 
 ## debug
 
