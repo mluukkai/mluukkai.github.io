@@ -883,15 +883,36 @@ API:n version ilmaiseminen URL:issa ei kuitenkaan ole välttämättä, ainakaan 
 
 ### proxy
 
-lokaali hajoaa.. ei hyvä
+Fronendiin tehtyjen muutosten seurauksena on nyt se, että kun suoritamme sovelluskehitysmoodissa, eli käynnistämällä sen komennolla _npm start_, yhteys backendiin ei toimi. 
 
-### deployment pipeline
+Koska backendin osoite on määritelty suhteellisena:
 
-one click push...
+```js
+const baseUrl = '/api/notes'
+```
 
-### erillinen sovellus
+ja sovellus toimii osoitteessa _localhost:3000_, menevät bakendiin tehtävät pyynnöt väärään osoitteeseen _localhost:3000/api/notes_. Backend toimii kuitenkin osoitteessa _localhost:3001/_
 
-ei mennä siihen
+create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riittää, että tiedostoon _package.json_ lisätään seuraava määritelmä:
+
+```js
+{
+  // ...
+  "proxy": "http://localhost:3001"
+}
+```
+
+Nyt Reactin sovelluskehitysympäristö toimii [proxynä](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#proxying-api-requests-in-development) ja jos React-koodi tekee HTTP-pyynnön, osoitteen _http://localhost:3000_ alle mutta pyyntö ei ole React-sovelluksen vastuulla (eli kyse ei ole esim. sovelluksen javascript-koodista tai CSS:stä), lähetetään pyyntö edelleen osoitteessa _http://localhost:3001_ olevalle palvelimelle.
+
+Nyt myös fronend on kunnossa, se toimii sekä sovelluskehitysmoodissa että tuotannossa yhdessä palvelimen kanssa.
+
+Eräs negatiivinen puoli käyttämässämme lähestymistavassa on se, että sovelluksen uuden version tuotantoonvieminen edellyttää ikävän manuaalisen askeleen: fronendin koodin kopioimisen backendin repositorioon. Tämä taas hankaloittaa automatisoidun [deployment pipelinen](https://martinfowler.com/bliki/DeploymentPipeline.html) toteuttamista, eli koodin automatisoidun ja hallitun sovelluskehittäjän koneelta testien kautta tuotantoympäristöön vientiä.
+
+Tähänkin on useita erilaisia ratkaisuja, emme kuitenkaan nyt mene niihin. Joihinkin teemoihin palataan myöhemmin kurssilla.
+
+### Fronend ja backend erillisinä sovelluksina
+
+Olisimme voinut 
 
 ## debug
 
