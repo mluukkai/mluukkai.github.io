@@ -1272,7 +1272,7 @@ Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielte
 
 Tutustumme kuitenkin pikaisesti ES6:n myötä javascriptiin tulleeseen _luokkasyntaksiin_, joka helpottaa oleellisesti luokkien (tai luokan kaltaisten asioiden) määrittelyä Javascriptissa.
 
-Seuraavassa on määritelyt "luokka" Henkilö ja sille kaksi Henkilö-olioa:
+Seuraavassa on määritelty "luokka" Henkilö ja sille kaksi Henkilö-olioa:
 
 ```js
 class Henkilo {
