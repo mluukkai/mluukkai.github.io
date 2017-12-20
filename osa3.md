@@ -673,14 +673,86 @@ Jos kenttä _content_ puuttuu, vastataan statuskoodilla [400 bad request](https:
 
 ## middlewaret
 
- body-parser on expressin _middleware_
+Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on niin sanottu expressin terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
 
-- konsepti
-- oma: logger
-- static
-- cors
+Middlewaret ovat funktioita joiden avulla voidaan käsitellä _request_- ja _response_-olioita. 
 
-## frontti
+Esim. body-parser ottaa pyynnön mukana tulevan raakadatan _request_-oliosta, parsii sen Javascript-olioksi ja sijoittaa olion _request_:in kenttään _body_
+
+Middlewareja voi olla käytössä useita jolloin ne suoritetaan peräkkäin siinä järjestyksessä kun ne on määritelty.
+
+Toteutetaan itse yksinkertainen middleware, tulostaa konsoliin palvelimelle tulevien pyyntöjen perustietoja. 
+
+Middleware on funktota, joka saa kolme parametria:
+
+```js
+const logger = (request, response, next) => {
+  console.log('Method:',request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+```
+
+Middlewaren kutsuu lopussa parametrina olevaa funktiota _next_ jolla se siirtää kontrollin seuraavalle middlewarelle.
+
+Middleware otetaan käyttöön seuraavasti:
+
+```js
+app.use(logger)
+```
+
+Middlewaret suoritetaan siinä järjestyksessä jossa ne on määritelty. Middlewaret tulee myös määritellä ennen routeja _jos_ ne halutaan suorittaa ennen niitä. On myös middlewareja jotka halutaan suorittaa routejen jälkeen. 
+
+Lisätään routejen jälkeen seuraava middleware, jonka ansiosta saadaan routejen käsittelemättömistä virhetilanteista JSON-muotoinen virheilmoitus:
+
+```js
+const error = (request, response) => {
+  response.status(404).send({error: 'unknown endpoint'})
+}
+
+app.use(error)
+```
+
+## yhteys fronendiin
+
+Palataan yritykseemme käyttää nyt tehtyä backendiä [osassa 2](/osa2) tehdyllä React-frontendillä. Aiempi yritys lopahti seuraavaan virheilmoitukseen
+
+![]({{ "/assets/3/3.png" | absolute_url }})
+
+Fronendin tekemä GET-pyyntö osoitteeseen <http://localhost:3001/notes> ei jostain syystä toimi. Mistä on kyse? Backend toimii kuitenkin selaimesta ja postmanista käytettäessä ilman ongelmaa.
+
+### same origin policy ja CORS
+
+Kyse on asiasta nimeltään CORS eli Cross-origin resource sharing. [Wikipedian](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) sanon
+
+> Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served. A web page may freely embed cross-origin images, stylesheets, scripts, iframes, and videos. Certain "cross-domain" requests, notably Ajax requests, are forbidden by default by the same-origin security policy.
+
+Lyhyesti sanottuna meidän kontekstissa kyse on seuraavasta: sivulla oleva javascript-koodi saa oletusarvoisesti kommunikoida vaan samassa [originissa](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) olevaan palvelimeen. Koska palvelin on localhostin portissa 3001 ja fronend localhostin portissa 3000 tulkitaan niiden origin ei ole sama. 
+
+Korostetaan vielä, että [same origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) ja CORS eivät ole mitenkään React- tai node-spesifisiä asioita, vaan yleismaailmallisia periaatteita Web-sovellusten toiminnasta.
+
+Voimme sallia muista _origineista_ tulevat käyttämällä noden [cors](https://github.com/expressjs/cors)-middlewarea.
+
+Asennetaan _cors_ komennolla
+
+´´´bash
+npm install npm install cors --save
+´´´
+
+Otetaan middleware käyttöön ja sallitaan kaikki muista origineista tulevat pyynnöt:
+
+´´´js
+const cors = require('cors')
+
+app.use(cors())
+´´´
+
+Nyt fronend toimii! Tosin muistiinpanojen tärkeäksi muuttavaa toiminnallisuutta backendissa ei vielä ole.
+
+CORS:ista voi lukea tarkemmin esim. [Mozillan sivuilta](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+
 
 ## heroku
 
