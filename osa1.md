@@ -40,7 +40,7 @@ Asenna koneeseesi heti myös [Node.js](https://nodejs.org/en/). Materiaali on te
 
 Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmjs.com/get-npm) jota tulemme tarvitsemaan kurssin aikana aktiivisesti.
 
-Asennusohjeita on koottu [tännne](https://github.com/mluukkai/mluukkai.github.io/wiki/asennusohjeita). Sivu on kaikkien editoitavissa, eli tee muokkauksia ja lisäyksiä tarpeen vaatiessa.
+Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io/wiki/asennusohjeita). Sivu on kaikkien editoitavissa, eli tee muokkauksia ja lisäyksiä tarpeen vaatiessa.
 
 ## osan 1 oppimistavoitteet
 
