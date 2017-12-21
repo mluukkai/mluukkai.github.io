@@ -1321,8 +1321,6 @@ Body:   {}
 TypeError: Cannot read property '_doc' of null
     at formatNote (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:46:33)
     at Note.findById.then.note (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:65:21)
-    at <anonymous>
-    at process._tickCallback (internal/process/next_tick.js:188:7)
 </pre>
 
 Nämä tilanteen on syytä erottaa toisistaan, ja itseasiassa jälkimmäinen poikkeus on oman koodimme aiheuttama.
@@ -1427,10 +1425,6 @@ Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muis
 
 Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdollista vertailla <-operaattorilla, teemme vertailun ja palautamme vertailun tulokseen perustuen joko -1 tai 1.
 
-## testaus
-
-- ava/supertest
-
 ## refaktorointia - promisejen ketjutus
 
 Useat routejen tapahtumankäsittelijöistä muuttivat palautettavan datan oikeaan formaattiin kutsumalla metodia _formatNote_:
@@ -1498,7 +1492,6 @@ app.post('/api/notes', (request, response) => {
 
 sillä oleellisesti koska _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme: 
 
-
 ```js
 app.post('/api/notes', (request, response) => {
   // ...
@@ -1519,10 +1512,77 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
+## sovelluksen vieminen tuotantoon
 
-## rest safe, idemponet...
+Sovelluksen pitäisi toimia tuotannossa, eli herokussa sellaisenaan. Fronendin muutosten takia on tehtävä siitä uusi tuotantoversio ja kopioitava se backendiin. 
 
+Sovellusta voi käyttää sekä fronendin kautta
+>https://radiant-plateau-25399.herokuapp.com/>, mutta myös API:n <https://radiant-plateau-25399.herokuapp.com/api/notes> suora käyttö selaimella ja postmanilla onnistuu.
 
+Sovelluksessamme on tällä hetkellä eräs ikävä piirre. Tietokannan osoite on kovakoodattu backendiin ja samaa tietokantaa käytetään sekä tuotannossa, että sovellusta kehitettäessä.
 
+Tarvitsemme oman kannan sovelluskehitystä varten. Eräs vaihtoehto on luoda käyttäjätunnus [mlab](https://www.mlab.com):iin ja luoda sinne uusi tietokanta. 
 
+Huomaa, että kun luot mlab:issa tietokannan, tarkoitetaan käyttäjätunnuksella ja salasanalla tietokannalle määriteltyä tietoja, ei niitä millä kirjaudut mlabiin_
 
+<img src="/assets/3/16.png" height="200">
+
+Tietokannan osoitetta ei kannata kirjoittaa koodiin. Eräs hyvä tapa tietokannan osoitteen määrittelemiseen on [ympäristömuuttujien](https://en.wikipedia.org/wiki/Environment_variable) käyttö. Itseasiassa Herokussa solvelluksemme tietokannan osoite on talletettuna ympäristömuuttujaan _MONGODB_URI_, tämän kertoo myös komentoriviltä annettava komento _heroku config_
+
+Ympäristömuuttujiin pääsee Node-sovelluksesta käsiksi seuraavasti:
+
+```js
+const mongoose = require('mongoose')
+
+const url = process.env.MONGODB_URI
+
+// ...
+
+module.exports = Note
+```
+
+tämän muutoksen jäkeen sovellus ei toimi paikallisesti, koska ympäristömuuttujalla _MONGODB_URI_ ei ole mitään arvoa. Tapoja määritellä ympäristömuuttujalle arvo on monia, käytetään nyt [dotenv](https://www.npmjs.com/package/dotenv)-kirjastoa.
+
+Asennetaan kirjasto komennolla
+
+```bash
+https://www.npmjs.com/package/dotenv
+```
+
+Sovelluksen juurihakemistoon tehdään sitten tiedosto nimeltään _.env_, minne tarvittavien ympäristömuuttujien arvot asetetaan
+
+```bash
+MONGODB_URI=mongodb://....
+```
+
+Tiedosto **tulee heti gitignorata** sillä emme halua dotenvin tietoja verkkoon.
+
+dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön komenolla
+
+```js
+require('dotenv').config()
+```
+
+ja niihin viitataan Nodessa kuiten "normaaleihin" ympäristömuututjiin syntaksilla _process.env.MONGODB_URI_
+
+Otetaan dotenv käyttöön seuraavasti:
+
+```js
+const mongoose = require('mongoose')
+
+if ( process.env.NODE_ENV!=='production' ) {
+  require('dotenv').config()
+}
+
+const url = process.env.MONGODB_URI
+
+// ...
+
+module.exports = Note
+```
+
+Nyt dotenvissä olevat ympäristömuuttujat otetaan käyttöön ainoastaan silloin kun sovellus ei ole _production_- eli tuotantomoodssa (kuten esim. Herokussa). 
+
+Uudelleenkäynnistyksen jälkeen sovellus toimii taas paikallisesti.
+
+Node-sovellusten konfigirointiin on olemassa ympäristömuuttujien ja dotenvin lisäksi lukuisia vaihtoehtoja, mm. [node-conf](https://github.com/lorenwest/node-config). Ympäristömuuttujien käyttö riittää meille nyt, joten emme rupea overengineeraamaan. Palaamme aiheeseen kenties myöhemmin.
