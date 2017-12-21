@@ -362,6 +362,10 @@ Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anek
 
 <img src="/assets/teht/3b.png" height="200">
 
+Tämä saattaa olla jo hieman haastavampi. Tauluoilta löytyy monia hyviä metodeja, katso lisää [Mozillan dokumentaatiosta](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+
+Kurssin normaaliin versioon tullaan todeenäköisesti lisäämään tehtäviä, joissa harjotellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
+
 ## osa 2
 
 ### kokoelmien renderöinti

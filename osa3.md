@@ -8,7 +8,7 @@ permalink: /osa3/
   <h1>KESKEN, ÄLÄ LUE</h1>
 </div>
 
-## osan 3 oppimistavoitteet
+## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
   - RESTful routing
@@ -208,7 +208,7 @@ Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-
 
 Syy virheelle selviää pian, parantelemme kuitenkin ensin koodia muista osin.
 
-## express
+## Express
 
 Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta hieman työlästä.
 
@@ -388,7 +388,7 @@ npm run watch
 
 Toisin kuin skriptejä _start_ tai _test_ suoritettaessa, joudumme sanomaan myös _run_.
 
-## lisää routeja
+## Lisää routeja
 
 Laajennetaan sovellusta siten, että se toteuttaa samanlaisen [RESTful]()-periaatteeseen nojaavan HTTP-rajapinnan kun [json-server](https://github.com/typicode/json-server#routes)
 
@@ -427,7 +427,7 @@ Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla
 
 Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://shop.oreilly.com/product/9780596529260.do)) edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a nimitetään REST:in sijaan [resurssipohjaiseksi](https://en.wikipedia.org/wiki/Resource-oriented_architecture) arkkitehtuurityyliksi.
 
-### lisää routeja: yksittäisen resurssin haku
+### Yksittäisen resurssin haku
 
 Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensi route yksittäisen resurssin katsomista varten.
 
@@ -542,7 +542,7 @@ Koodin haaratumisessa hyväksikäytetään sitä, että mikä tahansa Javascript
 
 Nyt sovellus toimii, eli palauttaa oikean virhekoodin. Sovellus ei kuitenkaan palauta mitään käyttäjälle näytettävää kuten web-sovellukset yleensä tekevät jos mennään osoitteeseen jota ei ole olemassa. Emme kuitenkaan tarvitse nyt mitään näytettävää, sillä REST API:t ovat ohjelmalliseen käyttöön tarkoitettuja rajapintoja ja pyyntöön liitetty virheestä kertova statuskoodi on riittävä.
 
-### resurssin poisto
+### Resurssin poisto
 
 Toteutetaan seuraavaksi resurssin poistava route. Poisto tapahtuu tekemällä HTTP DELETE -pyyntö resurssin urliin:
 
@@ -560,7 +560,7 @@ Jos poisto onnistuu, eli poistettava muistiinpano on olemassa, vastataan statusk
 
 Ei ole täyttä yksimielisyyttä siitä mikä statuskoodi DELETE-pyynnöstä pitäisi palauttaa jos poistettavaa resurssia ei ole olemassa. Vaihtoehtoja ovat lähinnä 204 ja 404. Yksinkertaisuuden vuoksi sovellus palauttaa nyt molemmissa tilanteissa statuskoodin 204.
 
-### postman
+### Postman
 
 Herää kysymys miten voimme testata operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa uutta deletointia, mutta jokaiseen mahdolliseen tilanteeseen tesikoodinkaan tekeminen ei ole aina paras ratkaisu.
 
@@ -576,7 +576,7 @@ Palvelin näyttää vastaavan oiken. Tekemällä HTTP GET osoitteeseen _http://l
 
 Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
 
-### datan vastaanottaminen
+### Datan vastaanottaminen
 
 Toteutetaan seuraavana uusien muistiinpanojen lisäys, joka siis tapahtuu tekemällä HTTP POST -pyyntö osoitteeseen _http://localhost:3001/notes_ ja liittämällä pyynnön mukaan eli [bodyyn]https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7) luotavan muistiinpanon tiedot JSON-muodossa.
 
@@ -671,7 +671,7 @@ Tunnisteena toimivan id-kentän arvon generointilogiikka on eriytetty funktioon 
 
 Jos kenttä _content_ puuttuu, vastataan statuskoodilla [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1). Muussa tapauksessa luodaan muistiinpanio syötteen perusteella. Jos kenttä _important_ tai _date_ puuttuvat, generoidaan niille oletusarvo.
 
-## middlewaret
+## Middlewaret
 
 Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on niin sanottu expressin terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
 
@@ -715,7 +715,7 @@ const error = (request, response) => {
 app.use(error)
 ```
 
-## yhteys fronendiin
+## Yhteys fronendiin
 
 Palataan yritykseemme käyttää nyt tehtyä backendiä [osassa 2](/osa2) tehdyllä React-frontendillä. Aiempi yritys lopahti seuraavaan virheilmoitukseen
 
@@ -723,7 +723,7 @@ Palataan yritykseemme käyttää nyt tehtyä backendiä [osassa 2](/osa2) tehdyl
 
 Fronendin tekemä GET-pyyntö osoitteeseen <http://localhost:3001/notes> ei jostain syystä toimi. Mistä on kyse? Backend toimii kuitenkin selaimesta ja postmanista käytettäessä ilman ongelmaa.
 
-### same origin policy ja CORS
+### Same origin policy ja CORS
 
 Kyse on asiasta nimeltään CORS eli Cross-origin resource sharing. [Wikipedian](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) sanon
 
@@ -753,7 +753,7 @@ Nyt fronend toimii! Tosin muistiinpanojen tärkeäksi muuttavaa toiminnallisuutt
 
 CORS:ista voi lukea tarkemmin esim. [Mozillan sivuilta](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 
-## sovellus internettiin
+## Sovellus internettiin
 
 Kun koko stacki on saatu vihdoin kunton, siirretään sovellus internettiin. Viime aikoina on tullut uusia mielenkiintoisa sovellusten hostausmahdollisuuksia, esim [Zeit](https://zeit.co). Käytetään seuraavassa vanhaa kunnon [Herokua](https://www.heroku.com)
 
@@ -794,7 +794,7 @@ Myös fronend toimii herokussa olevan backendin avulla.
 
 Seuraavaksi herää kysymys miten saamme myös fronendin internettiin? Vaihtoehtoja on muutamia. 
 
-### frontendin tuotantoversio
+### Frontendin tuotantoversio
 
 Olemme toistaiseksi suorittaneet React-koodia _sovelluskehitysmoodissa_, missä sovellus on konfiguroitu anatamaan havainnollisia virheilmoituksia, päivittämään koodiin tehdyt muutokset automaattisesti selaimeen ym.
 
@@ -811,7 +811,7 @@ Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraa
 !function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/",t(t.s=12)}([function(e,t,n){"use strict";function r(e){return"[object Array]"===E.call(e)}function o(e){return"[object ArrayBuffer]"===E.call(e)}function a(e){return"undefined"!==typeof FormData&&e instanceof FormData}function i(e){return"undefined"!==typeof ArrayBuffer&&ArrayBuffer.isView?ArrayBuffer.isView(e):e&&e.buffer&&e.buffer instanceof ArrayBuffer}function u(e){return"string"===typeof e}function l(e){return"number"===typeof e}function s(e){return"undefined"===typeof e}function c(e){return null!==e&&"object"===typeof
 ```
 
-### statattisten tiedostojen tarjoaminen backendistä
+### Statattisten tiedostojen tarjoaminen backendistä
 
 Eräs mahdollisuus frontendin tuotantoonviemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin hakemiston sisään ja määritellä backend näyttämään pääsivunaan fronendin _pääsivu_, eli tiedosto _build/index.html_.
 
@@ -849,7 +849,7 @@ Sovelluksemme tallettama tieto ei ole ikuisesti pysyvää, sillä sovellus talle
 
 Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa katsotaan kuitenkin vielä muutamaa asiaa.
 
-### backendin urlit
+### Backendin urlit
 
 Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen joukko ym. Koska backendin roolina on tarjota fronendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_. 
 
@@ -881,7 +881,7 @@ Joskus API:n ulissa ilmaistaan myös API:n versio. Eri versioita saatetaan tarvi
 
 API:n version ilmaiseminen URL:issa ei kuitenkaan ole välttämättä, ainakaan kaikkien mielstä järkevää vaikka tapaa paljon käytetäänkin. Oikeasta tavasta API:n versiointiin [kiistellään ympäri internettiä](https://stackoverflow.com/questions/389169/best-practices-for-api-versioning).
 
-### proxy
+### Proxy
 
 Fronendiin tehtyjen muutosten seurauksena on nyt se, että kun suoritamme sovelluskehitysmoodissa, eli käynnistämällä sen komennolla _npm start_, yhteys backendiin ei toimi. 
 
@@ -908,19 +908,51 @@ Nyt myös fronend on kunnossa, se toimii sekä sovelluskehitysmoodissa että tuo
 
 Eräs negatiivinen puoli käyttämässämme lähestymistavassa on se, että sovelluksen uuden version tuotantoonvieminen edellyttää ikävän manuaalisen askeleen: fronendin koodin kopioimisen backendin repositorioon. Tämä taas hankaloittaa automatisoidun [deployment pipelinen](https://martinfowler.com/bliki/DeploymentPipeline.html) toteuttamista, eli koodin automatisoidun ja hallitun sovelluskehittäjän koneelta testien kautta tuotantoympäristöön vientiä.
 
-Tähänkin on useita erilaisia ratkaisuja, emme kuitenkaan nyt mene niihin. Joihinkin teemoihin palataan myöhemmin kurssilla.
+Tähänkin on useita erilaisia ratkaisuja (esim. sekä frontendin että backendin [sijoittaminen samaan reporitorioon](https://github.com/mars/heroku-cra-node)), emme kuitenkaan nyt mene niihin. Joihinkin teemoihin palataan myöhemmin kurssilla.
 
-### Fronend ja backend erillisinä sovelluksina
+Myös fronendin koodin deployaaminen omana sovelluksenaan voi joissain tilanteissa olla järkevää. create-react-app:in avulla luotujen sovellusten osalta se on [suoraviivaista](https://github.com/mars/create-react-app-buildpack).
 
-Olisimme voinut 
+## Node-sovellusten debuggaaminen
 
-## debug
+## Mongo
 
-## mongo
+Jotta saisimme talletettua muistiinpanot pysyvästi, tarvitsemme tietokannan. Useimmilla laitoksen kursseilla on käytetty relaatiotietokantoja. Tällä kurssilla käytämme [MongoDB](https://www.mongodb.com/):tä, joka on ns. [dokumenttitietokanta](https://en.wikipedia.org/wiki/Document-oriented_database).
+
+Dokumenttitietokannat poikkeavat jossain määrin relaatiotietokannoista niin datan organisointitapansa kuin kyselykielensäkin suhteen. Dokumenttitietokantojen ajatellaan kuuluvan sateenvarjotermin [NoSQL](https://en.wikipedia.org/wiki/NoSQL) alle. Lisää dokumenttititokannoista ja NoSQL:stä Tietokantojen perusteiden [viikon 7 materiaalista](https://materiaalit.github.io/tikape-s17/part7/)
+
+MongoDB:n voi luonnollisesti asentaa omalle koneelle. Internetistä löytyy kuitenin myös palveluna toimivia Mongoja (esim [mlab](https://mlab.com/) ja [MongoDbCloud](https://www.mongodb.com/cloud/atlas)), ja koska Herokussa oleville sovelluksille on suhteellisen suoraviivaista konfiguroida Mongo-tietokanta, seuraavissa esimerkeissä käytetään Herokun kautta käyttöönotettavaa Mongoa.
+
+Käyttöönotto tapahtuu sovelluksen repositorissa komennolla
+
+```bash
+heroku addons:create mongolab:sandbox
+```
+
+Kuten komennon tuloste kertoo, kysessä on [mlab](https://mlab.com/):n tarjoama Mongo:
+
+<img src="/assets/3/12.png" height="200">
+
+Pääset Herokusta sovelluksesi sivulta mlabin mongo-konsoliin. Tietokannan _mongodb_url_ selviää komentoriviltä komennolla _heroku config_.
+
+Mongon käyttäminen javascript-koodista suoraan [MongoDB Node.js driver](https://mongodb.github.io/node-mongodb-native/) -kirjaston avulla on varsin työlästä. Käytämmekin [mongoose](http://mongoosejs.com/index.html)-kirjastoa. 
+
+Mongoosesta voisi käyttää luonnehdintaa _object document mapper_ (ODM), 
+
+
+
+```bash
+npm install mongoose --save
+```
+
+Ei lisätä mongoa koodia heti backendin koodiin, vaan tehdään erillinen kokeilusovellus tiedostoon _mongo.js_:
+
+```js
+const mongo = require('mongodb')
+```
+
+## Mongoose
 
 ## async/await
-
-## mongoose
 
 ## testaus
 
