@@ -656,7 +656,7 @@ app.post('/notes', (request, response) => {
 
   const note = {
     content: body.content,
-    important: body.important || false,
+    important: body.content===undefined ? 'false' : body.important,
     date: body.date || new Date(),
     id: generateId()
   }
@@ -1167,6 +1167,18 @@ Ennen olion palauttamista turhat kentät poistetaan.
 
 Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muisiinpanoja_ sopisi sama funktio niidenkin muotoiluun. 
 
+On myös mahdollista estää mongoosea palauttasta tiettyjen kenttien arvoa. Saamme estettyä <em>\_\_v</em>:n seuraavasti: 
+
+```js
+app.get('/api/notes', (request, response) => {
+  Note
+    .find({}, '-__v')
+    .then(notes => {
+      response.json(notes.map(formatNote))
+    })
+})
+```
+
 ### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
 Ennen kun täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin. 
@@ -1218,7 +1230,7 @@ app.post('/api/notes', (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.important || false,
+    important: body.important,
     date: new Date(),
   })
 
@@ -1329,6 +1341,7 @@ app.get('/api/notes/:id', (request, response) => {
       }  
     })
     .catch(error=>{
+      console.log(error) 
       response.status(400).send({ error: 'malformatted id' })
     })
 })
@@ -1343,6 +1356,17 @@ Jos id ei ole hyväksyttämässä muodossa ajaudutaan _catch_:in avulla määrit
 Vastaukseen on lisätty myös hieman dataa kertomaan virheen syystä.
 
 Promisejen yhteydessä kannattaa melkeinpä aina lisätä koodiin myös virhetilainteiden käsittely, muuten seurauksena on usein hämmentäviä vikoja.
+
+Ei ole koskaan huno idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virheenkäsittelijässä:
+
+```js
+.catch(error=>{
+  console.log(error) 
+  response.status(400).send({ error: 'malformatted id' })
+})
+```
+
+Virheenkäsittelijään joutumisen syy voi olla joku ihan muu mitä on tullu alunperin ajatelleeksi. Jos virheen tulostaa konsoliin, voi säästyä pitkiltä ja turhauttavilta väärää asiaa debuggaavista sessioilta.
 
 ### loput operaatiot
 
@@ -1367,12 +1391,134 @@ Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksi
 
 Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys onnistuu helposti metodilla [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
 
+```js
+app.put('/api/notes/:id', (request, response) => {
+  const body = request.body
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+
+  Note
+    .findByIdAndUpdate(request.params.id, note, { new: true } )
+    .then(updatedNote => {
+      response.json(formatNote(updatedNote))
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
+    })
+})
+```
+
+Operaatio mahdollistaa myös muistiinpanon sisällön editoinnin. Päivämäärän muuttaminen ei ole mahdollista. 
+
+Huomaa, että metodin _findOneAndUpdate_ parametrina tulee antaa normaali javascript-olio, eikä uuden olion luomisessa käytettävä _Note_-konstruktorifunktiolla luotu olio.
+
+Pieni, mutta tärkeä detalji liittyen operaatioon _findOneAndUpdate_. Oletusarvoisesti tapahtumankäsittelijä saa parametrikseen _response_ mikä oli olion tila [ennen muutosta](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate). Lisäsimme operaatioon parametrin <code>{ new: true }</code> jotta saamme muuttuneen olion palautetuksi kutsujalle.
+
+Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muistiinpanojen tärkeyden muuttaminen fronedissa kuitenkin sotkee muistiinpanojen järjestyksen. Syynä on se, että _id_-kentät eivät ole enää numeroja  vaan stringejä ja joudummekin muuttamaan järjestämisessä käytettävän metodissa _render_ olevan funktion esim. seuraavaan muotoon:
+
+```js
+  const byId = (note1, note2) => 
+    note1.id < note2.id ? -1 : 1
+```
+
+Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdollista vertailla <-operaattorilla, teemme vertailun ja palautamme vertailun tulokseen perustuen joko -1 tai 1.
 
 ## testaus
 
 - ava/supertest
 
-## router
+## refaktorointia - promisejen ketjutus
+
+Useat routejen tapahtumankäsittelijöistä muuttivat palautettavan datan oikeaan formaattiin kutsumalla metodia _formatNote_:
+
+```js
+const formatNote = (note) => {
+  const formattedNote = { ...note._doc, id: note._id }
+  delete formattedNote._id
+  delete formattedNote.__v
+
+  return formattedNote
+}
+```
+
+esim uuden muitiinpanon luomisessa metodia kutsutaan _then_:in parametrina palauttama olio parametrina:
+
+```js
+app.post('/api/notes', (request, response) => {
+  // ...
+
+  note
+    .save()
+    .then(savedNote => {
+      response.json(formatNote(savedNote))
+    })
+
+})
+```
+
+Voisimme tehdä saman myös hieman tyylikkäämmin seuraavaan tapaan:
+
+```js
+app.post('/api/notes', (request, response) => {
+  // ...
+
+  note
+    .save()
+    .then(savedNote => {
+      return formatNote(savedNote)
+    })
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
+    })
+
+})
+```
+
+Eli ensimmäisen _then_:in takaisinkutsussa otamme mongoosen palauttaman olion ja formatoimme sen. Operaation tulos palautetaan returnilla. Kuten osassa 2 [todettiin](osa2/#palvelimen-kanssa-tapahtuvan-kommunikoinnin-eristäminen-omaan-moduuliin), jos promisen then-metodi palauttaa myös promisen. Eli kun palautamme _formatNote(note)_:n takaisinkutsufunktiosta, syntyy promise, jonka arvona on formatoitu muistiinpano. Saamme sen _then_-kutsun parmetrina.
+
+Itseasiassa selviämme vieläkin tiiviimmällä muodossaa:
+
+```js
+app.post('/api/notes', (request, response) => {
+  // ...
+
+  note
+    .save()
+    .then(formatNote)
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
+    })
+
+})
+```
+
+sillä oleellisesti koska _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme: 
+
+
+```js
+app.post('/api/notes', (request, response) => {
+  // ...
+
+  note
+    .save()
+    .then(savedNote => {
+      const formattedNote = { ...savedNote._doc, id: savedNote._id }
+      delete formattedNote._id
+      delete formattedNote.__v
+
+      return formattedNote
+    })
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
+    })
+
+})
+```
+
 
 ## rest safe, idemponet...
 
