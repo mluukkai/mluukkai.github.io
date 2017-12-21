@@ -914,6 +914,58 @@ Myös fronendin koodin deployaaminen omana sovelluksenaan voi joissain tilanteis
 
 ## Node-sovellusten debuggaaminen
 
+Node-sovellusten debuggaaminen on jossain määrin hankalampaa kuin selaimessa toimivan javascriptin.
+
+Vanha hyvä keino on tietysti konsoliin tulostelu. Se kannattaa aina.
+
+### Visual Studio Code
+
+Visual Studio Coden debuggeri voi myös olla hyödyksi. Seuraavassa screenshot, joka tosin on otettu koodin tämän osan lopun versiosta: 
+
+<img src="/assets/3/17.png" height="300">
+
+Koodiin on asetettu muutama breakpoint ja konsolissa on evaluoitu muuttujan _request.params_ arvo. Vasemmalla olevassa ikkunassa on nähtävillä myös muuta ohjelman tilaan liittyvää. 
+
+Ylhäällä olevista nuolista yms. voidaan kontrolloida debuggauksen etenemistä. 
+
+Itse en juurikaan käytä Visual Studio Code debuggeria.
+
+### Chromen dev tools
+
+Debuggaus onnisuu myös Chromen developer-konsolilla, käynnistämällä sovellus seuraavasti:
+
+```bash
+node --inspect --debug-brk index.js
+```
+
+Debuggeriin pääsee käsiksi kirjoittamalla chromen osoiteriville
+
+```bash
+chrome://inspect
+```
+
+Avautuvasta näkymästä valitaan debugattava sovellus
+
+<img src="/assets/3/18.png" height="300">
+
+Debuggausnäkymä toimii kuten React-koodia debugattaessa, _source_-välilehdelle voidaan esim. asettaa breakpoineja, eli kohtia joihin suoritus pysähtyy:
+
+<img src="/assets/3/19.png" height="300">
+
+Kaikki sovelluksen console.log-tulostukset tulevat _Console_-välilehdelle. Voit myös tutkia siellä muuttujien arvoja ja suorittaa mielivaltaista javascript-koodia:
+
+<img src="/assets/3/20.png" height="300">
+
+### epäile kaikkea
+
+Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja yhdistämme fronendin backendiin, on potentiaalisia virheenlähteitä todella paljon.
+
+Kun sovellus "ei toimi", onkin selvitettävä missä vika on. On erittäin yleistä, että vika on sellaisessa paikassa, mitä ei osaa ollenkaan epäillä, ja menee minuutti- tai jopa tuntikausia ennen kuin oikea ongelmien lähde löytyy. 
+
+Avainasemassa onkin systemaattisuus. Koska virhe voi olla melkein missä vaan, kaikkea pitää epäillä, ja tulee pyrkiä poissulkemaan ne osat tarkastelusta missä virhe ei ainakaan ole. Konsoliin kirjoitus, Postman, debuggeri ja kokemus auttavan.
+
+Virheiden ilmaantuessa huonoin strategia on jatkaa koodin kirjoittamista. Se on tae siitä, että koodissa on pian kymmenen ongelmaa lisää ja niiden syyn selvittäminen on entistäkin vaikeampaa. Toyota Production Systemin periaate [Stop and fix](http://gettingtolean.com/toyota-principle-5-build-culture-stopping-fix/#.Wjv9axP1WCQ) toimii tässäkin yhteydessä paremmin kuin hyvin.
+
 ## Mongo
 
 Jotta saisimme talletettua muistiinpanot pysyvästi, tarvitsemme tietokannan. Useimmilla laitoksen kursseilla on käytetty relaatiotietokantoja. Tällä kurssilla käytämme [MongoDB](https://www.mongodb.com/):tä, joka on ns. [dokumenttitietokanta](https://en.wikipedia.org/wiki/Document-oriented_database).
