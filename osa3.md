@@ -918,7 +918,10 @@ Myös fronendin koodin deployaaminen omana sovelluksenaan voi joissain tilanteis
 
 Jotta saisimme talletettua muistiinpanot pysyvästi, tarvitsemme tietokannan. Useimmilla laitoksen kursseilla on käytetty relaatiotietokantoja. Tällä kurssilla käytämme [MongoDB](https://www.mongodb.com/):tä, joka on ns. [dokumenttitietokanta](https://en.wikipedia.org/wiki/Document-oriented_database).
 
-Dokumenttitietokannat poikkeavat jossain määrin relaatiotietokannoista niin datan organisointitapansa kuin kyselykielensäkin suhteen. Dokumenttitietokantojen ajatellaan kuuluvan sateenvarjotermin [NoSQL](https://en.wikipedia.org/wiki/NoSQL) alle. Lisää dokumenttititokannoista ja NoSQL:stä Tietokantojen perusteiden [viikon 7 materiaalista](https://materiaalit.github.io/tikape-s17/part7/)
+Dokumenttitietokannat poikkeavat jossain määrin relaatiotietokannoista niin datan organisointitapansa kuin kyselykielensäkin suhteen. Dokumenttitietokantojen ajatellaan kuuluvan sateenvarjotermin [NoSQL](https://en.wikipedia.org/wiki/NoSQL) alle. Lisää dokumenttititokannoista ja NoSQL:stä Tietokantojen perusteiden [viikon 7 materiaalista](https://materiaalit.github.io/tikape-s17/part7/).
+
+**Lue nyt Tietokantojen perusteiden dokumenttitietokantoja kuvaava osuus.** Jatkossa oletetaan, että hallitset käsitteet _dokumentti_ ja _kokoelma_ (collection).
+
 
 MongoDB:n voi luonnollisesti asentaa omalle koneelle. Internetistä löytyy kuitenin myös palveluna toimivia Mongoja (esim [mlab](https://mlab.com/) ja [MongoDbCloud](https://www.mongodb.com/cloud/atlas)), ja koska Herokussa oleville sovelluksille on suhteellisen suoraviivaista konfiguroida Mongo-tietokanta, seuraavissa esimerkeissä käytetään Herokun kautta käyttöönotettavaa Mongoa.
 
@@ -936,9 +939,7 @@ Pääset Herokusta sovelluksesi sivulta mlabin mongo-konsoliin. Tietokannan _mon
 
 Mongon käyttäminen javascript-koodista suoraan [MongoDB Node.js driver](https://mongodb.github.io/node-mongodb-native/) -kirjaston avulla on varsin työlästä. Käytämmekin [mongoose](http://mongoosejs.com/index.html)-kirjastoa. 
 
-Mongoosesta voisi käyttää luonnehdintaa _object document mapper_ (ODM), 
-
-
+Mongoosesta voisi käyttää luonnehdintaa _object document mapper_ (ODM), ja sen avulla javascript-olioiden tallettaminen mongon dokumenteiksi on suoraviivaista.
 
 ```bash
 npm install mongoose --save
@@ -947,16 +948,431 @@ npm install mongoose --save
 Ei lisätä mongoa koodia heti backendin koodiin, vaan tehdään erillinen kokeilusovellus tiedostoon _mongo.js_:
 
 ```js
-const mongo = require('mongodb')
+const mongoose = require('mongoose')
+
+const url = 'mongodb://...'
+
+mongoose.connect(url, { useMongoClient: true });
+mongoose.Promise = global.Promise;
+
+const Note = mongoose.model('Note', { 
+  content: String,
+  date: Date,
+  important: Boolean 
+})
+
+const note = new Note({
+  content: 'HTML on helppoa',
+  date: new Date(),
+  important: true
+})
+
+note
+.save()
+.then(resp=>{
+  console.log('note saved!')
+  mongoose.connection.close()
+})
 ```
 
-## Mongoose
+Kun koodi suoritetaan komennolla _node mongo.js_ lisää mongoose tietokantaaan uuden dokumentin.
 
-## async/await
+Mlab:in hallintanäkymä (minne pääsee sovelluksen heroku-sivun kautta) näyttää lisäämämme datan:
+
+<img src="/assets/3/13.png" height="200">
+
+Kuten näkymä kertoo, on muistiinpanoa vastaava _dokumentti_ lisätty kokoelmaan nimeltään _notes_.
+
+Koodi sisältää muutamia mielenkiintoisia asioita. Aluksi avataan yhteys ja määritellään, että mongoose käyttää _promiseja_, eikä oldschool-tarkaisunkutsufunktioita. Valitettavasti mongosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
+
+### skeema
+
+Yhteyden avaamisen jälkeen määritellään mustiinpanoa vastaava [model](http://mongoosejs.com/docs/models.html):
+
+```js
+const Note = mongoose.model('Note', { 
+  content: String,
+  date: Date,
+  important: Boolean 
+})
+```
+
+Modelin parametrina määritellään _muistiinpanoa_ vastaava vastaava [skeema](http://mongoosejs.com/docs/guide.html), joka keroo mongooselle, miten muitiinpano-oliot tulee tallettaa tietokantaan. 
+
+Ensimmäisenä parametrina oleva _Note_ määrittelee sen, että mongoose tallettaa muistiinpanoa vastaavat oliot kokoelmaan nimeltään _notes_. 
+
+Dokumentaatiossa skeema ja sitä vastaava model määritellään kumpikin erikseen:
+
+```js
+const noteSchema = new mongoose.Schema({
+  content: String,
+  date: Date,
+  important: Boolean
+})
+
+const Note = mongoose.model('Note', noteSchema);
+```
+
+Koska meillä ei ole skeema-oliolle muuta käyttöä kuin modelin parametrina, käytämme hyväksemme sitä, että skeema voidaan määritellä modeleille suoraan antamalla toisena parametrina skeeman määrittelevä olio.
+
+Dokumenttikannat, kuten Mongo ovat skeemattomia, eli tietokanta itsessään ei välitä mitään sinne talletettavan tiedon muodosta. Samaan kokoelmaankin voi tallettaa olioita joilla on täysin eri kentät.
+
+Mongoosea käytettäessä periaatteena on kuitenkin se, että tietokantaan talletettavalle tiedolle määritellään sovelluksen koodin tasolla skeema joka määrittelee minkä muotoisia olioita kannan eri kokoelmiin talletetaan.  
+
+### olioiden luominen ja tallettaminen
+
+Seuraavaksi sovellus luo muistiinpanoa vastaavan [model](http://mongoosejs.com/docs/models.html):in avulla muistiinpano-olion:
+
+```js
+const note = new Note({
+  content: 'Selain pystyy suorittamaan vain javascriptiä',
+  date: new Date(),
+  important: false
+})
+```
+
+Modelit ovat ns. konstruktorifunktioita, jotka luovat parametrien perusteella javascript-olioita. Koska oliot on luotu modelien konstruktirifunktiolla, nillä on kaikki modelien ominaisuudet, eli joukko metodeja, joiden avulla olioita voidaan mm. tallettaa tietokantaan.
+
+Tallettaminen tapahtuu metodilla _save_. Metodi palauttaa _promisen_ jolle voidaan rekisteröidä _then_-metodin avulla tapahtumankäsittelijä:
+
+```js
+note
+  .save()
+  .then(result=>{
+    console.log('note saved!')
+    mongoose.connection.close()
+  })
+```
+
+eli kun olio on tallennettu kantaan, kutsutaan _then_:in parametrina olevaa funktiota, joka sulkee tietokantayhteyden _mongoose.connection.close()_. Ilman yhteyden sulkemista ohjelman suoritus ei pääty.
+
+Tallennusoperaation tulos on takaisinkutsun parametrissa _result_. Yhtä olioa tallentaessamme tulos ei ole kovin mielenkiintoinen, olion sisällön voi esim. tulostaa konsoliin jos haluaa tutkia sitä tarkemmin.
+
+Talletetaan kantaan myös pari muuta muistiinpanoa muokkaamalla dataa koodista ja suorittamalla ohjelma uudelleen.
+
+### olioiden hakeminen tietokannasta
+
+Kommentoidaan koodista uusia muistiinpanoja generoiva osa, ja korvataan se seuraavalla:
+
+```js
+Note
+  .find({})
+  .then(result => {
+    result.forEach(note => {
+      console.log(note)
+    })
+    mongoose.connection.close()
+  })
+```
+
+Kun koodi suoritetaan, kantaan talletetut muistiinpanot tulostuvat. 
+
+Oliot haetaan kannasta _Note_-modelin metodilla [find](http://mongoosejs.com/docs/api.html#model_Model.find). Metodin parametdina on hakuehto. Koska hakuehtona oli tyhjä olio <code>{}</code>, saimme kannasta kaikki _notes_-kokoelmaan talletetut oliot.
+
+Hakuehdot noudattavat mongon [syntaksia](https://docs.mongodb.com/manual/reference/operator/).
+
+Voisimme hakea esim. ainoastaan tärkeät muistiinpanot seuraavasti:
+
+```js
+Note
+  .find({ important:true })
+  .then(result => {
+    // ...
+  })
+```
+
+## tietokantaa käyttävä backend
+
+Nyt meillä on periaatteessa hallussamme riittävä tietämys ottaa mongo käyttöön sovelluksessamme. 
+
+Aloitetaan nopean kaavan mukaan, copypastetaan tiedostoon _inded.js_ mongoosen määrittelyt, eli
+
+```js
+const mongoose = require('mongoose')
+
+const url = 'mongodb://...'
+
+mongoose.connect(url, { useMongoClient: true })
+mongoose.Promise = global.Promise
+
+const Note = mongoose.model('Note', {
+  content: String,
+  date: Date,
+  important: Boolean
+})
+```
+
+ja muutetaan kaikien muistiinpanojen hakemisesta vastaava käsittelijä seuraavaan muotoon  
+
+```js
+app.get('/api/notes', (request, response) => {
+  Note
+    .find({})
+    .then(notes => {
+      response.json(notes)
+    })
+})
+```
+
+Voimme todeta selaimella, että backend toimii kaikkien dokumenttien näyttämisen osalta:
+
+<img src="/assets/3/14.png" height="200">
+
+Toiminnallisuus on muuten kunnossa, mutta fronend olettaa, että olioiden yksikäsitteinen tunniste on kentässä _id_. Emme myöskään halua näyttää fronendille mongon versiontiin käyttämää kenttää <em>\_\_v</em>. Tehdään pieni apufunktio, jonka avulla yksittäinen muistiinpano saadaan muutettua mongon sisäisestä esitysmuodosta haluamaamme muotoon:
+
+```js
+const formatNote = (note) => {
+  return {
+    content: note.content,
+    date: note.date,
+    important: note.important,
+    id: note._id
+  }
+}
+```
+
+ja käytetään palautetaan HTTP-pyynnön vastauksena funktion avulla mutoiltuja oliota:
+
+```js
+app.get('/api/notes', (request, response) => {
+  Note
+    .find({})
+    .then(notes => {
+      response.json(notes.map(formatNote))
+    })
+})
+```
+
+Nyt siis muuttujassa _notes_ on taulukollinen mongon palauttamia olioita. Kun suoritamme operaation <code>notes.map(format)</code> seurauksena on uusi taulukko, missä on jokaista alkuperäisen taulukon alkiota vastaava funktion _formatNote_ avulla muodostettu alkio.
+
+Jos kannasta haettavilla olioilla olisi suuri määrä kenttiä, apufunktio _formatNote_ kannattaisi mutoilla hieman geneerisemmässä muodossa, esim:
+
+```js
+const formatNote = (note) => {
+  const formattedNote = { ...note._doc, id: note._id }
+  delete formattedNote._id
+  delete formattedNote.__v
+
+  return formattedNote
+}
+```
+
+Ensimmäinen rivi luo uuden olion, mihin kopioituu kaikki vanhan olion kentät. Uuteen olioon lisätään myös kenttä _id_: 
+
+```js
+const formattedNote = { ...note._doc, id: note._id }
+```
+
+Ennen olion palauttamista turhat kentät poistetaan.
+
+Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muisiinpanoja_ sopisi sama funktio niidenkin muotoiluun. 
+
+### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
+
+Ennen kun täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin. 
+
+Tehdään moduulia varten hakemisto _models_ ja sinne tiedosto _note.js_:
+
+```js
+const mongoose = require('mongoose')
+
+const url = 'mongodb://...'
+
+mongoose.connect(url, { useMongoClient: true })
+mongoose.Promise = global.Promise
+
+const Note = mongoose.model('Note', {
+  content: String,
+  date: Date,
+  important: Boolean
+})
+
+module.exports = Note
+```
+
+Noden [moduulien](https://nodejs.org/docs/latest-v8.x/api/modules.html) määrittely poikkeaa hiukan osassa 2 määrittelemistäme fronendin käyttämistä [ES6-moduuleista](osa3/#refaktorointia---moduulit)
+
+Mouduulin ulos näkyvä osa määritellään asettamalla arvo muuttujalle _module.exports_. Asetamme arvoksi määsitellyn modelin _Note_. Muut moduulin sisällä määritellyt asiat, esim. muuttujat _mongoose_ ja _url_ eivät näy moduulin käyttäjälle.
+
+Moduulin käyttöönotto tapahtuu lisäämällä tiedostoon _index.js_ seuraava rivi
+
+```js
+const Note = require('./models/note')
+```
+
+Näin muuttuja _Note_ saa arvokseen saman olion, jonka moduuli määrittelee.
+
+### muut operaatiot
+
+Muutetaan nyt kaikki operaatiot tietokantaa käyttävään muotoon. 
+
+Uuden muistiinpanon luominen tapahtuu seuraavasti:
+
+```js
+app.post('/api/notes', (request, response) => {
+  const body = request.body
+
+  if (body.content===undefined){
+    response.status(400).json({error: 'content missing'}) 
+  }
+
+  const note = new Note({
+    content: body.content,
+    important: body.important || false,
+    date: new Date(),
+  })
+
+  note
+    .save()
+    .then(savedNote => {
+      response.json(formatNote(savedNote))
+    })
+
+})
+```
+
+Muistiinpano-oliot siis luodaan _Note_-konstruktorifunktiolla. Pyyntöön vastataan _save_-operaation konstruktorifunktion sisällä. Näin varmistutaan, että operaatio vastaus tapahtuu vain jos operaatio on onnistunut. Palaamme virheiden käsittelyyn myöhemmin.
+
+Takaisinkutsufunktion parametrina _savedNote_ on talletettu muistiinpano. HTTP-pyyntöön palautetaan kuitenkin siitä funktiolla _formatNote_ formatoitu muoto:
+
+```js
+response.json(formatNote(savedNote))
+```
+
+Kun backendia laajennetaa, kannattaa sitä testailla aluksi ehdottomasti selaimella ja postmanilla. Vasta kun kaikki on todettu toimivaksi, kannattaa siirtyä testailemaan että muutosten jälkeinen backend toimii yhdessä myös frontendin kanssa. Kaikkien kokeilujen tekeminen ainoastaan fronendin kautta on todennäköisesti varsin tehotonta.
+
+Kun kuvioissa on mukana tietokanta, on myös tietokannan tilan tarkastelu mlabin hallintanäkymästä varsin hyödyllistä.
+
+Ykisttäisen muistiinpanon tarkastelu muuttuu muotoon
+
+```js
+app.get('/api/notes/:id', (request, response) => {
+  Note
+    .findById(request.params.id)
+    .then(note => {
+      response.json(formatNote(note))
+    })
+})
+```
+
+### virheen käsittely
+
+Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mitä ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
+
+Palvelimen konsolissa näkyykin virheilmoitus:
+
+<img src="/assets/3/15.png" height="200">
+
+Kysely on epäonnistunut ja kyselyä vastaava promise mennyt tilaan _rejected_. Koska emme käsittele promisen epäonnistumista, ei pyyntöön vastata koskaan. Osassa 2 tutstuimme jo
+[promisejen virhetilanteidenkäsittelyyn](osa2/#promise-ja-virheet). 
+
+Lisätään tilanteeseen yksinkertainen virheidenkäsittelijä:
+
+```js
+app.get('/api/notes/:id', (request, response) => {
+  Note
+    .findById(request.params.id)
+    .then(note => {
+      response.json(formatNote(note))
+    })
+    .catch(error=>{
+      console.log(error)
+      response.status(404).end()
+    })
+})
+```
+
+Kaikissa virheeseen päättyvissä tilanteissa HTTP-pyyntöön vastataan statuskoodilla 404 not found. Konsoliin tulostetaan tarkempi tieto virhestä.
+
+Tapauksessamme on itseasiassa olemassa kaksi erityyppistä virhetilannetta. Toinen vastaa sitä, että yritetään hakea muistiinpanoa virheellisen muotoisella _id_:llä, eli sellasiella mikä ei vastaa mongon id:iden muotoa.
+
+Jos teemme noin tulostuu konsoliin:
+
+<pre>
+Method: GET
+Path:   /api/notes/5a3b7c3c31d61cb9f8a0343
+Body:   {}
+---
+{ CastError: Cast to ObjectId failed for value "5a3b7c3c31d61cb9f8a0343" at path "_id"
+    at CastError (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/error/cast.js:27:11)
+    at ObjectId.cast (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/node_modules/mongoose/lib/schema/objectid.js:158:13)
+    ...
+</pre>
+
+Toinen virhetilanne taas vastaa tilannetta, missä haettavan muistiinpanon id on periaatteessa oikeassa formaatissa, mutta tietokannasta ei löydy indeksillä mitään:
+
+<pre>
+Method: GET
+Path:   /api/notes/5a3b7c3c31d61cbd9f8a0343
+Body:   {}
+---
+TypeError: Cannot read property '_doc' of null
+    at formatNote (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:46:33)
+    at Note.findById.then.note (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:65:21)
+    at <anonymous>
+    at process._tickCallback (internal/process/next_tick.js:188:7)
+</pre>
+
+Nämä tilanteen on syytä erottaa toisistaan, ja itseasiassa jälkimmäinen poikkeus on oman koodimme aiheuttama.
+
+Muutetaan koodia seuraavasti:
+
+```js
+app.get('/api/notes/:id', (request, response) => {
+  Note
+    .findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(formatNote(note))
+      } else {
+        response.status(404).end()
+      }  
+    })
+    .catch(error=>{
+      response.status(400).send({ error: 'malformatted id' })
+    })
+})
+```
+
+Jos kannasta ei löydy haettua olioa, muuttujan _note_ arvo on _undefined_ ja koodi ajautuu _else_-haaraan. Siellä vastataan kyselyyn _404 not found_.
+
+Jos id ei ole hyväksyttämässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Parempi statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä
+
+> The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
+
+Vastaukseen on lisätty myös hieman dataa kertomaan virheen syystä.
+
+Promisejen yhteydessä kannattaa melkeinpä aina lisätä koodiin myös virhetilainteiden käsittely, muuten seurauksena on usein hämmentäviä vikoja.
+
+### loput operaatiot
+
+Toteutetaan vielä jäljellä olevat operaatiot, eli yksittäisen muistiinpanon poisto ja muokkaus.
+
+Poisto onnistuu helpointen metodilla [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove):
+
+```js
+app.delete('/api/notes/:id', (request, response) => {
+  Note
+    .findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => {
+      response.status(400).send({ error: 'malformatted id' })
+    })
+})
+```
+
+Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksissa, eli jos olio poistettiin tai olioa ei ollut mutta _id_ oli periaatteessa oikea. Takaisunkutsun parametrin _result_ peruteella olisi mahdollisuus haarautua ja palauttaa tilanteissa eri statuskoodi jos sille on tarvetta.
+
+Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys onnistuu helposti metodilla [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
+
 
 ## testaus
 
 - ava/supertest
+
+## router
 
 ## rest safe, idemponet...
 
