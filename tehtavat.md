@@ -1,6 +1,8 @@
 # tehtävät
 
-## osa 1
+Muut osat: [2](#osa-2) [3](#osa-3)
+
+## Osa 1
 
 ### web-sovellusten perusteet ###
 
@@ -16,7 +18,6 @@ Tutustu HTML:n lomakkeiden perusteisiin lukemalla Mozillan tutoriaali [Your firs
 #### 3
 
 Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona esim. seuraavasti:
-
 
 <img src="/assets/teht/1.png" height="400">
 
@@ -370,9 +371,9 @@ Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmoin
 (https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84).  Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
 
 
-## osa 2
+## Osa 2
 
-### kokoelmien renderöinti
+### Kokoelmien renderöinti
 
 #### 21 kurssien sisältö
 
@@ -735,4 +736,78 @@ Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muutt
 
 Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
-## osa 3
+## Osa 3
+
+Tämän osan tehtävissä teemme backendin edellisen osan puhelinluettelosovellukseen.
+
+### Expressin alkeet
+
+#### 40 puhelinluettelon backend osa 1
+
+Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taukkoon listan puhelinnumerotietoja:
+
+![]({{ "/assets/teht/19.png" | absolute_url }})
+
+Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuiten mikä tahansa muu merkki.
+
+Sovellus pitää pystyä käynnistämään komennolla _npm start_. 
+
+Komennolla _npm run watch_ käynnistettäessa sovelluksen tulee käynnistyä uudelleen kun koodiin tehdään muutoksia.
+
+#### 41 puhelinluettelon backend osa 2
+
+Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunilleen seuraavanlainen sivu
+
+![]({{ "/assets/teht/20.png" | absolute_url }})
+
+eli sivu kertoo pyynön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
+
+#### 42 puhelinluettelon backend osa 3
+
+Toteuta toiminnallisuus yksittäisen puhelinnumerotiedon näyttämiseen. Esim. id:n 5 omaavan numerotiedon url on <http://localhost:3001/api/persons/5>
+
+Jos id:tä vastaavaa puhelinnumerotietoa ei ole, tulee palvelimen vastata asianmukaisella statuskoodilla.
+
+#### 43 puhelinluettelon backend osa 3
+
+Toteuta toiminnallisuus, jonka avulla puhelinnumerotieto on mahdollista poistaa numerotiedon yksilöivään URL:iin tehtävällä HTTP DELETE -pyynnöllä.
+
+Testaa toiminnallisuus postmanilla.
+
+#### 44 puhelinluettelon backend osa 4
+
+Laajenna backendia siten, että uusia puhelintietoja on mahdollista lisätä osoitteeseen <http://localhost:3001/api/persons> tapahtuvalla HTTP POST -pyynnöllä.
+
+Generoi uuden puhelintiedon tunniste funktiolla [Math.random](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random). Käytä riittävän isoa arvoväliä jotta arvottu id on riittävän suurella todennäköisyydellä sellainen, joka ei ole jo käytössä.
+
+#### 45 puhelinluettelon backend osa 5
+
+Tee uuden numeron lisäykseen virheiden käsittely, pyyntö ei saa onnistua, jos
+- jos nimi tai numero puuttu
+- lisättävälle nimelle on jo numero luettelossa
+
+Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, joka kertoo virheen syyn, esim:
+
+```js
+{ error: 'name must be unique' }
+``` 
+
+### lisää middlewareja
+
+#### 46 puhelinluettelon backend osa 5
+
+#### 47 puhelinluettelon backend osa 6
+
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Koniguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+
+Middlewaren ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
+
+#### 47 puhelinluettelon backend osa 7
+
+Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tulevan datan:
+
+![]({{ "/assets/teht/21.png" | absolute_url }})
+
+Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
+- [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
+- [JSON.stringigy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)

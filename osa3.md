@@ -11,25 +11,44 @@ permalink: /osa3/
 ## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
-  - RESTful routing
-- node.js
-  - ...
-- Javascript
-  - async/await
-- muu
+  - RESTful-periaatteiden alkeet   
+    - HTTP-pyyntötyypit
+    - statuskoodit
+    - resurssiperustaiset URL:it
+- node.js/express
   - npm
+    - sovelluksen luominen
+    - riippuvuuksien hallinta
+    - npm-skriptien alkeet
+    - versiointi
+    - nodemon
+  - HTTP-pyyntöjen käsittely
+    - reittien määrittely
+    - pyyntöihin vastaaminen eri statuskoodein
+  - middlewaret
+  - node.js-sovellusten debuggaaminen  
+  - sovelluksen vieminen tuotantoon
+  - sovelluskehitys- ja tuotantoversion tietokantojen erottaminen  
+- mongo
+  - dokumenttitietokantojen perusteet
+  - mlab:in (tai vastaavan palvelun) mongon peruskäyttö
+  - mongoose
+    - skeema ja model
+    - olioiden hakeminen, tallettaminen, editointi ja poisto
+
+
 
 ## Node.js
 
 Siirrämme tässä osassa fokuksen backendiin, eli palvelimella olevaan toiminnallisuuteen.
 
-Backendin toiminnallisuuteen hyödynnämme [Node.js](https://nodejs.org/en/):ää, joka on melkein missä vaan, erityisesti palvelimilla ja omallakin koneellasi toimiva, Googlen [chrome V8](https://developers.google.com/v8/)-javascriptmoottoriin perustuva javascriptsuoritusympäristö.
+Backendin toiminnallisuuteen käytämme [Node.js](https://nodejs.org/en/):ää, joka on melkein missä vaan, erityisesti palvelimilla ja omalla koneellasikin toimiva, Googlen [chrome V8](https://developers.google.com/v8/) -javascriptmoottoriin perustuva javascriptin suoritusympäristö.
 
-Kurssimateriaalia tehdessä on ollut käytössä Node.js:n versio _v8.6.0_. Huolehdi että omasi on vähintää yhtä tuore (ks. komentoriviltä _node -v_).
+Kurssimateriaalia tehtäessä on ollut käytössä Node.js:n versio _v8.6.0_. Huolehdi että omasi on vähintää yhtä tuore (ks. komentoriviltä _node -v_).
 
 Kuten [osassa 1](osa1#Javascriptiä) todettiin, selaimet eivät vielä osaa uusimpia javascriptin ominaisuuksia ja siksi selainpuolen koodi täytyy kääntää eli _transpiloida_ esim [babel](https://babeljs.io/):illa. Backendissa tilanne on kuitenkin toinen, uusin node hallitsee riittävissä määrin myös javascriptin uusia versioita (muutamia vielä standardoimattomia ominaisuuksia lukuunottamatta), joten suoritamme nodella suoraan kirjoittamaamme koodia ilman transpilointivaihetta.
 
-Tavoitteenamme on tehdä nodella [osan 2](/osa2) muistiinpano-sovellukseen sopiva backend. Aloitetaan kuitenkin ensin perusteiden läpikäyminen toteuttamalla perinteinen "hello world"-sovellus.
+Tavoitteenamme on tehdä [osan 2](/osa2) muistiinpano-sovellukseen sopiva backend. Aloitetaan kuitenkin ensin perusteiden läpikäyminen toteuttamalla perinteinen "hello world"-sovellus.
 
 Osassa 2 oli jo puhe [npm](osa2#npm):stä, eli javascript-projektien hallintaan liittyvästä, alunperin node-ekosysteeminstä kotoisin olevasta työkalusta. Mennään sopivaan hakemistoon ja luodaan projektimme runko komennolla _npm init_. Vastaillaan kysymyksiin sopivasti ja tuloksena on hakemiston juureen sijoitettu projektin tietoja kuvaava tiedosto _package.json_
 
@@ -49,9 +68,9 @@ Osassa 2 oli jo puhe [npm](osa2#npm):stä, eli javascript-projektien hallintaan 
 
 Tiedosto määrittelee mm. että ohjelmamme käynnistyspiste on tiedosto _index.js_.
 
-Tehdään avaimen _scripts_ alle pieni lisäys:
+Tehdään kenttään _scripts_ pieni lisäys:
 
-```json
+```bash
 {
   // ...
   "scripts": {
@@ -80,9 +99,9 @@ tai [npm scriptinä](https://docs.npmjs.com/misc/scripts)
 npm start
 ```
 
-npm-scripti _start_ toimii koska määrittelimme sen tiedostoon _package.json_
+npm-skripti _start_ toimii koska määrittelimme sen tiedostoon _package.json_
 
-```json
+```bash
 {
   // ...
   "scripts": {
@@ -93,11 +112,15 @@ npm-scripti _start_ toimii koska määrittelimme sen tiedostoon _package.json_
 }
 ```
 
-Vaikka esim. projektin suorittaminen onnistuukin suoraan käyttämällä komentoa _node_, on npm-projekteille suoritettavat operaatiot yleensä tapana määritellä nimenomaan npm-scripteinä. Oletusarvoinen _package.json_ määrittelee valmiiksi myös toisen yleisesti käytetyn npm-scriptin eli _npm test_. Koska projektissamme ei ole vielä testikirjastoa, ei _npm test_ kuitenkaan tee vielä muuta kun suorittaa komennon
+Vaikka esim. projektin suorittaminen onnistuukin suoraan käyttämällä komentoa _node index.js_, on npm-projekteille suoritettavat operaatiot yleensä tapana määritellä nimenomaan npm-skripteinä. 
+
+Oletusarvoinen _package.json_ määrittelee valmiiksi myös toisen yleisesti käytetyn npm-scriptin eli _npm test_. Koska projektissamme ei ole vielä testikirjastoa, ei _npm test_ kuitenkaan tee vielä muuta kun suorittaa komennon
 
 ```bash
 echo "Error: no test specified" && exit 1
 ```
+
+### Yksinkertainen web-palvelin
 
 Muutetaan sovellus web-palvelimeksi:
 
@@ -120,7 +143,7 @@ Konsoliin tulostuu
 Server running on port 3001
 ```
 
-Ja voimme avata selaimella osoitteeseen <http://localhost:3001> olevan vaatimattoman sovelluksemme:
+Voimme avata selaimella osoitteessa <http://localhost:3001> olevan vaatimattoman sovelluksemme:
 
 ![]({{ "/assets/3/1.png" | absolute_url }})
 
@@ -140,32 +163,32 @@ import http from 'http'
 
 Selaimen puolella käytetään (nykyään) ES6:n moduuleita, eli moduulit määritellään [exportilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) ja otetaan käyttöön [importilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 
-Node.js kuitenkin käyttää oletusarvoisesti ns. [CommonJS](https://en.wikipedia.org/wiki/CommonJS)-moduuleja. Syy tälle on siinä, että node-ekosysteemillä oli tarve moduuleihin jo pitkä aika ennen kuin Javascript tuki kielen tasolla moduuleja. Node ei toistaiseksi tue ES-moduuleja, mutta tuki on todennäköisesti jossain vaiheessa [tulossa](https://nodejs.org/api/esm.html).
+Node.js kuitenkin käyttää ns. [CommonJS](https://en.wikipedia.org/wiki/CommonJS)-moduuleja. Syy tälle on siinä, että node-ekosysteemillä oli tarve moduuleihin jo kauan ennen kuin Javascript tuki kielen tasolla moduuleja. Node ei toistaiseksi tue ES-moduuleja, mutta tuki on todennäköisesti jossain vaiheessa [tulossa](https://nodejs.org/api/esm.html).
 
 CommonJS-moduulit toimivat kohtuullisessa määrin samaan tapaan kuin ES6-moduulit, ainakin tämän kurssin tarpeiden puitteissa.
 
 Koodi jatkuu seuraavasti:
 
 ```js
-const app = http.createServer( (req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' })
-  res.end('Hello World')
+const app = http.createServer( (request, response) => {
+  response.writeHead(200, { 'Content-Type': 'text/plain' })
+  response.end('Hello World')
 })
 ```
 
-koodi luo [http](https://nodejs.org/docs/latest-v8.x/api/http.html)-palvelimen metodilla _createServer_ web-palvelimen, jolle se rekisteröi tapahtumankäsittelijän, joka suoritetaan _jokaisen_ osoitteen <http:/localhost:3000/> alle tulevan HTTP-pyynnön yhteydessä.
+koodi luo [http](https://nodejs.org/docs/latest-v8.x/api/http.html)-palvelimen metodilla _createServer_ web-palvelimen, jolle se rekisteröi _tapahtumankäsittelijän_, joka suoritetaan _jokaisen_ osoitteen <http:/localhost:3000/> alle tulevan HTTP-pyynnön yhteydessä.
 
-Pyyntöön vastataan statuskoodilla 200, asettamalla _Content-Type_-headerille arvo ja laittamalla sivun sisällöksi merkkijono _Hello World_.
+Pyyntöön vastataan statuskoodilla 200, asettamalla _Content-Type_-headerille arvo _text/plain_ ja asettamalla palautettavan sivun sisällöksi merkkijono _Hello World_.
 
 Viimeiset rivit sitovat muuttujaan _app_ sijoitetun http-palvelimen kuuntelemaan porttiin 3001 tulevia HTTP-pyyntöjä:
 
 ```js
-const port = 3001
-app.listen(port)
-console.log(`Server running on port ${port}`)
+const PORT = 3001
+app.listen(PORT)
+console.log(`Server running on port ${PORT}`)
 ```
 
-Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frondille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun JSON-muotoisia muistiinpanoja:
+Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frondille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun listallisen JSON-muotoisia muistiinpanoja:
 
 ```js
 let notes = [
@@ -195,24 +218,24 @@ const app = http.createServer( (request, response) => {
 })
 ```
 
-Headerin _'Content-Type'_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
+Headerin _Content-Typ'_ arvolla _application/json_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
 
 
-Kun avaamme selaimen, on tulostusasu sama kuin [osassa 3](osa2/#datan-haku-palvelimelta) käytetyn [json-serverin](https://github.com/typicode/json-server) käytettäessä:
+Kun avaamme selaimen, on tulostusasu sama kuin [osassa 2](osa2/#datan-haku-palvelimelta) käytetyn [json-serverin](https://github.com/typicode/json-server) tarjoamalla muistiinpanojen listalla:
 
 ![]({{ "/assets/3/2.png" | absolute_url }})
 
-Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-frontendin kanssa. Mutta vasta melkein, jos käynnistämme frontendin, tulee konsoliin virheilmoitus
+Voimme jo melkein ruveta käyttämään uutta backendiämme osan 2 muistiinpano-frontendin kanssa. Mutta vain _melkein_, sillä kun käynnistämme frontendin, tulee konsoliin virheilmoitus
 
 ![]({{ "/assets/3/3.png" | absolute_url }})
 
-Syy virheelle selviää pian, parantelemme kuitenkin ensin koodia muista osin.
+Syy virheelle selviää pian, parantelemme kuitenkin ensin koodia muilta osin.
 
 ## Express
 
-Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta hieman työlästä.
+Palvelimen koodin tekeminen suoraan noden sisäänrakennetun web-palvelimen [http](https://nodejs.org/docs/latest-v8.x/api/http.html):n päälle on mahdollista, mutta työlästä, erityisesti jos sovellus kasvaa hieman isommaksi.
 
-Nodella tapahtuvaa web-sovellusten ohjelmointia helpottamaan onkin kehitelty useita _http_:tä miellyttävämmän ohjelmoitirajapinnan tarjoamia kirjastoja. Näistä ehdoton [express](http://expressjs.com).
+Nodella tapahtuvaa web-sovellusten ohjelmointia helpottamaan onkin kehitelty useita _http_:tä miellyttävämmän ohjelmoitirajapinnan tarjoamia kirjastoja. Näistä ylivoimaisesti suosituin on [express](http://expressjs.com).
 
 Otetaan express käyttöön määrittelemällä se projektimme riippuvuudeksi komennolla
 
@@ -222,7 +245,7 @@ npm install express --save
 
 Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 
-```json
+```bash
 {
   // ...
   "dependencies": {
@@ -231,7 +254,7 @@ Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 }
 ```
 
-Riippuvuuden koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin
+Riippuvuuden koodi asentuu kaikkien projektin riippuvuuksien tapaan projektin juuressa olevaan hakemistoon _node_modules_. Hakemistosta löytyy expressin lisäksi suuri määrä muutakin tavaraa
 
 <img src="/assets/3/4.png" height="200">
 
@@ -245,7 +268,8 @@ Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_
 
 npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
 
-Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
+Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ eli keskimäinen numero voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama. 
+
 
 Voimme päivittää projektin riippuvuudet komennolla
 
@@ -253,11 +277,16 @@ Voimme päivittää projektin riippuvuudet komennolla
 npm update
 ```
 
-Vastaavasti jos aloitamme projektin koodaamisen toisella koneella, saamme haettua ajantasaiset, _package.json_:in määrittelyn mukaiset riippuvuudet haettua komennolla
+Vastaavasti jos aloitamme projektin koodaamisen toisella koneella, saamme haettua ajantasaiset, _package.json_:in määrittelyn kanssa yhteensopivat riippuvuudet komennolla
 
 ```bash
 npm install
 ```
+
+
+Jos riippuvuuen _major_-versionumero ei muutu, uudempien versioiden pitäisi olla [taaksepäin yhteensopivia](https://en.wikipedia.org/wiki/Backward_compatibility), eli jos ohjelmamme käyttäisi tulevaisuudessa esim. expressin versiota 4.99.175, tässä osassa tehtävän koodin pitäisi edelleen toimia ilman muutoksia. Sen sijaan tulevaisuudessa joskus julkasitava express 5.0.0. voi sisältää sellaisia muutoksia, että koodimme ei enää toimisi.
+
+### Web ja express
 
 Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
 
@@ -266,39 +295,39 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('<h1>Hello World!</h1>')
 })
 
 app.get('/notes', (req, res) => {
   res.json(notes)
 })
 
-const port = 3001
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`)
+const PORT = 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
 ```
 
-Sovellus ei muutu paljoa. Heti alussa otetaan käyttöön _express_ joka on tällä kertaa _funktio_, jota kutsumalla luodaan express-sovellusta vastaava olio:
+Sovellus ei muutu paljoa. Heti alussa otetaan käyttöön _express_, joka on tällä kertaa _funktio_, jota kutsumalla luodaan express-sovellusta vastaava olio:
 
 ```js
 const express = require('express')
 const app = express()
 ```
 
-Seuraavaksi määritellään sovellukselle kaksi _routea_. Näistä ensimmäinen näistä määrittelee tapahtumankäsittelijän joka hoitaa sovelluksen juureen eli polkuun _/_ tulevia HTTP GET -pyyntöjä:
+Seuraavaksi määritellään sovellukselle kaksi _routea_. Näistä ensimmäinen tapahtumankäsittelijän, joka hoitaa sovelluksen juureen eli polkuun _/_ tulevia HTTP GET -pyyntöjä:
 
 ```js
 app.get('/', (request, response) => {
-  response.send('Hello World!')
+  response.send('<h1>Hello World!</h1>')
 })
 ```
 
-Tapahtumankäsittelijäfunktiolla on kaksi parametria, [request](http://expressjs.com/en/4x/api.html#req) joka sisältää kaikki HTTP-pyynnön tiedot ja [response](http://expressjs.com/en/4x/api.html#res) jonka avulla määritellään, miten pyyntöön vastataan.
+Tapahtumankäsittelijäfunktiolla on kaksi parametria. Näistä ensimmäinen eli [request](http://expressjs.com/en/4x/api.html#req) sisältää kaikki HTTP-pyynnön tiedot ja toisen parametrin [response](http://expressjs.com/en/4x/api.html#res):n avulla määritellään, miten pyyntöön vastataan.
 
-Pyyntöön vastataan käyttäen _request_-olion metodia [send](http://expressjs.com/en/4x/api.html#res.send), joka aiheuttaa sen, että parametrina palvelin vastaa HTTP-pyyntöön lähettämällä vastaukseksi parametrina olevan merkkijonon. Koska parametri on merkkijono, metodi asettaa vastauksen _content-type_-headerille arvoksi _text/html_, statuskoodiksi tulee oletusarvoisesti 200.
+Koodissa pyyntöön vastataan käyttäen _response_-olion metodia [send](http://expressjs.com/en/4x/api.html#res.send), jonka kutsumisen seurauksena palvelin vastaa HTTP-pyyntöön lähettämällä vastaukseksi _send_:in parametrina olevan merkkijonon _<h1>Hello World!</h1>_. Koska parametri on merkkijono, tulee vastauksessa _content-type_-headerin arvoksi _text/html_, statuskoodiksi tulee oletusarvoisesti 200.
 
-Routeista toinen määrittelee tapahtumankäsittelijän joka hoitaa sovelluksen polkuun _notes_ tulevia HTTP GET -pyyntöjä:
+Routeista toinen määrittelee tapahtumankäsittelijän, joka hoitaa sovelluksen polkuun _notes_ tulevia HTTP GET -pyyntöjä:
 
 ```js
 app.get('/notes', (request, response) => {
@@ -306,7 +335,7 @@ app.get('/notes', (request, response) => {
 })
 ```
 
-Pyyntöön vastataan metodilla [json](http://expressjs.com/en/4x/api.html#res.json), joka lähettää HTTP-pyynnön vastaukseksi parametrina olevaa javascript-olioa (eli taulukko _notes_) vastaavan JSON-merkkijonon. Content-type-headerin arvoksi tulee _application/json_.
+Pyyntöön vastataan _response_-olion metodilla [json](http://expressjs.com/en/4x/api.html#res.json), joka lähettää HTTP-pyynnön vastaukseksi parametrina olevaa javascript-olioa (eli taulukko _notes_) vastaavan JSON-muotoisen merkkijonon. Headerin _Content-type_ arvoksi tulee _application/json_.
 
 Pieni huomio JSON-muodossa palautettavasta datasta.
 
@@ -328,9 +357,9 @@ Saat käynnistettyä interaktiivisen node-repl:in kirjoittamalla komentoriville 
 
 ## nodemon
 
-Jos muutamme sovelluksen koodia, joudumme sammuttamaan (konsolista ctrl+c) uudelleenkäynnistääksemme sen, jotta muutokset tulevat voimaan. Verrattuna Reactin mukavaan workflowhun missä selain päivittyi automaattisesti koodin muuttuessa tuntuu uudelleenkäynnistely kömpelöltä.
+Jos muutamme sovelluksen koodia uudelleenkäynnistämään sovelluksen (eli ensin sammuttamaan konsolista _ctrl_ ja _c_ ja käynnistämään uudelleen), jotta muutokset tulisivat voimaan. Verrattuna Reactin mukavaan workflowhun missä selain päivittyi automaattisesti koodin muuttuessa tuntuu uudelleenkäynnistely kömpelöltä.
 
-Onneksi ongelmaan löytyy ratkaisu [nodemon](https://github.com/remy/nodemon):
+Ongelmaan ratkaisu on [nodemon](https://github.com/remy/nodemon):
 
 > nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application.
 
@@ -342,7 +371,7 @@ npm install --save-dev nodemon
 
 Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 
-```json
+```bash
 {
   //...
   "dependencies": {
@@ -354,7 +383,7 @@ Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 }
 ```
 
-Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen _nodemon_.
+Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen kuten _nodemon_.
 
 Kun sovellusta suoritetaan tuotantomoodissa, eli samoin kun sitä tullaan suorittamaan tuotantopalvelimella (esim. Herokussa, mihin tulemme kohta siirtämään sovelluksemme), ei kehitysaikaisia riippuvuuksia tarvita.
 
@@ -364,11 +393,11 @@ Voimme nyt käynnistää ohjelman _nodemon_:illa seuraavasti:
 node_modules/.bin/nodemon index.js
 ```
 
-Sovelluksen koodin muutokset aiheuttavat nyt automaattisen palvelimen uudelleenkäynnistyksen. Kannattaa huomata, että vaikka palvelin käynnistyy automaattisesti, selain täytyy kuitenkin refreshata, sillä toisin kuin Reactin yhteydessä, meillä ei nyt ole eikä tässä skenaariossa (missä palautamme JSON-muotoista dataa) edes voisikaan olla selainta päivittävää [hot reload](https://gaearon.github.io/react-hot-loader/getstarted/) -toiminnallisuutta.
+Sovelluksen koodin muutokset aiheuttavat nyt automaattisen palvelimen uudelleenkäynnistyksen. Kannattaa huomata, että vaikka palvelin uudelleenkäynnistyy automaattisesti, selain täytyy kuitenkin refreshata, sillä toisin kuin Reactin yhteydessä, meillä ei nyt ole eikä tässä skenaariossa (missä palautamme JSON-muotoista dataa) edes voisikaan olla selainta päivittävää [hot reload](https://gaearon.github.io/react-hot-loader/getstarted/) -toiminnallisuutta.
 
 Komento on ikävä, joten määritellään sitä varten _npm-skripti_ tiedostoon _package.json_:
 
-```json
+```bash
 {
   // ..
   "scripts": {
@@ -390,15 +419,15 @@ Toisin kuin skriptejä _start_ tai _test_ suoritettaessa, joudumme sanomaan myö
 
 ## Lisää routeja
 
-Laajennetaan sovellusta siten, että se toteuttaa samanlaisen [RESTful]()-periaatteeseen nojaavan HTTP-rajapinnan kun [json-server](https://github.com/typicode/json-server#routes)
+Laajennetaan sovellusta siten, että se toteuttaa samanlaisen RESTful-periaatteeseen nojaavan HTTP-rajapinnan kun [json-server](https://github.com/typicode/json-server#routes).
 
 ### REST
 
 Representational State Transfer eli REST on Roy Fieldingin vuonna 2000 ilmestyneessä [väitöskirjassa](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) määritelty skaalautuvien web-sovellusten rakentamiseksi tarkoitettu arkkitehtuurityyli.
 
-Emme nyt rupea määrittelemään REST:iä Fieldingiläisittäin tai rupea väittämään mitä REST on tai mitä se ei ole vaan otamme hieman [kapeamman näkökulman](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) miten REST tai RESTful API:t yleensä tulkitaan Web-sovelluksissa. Alkuperäinen REST-periaate ei edes rajoitu sinänsä Web-sovelluksiin.
+Emme nyt rupea määrittelemään REST:iä Fieldingiläisittäin tai rupea väittämään mitä REST on tai mitä se ei ole vaan otamme hieman [kapeamman näkökulman](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) miten REST tai RESTful API:t yleensä tulkitaan Web-sovelluksissa. Alkuperäinen REST-periaate ei edes sinänsä rajoitu Web-sovelluksiin.
 
-Mainitsimme jo [edellisestä osassa](osa3/#REST-API:n-käyttö), että yksttäisiä asioita, meidän tapauksessamme muistiinpanoja kutsutaan RESTful-ajattelussa _resursseiksi_. Jokaisella resurssilla on sen yksilöivä osoite.
+Mainitsimme jo [edellisestä osassa](osa3/#REST-API:n-käyttö), että yksttäisiä asioita, meidän tapauksessamme muistiinpanoja kutsutaan RESTful-ajattelussa _resursseiksi_. Jokaisella resurssilla on yksilöivä osoite.
 
 Erittäin yleinen konventio on muodostaa resurssien yksilöivät urlit liittäen resurssityypin nimi ja resurssin yksilöivä tunniste.
 
@@ -408,7 +437,7 @@ Jos nimitämme muistiinpanoja _note_-resursseiksi, yksilöidään yksittäinen m
 
 Kaikkia muistiinpanoja edustavan kokoelmaresurssin url taas on _www.example.com/api/notes_
 
-Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation määrittelee HTTP-operaation tyyppi jota kutsutaan usein myös _verbiksi_:
+Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation määrittelee HTTP-operaation tyyppi, jota kutsutaan usein myös _verbiksi_:
 
 | URL | verbi           |  toiminnallisuus |
 |------- | --- | --- |
@@ -423,13 +452,13 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
 
-Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi.  Restin kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen apin määritelmää.
+Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi.  REST:in kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen REST-API:n määritelmää.
 
-Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://shop.oreilly.com/product/9780596529260.do)) edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a nimitetään REST:in sijaan [resurssipohjaiseksi](https://en.wikipedia.org/wiki/Resource-oriented_architecture) arkkitehtuurityyliksi.
+Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://shop.oreilly.com/product/9780596529260.do)) edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a nimitetään REST:in sijaan [resurssipohjaiseksi](https://en.wikipedia.org/wiki/Resource-oriented_architecture) arkkitehtuurityyliksi. Emme nyt kuitenkaan takerru liian tarkasti määritelmällisiin asioihin vaan jatkamme sovelluksen parissa.
 
 ### Yksittäisen resurssin haku
 
-Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensi route yksittäisen resurssin katsomista varten.
+Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensi [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
 
 Yksittäisen muistiinpanon identifioi url, joka on muotoa _notes/10_, missä lopussa oleva numero vastaa resurssin muistiinpanon id:tä.
 
@@ -443,7 +472,7 @@ app.get('/notes/:id', (request, response) => {
 })
 ```
 
-Nyt _app.get('/notes/:id', ...)_ käsittelee kaikki HTTP GET -pyynnöt, jotka ovat muotoa _note/<jotain>_, missä _<jotain>_ on mielivaltainen merkkijono.
+Nyt <code>app.get('/notes/:id', ...)</code> käsittelee kaikki HTTP GET -pyynnöt, jotka ovat muotoa _note/JOTAIN_, missä _JOTAIN_ on mielivaltainen merkkijono.
 
 
 Polun parametrin _id_ arvoon päästään käsiksi olion _request_ kautta:
@@ -454,14 +483,16 @@ const id = request.params.id
 
 Jo tutuksi tulleella taulukon _find_-metodilla haetaan taulukosta parametria vastaava muistiinpano ja palautetaan se pyynnön tekijälle.
 
-Kun nyt sovellusta testataan selaimella menemällä osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan. Vanha keino on alkaa lisäillä koodiin _console.log_-komentoja:
+Kun sovellusta testataa menemällä selaimella osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan. 
+
+Vanha hyvä keino on alkaa lisäillä koodiin _console.log_-komentoja:
 
 ```js
 app.get('/notes/:id', (request, response) => {
   const id = request.params.id
   console.log(id)
   const note = notes.find(note => note.id === id)
-  console.lod(note)
+  console.log(note)
   response.json(note)
 })
 ```
@@ -497,9 +528,9 @@ Jokaisesta vertailufunktion kutsusta tulostetaan nyt monta asiaa. Konsoliin tulo
 3 'number' '1' 'string' false
 </pre>
 
-eli vika selviää, muuttujassa _id_ on talletettu merkkijono '1' kun taas muistiinpanojen id:t ovat numeroita. Javascriptissä === vertailu katsoo kaikki eri tyyppiset arvot oletusarvoisesti erisuuriksi, joten 1 ei ole '1'.
+ongelman syy selviää: muuttujassa _id_ on tallennettuna merkkijono '1' kun taas muistiinpanojen id:t ovat numeroita. Javascriptissä === vertailu katsoo kaikki eri tyyppiset arvot oletusarvoisesti erisuuriksi, joten 1 ei ole '1'.
 
-Korjataan ongelma, muuttamalla parametrina oleva id numeroksi:
+Korjataan ongelma, muuttamalla parametrina oleva merkkijonomuotoinen id [numeroksi](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number):
 
 ```js
 app.get('/notes/:id', (request, response) => {
@@ -517,11 +548,13 @@ toiminnallisuuteen jää kuitenkin pieni ongelma.
 
 Jos haemme muistiinpanoa sellaisella indeksillä, mitä vastaavaa muistiinpanoa ei ole olemassa, vastaa palvelin seuraavasti
 
-<img src="/assets/3/7.png" height="200">
+![]({{ "/assets/3/7.png" | absolute_url }})
 
 HTTP-statuskoodi on onnistumisesta kertova 200. Vastaukseen ei liity dataa, sillä headerin _content-length_ arvo on 0, ja samaa todistaa selain: mitään ei näy.
 
-Syynä tälle käyttäytymiselle on se, että muuttujan _note_ arvoksi tulee _undefined_ jos muistiinpanoa ei löydy. Tilanne tulisi käsitellä palvelimella järkevämmin, eli statuskoodin 200 sijaan tulee vastata [statuskoodilla](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5) _404 not found_. Tehdään muutos
+Syynä tälle käyttäytymiselle on se, että muuttujan _note_ arvoksi tulee _undefined_ jos muistiinpanoa ei löydy. Tilanne tulisi käsitellä palvelimella järkevämmin, eli statuskoodin 200 sijaan tulee vastata statuskoodilla [404 not found](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5). 
+
+Tehdään koodiin muutos
 
 ```js
 app.get('/notes/:id', (request, response) => {
@@ -536,7 +569,7 @@ app.get('/notes/:id', (request, response) => {
 })
 ```
 
-Koska vastaukseen ei nyt liity mitään dataa käytetään statuskoodin asettavan metodin [status](http://expressjs.com/en/4x/api.html#res.status) lisäksi metodia [end](http://expressjs.com/en/4x/api.html#res.end) ilmoittamaan siitä, että pyyntöön voidaan vastata ilman dataa.
+Koska vastaukseen ei nyt liity mitään dataa käytetään statuskoodin asettavan metodin [status](http://expressjs.com/en/4x/api.html#res.status) lisäksi metodia [end](http://expressjs.com/en/4x/api.html#res.end) ilmoittamaan siitä, että pyyntöön tulee vastata ilman dataa.
 
 Koodin haaratumisessa hyväksikäytetään sitä, että mikä tahansa Javascript-olio on [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), eli katsotaan todeksi vertailuoperaatiossa. undefined taas on [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) eli epätosi.
 
@@ -562,13 +595,14 @@ Ei ole täyttä yksimielisyyttä siitä mikä statuskoodi DELETE-pyynnöstä pit
 
 ### Postman
 
-Herää kysymys miten voimme testata operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa uutta deletointia, mutta jokaiseen mahdolliseen tilanteeseen tesikoodinkaan tekeminen ei ole aina paras ratkaisu.
+Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa deletointia, mutta jokaiseen mahdolliseen tilanteeseen tesikoodinkaan tekeminen ei ole aina paras ratkaisu.
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
-Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä työkalua. Asennetaan postman ja kokeillaan
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. Asennetaan postman ja kokeillaan
 
-<img src="/assets/3/8.png" height="200">
+![]({{ "/assets/3/8.png" | absolute_url }})
+
 
 Postmanin käyttö on tässä tilanteessa suhteellisen ykinkertaista, riittää määritellä url ja valita oikea pyyntötyyppi.
 
@@ -578,15 +612,15 @@ Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys pala
 
 ### Datan vastaanottaminen
 
-Toteutetaan seuraavana uusien muistiinpanojen lisäys, joka siis tapahtuu tekemällä HTTP POST -pyyntö osoitteeseen _http://localhost:3001/notes_ ja liittämällä pyynnön mukaan eli [bodyyn]https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7) luotavan muistiinpanon tiedot JSON-muodossa.
+Toteutetaan seuraavana uusien muistiinpanojen lisäys, joka siis tapahtuu tekemällä HTTP POST -pyyntö osoitteeseen _http://localhost:3001/notes_ ja liittämällä pyynnön mukaan eli [bodyyn](https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7) luotavan muistiinpanon tiedot JSON-muodossa.
 
-Jotta pääsisimme pyynnön mukana lähetettyyn dataan helposti käsiksi tarvitsemme [body-parser](https://github.com/expressjs/body-parser) -kirjaston apua. Määritellään kirjasto projektin riippuvuudeksi
+Jotta pääsisimme pyynnön mukana lähetettyyn dataan helposti käsiksi tarvitsemme [body-parser](https://github.com/expressjs/body-parser)-kirjaston apua. Määritellään kirjasto projektin riippuvuudeksi
 
 ```bash
 npm install body-parser --save
 ```
 
-Otetaan sitten body-parser käyttöön ja luodaan alustava määrittely HTTP POST -operaation käsittelyyn
+Otetaan sitten body-parser käyttöön ja luodaan alustava määrittely HTTP POST -pyynnön käsittelyyn
 
 ```js
 const express = require('express')
@@ -605,30 +639,33 @@ app.post('/notes', (request, response) => {
 })
 ```
 
-Reitin tapahtumankäsittelijäfunktio pääsee dataan käsiksi viitaamalla _request.body_.
+Tapahtumankäsittelijäfunktio pääsee dataan käsiksi viitaamalla _request.body_.
 
-Ilman body-parser-kirjaston määrittelyä pyynnön kentässä _body_ olisi ollut määrittelemätön. body-parserin toimintaperiaatteena onkin se, että se ottaa pyynnön mukana olevan JSON-muotoisen datan, muuttaa sen Javascript-olioksi ja sijoittaa  _request_-olion kenttään ennen kuin routen käsittelijää kutsutaan.
+Ilman body-parser-kirjaston määrittelyä pyynnön kentän _body_ arvo olisi ollut määrittelemätön. body-parserin toimintaperiaatteena on, että se ottaa pyynnön mukana olevan JSON-muotoisen datan, muuttaa sen Javascript-olioksi ja sijoittaa _request_-olion kenttään _body_ ennen kuin routen käsittelijää kutsutaan.
 
 Toistaiseksi sovellus ei vielä tee vastaanotetulle datalle, mitään muuta kuin tulostaa sen konsoliin ja palauttaa sen pyynnön vastauksessa.
 
 Ennen toimintalogiikan viimeistelyä varmistetaan ensin postmanilla että, lähetetty tieto menee varmasti perille. Pyyntötyypin ja urlin lisäksi on määriteltävä myös pyynnön mukana menevä data eli _body_:
 
-<img src="/assets/3/9.png" height="200">
+
+![]({{ "/assets/3/9.png" | absolute_url }})
 
 Näyttää kuitenkin siltä, että mitään ei mene perille, palvelin vastaanottaa ainoastaan tyhjän olion. Missä on vika? Olemme unohtaneet määritellä headerille _Content-Type_ oikean arvon:
 
 <img src="/assets/3/10.png" height="200">
 
-Nyt kaikki toimii! Ilman oikeaa headerin arvoa palvelin ei osaa parsia dataa oikeaan muotoon. Se ei edes yritä arvella mitä data on, sillä potentiaalisia datan lähetysmuotoja eli _Content-Typejä_ on olemassa [suuri määrä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
+Nyt kaikki toimii! Ilman oikeaa headerin arvoa palvelin ei osaa parsia dataa oikeaan muotoon. Se ei edes yritä arvailla missä muodossa data on, sillä potentiaalisia datan siirtomuotoja eli _Content-Typejä_ on olemassa [suuri määrä](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
 
-Välillä debugatessa tulee vastaan tilanteita, joissa backendissä on tarve selvittää mitä headereja HTTP-pyynnöille on asetettu. Eräs menetelmä tähän on _request_-olion melko kehonosti nimetty metodin [get](http://expressjs.com/en/4x/api.html#req.get), jonka avulla voi selvittää yksittäisen headerin arvon. _request_-oliolla on myös kenttä _headers_, jonka arvona ovat kaikki pyyntöön liittyvät headerit.
+> **sivuhuomio**
+>
+> Välillä debugatessa tulee vastaan tilanteita, joissa backendissä on tarve selvittää mitä headereja HTTP-pyynnöille on asetettu. Eräs menetelmä tähän on _request_-olion melko kehonosti nimetty metodin [get](http://expressjs.com/en/4x/api.html#req.get), jonka avulla voi selvittää yksittäisen headerin arvon. _request_-oliolla on myös kenttä _headers_, jonka arvona ovat kaikki pyyntöön liittyvät headerit.
 
-Saamme nyt sovelluslogiikan viimeisteltyä helposti:
+Palataan taas sovelluksen pariin. Kun tiedämme, että sovellus vastaanottaa tiedon oikein, voimme viimeistellä sovelluslogiikan:
 
 ```js
 app.post('/notes', (request, response) => {
+  const maxId = notes.length > 0 ? notes.map(n => n.id).sort().reverse()[0] : 0
   const note = request.body
-  const maxId = notes.length > 0 ? notes.map(n => n.id).sort().reverse()[0] : 1
   note.id = maxId + 1
 
   notes = notes.concat(note)
@@ -637,9 +674,9 @@ app.post('/notes', (request, response) => {
 })
 ```
 
-uuden muistiinpanon id:ksi asetetaan yhtä suurempi olemassaolevien id:iden maksimi.
+Uudelle muistiinpanolle tarvitaan uniikki id. Ensin selvitetään olemassaolevista id:istä suurin muuttujaan _maxId_. Uuden muistiinpanon id:ksi asetetaan sitten _maxId+1_. Tämä tapa ei ole itseasiassa kovin hyvä, mutta emme nyt välitä siitä sillä tulemme pian korvaamaan tavan miten muistiinpanot talletetaan.
 
-Tämän hetkisessä versiossa on vielä se ongelma, että voimme lisätä mitä tahansa kenttiä sisältäviä olioita. Parannellaan sovellusta siten, että kenttä _content_ vaaditaan. Kentille _important_ ja _date_ asetetaan oletusarvot. Kaikki muut kentät hylätään: 
+Tämän hetkisessä versiossa on vielä se ongelma, että voimme HTTP POST -pyynnöllä lisätä mitä tahansa kenttiä sisältäviä olioita. Parannellaan sovellusta siten, että kenttä _content_ vaaditaan. Kentille _important_ ja _date_ asetetaan oletusarvot. Kaikki muut kentät hylätään: 
 
 ```js
 const generateId = () => {
@@ -656,7 +693,7 @@ app.post('/notes', (request, response) => {
 
   const note = {
     content: body.content,
-    important: body.content===undefined ? 'false' : body.important,
+    important: body.date || false,
     date: body.date || new Date(),
     id: generateId()
   }
@@ -670,6 +707,18 @@ app.post('/notes', (request, response) => {
 Tunnisteena toimivan id-kentän arvon generointilogiikka on eriytetty funktioon _generateId_. 
 
 Jos kenttä _content_ puuttuu, vastataan statuskoodilla [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1). Muussa tapauksessa luodaan muistiinpanio syötteen perusteella. Jos kenttä _important_ tai _date_ puuttuvat, generoidaan niille oletusarvo.
+
+Kenttien _important_ ja _date_ oletusarvot generoidaan nyt hieman erikoisella tavalla. date:n arvoksi asetetaan
+
+```js
+body.date || new Date()
+```
+
+jos sovelluksen vastaanottamassa muuttujaan _body_ talletetussa datassa on kenttä _data_, tulee lausekkeelle sen arvo. Jos kenttää ei ole olemassa, tulee lausekkeen arvoksi oikeanpuoleinen osa eli _new Date()_.
+
+## Tehtäviä
+
+Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
 ## Middlewaret
 
@@ -714,6 +763,10 @@ const error = (request, response) => {
 
 app.use(error)
 ```
+
+## Tehtäviä
+
+Tee nyt tehtävät [41](../tehtavat#lisää-middlewareja)
 
 ## Yhteys fronendiin
 

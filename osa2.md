@@ -534,7 +534,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 Tila päivitetään uusilla muistiinpanoilla ja tyhjentämällä syötekomponentin arvoa kontrolloiva kenttä.
 
-### kehittyneempi tapa olioliteraalien kirjoittamiseen
+### Kehittyneempi tapa olioliteraalien kirjoittamiseen
 
 Voimme muuttaa tilan päivittämän koodin
 
@@ -582,7 +582,7 @@ const person = { name, age }
 
 lopputulos molemmilla tavoilla luotuun olioon on täsmälleen sama.
 
-## näytettävien elementtien filtteröinti
+## Näytettävien elementtien filtteröinti
 
 Tehdään sovellukseen feature, joka mahdollistaa ainoastaan tärkeiden muistiinpanojen näyttämisen.
 
@@ -724,11 +724,11 @@ Napin teksti määritellään muuttujaan, jonka arvo määräytyy tilan perustee
 const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 ```
 
-### tehtäviä lomakkeista
+### Tehtäviä lomakkeista
 
 Tee nyt tehtävät [26-30](../tehtavat#lomakkeet)
 
-## datan haku palvelimelta
+## Datan haku palvelimelta
 
 Olemme nyt viipyneet tovin keskittyen pelkkään "frontendiin", eli selainpuolen toiminnallisuuteen. Rupeamme itse toteuttamaan "backendin", eli palvelinpuolen toiminnallisuutta vasta kurssin kolmannessa osassa, mutta otamme nyt jo askeleen sinne suuntaan tutustumalla siihen miten selaimessa suoritettava koodi kommunikoi backendin kanssa.
 
@@ -781,7 +781,7 @@ json-server tallettaa kaiken datan palvelimella sijaitsevaan tiedostoon _db.json
 
 Tutustumme palvelinpuolen toteuttamisen periaatteisiin tarkemmin kurssin [osassa 3](/osa3).
 
-### selain suoritusympäristönä
+### Selain suoritusympäristönä
 
 Ensimmäisenä tehtävänämme on siis hakea React-sovellukseen jo olemassaolevat mustiinpano osoitteesta <http://localhost:3001/notes>.
 
@@ -906,7 +906,7 @@ Sen lisäksi, että komento _npm install_ lisäsi axiosin riippuvuuksien joukkoo
 
 Tutustumme npm:n tarkemmin kurssin [kolmannessa osassa](/osa3).
 
-### axios ja promiset
+### Axios ja promiset
 
 Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-server_ on käynnissä portissa 3001.
 
@@ -991,7 +991,7 @@ Joissain tilanteissa tämäkin tapa voisi olla ok, mutta se on hieman ongelmalli
 
 Ei ole kuitenkaan ihan selvää, mihin kohtaan komponentin koodia komento _axios.get_ olisi hyvä sijoittaa.
 
-### komponenttien lifecycle-metodit
+### Komponenttien lifecycle-metodit
 
 Reactin luokkien avulla määritellyillä komponenteilla voidaan määritellä joukko [lifecycle](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class)-metodeita, eli metodeita, joita React kutsuu tietyssä komponentin "elinkaaren" vaiheessa.
 
@@ -1091,7 +1091,7 @@ Muuttujaan _eventHandler_ on sijoitettu viite funktioon. Axiosin metodin get pal
 
 React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.org/docs/react-component.html), palaamme niihin myöhemmin.
 
-### tehtäviä datan hakemisesta palvelimelta
+### Tehtäviä datan hakemisesta palvelimelta
 
 Tee nyt tehtävä [31-33](../tehtavat#datan-hakeminen-palvelimelta)
 
@@ -1115,7 +1115,7 @@ Uuden muistiinpanoa vastaavan resurssin luominen tapahtuu json-serverin RESTful-
 
 json-server vaatii, että tiedot lähetetään JSON-muodossa, eli käytännössä sopivasti muotoiltuna merkkijonona ja asettamalla headerille _Content-Type_ arvo _application/json_.
 
-## datan lähetys palvelimelle
+## Datan lähetys palvelimelle
 
 Muutetaan nyt uuden muistiinpanon lisäämisestä huolehtivaa tapahtumankäsittelijää seuraavasti:
 
@@ -1186,7 +1186,7 @@ näin on mahdollista varmistua, mm. siirtyykö kaikki oletettu data palvelimelle
 
 Kurssin seuraavassa osassa alamme toteuttaa itse myös palvelimella olevan sovelluslogiikan, tutustumme silloin tarkemmin palvelimen debuggausta auttaviin työkaluihin, mm. [postmaniin](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop). Tässä vaiheessa json-server-palvelimen tilan tarkkailuun riittänee selain.
 
-## muistiinpanon tärkeyden muutos
+## Muistiinpanon tärkeyden muutos
 
 Lisätään muistiinpanojen yhteyteen painike, millä niiden tärkeyttä voi muuttaa.
 
@@ -1331,7 +1331,7 @@ Ensin muut vanhat muistiinpanot paitsi muutunut otetaan tilasta taulukon muuttuj
 
 Tila päivitetään [concatenoimalla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) avulla vanhat muuttumattomat ja palvelimen palauttama muuttunut muistiinpano.
 
-### kiinteä järjestys
+### Kiinteä järjestys
 
 Sovelluksemme toimii, mutta uusi toiminnallisuus vaihtelee ikävästi muistiinpanojen järjestystä. Korjataan asia järjestämällä muistiinpanot aina id-kentän perusteella.
 
@@ -1369,7 +1369,7 @@ Järjestämistä varten on nyt määritelty muuttujaan _byId_ apufunktio, jota k
 notesToShow.sort(byId).map.map(note => <Note ... />)
 ```
 
-## palvelimen kanssa tapahtuvan kommunikoinnin eristäminen omaan moduuliin
+## Palvelimen kanssa tapahtuvan kommunikoinnin eristäminen omaan moduuliin
 
 _App_-komponentti alkaa kasvaa uhkaavasti kun myös palvelimen kanssa kommunikointi tapahtuu komponentissa. [Single responsibility](https://en.wikipedia.org/wiki/Single_responsibility_principle) -periaatteen hengessä kommunikointi onkin viisainta eristää omaan [moduuliinsa](#refaktorointia---moduulit).
 
@@ -1560,7 +1560,7 @@ Tämä kaikki on hieman monimutkaista ja asian selittäminen varmaan vaan vaikeu
 
 Promisejen ymmärtäminen on erittäin keskeistä modernissa Javascript-sovelluskehityksessä, joten asiaan kannattaa uhrata kohtuullisessa määrin aikaa.
 
-## promise ja virheet
+## Promise ja virheet
 
 Jos sovelluksemme mahdollistaisi muistiinpanojen poistamisen, voisi syntyä tilanne, missä käyttäjä yrittää muuttaa sellaisen muistiinpanon tärkeyttä, joka on jo poistettu järjestelmästä.
 
@@ -1660,11 +1660,11 @@ Virheilmoitus annetaan vanhan kunnon [alert](https://developer.mozilla.org/en-US
 
 Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme myöhemmin kehittyneempiä menetelmiä käyttäjille tarkoitettujen muistutusten antamiseen.
 
-### tehtäviä palvelimen tilan päivittämisestä
+### Tehtäviä palvelimen tilan päivittämisestä
 
 Tee nyt tehtävät [34-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
 
-## tyylien lisääminen
+## Tyylien lisääminen
 
 Sovelluksemme ulkoasu on tällä hetkellä hyvin vaatimaton. Osaan 1 liittyvissä [tehtävässä 1](tehtavat/#1-HTML-ja-CSS) oli tarkoitus tutustua Mozillan [CSS-tutoriaaliin](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics).
 
@@ -1757,7 +1757,7 @@ Luokkaselektori määritellään syntaksilla _.classname_, eli :
 
 Jos nyt lisäät sovellukseen muita li-elementtejä, ne eivät saa muistiinpanoille määriteltyjä tyylejä.
 
-### parempi virheilmoitus
+### Parempi virheilmoitus
 
 Toteutimme äsken olemassaolemattoman muistiinpanon tärkeyden muutokseen liittyvän virheilmoituksen _alert_-metodilla. Toteutetaan se nyt Reactilla omana komponenttinaan.
 
@@ -1857,6 +1857,6 @@ Nyt olemme valmiina lisäämään virheviestin logiikan. Alustetaan virheviesti 
 Eli virheen yhteydessä asetetaan tilan kenttään _error_ sopiva virheviesti. Samalla käynnistetään ajastin, joka asettaa 5 sekunnin kuluttua tilan _error_-kentän arvoksi _null_.
 
 
-### loppuhuipennus
+### Loppuhuipennus
 
-Tee nyt tehtävät [38-42](../tehtavat#tyylit)
+Tee nyt tehtävät [38 ja 39](../tehtavat#tyylit)

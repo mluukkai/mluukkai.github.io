@@ -4,19 +4,19 @@ title: osa 1
 permalink: /osa1/
 ---
 
-## yleistä
+## Yleistä
 
 Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa node.js:llä toteutetuissa REST-rajapinnoissa.
 
 Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä NoSQL-tietokantoja.
 
-## oletetut esitiedot
+## Oletetut esitiedot
 
 Osallistujilta edellytetään vahvaa ohjelmointiruutiinia, web-ohjelmoinnin ja tietokantojen perustuntemusta (esim. opintojakson Tietokantasovellus-suoritusta) sekä valmiutta omatoimiseen tiedonhakuun.
 
 Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.
 
-## kurssimateriaali, suoritustapa
+## Kurssimateriaali, suoritustapa
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
 
@@ -26,7 +26,7 @@ Kurssi koostuu osista joita ilmestyy viikoittain. On tarkoitus että etenet seur
 
 Arvosana määräytyy tehtyjen tehtävien perusteella, noin 50% tehtävistä tuo arvosanan 1 ja 90% arvosanan 5. Kurssin lopussa on koe joka on suoritettava hyväksytysti, koe ei kuitenkaan vaikuta arvosanaan.
 
-## alkutoimet
+## Alkutoimet
 
 Tällä kurssilla suositellaan Chrome-selaimen käyttöä sillä se tarjoaa parhaan välineistön web-sovelluskehitystä ajatellen.
 
@@ -42,7 +42,7 @@ Noden myötä koneelle asentuu myös Node package manager [npm](https://www.npmj
 
 Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io/wiki/asennusohjeita). Sivu on kaikkien editoitavissa, eli tee muokkauksia ja lisäyksiä tarpeen vaatiessa.
 
-## osan 1 oppimistavoitteet
+## Osan 1 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
   - HTML:n perusteet
@@ -70,7 +70,7 @@ Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io
   - luokkasyntaksi
   - class propertynä määritellyt metodit
 
-## web-sovelluksen toimintaperiaatteita ##
+## Web-sovelluksen toimintaperiaatteita ##
 
 Käymme aluksi läpi web-sovellusten toimintaperiaatteita tarkastelemalla osoitteessa <https://fullstack-exampleapp.herokuapp.com/> olevaa esimerkkisovellusta. Sovelluksen olemassaolon tarkoitus on ainoastaan havainnollistaa kurssin peruskäsitteistöä, sovellus ei ole missään tapauksessa esimerkki siitä _miten_ web-sovelluksia kannattaisi kehittää, päinvastoin, sovellus käyttää eräitä vanhentuneita tekniikoita sekä huonoja käytänteitä.
 
@@ -132,7 +132,7 @@ img-tagin ansiosta selain tekee HTTP-pyynnön, jonka avulla se hakee kuvan _kuva
 
 eli pyyntö on tehty osoitteeseen _https://fullstack-exampleapp.herokuapp.com/kuva.png_ ja se on tyypiltään HTTP GET. Vastaukseen liittyvät headerit kertovat että vastauksen koko on 89350 tavua ja vastauksen _Content-type_ on _image/png_, eli kyseessä on png-tyyppinen kuva. Tämän tiedon ansiosta selain tietää miten kuva on sijoitettava HTML-sivulle.
 
-### perinteinen web-sovellus
+### Perinteinen web-sovellus
 
 Esimerkkisovelluksen pääsivu toimii perinteisen web-sovelluksen tapaan. Mentäessä sivulle, selain hakee palvelimelta sivun strukturoinnin ja tekstuaalisen sisällön määrittelevän HTML-dokumentin.
 
@@ -169,7 +169,7 @@ Koodia ei tarvitse vielä ymmärtää, mutta käytännössä HTML-sivun sisält�
 
 Perinteisissä websovelluksissa selain on "tyhmä", se ainoastaan pyytää palvelimelta HTML-muodossa olevia sisältöjä, kaikki sovelluslogiikka on palvelimessa. Palvelin voi olla tehty esim. kurssin [Web-palvelinohjelmointi, Java](https://courses.helsinki.fi/fi/tkt21007/119558639) tapaan Springillä tai, [Tietokantasovelluksessa](http://tsoha.github.io/#/johdanto#top) PHP:llä tai [Ruby on Railsilla](http://rubyonrails.org/). Esimerkissä on käytetty Node.js:n [Express](https://expressjs.com/)-sovelluskehystä. Tulemme käyttämään kurssilla Node.js:ää ja Expressiä web-palvelimen toteuttamiseen.
 
-### selaimessa suoritettava sovelluslogiikka
+### Selaimessa suoritettava sovelluslogiikka
 
 Pidä konsoli edelleen auki. Tyhjennä konsolin näkymä painamalla vasemmalla olevaa &empty;-symbolia.
 
@@ -294,7 +294,7 @@ eli vastaanotettuaan datan palvelimelta, koodi tulostaa datan konsoliin.
 
 Tulet tarvitsemaan komentoa _console.log_ kurssilla todella monta kertaa...
 
-### tapahtumankäsittelijä ja takaisinkutsu ###
+### Tapahtumankäsittelijä ja takaisinkutsu ###
 
 Koodin rakenne on hieman erikoinen:
 
@@ -442,7 +442,7 @@ Konsolin _Elements_-välilehdellä on mahdollista manipuloida elementtien tyylej
 
 Tehdyt muutokset eivät luonnollisestikaan jää voimaan kun selaimen sivu uudelleenladataan, eli jos muutokset halutaan pysyviksi, tulee ne konsolissa tehtävien kokeilujen jälkeen tallettaa palvelimella olevaan tyylitiedostoon.
 
-### lomake ja HTTP POST ###
+### Lomake ja HTTP POST ###
 
 Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tätä varten muistiinpanojen sivu sisältää lomakkeen eli [formin](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Your_first_HTML_form).
 
@@ -500,7 +500,7 @@ Muistiinpano-olioilla on siis kaksi kenttää, varsinaisen sisällön kuvaava _c
 
 Palvelin ei talleta muistiinpanoja tietokantaan, joten uudet muistiinpanot katoavat aina Herokun uudelleenkäynnistäessä palvelun.
 
-## single page app ##
+## Single page app ##
 
 Esimerkkisovelluksemme pääsivu toimii perinteisten web-sivujen tapaan, kaikki sovelluslogiikka on palvelimella, selain ainoastaan renderöi palvelimen lähettämää HTML-koodia.
 
@@ -578,7 +578,7 @@ Koodissa siis määritellään, että kyse on HTTP POST -pyynnöstä, määritel
 
 Sovelluksen koodi on nähtävissä osoitteessa <https://github.com/mluukkai/example_app>. Kannattaa huomata, että sovellus on tarkoitettu ainoastaan kurssin käsitteistöä demonstroivaksi esimerkiksi, koodi on osin tyyliltään huonoa ja siitä ei tulee ottaa mallia omia sovelluksia tehdessä.
 
-## kirjastot
+## Kirjastot
 
 Kurssin esimerkkisovellus on tehty ns. [vanilla Javascriptillä](https://medium.freecodecamp.org/is-vanilla-javascript-worth-learning-absolutely-c2c67140ac34) eli käyttäen pelkkää DOM-apia ja Javascript-kieltä sivujen rakenteen manipulointiin.
 
@@ -592,7 +592,7 @@ Nykyisin suosituin tapa toteuttaa web-sovellusten selainpuolen logiikka on Faceb
 
 Reactin asema näyttää tällä hetkellä vahvalta, mutta Javascript-maailma ei lepää koskaan. Viime aikoina huomioita on alkanut kiinnittää mm. uudempi tulokas [VueJS](https://vuejs.org/).
 
-## full stack -websovelluskehitys
+## Full stack -websovelluskehitys
 
 Mitä tarkoitetaan kurssin nimellä _full stack -websovelluskehitys_? Full stack on hypen omainen termi, kaikki puhuvat siitä, mutta kukaan ei oikein tiedä mitä se tarkoittaa tai ainakaan mitään yhteneväistä määritelmää termille ei ole.
 
@@ -614,7 +614,7 @@ Oman haasteensa tuo vielä se, että Javascript-maailma etenee koko ajan kovaa v
 
 Javascript-väsymys tulee varmasti iskemään myös tällä kurssilla. Onneksi nykyään on olemassa muutamia tapoja loiventaa oppimiskäyrää, ja voimme aloittaa keskittymällä konfiguraation sijaan koodaamiseen. Konfiguraatioita ei voi välttää, mutta seuraavat pari viikkoa voimme edetä iloisin mielin vailla pahimpia konfiguraatiohelvettejä.
 
-### tehtäviä web-sovelluksen perusteista
+### Tehtäviä web-sovelluksen perusteista
 
 Ennen reactiin siirtymistä [tehtävät 1-6](../tehtavat#web-sovellusten-perusteet)
 
@@ -651,7 +651,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 Voit poistaa tiedostot _App.js_, _App.css_, _App.test.js_, _logo.svg_ ja _registerServiceWorkes.js_
 
-### komponentti
+### Komponentti
 
 Tiedosto _index.js_ määrittelee nyt React [komponentin](https://reactjs.org/docs/components-and-props.html) nimeltään _App_ ja viimeisen rivin komento
 
@@ -772,7 +772,7 @@ Reactia olisi myös mahdollista kirjoittaa "suoraan javascriptinä" käyttämät
 
 Käytännössä JSX on melkein kuin HTML:ää sillä erotuksella, että mukaan voi upottaa helposti dynaamista sisältöä kirjoittamalla sopivaa javascriptiä aaltosulkeiden sisälle. Idealtaan JSX on melko lähellä monia palvelimella käytettäviä templating-kieliä kuten Java Springin yhteydessä käytettävää thymeleafia.
 
-## monta komponenttia
+## Monta komponenttia
 
 Muutetaan sovellusta seuraavasti (yläreunan importit jätetään nyt ja jatkossa pois):
 
@@ -944,7 +944,7 @@ const App = () => {
 
 Määritellessä sovelluksen juurikomponenttia, tämä ei kuitenkaan ole järkevää ja näyttää koodissakin hirveältä.
 
-### react-tehtävät, osa 1
+### React-tehtävät, osa 1
 
 Tee nyt [tehtävät 7 ja 8](../tehtavat#kokoelmien renderöinti)
 
@@ -968,7 +968,7 @@ Javascript muistuttaa nimensä ja syntaksinsa puolesta läheisesti Javaa. Perusm
 
 Tietyissä piireissä on myös ollut suosittua yrittää "simuloida" Javascriptilla eräitä Javan piirteitä ja ohjelmointitapoja. En suosittele.
 
-### muuttujat
+### Muuttujat
 
 Javascriptissä on kolme tapaa määritellä muuttujia:
 
@@ -988,7 +988,7 @@ x = 4              // aiheuttaa virheen
 
 Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
 
-### taulukot
+### Taulukot
 
 [Taulukko](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) ja muutama esimerkki sen käytöstä
 
@@ -1035,7 +1035,7 @@ console.log(m2) // tulostuu [ '<li>1</li>', '<li>2</li>', '<li>3</li>', '<li>4</
 
 Map siis muodostaa taulukon perusteella uuden taulukon, jonka jokainen alkio muodostetaan map:in parametrina olevan funktion avulla. Kuten tulemme kurssin [osassa2](/osa2) näkemään, mapia käytetään Reactissa todella usein.
 
-### oliot
+### Oliot
 
 Javasriptissa on muutama tapa määritellä olioita. Erittäin yleisesti käytetään [olioliteraaleja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#Object_literals), eli määritellään olio luettelemalla sen kentät (englanniksi property) aaltosulkeiden sisällä:
 
@@ -1087,7 +1087,7 @@ Olioita on myös mahdollista määritellä ns. konstruktorifunktioiden avulla, j
 
 Reactissa konstruktorifunktioihin perustuvalle olioiden määrittelyyn ei ole kovin usein tarvetta, joten sivuutamme sen ainakin toistaiseksi.
 
-### funktiot
+### Funktiot
 
 Olemme jo tutustuneet ns. nuolifunktioiden määrittelyyn. Täydellinen (tai "pitkän kaavan" mukaan menevä) tapa nuolifunktion määrittelyyn on seuraava
 
@@ -1151,11 +1151,11 @@ const keskiarvo = function(a, b) {
 const vastaus = keskiarvo(2, 5)
 ```
 
-### tehtäviä javascriptistä
+### Tehtäviä javascriptistä
 
 Tee nyt [tehtävät 9-11](../tehtavat#javascriptin-alkeet)
 
-### olioiden metodit ja this
+### Olioiden metodit ja this
 
 Kaikille kolmelle tavalle määritellä funktio on oma paikkansa.
 
@@ -1266,7 +1266,7 @@ Komento <code>arto.tervehdi.bind(arto)</code> luo uuden funktion, missä se on s
 
 Jos haluat ymmärtää paremmin javascriptin _this_:in toimintaa, löytyy internetistä runsaasti materiaalia aiheesta. Esim. [egghead.io](https://egghead.io):n 20 minuutin screencastsarja [Understand JavaScript's this Keyword in Depth](https://egghead.io/courses/understand-javascript-s-this-keyword-in-depth) on erittäin suositeltava!
 
-### luokat
+### Luokat
 
 Kuten aiemmin mainittiin, Javascriptissä ei ole olemassa olio-ohjelmointikielten luokkamekanismia. Javascriptissa on kuitenkin ominaisuuksia, jotka mahdollistavat olio-ohjelmoinnin [luokkien](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) "simuloinnin". Emme mene nyt sen tarkemmin Javascriptin olioiden taustalla olevaan [prototyyppiperintämekanismiin](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain).
 
@@ -1308,7 +1308,7 @@ Jos haluat tutustua todella syvällisesti Javascriptiin, löytyy internetistä i
 
 [egghead.io](https://egghead.io):lla on tarjolla runsaasti laadukkaita screencasteja Javascriptista, Reactista ym. kiinnostavasta. Valitettavasti materiaali on osittain maksullista.
 
-## paluu Reactin äärelle
+## Paluu Reactin äärelle
 
 Palataan jälleen Reactin pariin.
 
@@ -1540,7 +1540,7 @@ setInterval(() => {
 
 _ReactDOM.render_-metodin toistuva kutsuminen ei kuitenkaan ole suositeltu tapa päivittää komponentteja. Tutustutaan seuraavaksi järkevämpään tapaan.
 
-### tilallinen komponentti
+### Tilallinen komponentti
 
 Muutetaan esimerkkisovelluksen komponentti _App_ luokkaperustaiseksi:
 
@@ -1602,7 +1602,7 @@ class App extends React.Component {
 }
 ```
 
-### tapahtumankäsittely
+### Tapahtumankäsittely
 
 Mainitsimme jo alun johdanto-osassa muutamaan kertaan _tapahtumankäsittelijät_, eli funktiot, jotka on rekisteröity kutsuttavaksi tiettyjen tapahtumien eli eventien yhteydessä. Esim. käyttäjän interaktio sivun elementtien kanssa aiheuttaa joukon erinäisiä tapahtumia.
 
@@ -1691,7 +1691,7 @@ class App extends React.Component {
 
 Sovelluksemme on valmis!
 
-### metodien käyttö ja _this_
+### Metodien käyttö ja _this_
 
 Tapahtumankäsittelijöiden määrittely suoraan JSX-templatejen sisällä ei useimmiten ole kovin viisasta. Eriytetään nappien tapahtumankäsittelijä omaksi metodeikseen:
 
@@ -1822,7 +1822,7 @@ Käytämme kurssilla jatkossa tätä tapaa komponenttien metodien määrittelemi
 
 Node.js ei oletusarvoisesti vielä tue ominaisuutta, eli kääntämätöntä koodia joka sisältää class propertyjä ei voi vielä suorittaa Node.js:llä.
 
-### huomio funktion setState käytöstä
+### Huomio funktion setState käytöstä
 
 Käytimme metodia _setState_ kahteen kertaan:
 
@@ -1852,7 +1852,7 @@ Emme nyt viitsi käyttää tätä monimutkaisempa muotoa, sillä emme välitä v
 
 Asia tulee kuitenkin ehdottomasti pitää mielessä, _setState_:n vääränlainen käyttö saattaa aiheuttaa hankalasti löydettävän, harvoin toistuvan bugin.
 
-### funktio joka palauttaa funktion ###
+### Funktio joka palauttaa funktion ###
 
 Metodit _kasvataYhdella_ ja _nollaa_ toimivat melkein samalla tavalla, ne asettavat uuden arvon laskurille. Kannattaakin tehdä yksittäinen metodi, joka sopii molempiin käyttötarkoituksiin:
 
@@ -1995,7 +1995,7 @@ Tässä näytetty tapa soveltaa funktioita palauttavia funktioita on oleellisest
 
 Jo muutamaan kertaan mainittu termi _funktionaalinen ohjelmointi_ ei ole välttämättä kaikille tässä vaiheessa tuttu. Asiaa avataan hiukan kurssin kuluessa, sillä React tukee ja osin edellyttää funktionaalisen tyylin käyttöä.
 
-### tilan vieminen alikomponenttiin
+### Tilan vieminen alikomponenttiin
 
 Reactissa suositaan pieniä komponentteja, joita on mahdollista uusiokäyttää monessa osissa sovellusta ja jopa useissa eri sovelluksissa. Refaktoroidaan koodiamme vielä siten, että yhden komponentin sijaan koostamme laskurin näytöstä ja kahdesta painikkeesta.
 
@@ -2092,7 +2092,7 @@ Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uut
 
 Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
 
-### monimutkaisemman tilan päivittäminen
+### Monimutkaisemman tilan päivittäminen
 
 Tarkastellaan sovellusta, jonka tila on hieman monimutkaisempi:
 
@@ -2149,7 +2149,7 @@ klikVasen = () => {
 
 tilassa oleva kenttä _oikea_ jää muutoksen yhteydessä ennalleen.
 
-### taulukon käsittelyä
+### Taulukon käsittelyä
 
 Tehdään sovellukseen vielä laajennus, lisätään tilaan taulukko _kaikki_ joka muistaa kaikki näppäimenpainallukset.
 
@@ -2247,7 +2247,7 @@ const historia = () => this.state.kaikki.join(' ')
 
 Taulukon [join](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join)-metodilla muodostetaan taulukosta merkkijono, joka sisältää taulukon alkiot erotettuna välilyönnillä.
 
-### ehdollinen renderöinti
+### Ehdollinen renderöinti
 
 Muutetaan apufunktiota hiukan:
 
@@ -2376,13 +2376,13 @@ Chromeen kannattaa asentaa [React developer tools](https://chrome.google.com/web
 
 Uuden konsolitabin avulla voidaan tarkkailla sovelluksen React-elementtejä ja niiden tilaa (eli this.state:a) ja propseja.
 
-### hyödyllistä materiaalia
+### Hyödyllistä materiaalia
 
 Internetissä on todella paljon Reactiin liittyvää materiaalia, tässä muutamia linkkejä:
 - Reactin [docs](https://reactjs.org/docs/hello-world.html) kannattaa ehdottomasti käydä läpi, ei välttämättä kaikkea nyt, osa on ajankohtaista vasta kurssin myöhemmissä osissa
   - Reactin sivuilla oleva [tutoriaali](https://reactjs.org/tutorial/tutorial.html) sen sijaan on aika huono
 - [Egghed.io](https://egghead.io):n kursseista [Start learning React](https://egghead.io/courses/start-learning-react) on laadukas ja hieman uudempi [The Beginner's guide to React](https://egghead.io/courses/the-beginner-s-guide-to-reactjs) myös kohtuullisen hyvä, molemmat sisältävät myös asiaa jotka tulevat tällä kurssilla vasta myöhemmissä osissa
 
-### react-tehtävät, osa 2
+### React-tehtävät, osa 2
 
 Tee nyt [tehtävät 12-](../tehtavat#lisää-reactia)
