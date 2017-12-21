@@ -744,6 +744,8 @@ Tämän osan tehtävissä teemme backendin edellisen osan puhelinluettelosovellu
 
 #### 40 puhelinluettelon backend osa 1
 
+**HUOM** tämän osan tehtäväsarja kannattaa tehdä omaan git-repositorioon, suoraan repositorion juureen! Jos et tee näin, joudut ongelmiin tehtävässä 49.
+
 Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taukkoon listan puhelinnumerotietoja:
 
 ![]({{ "/assets/teht/19.png" | absolute_url }})
@@ -794,13 +796,11 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 ### lisää middlewareja
 
-#### 46 puhelinluettelon backend osa 5
-
-#### 47 puhelinluettelon backend osa 6
+#### 46 puhelinluettelon backend osa 6
 
 Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Koniguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
-Middlewaren ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
+Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
 #### 47 puhelinluettelon backend osa 7
 
@@ -811,3 +811,35 @@ Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tule
 Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 - [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
 - [JSON.stringigy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+
+### yhteys fronendiin ja vienti tuotantoon
+
+#### 48 puhelinluettelon backend osa 8
+
+Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
+
+Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa  POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
+
+#### 49 puhelinluettelon backend osa 9
+
+Vie sovelluksen backend internetiin, esim. Herokuun.
+
+Testaa selaimen ja postmanin avulla, että internetissä oleva backend toimii.
+
+Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetissä olevaan sovellukseesi.
+
+#### 50 puhelinluettelo full stack
+
+Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
+
+Huolehdi myös, fronend toimii edelleen myös paikallisesti.
+
+**PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:  
+
+![]({{ "/assets/teht/22.png" | absolute_url }})
+
+### mogoose
+
+#### 51 puhelinluettelo ja tietokanta, osa 1
+
+#### 52 puhelinluettelo ja tietokanta, osa 1

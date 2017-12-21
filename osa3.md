@@ -720,11 +720,12 @@ jos sovelluksen vastaanottamassa muuttujaan _body_ talletetussa datassa on kentt
 
 Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
+
 ## Middlewaret
 
-Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on niin sanottu expressin terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
+Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on sanottu terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
 
-Middlewaret ovat funktioita joiden avulla voidaan käsitellä _request_- ja _response_-olioita. 
+Middlewaret ovat funktioita, joiden avulla voidaan käsitellä _request_- ja _response_-olioita. 
 
 Esim. body-parser ottaa pyynnön mukana tulevan raakadatan _request_-oliosta, parsii sen Javascript-olioksi ja sijoittaa olion _request_:in kenttään _body_
 
@@ -744,7 +745,7 @@ const logger = (request, response, next) => {
 }
 ```
 
-Middlewaren kutsuu lopussa parametrina olevaa funktiota _next_ jolla se siirtää kontrollin seuraavalle middlewarelle.
+Middleware kutsuu lopussa parametrina olevaa funktiota _next_, jolla se siirtää kontrollin seuraavalle middlewarelle.
 
 Middleware otetaan käyttöön seuraavasti:
 
@@ -752,7 +753,7 @@ Middleware otetaan käyttöön seuraavasti:
 app.use(logger)
 ```
 
-Middlewaret suoritetaan siinä järjestyksessä jossa ne on määritelty. Middlewaret tulee myös määritellä ennen routeja _jos_ ne halutaan suorittaa ennen niitä. On myös middlewareja jotka halutaan suorittaa routejen jälkeen. 
+Middlewaret suoritetaan siinä järjestyksessä, jossa ne on otettu käyttään metodilla sovellusolion _use_. Middlewaret tulee myös määritellä ennen routeja jos ne halutaan suorittaa ennen niitä. On myös eräitä tapauksia, joissa middleware tulee määritellä vasta routejen jälkeen, käytännössä tällöin on kyse middlewareista, joita suoritataan vain, jos mikän route ei käsittele HTTP-pyyntöä.
 
 Lisätään routejen jälkeen seuraava middleware, jonka ansiosta saadaan routejen käsittelemättömistä virhetilanteista JSON-muotoinen virheilmoitus:
 
@@ -766,7 +767,7 @@ app.use(error)
 
 ## Tehtäviä
 
-Tee nyt tehtävät [41](../tehtavat#lisää-middlewareja)
+Tee nyt tehtävät [46 ja 47](../tehtavat#lisää-middlewareja)
 
 ## Yhteys fronendiin
 
@@ -778,11 +779,12 @@ Fronendin tekemä GET-pyyntö osoitteeseen <http://localhost:3001/notes> ei jost
 
 ### Same origin policy ja CORS
 
-Kyse on asiasta nimeltään CORS eli Cross-origin resource sharing. [Wikipedian](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) sanon
+Kyse on asiasta nimeltään CORS eli Cross-origin resource sharing. [Wikipedian](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) sanoin
 
 > Cross-origin resource sharing (CORS) is a mechanism that allows restricted resources (e.g. fonts) on a web page to be requested from another domain outside the domain from which the first resource was served. A web page may freely embed cross-origin images, stylesheets, scripts, iframes, and videos. Certain "cross-domain" requests, notably Ajax requests, are forbidden by default by the same-origin security policy.
 
-Lyhyesti sanottuna meidän kontekstissa kyse on seuraavasta: sivulla oleva javascript-koodi saa oletusarvoisesti kommunikoida vaan samassa [originissa](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) olevaan palvelimeen. Koska palvelin on localhostin portissa 3001 ja fronend localhostin portissa 3000 tulkitaan niiden origin ei ole sama. 
+Lyhyesti sanottuna meidän kontekstissa kyse on seuraavasta: sivulla oleva javascript-koodi saa oletusarvoisesti kommunikoida vaan samassa [originissa](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) olevan palvelimen kanssa. Koska palvelin on localhostin portissa 3001 ja fronend localhostin portissa 3000 niiden origin ei ole sama. 
+
 
 Korostetaan vielä, että [same origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) ja CORS eivät ole mitenkään React- tai node-spesifisiä asioita, vaan yleismaailmallisia periaatteita Web-sovellusten toiminnasta.
 
@@ -790,17 +792,17 @@ Voimme sallia muista _origineista_ tulevat käyttämällä noden [cors](https://
 
 Asennetaan _cors_ komennolla
 
-´´´bash
+```bash
 npm install npm install cors --save
-´´´
+```
 
-Otetaan middleware käyttöön ja sallitaan kaikki muista origineista tulevat pyynnöt:
+Otetaan middleware käyttöön ja sallitaan kaikki origineista tulevat pyynnöt:
 
-´´´js
+```js
 const cors = require('cors')
 
 app.use(cors())
-´´´
+```
 
 Nyt fronend toimii! Tosin muistiinpanojen tärkeäksi muuttavaa toiminnallisuutta backendissa ei vielä ole.
 
@@ -808,30 +810,30 @@ CORS:ista voi lukea tarkemmin esim. [Mozillan sivuilta](https://developer.mozill
 
 ## Sovellus internettiin
 
-Kun koko stacki on saatu vihdoin kunton, siirretään sovellus internettiin. Viime aikoina on tullut uusia mielenkiintoisa sovellusten hostausmahdollisuuksia, esim [Zeit](https://zeit.co). Käytetään seuraavassa vanhaa kunnon [Herokua](https://www.heroku.com)
+Kun koko "stäkki" on saatu vihdoin kunton, siirretään sovellus internettiin. Viime aikoina on tullut uusia mielenkiintoisa sovellusten hostausmahdollisuuksia, esim. [Zeit](https://zeit.co). Käytetään seuraavassa vanhaa kunnon [Herokua](https://www.heroku.com).
 
 Lisätään projektin juureen tiedosto _Procfile_, joka kertoo herokulle, miten sovellus käynnistetään
 
-´´´bash
+```bash
 web: node index.js
-´´´
+```
 
 Muutetaan tiedoston _index.js_ lopussa olevaa sovelluksen käyttämän portin määrittelyä seuraavasti:
 
-´´´js
+```js
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-´´´
+```
 
 Nyt käyttöön tulee [ympäristämuuttujassa](https://en.wikipedia.org/wiki/Environment_variable) _PORT_ määritelty portti tai 3001 jos ympäristömuuttuja _PORT_ ei ole määritelty. Heroku konfiguroi sovelluksen portin ympöristömuuttujan avulla.
 
 Tehdään projektihakemistosta git-repositorio, lisätään _.gitignore_ jolla seuraava sisältö
 
-´´´bash
+```bash
 node_modules
-´´´
+```
 
 Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennolla _git push heroku master_.
 
@@ -839,24 +841,24 @@ Jos kaikki meni hyvin, sovellus toimii. Jos ei, vikaa voi selvittää herokun lo
 
 Esim. tätä materiaalia tehdessä törmättiin ongelmaan joka aiheutti seuraavan tulostuksen lokeihin
 
-<img src="/assets/3/11.png" height="200">
+![]({{ "/assets/3/11.png" | absolute_url }})
 
 Syynä ongelmalle oli se, että middlewarea _cors_ asennettaessa oli unohtunut antaa optio __--save__, joka tallentaa tiedon riippuvuudesta tiedostoon _package.json_. Koska näin kävi, ei Heroku ollut asentanut corsia sovelluksen käyttöön.
 
-Myös fronend toimii herokussa olevan backendin avulla. 
+Myös fronend toimii herokussa olevan backendin avulla. Voit varmistaa asian muuttamalla fronendiin määritellyn backendin osoitteen viittaamaan _localhost:3001_:n sijaan herokussa olevaan backendiin.
 
-Seuraavaksi herää kysymys miten saamme myös fronendin internettiin? Vaihtoehtoja on muutamia. 
+Seuraavaksi herää kysymys miten saamme myös fronendin internettiin? Vaihtoehtoja on useita. 
 
 ### Frontendin tuotantoversio
 
-Olemme toistaiseksi suorittaneet React-koodia _sovelluskehitysmoodissa_, missä sovellus on konfiguroitu anatamaan havainnollisia virheilmoituksia, päivittämään koodiin tehdyt muutokset automaattisesti selaimeen ym.
+Olemme toistaiseksi suorittaneet React-koodia _sovelluskehitysmoodissa_, missä sovellus on konfiguroitu antamaan havainnollisia virheilmoituksia, päivittämään koodiin tehdyt muutokset automaattisesti selaimeen ym.
 
 Kun sovellus viedään tuotantoon, täytyy siitä tehdä [production build](https://reactjs.org/docs/optimizing-performance.html#use-the-production-build)
 eli tuotantoa varten optimoitu versio. 
 
-create-react-app:in avulla tehdyistä sovelluksista saadaan muodostettua tuotantoversio komennolla [npm run build](https://github.com/facebookincubator/create-react-app#npm-run-build-or-yarn-build)
+create-react-app:in avulla tehdyistä sovelluksista saadaan muodostettua tuotantoversio komennolla [npm run build](https://github.com/facebookincubator/create-react-app#npm-run-build-or-yarn-build).
 
-Komennon seurauksena syntyy hakemistoon _build_ (joka sisältää jo sovelluksen ainoan html-tiedoston _index.html_) sisään hakemisto _static_, minkä alle generoituu sovelluksen javascript-koodin [minifioitu](https://en.wikipedia.org/wiki/Minification_(programming))  versio. Vaikka sovelluksen koodi on kirjoitettu useaan kirjastoon, tulee kaikki javascript yhteen tiedostoon, samaan tiedostoon tulee itseasiassa myös kaikkien sovelluksen koodin tarvitsemien riippuvuuksien koodi.
+Komennon seurauksena syntyy hakemiston _build_ (joka sisältää jo sovelluksen ainoan html-tiedoston _index.html_) sisään hakemisto _static_, minkä alle generoituu sovelluksen javascript-koodin [minifioitu](https://en.wikipedia.org/wiki/Minification_(programming))  versio. Vaikka sovelluksen koodi on kirjoitettu useaan tiedostoon, generoituu kaikki javascript yhteen tiedostoon, samaan tiedostoon tulee itseasiassa myös kaikkien sovelluksen koodin tarvitsemien riippuvuuksien koodi.
 
 Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraavalta:
 
@@ -866,9 +868,9 @@ Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraa
 
 ### Statattisten tiedostojen tarjoaminen backendistä
 
-Eräs mahdollisuus frontendin tuotantoonviemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin hakemiston sisään ja määritellä backend näyttämään pääsivunaan fronendin _pääsivu_, eli tiedosto _build/index.html_.
+Eräs mahdollisuus frontendin tuotantoon viemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin repositorion juureen ja määritellä backend näyttämään pääsivunaan fronendin _pääsivu_, eli tiedosto _build/index.html_.
 
-Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym tarvitsemme expressiin sisäänrakennettua midlewarea [static](http://expressjs.com/en/starter/static-files.html) 
+Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym. tarvitsemme expressiin sisäänrakennettua midlewarea [static](http://expressjs.com/en/starter/static-files.html). 
 
 Kun lisäämme muiden middlewarejen määrittelyn yhteyteen seuraavan
 
@@ -876,7 +878,7 @@ Kun lisäämme muiden middlewarejen määrittelyn yhteyteen seuraavan
 app.use(express.static('build'))
 ```
 
-tarkastaa express pyyntöjen yhteydessä ensin löytyykö pyynnön polkua vastaavan nimistä tiedostoa hakemistosta _build_, jos löytyy palauttaa express tiedoston.
+tarkastaa express GET-tyyppisten HTTP-pyyntöjen yhteydessä ensin löytyykö pyynnön polkua vastaavan nimistä tiedostoa hakemistosta _build_. Jos löytyy, palauttaa express tiedoston.
 
 Nyt HTTP GET -pyyntö osoitteeseen _www.palvelimenosoite.com/index.html_ tai _www.palvelimenosoite.com_ näyttää Reactilla tehdyn fronendin. GET-pyynnön esim. osoitteeseen _www.palvelimenosoite.com/notes_ hoitaa backendin koodi.
 
@@ -904,7 +906,7 @@ Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa kat
 
 ### Backendin urlit
 
-Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen joukko ym. Koska backendin roolina on tarjota fronendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_. 
+Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen lista ym. Koska backendin roolina on tarjota fronendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_. 
 
 Tehdään muutos ensin muuttamalla käsin kaikki backendin routet:
 
@@ -930,21 +932,23 @@ const getAll = () => {
 // ...
 ```
 
-Joskus API:n ulissa ilmaistaan myös API:n versio. Eri versioita saatetaan tarvita, jos aikojen kuluessa API:n tehdään laajennuksia jotka ilman versiointia hajoittaisivat olemassaolevia osia ohjelmista. Versioinnin avulla voidaan tuoda vanhojen rinnalle uusia, hieman eritavalla voimivia versioita API:sta. 
-
-API:n version ilmaiseminen URL:issa ei kuitenkaan ole välttämättä, ainakaan kaikkien mielstä järkevää vaikka tapaa paljon käytetäänkin. Oikeasta tavasta API:n versiointiin [kiistellään ympäri internettiä](https://stackoverflow.com/questions/389169/best-practices-for-api-versioning).
+> Sivuhuomautus: API:en versiointi
+>
+>Joskus API:n urleissa ilmaistaan myös API:n versio. Eri versioita saatetaan tarvita, jos aikojen kuluessa API:in tehdään laajennuksia, jotka ilman versiointia hajoittaisivat olemassaolevia osia ohjelmista. Versioinnin avulla voidaan tuoda vanhojen rinnalle uusia, hieman eri tavalla voimivia versioita API:sta. 
+>
+>API:n version ilmaiseminen URL:issa ei kuitenkaan ole välttämättä, ainakaan kaikkien mielstä järkevää vaikka tapaa paljon käytetäänkin. Oikeasta tavasta API:n versiointiin [kiistellään ympäri internettiä](https://stackoverflow.com/questions/389169/best-practices-for-api-versioning).
 
 ### Proxy
 
-Fronendiin tehtyjen muutosten seurauksena on nyt se, että kun suoritamme sovelluskehitysmoodissa, eli käynnistämällä sen komennolla _npm start_, yhteys backendiin ei toimi. 
+Fronendiin tehtyjen muutosten seurauksena on nyt se, että kun suoritamme fronendiä sovelluskehitysmoodissa, eli käynnistämällä sen komennolla _npm start_, yhteys backendiin ei toimi. 
 
-Koska backendin osoite on määritelty suhteellisena:
+Syynä tälle on se, että backendin osoite muutettiin suhteellisesti määritellyksi:
 
 ```js
 const baseUrl = '/api/notes'
 ```
 
-ja sovellus toimii osoitteessa _localhost:3000_, menevät bakendiin tehtävät pyynnöt väärään osoitteeseen _localhost:3000/api/notes_. Backend toimii kuitenkin osoitteessa _localhost:3001/_
+Koska fronend toimii osoitteessa _localhost:3000_, menevät backendiin tehtävät pyynnöt väärään osoitteeseen _localhost:3000/api/notes_. Backend toimii kuitenkin osoitteessa _localhost:3001_
 
 create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riittää, että tiedostoon _package.json_ lisätään seuraava määritelmä:
 
@@ -955,27 +959,32 @@ create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riitt�
 }
 ```
 
-Nyt Reactin sovelluskehitysympäristö toimii [proxynä](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#proxying-api-requests-in-development) ja jos React-koodi tekee HTTP-pyynnön, osoitteen _http://localhost:3000_ alle mutta pyyntö ei ole React-sovelluksen vastuulla (eli kyse ei ole esim. sovelluksen javascript-koodista tai CSS:stä), lähetetään pyyntö edelleen osoitteessa _http://localhost:3001_ olevalle palvelimelle.
+Nyt Reactin sovelluskehitysympäristö toimii [proxynä](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#proxying-api-requests-in-development) ja jos React-koodi tekee HTTP-pyynnön palvelimen _http://localhost:3000_ johonkin osoitteeseen joka ei ole React-sovelluksen vastuulla (eli kyse ei ole esim. sovelluksen javascript-koodista tai CSS:stä), lähetetään pyyntö edelleen osoitteessa _http://localhost:3001_ olevalle palvelimelle.
 
 Nyt myös fronend on kunnossa, se toimii sekä sovelluskehitysmoodissa että tuotannossa yhdessä palvelimen kanssa.
 
-Eräs negatiivinen puoli käyttämässämme lähestymistavassa on se, että sovelluksen uuden version tuotantoonvieminen edellyttää ikävän manuaalisen askeleen: fronendin koodin kopioimisen backendin repositorioon. Tämä taas hankaloittaa automatisoidun [deployment pipelinen](https://martinfowler.com/bliki/DeploymentPipeline.html) toteuttamista, eli koodin automatisoidun ja hallitun sovelluskehittäjän koneelta testien kautta tuotantoympäristöön vientiä.
+Eräs negatiivinen puoli käyttämässämme lähestymistavassa on se, että sovelluksen uuden version tuotantoon vieminen edellyttää ikävän manuaalisen askeleen: frontendin koodin tuotantoversion kopioimisen backendin repositorioon. Tämä taas hankaloittaa automatisoidun [deployment pipelinen](https://martinfowler.com/bliki/DeploymentPipeline.html) toteuttamista. Deployment pipelinellä tarkoitetaan automatisoitua ja hallittua tapaa viedä koodi sovelluskehittäjän koneelta erilaisten testien ja laadunhallinnallisten vaiheiden kautta tuotantoympäristöön.
 
-Tähänkin on useita erilaisia ratkaisuja (esim. sekä frontendin että backendin [sijoittaminen samaan reporitorioon](https://github.com/mars/heroku-cra-node)), emme kuitenkaan nyt mene niihin. Joihinkin teemoihin palataan myöhemmin kurssilla.
+Tähänkin on useita erilaisia ratkaisuja (esim. sekä frontendin että backendin [sijoittaminen samaan reporitorioon](https://github.com/mars/heroku-cra-node)), emme kuitenkaan nyt mene niihin. 
 
 Myös fronendin koodin deployaaminen omana sovelluksenaan voi joissain tilanteissa olla järkevää. create-react-app:in avulla luotujen sovellusten osalta se on [suoraviivaista](https://github.com/mars/create-react-app-buildpack).
+
+
+## Tehtäviä
+
+Tee nyt tehtävät [48-50](../tehtavat#yhteys-fronendiin-ja-vienti-tuotantoon)
 
 ## Node-sovellusten debuggaaminen
 
 Node-sovellusten debuggaaminen on jossain määrin hankalampaa kuin selaimessa toimivan javascriptin.
 
-Vanha hyvä keino on tietysti konsoliin tulostelu. Se kannattaa aina.
+Vanha hyvä keino on tietysti konsoliin tulostelu. Se kannattaa aina. 
 
 ### Visual Studio Code
 
-Visual Studio Coden debuggeri voi myös olla hyödyksi. Seuraavassa screenshot, joka tosin on otettu koodin tämän osan lopun versiosta: 
+Visual Studio Coden debuggeri voi olla hyödyksi joissain tapauksissa. Seuraavassa screenshot, joka tosin on otettu koodin tämän osan lopun versiosta: 
 
-<img src="/assets/3/17.png" height="300">
+![]({{ "/assets/3/17.png" | absolute_url }})
 
 Koodiin on asetettu muutama breakpoint ja konsolissa on evaluoitu muuttujan _request.params_ arvo. Vasemmalla olevassa ikkunassa on nähtävillä myös muuta ohjelman tilaan liittyvää. 
 
@@ -985,10 +994,10 @@ Itse en juurikaan käytä Visual Studio Code debuggeria.
 
 ### Chromen dev tools
 
-Debuggaus onnisuu myös Chromen developer-konsolilla, käynnistämällä sovellus seuraavasti:
+Debuggaus onnisuu myös Chromen developer-konsolilla, käynnistämällä sovellus komennolla:
 
 ```bash
-node --inspect --debug-brk index.js
+node --inspect index.js
 ```
 
 Debuggeriin pääsee käsiksi kirjoittamalla chromen osoiteriville
@@ -997,25 +1006,26 @@ Debuggeriin pääsee käsiksi kirjoittamalla chromen osoiteriville
 chrome://inspect
 ```
 
-Avautuvasta näkymästä valitaan debugattava sovellus
+Avautuvasta näkymästä valitaan debugattava sovellus:
 
-<img src="/assets/3/18.png" height="300">
+![]({{ "/assets/3/18.png" | absolute_url }})
 
 Debuggausnäkymä toimii kuten React-koodia debugattaessa, _source_-välilehdelle voidaan esim. asettaa breakpoineja, eli kohtia joihin suoritus pysähtyy:
 
-<img src="/assets/3/19.png" height="300">
+![]({{ "/assets/3/19.png" | absolute_url }})
 
-Kaikki sovelluksen console.log-tulostukset tulevat _Console_-välilehdelle. Voit myös tutkia siellä muuttujien arvoja ja suorittaa mielivaltaista javascript-koodia:
 
-<img src="/assets/3/20.png" height="300">
+Kaikki sovelluksen console.log-tulostukset tulevat debuggerin _Console_-välilehdelle. Voit myös tutkia siellä muuttujien arvoja ja suorittaa mielivaltaista javascript-koodia:
+
+![]({{ "/assets/3/20.png" | absolute_url }})
 
 ### epäile kaikkea
 
-Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja yhdistämme fronendin backendiin, on potentiaalisia virheenlähteitä todella paljon.
+Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja fronend on yhdistetty backendiin, on potentiaalisia virheenlähteitä todella paljon.
 
-Kun sovellus "ei toimi", onkin selvitettävä missä vika on. On erittäin yleistä, että vika on sellaisessa paikassa, mitä ei osaa ollenkaan epäillä, ja menee minuutti- tai jopa tuntikausia ennen kuin oikea ongelmien lähde löytyy. 
+Kun sovellus "ei toimi", onkin selvitettävä missä vika on. On erittäin yleistä, että vika on sellaisessa paikassa, mitä ei osaa ollenkaan epäillä, ja menee minuutti-, tunti- tai jopa päiväkausia ennen kuin oikea ongelmien lähde löytyy. 
 
-Avainasemassa onkin systemaattisuus. Koska virhe voi olla melkein missä vaan, kaikkea pitää epäillä, ja tulee pyrkiä poissulkemaan ne osat tarkastelusta missä virhe ei ainakaan ole. Konsoliin kirjoitus, Postman, debuggeri ja kokemus auttavan.
+Avainasemassa onkin systemaattisuus. Koska virhe voi olla melkein missä vaan, kaikkea pitää epäillä, ja tulee pyrkiä poissulkemaan ne osat tarkastelusta, missä virhe ei ainakaan ole. Konsoliin kirjoitus, Postman, debuggeri ja kokemus auttavan.
 
 Virheiden ilmaantuessa huonoin strategia on jatkaa koodin kirjoittamista. Se on tae siitä, että koodissa on pian kymmenen ongelmaa lisää ja niiden syyn selvittäminen on entistäkin vaikeampaa. Toyota Production Systemin periaate [Stop and fix](http://gettingtolean.com/toyota-principle-5-build-culture-stopping-fix/#.Wjv9axP1WCQ) toimii tässäkin yhteydessä paremmin kuin hyvin.
 
