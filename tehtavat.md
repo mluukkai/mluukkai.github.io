@@ -366,6 +366,10 @@ Tämä saattaa olla jo hieman haastavampi. Tauluoilta löytyy monia hyviä metod
 
 Kurssin normaaliin versioon tullaan todeenäköisesti lisäämään tehtäviä, joissa harjotellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
 
+Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin]
+(https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84).  Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
+
+
 ## osa 2
 
 ### kokoelmien renderöinti
