@@ -367,8 +367,7 @@ Tämä saattaa olla jo hieman haastavampi. Tauluoilta löytyy monia hyviä metod
 
 Kurssin normaaliin versioon tullaan todeenäköisesti lisäämään tehtäviä, joissa harjotellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
 
-Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin]
-(https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84).  Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
+Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84).  Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
 
 
 ## Osa 2
@@ -547,7 +546,7 @@ Tilassa oleva kenttä _newName_ on tarkoitettu lomakkeen kentän kontrollointiin
 
 Joskus tilan muuttujia ja tarvittaessa muitakin voi olla hyödyllistä renderöidä debugatessa komponenttiin, eli voi lisätä tilapäisesti lisätä komponentin metodin _render_ palauttamaan koodiin esim. seuraavan:
 
-```js
+```html
 <div>
   debug: {this.state.newName}
 </div>
@@ -557,7 +556,7 @@ Muista myös osan 1 luku [React-sovellusten debuggaus](#React-sovellusten-debugg
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta
 
-<img src="/assets/teht/10.png" height="200">
+![]({{ "/assets/teht/11.png" | absolute_url }})
 
 **Huom:**
 * voit käyttää kentän _key_ arvona henkilön nimeä
