@@ -589,13 +589,13 @@ Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset si
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):in tarjoama näkymä komponentin _App_ tilaan:
 
-<img src="/assets/teht/11.png" height="300">
+![]({{ "/assets/teht/12.png" | absolute_url }})
 
 #### 29 puhelinluettelo osa 4
 
 Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
 
-<img src="/assets/teht/12.png" height="300">
+![]({{ "/assets/teht/12b.png" | absolute_url }})
 
 Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-elementtinä. Kuvassa rajausehdosta on tehty _caseinsensitiivinen_ eli ehto _arto_ löytää isolla kirjaimella kirjoitetun Arton.
 
@@ -838,8 +838,93 @@ Huolehdi myös, fronend toimii edelleen myös paikallisesti.
 
 ![]({{ "/assets/teht/22.png" | absolute_url }})
 
-### mogoose
+### mogoosen alkeet
 
-#### 51 puhelinluettelo ja tietokanta, osa 1
+#### 51 tietokanta komentoriviltä
 
-#### 52 puhelinluettelo ja tietokanta, osa 1
+Luo sovellukselle pilvessä oleva mongo esim. herokun avulla. 
+
+Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
+
+Ohjelma toimii siten, että jos sille annetan käynnistettaessa kaksi komentorivparametria, esim:
+
+```bash
+node mongo.js Joulupukki 040-1234556
+```
+
+Ohjelma tulostaa
+
+```bash
+listään henkilö Joulupukki numero 040-1234556 luetteloon
+```
+
+ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen komentoriviparametri voi sisältää välilyöntejä jos se annetaan hipsuissa:
+
+```bash
+node mongo.js 'Arto Vihavainen'  040-1234556
+```
+
+Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js  </pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
+
+<pre>
+puhelinluettelo:
+Pekka Mikkola 040-1234556
+Arto Vihavainen 045-1232456
+Tiina Niklander 040-1231236
+</pre>
+
+Saat selville ohjelman komentoriviparametrit muuttujasta [process.argv](https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_argv)
+
+#### 52 tietokanta komentoriviltä, finetuning
+
+Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunilleen seuraavanlainen
+
+<pre>
+puhelinluettelo: 
+Arto Vihavainen    045-1232456
+Joulupukki         09-342322 
+Pekka Mikkola      040-1234556
+Tiina Niklander    040-1231236
+</pre>
+
+### backend ja tietokanta
+
+Seuraavat tehtävät saattavat olla melko suoraviivaisia, tosin jos fronend-koodissasi sattuu olemaan bugeja tai epäyhteensopivuutta backendin kanssa, voi seurauksena olla myös mielenkiintoisia bugeja.
+
+#### 53 puhelinluettelo ja tietokanta, osa 1
+
+Muuta backendin kaikkien puhelintietojen näyttämistä siten, että se hakee näytettävät puhelintiedot tietokannasta.
+
+Varmista, että fronend toimii muutosten jälkeen.
+
+Tee tässä ja seuraavissa tehtävissä mongoose-spesifinen koodi omaan moduuliin samaan tapaan kuin osan 3 luvussa [tietokantamäärittelyjen eriyttäminen omaksi moduuliksi](osa3#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi)
+
+#### 54 puhelinluettelo ja tietokanta, osa 2
+
+Mutta backendiä siten, että uudet numerot tallennetaan tietokantaan. Tässä vaiheessa voit olla välittämättä siitä, onko tietokannassa jo henkilöä jolla on sama nimi kuin lisättävällä.
+
+Varmista, että fronend toimii muutosten jälkeen.
+
+#### 55 puhelinluettelo ja tietokanta, osa 3
+
+Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan. 
+
+Varmista, että fronend toimii muutosten jälkeen.
+
+#### 56 puhelinluettelo ja tietokanta, osa 4
+
+Jos fronendissä annetaan numero henkilölle, joka on jo olemassa, päivittää fronend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin. 
+
+Laajenna backendisi käsittelemään tämä tilanne.
+
+Varmista, että fronend toimii muutosten jälkeen.
+
+#### 57 puhelinluettelo ja tietokanta, osa 5
+
+Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista niiden toimivuus suoraan selaimella.
+
+### virheidenkäisttelyä
+
+#### 58 puhelinluettelo ja tietokanta, osa 5
+
+nimi uniq

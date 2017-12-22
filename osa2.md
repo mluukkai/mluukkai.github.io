@@ -305,11 +305,11 @@ ReactDOM.render(
 ```
 Moduuleilla on paljon muutakin käyttöä kuin mahdollistaa komponenttien määritteleminen omissa tiedostoissaan, palaamme moduuleihin tarkemmin myöhemmin kurssilla.
 
-### tehtäviä kokoelmien renderöinnistä
+### Tehtäviä kokoelmien renderöinnistä
 
 Tee nyt [tehtävät 21 - 25](../tehtavat#kokoelmien-renderöinti)
 
-## lomakkeet
+## Lomakkeet
 
 Jatketaan sovelluksen laajentamista siten, että se mahdollistaa uusien muistiinpanojen lisäämisen.
 

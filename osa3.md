@@ -720,7 +720,6 @@ jos sovelluksen vastaanottamassa muuttujaan _body_ talletetussa datassa on kentt
 
 Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
-
 ## Middlewaret
 
 Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on sanottu terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
@@ -1048,19 +1047,23 @@ heroku addons:create mongolab:sandbox
 
 Kuten komennon tuloste kertoo, kysessä on [mlab](https://mlab.com/):n tarjoama Mongo:
 
-<img src="/assets/3/12.png" height="200">
+![]({{ "/assets/3/12.png" | absolute_url }})
 
-Pääset Herokusta sovelluksesi sivulta mlabin mongo-konsoliin. Tietokannan _mongodb_url_ selviää komentoriviltä komennolla _heroku config_.
+Pääset Herokusta sovelluksesi sivun kautta mlabin mongo-hallintanäkymään. 
+
+Tietokannan osoite, eli _MONGODB_URI_ selviää komentoriviltä komennolla _heroku config_.
 
 Mongon käyttäminen javascript-koodista suoraan [MongoDB Node.js driver](https://mongodb.github.io/node-mongodb-native/) -kirjaston avulla on varsin työlästä. Käytämmekin [mongoose](http://mongoosejs.com/index.html)-kirjastoa. 
 
 Mongoosesta voisi käyttää luonnehdintaa _object document mapper_ (ODM), ja sen avulla javascript-olioiden tallettaminen mongon dokumenteiksi on suoraviivaista.
 
+Asennetaan mogoose:
+
 ```bash
 npm install mongoose --save
 ```
 
-Ei lisätä mongoa koodia heti backendin koodiin, vaan tehdään erillinen kokeilusovellus tiedostoon _mongo.js_:
+Ei lisätä mongoa käsittelevää koodia heti backendin koodin sekaan, vaan tehdään erillinen kokeilusovellus tiedostoon _mongo.js_:
 
 ```js
 const mongoose = require('mongoose')
@@ -1092,13 +1095,24 @@ note
 
 Kun koodi suoritetaan komennolla _node mongo.js_ lisää mongoose tietokantaaan uuden dokumentin.
 
-Mlab:in hallintanäkymä (minne pääsee sovelluksen heroku-sivun kautta) näyttää lisäämämme datan:
+Mlab:in hallintanäkymä (minne siis pääsee sovelluksen heroku-sivun kautta) näyttää lisäämämme datan:
 
-<img src="/assets/3/13.png" height="200">
+![]({{ "/assets/3/13.png" | absolute_url }})
 
-Kuten näkymä kertoo, on muistiinpanoa vastaava _dokumentti_ lisätty kokoelmaan nimeltään _notes_.
+Kuten näkymä kertoo, on muistiinpanoa vastaava _dokumentti_ lisätty kokoelmaan (collection) nimeltään _notes_.
 
-Koodi sisältää muutamia mielenkiintoisia asioita. Aluksi avataan yhteys ja määritellään, että mongoose käyttää _promiseja_, eikä oldschool-tarkaisunkutsufunktioita. Valitettavasti mongosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
+Koodi sisältää muutamia mielenkiintoisia asioita. Aluksi avataan yhteys ja määritellään, että mongoose käyttää _promiseja_, eikä oldschool-tarkaisunkutsufunktioita:
+
+```js
+const mongoose = require('mongoose')
+
+const url = 'mongodb://...'
+
+mongoose.connect(url, { useMongoClient: true });
+mongoose.Promise = global.Promise;
+```
+
+Valitettavasti mongosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
 ### skeema
 
@@ -1112,11 +1126,11 @@ const Note = mongoose.model('Note', {
 })
 ```
 
-Modelin parametrina määritellään _muistiinpanoa_ vastaava vastaava [skeema](http://mongoosejs.com/docs/guide.html), joka keroo mongooselle, miten muitiinpano-oliot tulee tallettaa tietokantaan. 
+Modelin parametrina määritellään _muistiinpanon_  [skeema](http://mongoosejs.com/docs/guide.html), joka keroo mongooselle, miten muitiinpano-oliot tulee tallettaa tietokantaan. 
 
-Ensimmäisenä parametrina oleva _Note_ määrittelee sen, että mongoose tallettaa muistiinpanoa vastaavat oliot kokoelmaan nimeltään _notes_. 
+Ensimmäisenä parametrina oleva _Note_ määrittelee, että mongoose tallettaa muistiinpanoa vastaavat oliot kokoelmaan nimeltään _notes_. 
 
-Dokumentaatiossa skeema ja sitä vastaava model määritellään kumpikin erikseen:
+Mongoosen dokumentaatiossa skeema ja sitä vastaava model määritellään kumpikin erikseen:
 
 ```js
 const noteSchema = new mongoose.Schema({
@@ -1130,11 +1144,11 @@ const Note = mongoose.model('Note', noteSchema);
 
 Koska meillä ei ole skeema-oliolle muuta käyttöä kuin modelin parametrina, käytämme hyväksemme sitä, että skeema voidaan määritellä modeleille suoraan antamalla toisena parametrina skeeman määrittelevä olio.
 
-Dokumenttikannat, kuten Mongo ovat skeemattomia, eli tietokanta itsessään ei välitä mitään sinne talletettavan tiedon muodosta. Samaan kokoelmaankin voi tallettaa olioita joilla on täysin eri kentät.
+Dokumenttikannat, kuten Mongo ovat _skeemattomia_, eli tietokanta itsessään ei välitä mitään sinne talletettavan tiedon muodosta. Samaan kokoelmaankin on mahdollista tallettaa olioita joilla on täysin eri kentät.
 
-Mongoosea käytettäessä periaatteena on kuitenkin se, että tietokantaan talletettavalle tiedolle määritellään sovelluksen koodin tasolla skeema joka määrittelee minkä muotoisia olioita kannan eri kokoelmiin talletetaan.  
+Mongoosea käytettäessä periaatteena on kuitenkin se, että tietokantaan talletettavalle tiedolle määritellään _sovelluksen koodin tasolla skeema_, joka määrittelee minkä muotoisia olioita kannan eri kokoelmiin talletetaan.  
 
-### olioiden luominen ja tallettaminen
+### Olioiden luominen ja tallettaminen
 
 Seuraavaksi sovellus luo muistiinpanoa vastaavan [model](http://mongoosejs.com/docs/models.html):in avulla muistiinpano-olion:
 
@@ -1146,9 +1160,9 @@ const note = new Note({
 })
 ```
 
-Modelit ovat ns. konstruktorifunktioita, jotka luovat parametrien perusteella javascript-olioita. Koska oliot on luotu modelien konstruktirifunktiolla, nillä on kaikki modelien ominaisuudet, eli joukko metodeja, joiden avulla olioita voidaan mm. tallettaa tietokantaan.
+Modelit ovat ns. _konstruktorifunktioita_, jotka luovat parametrien perusteella javascript-olioita. Koska oliot on luotu modelien konstruktirifunktiolla, nillä on kaikki modelien ominaisuudet, eli joukko metodeja, joiden avulla olioita voidaan mm. tallettaa tietokantaan.
 
-Tallettaminen tapahtuu metodilla _save_. Metodi palauttaa _promisen_ jolle voidaan rekisteröidä _then_-metodin avulla tapahtumankäsittelijä:
+Tallettaminen tapahtuu metodilla _save_. Metodi palauttaa _promisen_, jolle voidaan rekisteröidä _then_-metodin avulla tapahtumankäsittelijä:
 
 ```js
 note
@@ -1159,13 +1173,13 @@ note
   })
 ```
 
-eli kun olio on tallennettu kantaan, kutsutaan _then_:in parametrina olevaa funktiota, joka sulkee tietokantayhteyden _mongoose.connection.close()_. Ilman yhteyden sulkemista ohjelman suoritus ei pääty.
+Kun olio on tallennettu kantaan, kutsutaan _then_:in parametrina olevaa tapahtumankäsittelijää, joka sulkee tietokantayhteyden komennolla <code>mongoose.connection.close()</code>. Ilman yhteyden sulkemista ohjelman suoritus ei pääty.
 
-Tallennusoperaation tulos on takaisinkutsun parametrissa _result_. Yhtä olioa tallentaessamme tulos ei ole kovin mielenkiintoinen, olion sisällön voi esim. tulostaa konsoliin jos haluaa tutkia sitä tarkemmin.
+Tallennusoperaation tulos on takaisinkutsun parametrissa _result_. Yhtä olioa tallentaessamme tulos ei ole kovin mielenkiintoinen, olion sisällön voi esim. tulostaa konsoliin jos haluaa tutkia sitä tarkemmin sovelluslogiikassa tai esim. debugatessa.
 
 Talletetaan kantaan myös pari muuta muistiinpanoa muokkaamalla dataa koodista ja suorittamalla ohjelma uudelleen.
 
-### olioiden hakeminen tietokannasta
+### Olioiden hakeminen tietokannasta
 
 Kommentoidaan koodista uusia muistiinpanoja generoiva osa, ja korvataan se seuraavalla:
 
@@ -1182,7 +1196,7 @@ Note
 
 Kun koodi suoritetaan, kantaan talletetut muistiinpanot tulostuvat. 
 
-Oliot haetaan kannasta _Note_-modelin metodilla [find](http://mongoosejs.com/docs/api.html#model_Model.find). Metodin parametdina on hakuehto. Koska hakuehtona oli tyhjä olio <code>{}</code>, saimme kannasta kaikki _notes_-kokoelmaan talletetut oliot.
+Oliot haetaan kannasta _Note_-modelin metodilla [find](http://mongoosejs.com/docs/api.html#model_Model.find). Metodin parametdina on hakuehto. Koska hakuehtona on tyhjä olio <code>{}</code>, saimme kannasta kaikki _notes_-kokoelmaan talletetut oliot.
 
 Hakuehdot noudattavat mongon [syntaksia](https://docs.mongodb.com/manual/reference/operator/).
 
@@ -1195,6 +1209,10 @@ Note
     // ...
   })
 ```
+
+### Tehtäviä
+
+Tee nyt tehtävät [51 ja 52](../tehtavat#mongoosen-alkeet)
 
 ## tietokantaa käyttävä backend
 
@@ -1246,7 +1264,7 @@ const formatNote = (note) => {
 }
 ```
 
-ja käytetään palautetaan HTTP-pyynnön vastauksena funktion avulla mutoiltuja oliota:
+ja palautetaan HTTP-pyynnön vastauksena funktion avulla mutoiltuja oliota:
 
 ```js
 app.get('/api/notes', (request, response) => {
@@ -1366,11 +1384,7 @@ Takaisinkutsufunktion parametrina _savedNote_ on talletettu muistiinpano. HTTP-p
 response.json(formatNote(savedNote))
 ```
 
-Kun backendia laajennetaa, kannattaa sitä testailla aluksi ehdottomasti selaimella ja postmanilla. Vasta kun kaikki on todettu toimivaksi, kannattaa siirtyä testailemaan että muutosten jälkeinen backend toimii yhdessä myös frontendin kanssa. Kaikkien kokeilujen tekeminen ainoastaan fronendin kautta on todennäköisesti varsin tehotonta.
-
-Kun kuvioissa on mukana tietokanta, on myös tietokannan tilan tarkastelu mlabin hallintanäkymästä varsin hyödyllistä.
-
-Ykisttäisen muistiinpanon tarkastelu muuttuu muotoon
+Yksittäisen muistiinpanon tarkastelu muuttuu muotoon
 
 ```js
 app.get('/api/notes/:id', (request, response) => {
@@ -1382,7 +1396,19 @@ app.get('/api/notes/:id', (request, response) => {
 })
 ```
 
-### virheen käsittely
+### Fronendin ja backendin yhteistominnallisuuden varmistaminen
+
+Kun backendia laajennetaan, kannattaa sitä testailla aluksi **ehdottomasti selaimella ja postmanilla**. Vasta kun kaikki on todettu toimivaksi, kannattaa siirtyä testailemaan että muutosten jälkeinen backend toimii yhdessä myös frontendin kanssa. Kaikkien kokeilujen tekeminen ainoastaan fronendin kautta on todennäköisesti varsin tehotonta.
+
+Todennäköisesti voi olla kannattavaa edetä frontin ja backin integroinnissa toiminnallisuus kerrallaan, eli ensin voidaan toteuttaa esim. kaikkien muistiinpanojen näyttäminen backendiin ja testata että toiminnallisuus toimii selaimella. Tämän jälkeen varmistetaan, että fronend toimii yhteen muutetun backendin kanssa. Kun kaikki on todettu olevan kunnossa, siirrytään seuraavan ominaisuuden toteuttamiseen.
+
+Kun kuvioissa on mukana tietokanta, on myös tietokannan tilan tarkastelu mlabin hallintanäkymästä varsin hyödyllistä, usein myös suoraan tietokantaa käyttävät node-apuohjelmat, kuten tiedostoon _index.js_ kirjoittamamme koodi auttavat sovellukehityksen edetessä.
+
+### Tehtäviä
+
+Tee nyt tehtävät [53-56](tehtavat#backend-ja-ietokanta)
+
+### Virheiden käsittely
 
 Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mitä ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
 
