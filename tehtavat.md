@@ -904,6 +904,19 @@ Mutta backendiä siten, että uudet numerot tallennetaan tietokantaan. Tässä v
 
 Varmista, että fronend toimii muutosten jälkeen.
 
+### lisää operaatiota
+
+**HUOM:** vaikka et jostain syystä käsittelisikään promiseihin liittyviä virhetilanteita, on viisasta rekisteröidä promiseille virheenkäsittelijä, joka tulostaa virheen syyn konsoliin:
+
+```js
+.catch(error=>{
+  console.log(error)
+  // ...
+})
+```
+
+näin vältyt monilta ikäviltä yllätyksiltä.
+
 #### 55 puhelinluettelo ja tietokanta, osa 3
 
 Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan. 
@@ -922,8 +935,11 @@ Varmista, että fronend toimii muutosten jälkeen.
 
 Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista niiden toimivuus suoraan selaimella.
 
-### virheidenkäisttelyä
+#### 58 puhelinluettelo ja tietokanta, osa 6
 
-#### 58 puhelinluettelo ja tietokanta, osa 5
+Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluetteolssa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
 
-nimi uniq
+### loppuhuipennus
+
+#### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
+Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen vieminen tuotantoon](osa3#sovelluksen-vieminen-tuotantoon).

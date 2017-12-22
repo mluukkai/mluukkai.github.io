@@ -4,10 +4,6 @@ title: osa 3
 permalink: /osa3/
 ---
 
-<div class="important">
-  <h1>KESKEN, ÄLÄ LUE</h1>
-</div>
-
 ## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
@@ -1406,7 +1402,7 @@ Kun kuvioissa on mukana tietokanta, on myös tietokannan tilan tarkastelu mlabin
 
 ### Tehtäviä
 
-Tee nyt tehtävät [53-56](tehtavat#backend-ja-ietokanta)
+Tee nyt tehtävät [53 ja 54](tehtavat#backend-ja-tietokanta)
 
 ### Virheiden käsittely
 
@@ -1414,10 +1410,10 @@ Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mit�
 
 Palvelimen konsolissa näkyykin virheilmoitus:
 
-<img src="/assets/3/15.png" height="200">
+![]({{ "/assets/3/15.png" | absolute_url }})
 
-Kysely on epäonnistunut ja kyselyä vastaava promise mennyt tilaan _rejected_. Koska emme käsittele promisen epäonnistumista, ei pyyntöön vastata koskaan. Osassa 2 tutstuimme jo
-[promisejen virhetilanteidenkäsittelyyn](osa2/#promise-ja-virheet). 
+Kysely on epäonnistunut ja kyselyä vastaava promise mennyt tilaan _rejected_. Koska emme käsittele promisen epäonnistumista, ei pyyntöön vastata koskaan. Osassa 2 tutustuimme jo
+[promisejen virhetilanteiden käsittelyyn](osa2/#promise-ja-virheet). 
 
 Lisätään tilanteeseen yksinkertainen virheidenkäsittelijä:
 
@@ -1439,7 +1435,7 @@ Kaikissa virheeseen päättyvissä tilanteissa HTTP-pyyntöön vastataan statusk
 
 Tapauksessamme on itseasiassa olemassa kaksi erityyppistä virhetilannetta. Toinen vastaa sitä, että yritetään hakea muistiinpanoa virheellisen muotoisella _id_:llä, eli sellasiella mikä ei vastaa mongon id:iden muotoa.
 
-Jos teemme noin tulostuu konsoliin:
+Jos teemme näin tulostuu konsoliin:
 
 <pre>
 Method: GET
@@ -1464,7 +1460,7 @@ TypeError: Cannot read property '_doc' of null
     at Note.findById.then.note (/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:65:21)
 </pre>
 
-Nämä tilanteen on syytä erottaa toisistaan, ja itseasiassa jälkimmäinen poikkeus on oman koodimme aiheuttama.
+Nämä tilanteen on syytä erottaa toisistaan, ja itseasiassa jälkimmäinen poikkeus on oman koodimme <code>/Users/mluukkai/opetus/_fullstack/osa3-muisiinpanot/index.js:46</code> aiheuttama.
 
 Muutetaan koodia seuraavasti:
 
@@ -1488,7 +1484,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 Jos kannasta ei löydy haettua olioa, muuttujan _note_ arvo on _undefined_ ja koodi ajautuu _else_-haaraan. Siellä vastataan kyselyyn _404 not found_.
 
-Jos id ei ole hyväksyttämässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Parempi statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä
+Jos id ei ole hyväksyttämässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
 
 > The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
 
@@ -1505,7 +1501,7 @@ Ei ole koskaan huno idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virh
 })
 ```
 
-Virheenkäsittelijään joutumisen syy voi olla joku ihan muu mitä on tullu alunperin ajatelleeksi. Jos virheen tulostaa konsoliin, voi säästyä pitkiltä ja turhauttavilta väärää asiaa debuggaavista sessioilta.
+Virheenkäsittelijään joutumisen syy voi olla joku ihan muu mitä on tullu alunperin ajatelleeksi. Jos virheen tulostaa konsoliin, voi säästyä pitkiltä ja turhauttavilta väärää asiaa debuggaavilta sessioita.
 
 ### loput operaatiot
 
@@ -1526,9 +1522,9 @@ app.delete('/api/notes/:id', (request, response) => {
 })
 ```
 
-Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksissa, eli jos olio poistettiin tai olioa ei ollut mutta _id_ oli periaatteessa oikea. Takaisunkutsun parametrin _result_ peruteella olisi mahdollisuus haarautua ja palauttaa tilanteissa eri statuskoodi jos sille on tarvetta.
+Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksissa, eli jos olio poistettiin tai olioa ei ollut mutta _id_ oli periaatteessa oikea. Takaisinkutsun parametrin _result_ peruteella olisi mahdollisuus haarautua ja palauttaa tilanteissa eri statuskoodi jos sille on tarvetta.
 
-Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys onnistuu helposti metodilla [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
+Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys onnistuu helposti metodilla [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate):
 
 ```js
 app.put('/api/notes/:id', (request, response) => {
@@ -1555,7 +1551,7 @@ Operaatio mahdollistaa myös muistiinpanon sisällön editoinnin. Päivämäär�
 
 Huomaa, että metodin _findOneAndUpdate_ parametrina tulee antaa normaali javascript-olio, eikä uuden olion luomisessa käytettävä _Note_-konstruktorifunktiolla luotu olio.
 
-Pieni, mutta tärkeä detalji liittyen operaatioon _findOneAndUpdate_. Oletusarvoisesti tapahtumankäsittelijä saa parametrikseen _response_ mikä oli olion tila [ennen muutosta](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate). Lisäsimme operaatioon parametrin <code>{ new: true }</code> jotta saamme muuttuneen olion palautetuksi kutsujalle.
+Pieni, mutta tärkeä detalji liittyen operaatioon _findOneAndUpdate_. Oletusarvoisesti tapahtumankäsittelijä saa parametrikseen _updatedNote_ päivitetyn olion [ennen muutosta](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate) olleen tilan. Lisäsimme operaatioon parametrin <code>{ new: true }</code> jotta saamme muuttuneen olion palautetuksi kutsujalle.
 
 Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muistiinpanojen tärkeyden muuttaminen fronedissa kuitenkin sotkee muistiinpanojen järjestyksen. Syynä on se, että _id_-kentät eivät ole enää numeroja  vaan stringejä ja joudummekin muuttamaan järjestämisessä käytettävän metodissa _render_ olevan funktion esim. seuraavaan muotoon:
 
@@ -1565,6 +1561,10 @@ Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muis
 ```
 
 Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdollista vertailla <-operaattorilla, teemme vertailun ja palautamme vertailun tulokseen perustuen joko -1 tai 1.
+
+### Tehtäviä
+
+Tee nyt tehtävät [55-58](tehtavat#lisää-operaatioita)
 
 ## refaktorointia - promisejen ketjutus
 
@@ -1595,7 +1595,7 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-Voisimme tehdä saman myös hieman tyylikkäämmin seuraavaan tapaan:
+Voisimme tehdä saman myös hieman tyylikkäämmin [promiseja ketjuttamalla](https://javascript.info/promise-chaining):
 
 ```js
 app.post('/api/notes', (request, response) => {
@@ -1613,9 +1613,9 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-Eli ensimmäisen _then_:in takaisinkutsussa otamme mongoosen palauttaman olion ja formatoimme sen. Operaation tulos palautetaan returnilla. Kuten osassa 2 [todettiin](osa2/#palvelimen-kanssa-tapahtuvan-kommunikoinnin-eristäminen-omaan-moduuliin), jos promisen then-metodi palauttaa myös promisen. Eli kun palautamme _formatNote(note)_:n takaisinkutsufunktiosta, syntyy promise, jonka arvona on formatoitu muistiinpano. Saamme sen _then_-kutsun parmetrina.
+Eli ensimmäisen _then_:in takaisinkutsussa otamme mongoosen palauttaman olion _savedNote_ ja formatoimme sen. Operaation tulos palautetaan returnilla. Kuten osassa 2 [todettiin](osa2/#palvelimen-kanssa-tapahtuvan-kommunikoinnin-eristäminen-omaan-moduuliin), promisen then-metodi palauttaa myös promisen. Eli kun palautamme _formatNote(savedNote)_:n takaisinkutsufunktiosta, syntyy promise, jonka arvona on formatoitu muistiinpano. Pääsemme käsiksi arvoon rekisteröimällä _then_-kutsulla uuden tapahtumankäsittelijän.
 
-Itseasiassa selviämme vieläkin tiiviimmällä muodossaa:
+Itseasiassa selviämme vieläkin tiiviimmällä koodilla:
 
 ```js
 app.post('/api/notes', (request, response) => {
@@ -1631,7 +1631,7 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-sillä oleellisesti koska _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme: 
+koska  _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme: 
 
 ```js
 app.post('/api/notes', (request, response) => {
@@ -1653,7 +1653,7 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-## sovelluksen vieminen tuotantoon
+## Sovelluksen vieminen tuotantoon
 
 Sovelluksen pitäisi toimia tuotannossa, eli herokussa sellaisenaan. Fronendin muutosten takia on tehtävä siitä uusi tuotantoversio ja kopioitava se backendiin. 
 
@@ -1664,9 +1664,9 @@ Sovelluksessamme on tällä hetkellä eräs ikävä piirre. Tietokannan osoite o
 
 Tarvitsemme oman kannan sovelluskehitystä varten. Eräs vaihtoehto on luoda käyttäjätunnus [mlab](https://www.mlab.com):iin ja luoda sinne uusi tietokanta. 
 
-Huomaa, että kun luot mlab:issa tietokannan, tarkoitetaan käyttäjätunnuksella ja salasanalla tietokannalle määriteltyä tietoja, ei niitä millä kirjaudut mlabiin_
+Huomaa, että kun luot mlab:issa tietokannan, tarkoitetaan käyttäjätunnuksella ja salasanalla tietokannalle määriteltyä tietoja, ei niitä millä kirjaudut mlabiin.
 
-<img src="/assets/3/16.png" height="200">
+![]({{ "/assets/3/16.png" | absolute_url }})
 
 Tietokannan osoitetta ei kannata kirjoittaa koodiin. Eräs hyvä tapa tietokannan osoitteen määrittelemiseen on [ympäristömuuttujien](https://en.wikipedia.org/wiki/Environment_variable) käyttö. Itseasiassa Herokussa solvelluksemme tietokannan osoite on talletettuna ympäristömuuttujaan _MONGODB_URI_, tämän kertoo myös komentoriviltä annettava komento _heroku config_
 
@@ -1698,7 +1698,7 @@ MONGODB_URI=mongodb://....
 
 Tiedosto **tulee heti gitignorata** sillä emme halua dotenvin tietoja verkkoon.
 
-dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön komenolla
+dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön komennolla
 
 ```js
 require('dotenv').config()
@@ -1727,3 +1727,7 @@ Nyt dotenvissä olevat ympäristömuuttujat otetaan käyttöön ainoastaan sillo
 Uudelleenkäynnistyksen jälkeen sovellus toimii taas paikallisesti.
 
 Node-sovellusten konfigirointiin on olemassa ympäristömuuttujien ja dotenvin lisäksi lukuisia vaihtoehtoja, mm. [node-conf](https://github.com/lorenwest/node-config). Ympäristömuuttujien käyttö riittää meille nyt, joten emme rupea overengineeraamaan. Palaamme aiheeseen kenties myöhemmin.
+
+### Tehtäviä
+
+Tee nyt osan viimeiset tehtävät [59-](tehtavat#loppuhuipennus)

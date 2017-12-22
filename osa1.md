@@ -988,7 +988,7 @@ x = 4              // aiheuttaa virheen
 
 Esimerkistä näemme myös, että muuttujalla voi vaihtaa tyyppiä suorituksen aikana, _y_ tallettaa aluksi luvun ja lopulta merkkijonon.
 
-Lisää aiheesta esim. youtubessa [var, let and const - What, why and how - ES6 JavaScript Features](https://youtu.be/sjyJBL5fkp8)
+Lisää aiheesta esim. youtubessa [var, let and const - ES6 JavaScript Features](https://youtu.be/sjyJBL5fkp8)
 
 ### Taulukot
 
