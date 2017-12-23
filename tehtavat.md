@@ -797,7 +797,7 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 #### 46 puhelinluettelon backend osa 6
 
-Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Koniguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
 Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
@@ -811,7 +811,7 @@ Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 - [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
 - [JSON.stringigy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 
-### yhteys fronendiin ja vienti tuotantoon
+### yhteys frontendiin ja vienti tuotantoon
 
 #### 48 puhelinluettelon backend osa 8
 
@@ -831,7 +831,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
 
-Huolehdi myös, fronend toimii edelleen myös paikallisesti.
+Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
 **PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:
 
@@ -845,7 +845,7 @@ Luo sovellukselle pilvessä oleva mongo esim. herokun avulla.
 
 Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
 
-Ohjelma toimii siten, että jos sille annetan käynnistettaessa kaksi komentorivparametria, esim:
+Ohjelma toimii siten, että jos sille annetaan käynnistäessä kaksi komentoriviparametria, esim:
 
 ```bash
 node mongo.js Joulupukki 040-1234556
@@ -854,13 +854,13 @@ node mongo.js Joulupukki 040-1234556
 Ohjelma tulostaa
 
 ```bash
-listään henkilö Joulupukki numero 040-1234556 luetteloon
+lisätään henkilö Joulupukki numero 040-1234556 luetteloon
 ```
 
 ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen komentoriviparametri voi sisältää välilyöntejä jos se annetaan hipsuissa:
 
 ```bash
-node mongo.js 'Arto Vihavainen'  040-1234556
+node mongo.js 'Arto Vihavainen' 040-1234556
 ```
 
 Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js  </pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
@@ -888,13 +888,13 @@ Tiina Niklander    040-1231236
 
 ### backend ja tietokanta
 
-Seuraavat tehtävät saattavat olla melko suoraviivaisia, tosin jos fronend-koodissasi sattuu olemaan bugeja tai epäyhteensopivuutta backendin kanssa, voi seurauksena olla myös mielenkiintoisia bugeja.
+Seuraavat tehtävät saattavat olla melko suoraviivaisia, tosin jos frontend-koodissasi sattuu olemaan bugeja tai epäyhteensopivuutta backendin kanssa, voi seurauksena olla myös mielenkiintoisia bugeja.
 
 #### 53 puhelinluettelo ja tietokanta, osa 1
 
 Muuta backendin kaikkien puhelintietojen näyttämistä siten, että se hakee näytettävät puhelintiedot tietokannasta.
 
-Varmista, että fronend toimii muutosten jälkeen.
+Varmista, että frontend toimii muutosten jälkeen.
 
 Tee tässä ja seuraavissa tehtävissä mongoose-spesifinen koodi omaan moduuliin samaan tapaan kuin osan 3 luvussa [tietokantamäärittelyjen eriyttäminen omaksi moduuliksi](osa3#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi)
 
@@ -902,7 +902,7 @@ Tee tässä ja seuraavissa tehtävissä mongoose-spesifinen koodi omaan moduulii
 
 Mutta backendiä siten, että uudet numerot tallennetaan tietokantaan. Tässä vaiheessa voit olla välittämättä siitä, onko tietokannassa jo henkilöä jolla on sama nimi kuin lisättävällä.
 
-Varmista, että fronend toimii muutosten jälkeen.
+Varmista, että frontend toimii muutosten jälkeen.
 
 ### lisää operaatiota
 
@@ -921,15 +921,15 @@ näin vältyt monilta ikäviltä yllätyksiltä.
 
 Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan.
 
-Varmista, että fronend toimii muutosten jälkeen.
+Varmista, että frontend toimii muutosten jälkeen.
 
 #### 56 puhelinluettelo ja tietokanta, osa 4
 
-Jos fronendissä annetaan numero henkilölle, joka on jo olemassa, päivittää fronend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin.
+Jos frontendissä annetaan numero henkilölle, joka on jo olemassa, päivittää frontend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin.
 
 Laajenna backendisi käsittelemään tämä tilanne.
 
-Varmista, että fronend toimii muutosten jälkeen.
+Varmista, että frontend toimii muutosten jälkeen.
 
 #### 57 puhelinluettelo ja tietokanta, osa 5
 
