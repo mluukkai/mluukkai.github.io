@@ -642,11 +642,144 @@ Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi id.
 
 En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
-## Tietokannan nollaaminen ennen testejä
+## Tietokannan alustaminen ennen testejä
 
+Testimme käyttää jo jestin metodia [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout) sulkemaan backendin testien suoritusten jäleen. Jest tarjoaa joukon muitakin [funktioita](https://facebook.github.io/jest/docs/en/setup-teardown.html#content), joiden avulla voidaan suorittaa operaatioita ennen yhdenkään testin suorittamista tai ennen jokaisen testin suoritusta.
 
+Päätetään alustaa tietokanta ennen kaikkien testin suoritusta, eli funktiossa [beforeAll](https://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout): 
+
+```js
+const supertest = require('supertest')
+const {app, server} = require('../index')
+const api = supertest(app)
+const Note = require('../models/note')
+
+const initialNotes = [
+  {
+    content: 'HTML on helppoa',
+    important: false,
+  },
+  {
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    important: true
+  }
+]
+
+beforeAll(async () => {
+  await Note.remove({})
+
+  initialNotes.forEach(async (note)=>{
+    const noteObject = new Note(note)
+    await noteObject.save()
+  })
+})
+```
+
+Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi muuttujaan _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta. Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
+
+```js
+test('all notes are returned', async () => {
+  const res = await api
+    .get('/api/notes')
+
+  expect(res.body.length).toBe(initialNotes.length)
+})
+
+test('a specific note is within the returned notes', async () => {
+  const res = await api
+    .get('/api/notes')
+
+  const contents = res.body.map(r=>r.content)
+
+  expect(contents).toContain('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
+})
+```
+
+Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä async ja await tarkoittavat.
 
 ## async-await
+
+Asyc- ja await ovat ES7:n mukannaan mukanaan tuoma uusi syntaksi, joka mahdollistaa asynkronisten funktioiden kutsumisen siten, että kirjoitettava koodi näyttää synkroniselta.
+
+Olemme tähän asti käyttäneet promiseja asynkronisten operaatioiden suorittamisessa. 
+
+Esim. muistiinpanojen hakeminen tietokannasta hoidetaan seuraavasti:
+
+```js
+  Note
+    .find({})
+    .then(notes => {
+        console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+    })
+```
+
+Metodikutsu _Note.find()_ palauttaa promisen, ja saamme itse operaation tuloksen rekisteröimällä promiselle tapahtumankäsittelijän metodilla _then_.
+
+Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita synkronisia funktiokutsuja, meneisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäisttelijästä. Näin synstyisi potentiaalisesti monimutkaista koodia, jopa niinsanottu [callback hell](http://callbackhell.com/).
+
+[Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hanskassa, tällöinen callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
+
+```js
+  Note
+    .find({})
+    .then(notes => {
+      return note[0].remove()  
+    })
+    .then(response=>{
+      console.log('the first note is removed')
+      // more code here
+    })
+```
+
+Then-ketju on ok, mutta parempaankin pystytään. Jo ES6:ssa esitellyt [generaattorifunktiot](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) mahdollistivat [ovelan tavan](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch4.md#iterating-generators-asynchronously) määritellä asynkronista koodia siten että se "näytti synkroniselta". Syntaksi ei kuitenkaan ollut paras mahdollinen ja sitä ei käytetty kovin yleisesti.
+
+ES7:ssa Async ja Await tuvat generaattoreiden tarjoaman toiminnallisuuden ymmärrettävästi ja syntaktisesti koko javascript-kansan ulottuville.
+
+Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)-funktiota hyödyntäen seuraavasti:
+
+```js
+  const notes = await Note.find({})
+
+  console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+```
+
+Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komennon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos palautetaan muuttujaan _notes_. 
+
+Ylempänä oleva monimutkaisempi esimerkki suoritettaisiin awaitin avulla seuraavasti:
+
+```js
+  const notes = await Note.find({})
+  const response = await notes[0].remove()
+
+  console.log('the first note is removed')
+```
+
+Koodi siis yksinkertaistuu huomattavasti verrattuna suoraan promiseja käyttävään then-ketjuun. 
+
+Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja.
+
+Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään, se onnistuu ainoastaan jos ollaan  [async] https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function-funktiossa.
+
+Eli jotta, edelliset esimerkit toimisivat, olisi ne _käärittävä_ async-funktioiden sisälle:
+
+```
+const main = async () => {
+  const notes = await Note.find({})
+  console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+
+  const notes = await Note.find({})
+  const response = await notes[0].remove()
+
+  console.log('the first note is removed')
+}
+
+main()
+```
+
+Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _main_, sen jälkeen se kutsuu metodia _main()_
+
+### virheiden käsittely ja async/await
+
 
 ## Mongoose
   - Monimutkaisemmat skeemat
