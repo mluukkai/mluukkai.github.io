@@ -443,7 +443,7 @@ Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodoss
 
 Joissain tilanteissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla, eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock)
 
-Koska sovelluksemme backendin on koodiltaan kuitenkin suhteellisen yksinkertainen päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
+Koska sovelluksemme backendin on koodiltaan kuitenkin suhteellisen yksinkertainen, päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
 
 ### test-ympäristö
 
@@ -467,43 +467,56 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
   "scripts": {
     "start": "node index.js",
     "watch": "node_modules/.bin/nodemon index.js",
-    "test": "NODE_ENV=test node_modules/.bin/ava --verbose test"
+    "test": "NODE_ENV=test node_modules/.bin/jest --verbose test"
   },
   // ...
 }
 ```
 
-Nyt voimme konfiguroida sovelluksen käyttäytymistä, testien aikana, erityisesti voimme määritellä että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
+Nyt voimme konfiguroida sovelluksen käyttäytymistä testien aikana, erityisesti voimme määritellä, että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
-Sovelluksen testikanta voidaan luoda tuotantokäyttöön ja sovellukehitykseen tapaan _mlabiin_. Ratkaisu ei kuitenkaan ole optimi, jos sovellusta kehittää yhtä aikaa usea henkilö. Testien suoritus edellyttää yleensä sitä, että samaa testi-instanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
+Sovelluksen testikanta voidaan luoda tuotantokäyttöön ja sovellukehitykseen tapaan _mlabiin_. Ratkaisu ei kuitenkaan ole optimaalinen, jos sovellusta on tekemässä yhtä aikaa usea henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
-Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, jos jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu suhteellisen helposti mm. dockerin avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan.
+Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, jos jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu suhteellisen helposti mm. [keskusmuistissa toimivan mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontaineriaation avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia mongokantaa.
 
 Tehdään sovelluksen käynnistyspisteenä toimivaan tiedostoon _index.js_ muutama muutos:
 
 ```js
 // ...
-const envIs = (which) => process.env.NODE_ENV === which
+const http = require('http')
+// muut requiret
 
-if (!envIs('production')) {
+const envIs = (which) => process.env.NODE_ENV === which 
+
+if ( !envIs('production') ) {
   require('dotenv').config()
 }
 
 const url = envIs('test') ? process.env.TEST_MONGODB_URI : process.env.MONGODB_URI
 
-// ...
+//...
 
-const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT
+const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT 
 
-app.listen(PORT, () => {
+const server = http.createServer(app)
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-module.exports = app
+server.on('close', () =>{
+  mongoose.connection.close()
+})
+
+module.exports = {
+  app, server
+}
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se ei ole sovelluskehitysmoodissa.
-Tiedostossa _.env_ on nyt määritelty erikseen sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite ja portti:
+Metodin _envIs_ avulla voidaan testata onko sovellus _test_- tai _production_-moodissa.
+
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa.
+Tiedostossa _.env_ on nyt määritelty erikseen sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
 ```bash
 MONGODB_URI=mongodb://localhost/muistiinpanot
@@ -515,13 +528,26 @@ TEST_MONGODB_URI=mongodb://localhost/test
 
 Eri porttien käyttö mahdollistaa sen, että sovellus voi olla käynnissä testien suorituksen aikana.
 
-Tiedoston loppuun on myös lisätty komento
+Tiedoston loppu on muuttunut hieman:
 
 ```js
-module.exports = app
+const server = http.createServer(app)
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+
+server.on('close', () =>{
+  mongoose.connection.close()
+})
+
+module.exports = {
+  app, server
+}
 ```
 
-tämä mahdollistaa sen, että sovellusolioon pääsee tarvittaessa käsiksi tiedoston ulkopuolelta, tämä on oleellista kohta käyttöönottamallamme testikirjastolle.
+Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kautta. 
+
 
 ### supertest
 
