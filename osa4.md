@@ -952,20 +952,129 @@ Koodiin jää kuitenkin pieni ongelma virhetilanteita ei nyt käsitellä ollenka
 
 ### virheiden käsittely ja async/await
 
+Jos sovellus nyt kaatuu jonkinlaiseen ajoiaikaiseen virheeseen, syntyy jäälleen tuttu tilanne:
+
+<pre>
+(node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
+</pre>
+
+eli käsittelemätön promisen rejektoituminen. Pyyntöön ei vastata tilanteessa mitenkään.
+
+Async/awaitia käyttäessä kannattaa käyttää vanhaa kunnon _try/catch_-mekanismia virheiden käsittelyyn:
+
 ```js
 routerRouter.post('/', async (request, response) => {
-  // ...
-
   try {
+    const body = request.body
+
+    if (body.content === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+
+    const note = new Note({
+      content: body.content,
+      important: body.content === undefined ? false : body.important,
+      date: new Date(),
+    })
+
     const savedNote = await note.save()
     response.json(formatNote(note))
   } catch(exception) {
     console.log(exception)
     response.status(500).json({ error: 'something whent wrong...' })
   }
-
 })
 ```
+
+Iso try/catch tuo koodiin hieman ikävän vivahteen, mutta mikään ei ole ilmaista.
+
+Tehdään sitten testit yksittäisen muistiinpanon tietojen katsomiselle ja muistiinpanon poistolle:
+
+```js
+test('a specific note can be viewed', async () => {
+  const resultAll = await api
+    .get('/api/notes')
+
+  const aNoteFromAll = resultAll.body[0]
+
+  const resultNote = await api
+    .get(`/api/notes/${aNoteFromAll.id}`)
+
+  const noteObject = resultNote.body
+
+  expect(noteObject).toEqual(aNoteFromAll)
+})
+
+test('a note can be deleted', async () => {
+  const newNote = {
+    content: 'HTTP DELETE poistaa resurssin',
+    important: true
+  }
+
+  const addedNote = await api
+    .post('/api/notes')
+    .send(newNote)
+
+  const notesAtBeginningOfOperation = await api
+    .get('/api/notes')
+
+  await api
+    .delete(`/api/notes/${addedNote.body.id}`)
+
+  const notesAfterDelete = await api
+    .get('/api/notes')
+
+  const contents = notesAfterDelete.body.map(r => r.content)
+
+  expect(contents).not.toContain('HTTP DELETE poistaa resurssin')    
+  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length-1)    
+})
+```
+
+Testit eivät tässä vaiheessa ole optimaaliset, parannetaan niitä kohta. Ensin kuitenkin refaktoroidaan backend käyttämään async/awaitia.
+
+```js
+routerRouter.get('/:id', async (request, response) => {
+  try {
+    const note = await Note.findById(request.params.id)
+
+    if (note) {
+      response.json(formatNote(note))
+    } else {
+      response.status(404).end()
+    }
+    
+  } catch(exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+})
+
+routerRouter.delete('/:id', async (request, response) => {
+  try {
+    await Note.findByIdAndRemove(request.params.id)
+
+    response.status(204).end()
+  } catch (exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+})
+```
+
+Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos sanynkronisia kutsuja on tehtävä useampia.
+
+Kaikki eivät ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
+](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
+
+## Testien refaktorointi
+
+Testimme ovasisältävät tällä hetkellä jossain määrin toistoa ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
+
+Parannellaan testejä hiukan.
+
+- describet
+- virhetilanteet
 
 ## Mongoose
   - Monimutkaisemmat skeemat
@@ -977,7 +1086,6 @@ routerRouter.post('/', async (request, response) => {
 
 ## Muu
   - lint
-
 
 ## React
   - Lisää formeista: mm refs
