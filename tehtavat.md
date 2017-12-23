@@ -363,11 +363,11 @@ Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anek
 
 <img src="/assets/teht/3b.png" height="200">
 
-Tämä saattaa olla jo hieman haastavampi. Tauluoilta löytyy monia hyviä metodeja, katso lisää [Mozillan dokumentaatiosta](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+Tämä saattaa olla jo hieman haastavampi. Taulukolta löytyy monia hyviä metodeja, katso lisää [Mozillan dokumentaatiosta](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
 
-Kurssin normaaliin versioon tullaan todeenäköisesti lisäämään tehtäviä, joissa harjotellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
+Kurssin normaaliin versioon tullaan todennäköisesti lisäämään tehtäviä, joissa harjoitellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
 
-Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84).  Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
+Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84). Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
 
 
 ## Osa 2
@@ -751,7 +751,7 @@ Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> 
 
 Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuiten mikä tahansa muu merkki.
 
-Sovellus pitää pystyä käynnistämään komennolla _npm start_. 
+Sovellus pitää pystyä käynnistämään komennolla _npm start_.
 
 Komennolla _npm run watch_ käynnistettäessa sovelluksen tulee käynnistyä uudelleen kun koodiin tehdään muutoksia.
 
@@ -791,7 +791,7 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 ```js
 { error: 'name must be unique' }
-``` 
+```
 
 ### lisää middlewareja
 
@@ -833,7 +833,7 @@ Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellu
 
 Huolehdi myös, fronend toimii edelleen myös paikallisesti.
 
-**PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:  
+**PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:
 
 ![]({{ "/assets/teht/22.png" | absolute_url }})
 
@@ -841,7 +841,7 @@ Huolehdi myös, fronend toimii edelleen myös paikallisesti.
 
 #### 51 tietokanta komentoriviltä
 
-Luo sovellukselle pilvessä oleva mongo esim. herokun avulla. 
+Luo sovellukselle pilvessä oleva mongo esim. herokun avulla.
 
 Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
 
@@ -879,9 +879,9 @@ Saat selville ohjelman komentoriviparametrit muuttujasta [process.argv](https://
 Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunilleen seuraavanlainen
 
 <pre>
-puhelinluettelo: 
+puhelinluettelo:
 Arto Vihavainen    045-1232456
-Joulupukki         09-342322 
+Joulupukki         09-342322
 Pekka Mikkola      040-1234556
 Tiina Niklander    040-1231236
 </pre>
@@ -909,7 +909,7 @@ Varmista, että fronend toimii muutosten jälkeen.
 **HUOM:** vaikka et jostain syystä käsittelisikään promiseihin liittyviä virhetilanteita, on viisasta rekisteröidä promiseille virheenkäsittelijä, joka tulostaa virheen syyn konsoliin:
 
 ```js
-.catch(error=>{
+.catch(error => {
   console.log(error)
   // ...
 })
@@ -919,13 +919,13 @@ näin vältyt monilta ikäviltä yllätyksiltä.
 
 #### 55 puhelinluettelo ja tietokanta, osa 3
 
-Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan. 
+Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan.
 
 Varmista, että fronend toimii muutosten jälkeen.
 
 #### 56 puhelinluettelo ja tietokanta, osa 4
 
-Jos fronendissä annetaan numero henkilölle, joka on jo olemassa, päivittää fronend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin. 
+Jos fronendissä annetaan numero henkilölle, joka on jo olemassa, päivittää fronend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin.
 
 Laajenna backendisi käsittelemään tämä tilanne.
 
@@ -937,7 +937,7 @@ Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista nii
 
 #### 58 puhelinluettelo ja tietokanta, osa 6
 
-Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluetteolssa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
+Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluettelossa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
 
 ### loppuhuipennus
 
