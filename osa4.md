@@ -518,7 +518,7 @@ test('notes are returned as json', async t => {
 })
 ```
 
-Alussa testi käynnistää backendin ja käärii sen _supertest_-metodilla ns. superagent-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä  HTTP-pyyntöjä backentdiin.
+Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backentdiin.
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
