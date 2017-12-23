@@ -546,7 +546,9 @@ module.exports = {
 }
 ```
 
-Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kautta. 
+Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kautta. Serverille määritellään tapahtumankäsitteljäfunktio tapahtumalle _close_ eli tilanteeseen, missä sovellus sammutetaan. Tapahtumankäsittelijä sulkee tietokantayhteyden.
+
+Sekä sovellus _app_ että sitä suorittava _server_-olio määritellään eksportattavaksi tiedostosta. Tämä mahdollistaa sen, että testit voivat käynnistää ja sammuttaa backendin.
 
 
 ### supertest
@@ -559,21 +561,22 @@ Kirjasto asennetaan kehitysaikaiseksi riippuvuudeksi komennolla
 npm install --save-dev supertest
 ```
 
-Luodaan heti ensimmäinen testi tiedostoon _test/note_api.js:_
+Luodaan heti ensimmäinen testi tiedostoon _test/note_api.test.js:_
 
 ```js
-const test = require('ava')
 const supertest = require('supertest')
-const app = require('../index')
+const {app, server} = require('../index')
 const api = supertest(app)
 
-test('notes are returned as json', async t => {
+test('notes are returned as json', async () => {
   const res = await api
     .get('/api/notes')
     .expect(200)
     .expect('Content-Type', /application\/json/)
+})
 
-  t.pass()
+afterAll(()=>{
+  server.close()
 })
 ```
 
@@ -581,26 +584,43 @@ Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. 
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan.
+Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta. 
 
-Huomionarvoista on myös testin lopettava komento <code>t.pass()</code>, joka "ei testaa mitään" vaan merkkaa testin suoritetuksi. Koska testissä ei ole varsinaisia "asserteja", kuten aiempien testiemme _t.is("tcaer", result)_ joudumme kertomaan avalle testien päättymisestä.
+Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
+
+```js
+afterAll(()=>{
+  server.close()
+})
+```
 
 Tehdään pari testiä lisää:
 
 ```js
-test('there are five notes', async t => {
+test('there are five notes', async () => {
   const res = await api
     .get('/api/notes')
 
-  t.is(5 ,res.body.length)
+  expect(res.body.length).toBe(5)
 })
 
-test('the first note is about HTTP methods', async t => {
+test('the first note is about HTTP methods', async () => {
   const res = await api
     .get('/api/notes')
 
-  t.is('HTTP-protokollan tärkeimmät metodit ovat GET ja POST', res.body[0].content)
+  expect(res.body[0].content).toBe('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
 })
+```
+
+Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsillepääsemiseen promiseja ja takaisunkutsuja, mutta nyt kaikki menee mukavasti:
+
+```js
+  const res = await api
+    .get('/api/notes')
+
+  // tänne tullaan vasta kun edellinen komento eli HTTP-pyyntö on suoritettu
+  // muuttujassa res on nyt HTTP-pyynnön tulos
+  expect(res.body.length).toBe(5)
 ```
 
 Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu tietokannan tilasta. Jotta saisimme robustimmat testit, tulee tietokannan tila nollata ensin testien alussa ja sen jälkeen kantaan voidaan laittaa hallitusti testien tarvitsemaa dataa.
@@ -622,7 +642,8 @@ Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi id.
 
 En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
-### kannan nollaaminen
+## Tietokannan nollaaminen ennen testejä
+
 
 
 ## async-await
