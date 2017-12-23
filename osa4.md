@@ -293,12 +293,14 @@ module.exports = {
 }
 ```
 
-Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runneria_. Käytämme tällä kurssilla nopeasti suosiota saavuttanutta uutta tulokasta nimeltään [ava](https://github.com/avajs/ava). Ava on erityisen käyttökelpoinen asynkronista koodia testatessa ja se onkin nopeasti valtaamassa alaa "edellisen sukupolven" suosituimmalta testirunnerilta [Mochalta]() joka on toki edelleen paljon käytössä ja kelpo vaihtoehto mihin tahansa projektiin.
+Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runneria_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
 
-Koska testejä on tarkoitus suorittaa ainoastaan sovellusta kehitettäessä, asennetaan _ava_ kehitysaikaiseksi riippuvuudeksi komennolla
+Jest on tälle kurssille luoteva valinta, sillä sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
+
+Koska testejä on tarkoitus suorittaa ainoastaan sovellusta kehitettäessä, asennetaan _jest_ kehitysaikaiseksi riippuvuudeksi komennolla
 
 ```bash
-npm install --save-dev ava
+npm install --save-dev jest
 ```
 
 määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan testien suorituksesta _verbose_-tyylillä:
@@ -309,52 +311,61 @@ määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan
   "scripts": {
     "start": "node index.js",
     "watch": "node_modules/.bin/nodemon index.js",
-    "test": "node_modules/.bin/ava --verbose test"
+    "test": "node_modules/.bin/jest --verbose test"
   },
   //...
 }
 ```
 
-Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.js_ ja sille sisältö
+Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_ ja sille sisältö
 
 ```js
-const test = require('ava')
 const palindrom = require('../utils').palindrom
 
-test('palindrom of a', t => {
-  const result = palindrom('a')
+test("palindrom of a", () => {
+  const result = palindrom('a') 
 
-  t.is('a', result)
+  expect(result).toBe('a')
 })
 
-test('palindrom of a', t => {
+test("palindrom of react", () => {
   const result = palindrom('react')
 
-  t.is('tcaer', result)
+  expect(result).toBe('tcaer')
 })
 
-test('palindrom of saippuakauppias', t => {
+test("palindrom of saippuakauppias", () => {
   const result = palindrom('saippuakauppias')
 
-  t.is('saippuakauppias', result)
+  expect(result).toBe('saippuakauppias')
 })
 ```
 
-Testitiedosto ottaa alussa ava-kirjaston käyttöön ja sijoittaa sen konvention mukaisesti muuttujaan _test_. Kirjasto ottaa käyttöön myös testattavan funktion sijoittaen sen muuttujaan _palindrom_.
+Testi ottaa ensimmäisellä rivillä testattavan funktion sijoittaen sen muuttujaan _palindrom_.
 
-Testimetodit ovat yksinkertaisia. Yksittäinen testi kirjoitetaan nuolifunktiosyntaksilla. Nuolifunktion muuttujaa _t_ käytetään _assertointiin_, eli testattavan metodin vastauksen oikeellisuuden tarkastamiseen.
+Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. testitapauksista toinen näyttää seuraavalta:
+
+```
+() => {
+  const result = palindrom('react')
+
+  expect(result).toBe('tcaer')
+}
+```
+
+Ensin suoritetaan testattava koodi, eli generoidaan merkkijonon _react_ palindromi. Seuraavaksi varmistetaan tulos metodin [expect](https://facebook.github.io/jest/docs/en/expect.html#content) avulla. Expect käärii tuloksena olevan arvon olioon, joka tarjoaa joukon _matcher_-funktioita, joiden avulla tuloksen oikeellisuutta voidaan tarkastella. Koska kyse on kahden merkkijonon samuuden vertailusta, sopii tilanteeseen matcheri [toBe](https://facebook.github.io/jest/docs/en/expect.html#tobevalue).
 
 Kuten odotettua, testit menevät läpi:
 
 ![]({{ "/assets/4/1.png" | absolute_url }})
 
-Avan antamat virheilmoitukset ovat kohtuullisen hyviä, rikotaan testi
+Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
 
 ```js
-test('palindrom of react', t => {
+test("palindrom of react", () => {
   const result = palindrom('react')
 
-  t.is('tkaer', result)
+  expect(result).toBe('tkaer')
 })
 ```
 
@@ -362,32 +373,32 @@ seurauksena on seuraava virheilmotus
 
 ![]({{ "/assets/4/2.png" | absolute_url }})
 
-Lisätään muutama testi metodille _average_, tiedostoon _test/average.js_
+Jest olettaa oletusarvoisesti, että testitiedoston nimessä on sana testi. Käytetään tällä kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
+
+Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_. 
 
 ```js
-const test = require('ava')
 const average = require('../utils').average
 
-test('average of one', t => {
-  const result = average([1])
+describe("average", () => {
 
-  t.is(1, result)
+  test("of one value is the value itself", () => {
+    expect(average([1])).toBe(1)
+  })
+
+  test("of many is caclulated right", () => {
+    expect(average([1, 2, 3, 4, 5, 6])).toBe(3.5)
+  })
+
+  test("of empty array is zero", () => {
+    expect(average([])).toBe(0)
+  })
+
 })
 
-test('average of many', t => {
-  const result = average([1, 2, 3, 4, 5, 6])
-
-  t.is(3.5, result)
-})
-
-test('average of empty array', t => {
-  const result = average([])
-
-  t.is(0, result)
-})
 ```
 
-Testi paljastaa, että metodi toimii väärin tyhjällä taulukolla:
+Testi paljastaa, että metodi toimii väärin tyhjällä taulukolla (sillä nollallajaon tulos on _NaN_):
 
 ![]({{ "/assets/4/3.png" | absolute_url }})
 
@@ -401,6 +412,28 @@ const average = (array) => {
   return array.length == 0 ? 0 : array.reduce(reducer, 0) / array.length
 }
 ```
+
+Pari huomiota keskiarvon testeistä. Määrittelimme testien ympärille nimellä "average" varustetun _describe_-lohkon. 
+
+```js
+describe("average", () => {
+  // testit
+})
+```
+
+Describejen avulla yksittäisessä tiedostossa olevat testit voidaan jaoitella loogisiin kokonaisuuksiin. Testituloste hyödyntää myös describe-kohkon nimeä:
+
+![]({{ "/assets/4/3.png" | absolute_url }})
+
+Kuten myöhemmin tulemme näkemään, _describe_-lohkot ovat tarpeellisia siinä vaiheessa, jos haluamme osalle yksittäisen testitiedoston testitapauksista jotain yhteisiä alustustoimenpiteitä.
+
+Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodossa, ottamatta testattavan metodin tulosta erikseen apumuuttujaan:
+
+```js
+  test("of empty array is zero", () => {
+    expect(average([])).toBe(0)
+  })
+```  
 
 ## Tehtäviä
 
@@ -564,9 +597,6 @@ Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi id.
 En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
 ### kannan nollaaminen
-
-
-
 
 
 ## async-await
