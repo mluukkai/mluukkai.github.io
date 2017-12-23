@@ -14,7 +14,7 @@ permalink: /osa4/
   - Router
   - Helmet.js https://www.npmjs.com/package/helmet
 - Node-sovellusten testaut
-  - ava/supertes
+  - ava/supertest
 - Mongoose
   - Monimutkaasemmat skeemat
   - Viittaukset kokoelmien välillä
@@ -23,7 +23,7 @@ permalink: /osa4/
   - Token-autentikaatio
   - JWT
 - Muu
-  -lint
+  - lint
 - JS
   - async/await
 - React
@@ -37,7 +37,7 @@ permalink: /osa4/
 
 ## Sovellukuksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta, siten että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret ja siirretään rotejen määrittely omaan tiedostoonsa. 
+Muutetaan sovelluksen rakennetta, siten että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret ja siirretään rotejen määrittely omaan tiedostoonsa.
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -71,7 +71,6 @@ routerRouter.get('/:id', (request, response) => {
       } else {
         response.status(404).end()
       }
-
     })
     .catch(error => {
       response.status(400).send({ error: 'malformatted id' })
@@ -136,19 +135,19 @@ routerRouter.put('/:id', (request, response) => {
 module.exports = routerRouter;
 ```
 
-Käytännössä kyse melkien suora copypaste tiedostosta _index.js_.
+Käytännössä kyse melkein suora copypaste tiedostosta _index.js_.
 
 Muutoksia on pari. Tiedoston alussa luodaan [router](http://expressjs.com/en/api.html#router)-olio:
 
 ```js
-const routerRouter = require('express').Router() 
+const routerRouter = require('express').Router()
 
 //...
 
 module.exports = routerRouter
 ```
 
-Tiedoston määrittelemä moduuli tarjoaa moduulin käyttäjille routerin. 
+Tiedoston määrittelemä moduuli tarjoaa moduulin käyttäjille routerin.
 
 Kaikki määriteltävät routet liitetään router-olioon, samaan tapaan kuin aiemmassa versiossa routet liitettiin sovellusta edustavaan olioon.
 
@@ -216,7 +215,7 @@ app.listen(PORT, () => {
 })
 ```
 
-Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitetävä _notesRouter_ (tai notes-kontrolleri niinkuin jotkut sitä kutsuisivat) avataan yhteys tietokantaan ja käynnistetään sovellus.
+Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niinkuin jotkut sitä kutsuisivat) avataan yhteys tietokantaan ja käynnistetään sovellus.
 
 Middlewareista kaksi _utils.loggerMiddleware_ ja _utils.errorMiddleware_ on määritelty hakemiston _utils_ tiedostossa _index.js_:
 
@@ -234,12 +233,12 @@ const errorMiddleware = (request, response) => {
 }
 
 module.exports = {
-  loggerMiddleware, 
+  loggerMiddleware,
   errorMiddleware
 }
 ```
 
-Tietokantayhteyden muodostaminen on nyt siirretty konfiguraatiot tekevän _index.js_:n vastuulle. Hakemistossa _models_ oleva tiedosto _note.js_ sisältää nyt ainoastaan muistiinpanojen skeeman määrittelyn. 
+Tietokantayhteyden muodostaminen on nyt siirretty konfiguraatiot tekevän _index.js_:n vastuulle. Hakemistossa _models_ oleva tiedosto _note.js_ sisältää nyt ainoastaan muistiinpanojen skeeman määrittelyn.
 
 ```js
 const mongoose = require('mongoose')
@@ -259,11 +258,11 @@ Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei
 
 [express cli](https://expressjs.com/en/starter/generator.html)
 
-Tiedostonimi index 
+Tiedostonimi index
 
 ## node-sovellusten testaaminen
 
-Olemme laiminlyöneet ikävästi yhtä oleellista ohjelmistokehityksen osa-aluetta, automatisoitua testausta. 
+Olemme laiminlyöneet ikävästi yhtä oleellista ohjelmistokehityksen osa-aluetta, automatisoitua testausta.
 
 Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertaista, että siinä ei ole juurikaan mielekästä yksikkötestattavaa. Lisätäänkin tiedostoon _utils/index.js_ pari yksinketaista funktiota testattavaksi:
 
@@ -271,7 +270,7 @@ Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertai
 //...
 const palindrom = (string) => {
   const letters = []
-  for(let i=0; i<string.length; i++ ){
+  for(let i = 0; i < string.length; i++) {
     letters.push(string.charAt(i))
   }
 
@@ -280,13 +279,14 @@ const palindrom = (string) => {
 
 const average = (array) => {
   const reducer = (sum, item) => {
-    return sum+item
+    return sum + item
   }
+
   return array.reduce(reducer, 0) / array.length
 }
 
 module.exports = {
-  loggerMiddleware, 
+  loggerMiddleware,
   errorMiddleware,
   palindrom,
   average
@@ -321,19 +321,19 @@ Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.js_ ja s
 const test = require('ava')
 const palindrom = require('../utils').palindrom
 
-test( "palindrom of a", t => {
+test('palindrom of a', t => {
   const result = palindrom('a')
 
   t.is('a', result)
 })
 
-test("palindrom of a", t => {
+test('palindrom of a', t => {
   const result = palindrom('react')
 
   t.is('tcaer', result)
 })
 
-test("palindrom of saippuakauppias", t => {
+test('palindrom of saippuakauppias', t => {
   const result = palindrom('saippuakauppias')
 
   t.is('saippuakauppias', result)
@@ -348,10 +348,10 @@ Kuten odotettua, testit menevät läpi:
 
 ![]({{ "/assets/4/1.png" | absolute_url }})
 
-Avan antamat virheilmoitukset ovat kohtuullisen hyviä, rikoitaan testi
+Avan antamat virheilmoitukset ovat kohtuullisen hyviä, rikotaan testi
 
 ```js
-test("palindrom of react", t => {
+test('palindrom of react', t => {
   const result = palindrom('react')
 
   t.is('tkaer', result)
@@ -368,19 +368,19 @@ Lisätään muutama testi metodille _average_, tiedostoon _test/average.js_
 const test = require('ava')
 const average = require('../utils').average
 
-test("average of one", t => {
+test('average of one', t => {
   const result = average([1])
 
   t.is(1, result)
 })
 
-test("average of many", t => {
+test('average of many', t => {
   const result = average([1, 2, 3, 4, 5, 6])
 
   t.is(3.5, result)
 })
 
-test("average of empty array", t => {
+test('average of empty array', t => {
   const result = average([])
 
   t.is(0, result)
@@ -396,7 +396,7 @@ Metodi on helppo korjata
 ```js
 const average = (array) => {
   const reducer = (sum, item) => {
-    return sum+item
+    return sum + item
   }
   return array.length == 0 ? 0 : array.reduce(reducer, 0) / array.length
 }
@@ -408,27 +408,27 @@ const average = (array) => {
 
 ## api:n testaaminen
 
-Joissain tilatenissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla, eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock)
+Joissain tilanteissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla, eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock)
 
-Koska sovelluksemme backendin on koodiltaan kuitenkin suhteellisen yksinkertainen päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_. 
+Koska sovelluksemme backendin on koodiltaan kuitenkin suhteellisen yksinkertainen päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
 
 ### test-ympäristö
 
-Edellisen osan luvussa [Sovelluksen vieminen tuotantoon](osa3/##-Sovelluksen-vieminen tuotantoon) mainitsimme, että kun sovellusta suoritetaan Herokussa, on se _production_-moodissa. 
+Edellisen osan luvussa [Sovelluksen vieminen tuotantoon](osa3/##-Sovelluksen-vieminen tuotantoon) mainitsimme, että kun sovellusta suoritetaan Herokussa, on se _production_-moodissa.
 
 Noden konventiona on määritellä projektin suoritusmoodi ympäristömuuttujan _NODE_ENV_ avulla. Lataammekin sovelluksen nykyisessä versiossa tiedostossa _.env_ määritellyt ympäristömuuttujat ainoastaan jos sovellus _ei ole_ production moodissa:
 
 ```js
-if ( process.env.NODE_ENV!=='production' ) {
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 ```
 
-Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovelluskehitykseen ja testaukseen. 
+Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovelluskehitykseen ja testaukseen.
 
 Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovelluksen _NODE_ENV_ saa arvokseen _test_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -440,19 +440,19 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 }
 ```
 
-Nyt voimme konfiguroida sovelluksen käyttäytymistä, testien aikana, erityisesti voimme määritellä että testejä suoritettaessa ohjelma käyttää erillisä, testejä varten luotua tietokantaa. 
+Nyt voimme konfiguroida sovelluksen käyttäytymistä, testien aikana, erityisesti voimme määritellä että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
-Sovelluksen testikanta voidaan luoda tuotantokäyttöön ja sovellukehitykseen tapaan _mlabiin_. Ratkaisu ei kuitenkaan ole optimi, jos sovellusta kehittää yhtä aikaa usea henkilö. Testien suoritus edellyttää yleensä sitä, että samaa testi-instanssia ei ole yhtä aikaa käyttämässä useampia testiajoja. 
+Sovelluksen testikanta voidaan luoda tuotantokäyttöön ja sovellukehitykseen tapaan _mlabiin_. Ratkaisu ei kuitenkaan ole optimi, jos sovellusta kehittää yhtä aikaa usea henkilö. Testien suoritus edellyttää yleensä sitä, että samaa testi-instanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
-Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, jos jokaista testiajoa varten olisi käytettävissä oma tietokana, sekin periaatteessa onnistuu suhteellisen helposti mm. dockerin avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan. 
+Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, jos jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu suhteellisen helposti mm. dockerin avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan.
 
 Tehdään sovelluksen käynnistyspisteenä toimivaan tiedostoon _index.js_ muutama muutos:
 
 ```js
 // ...
-const envIs = (which) => process.env.NODE_ENV === which 
+const envIs = (which) => process.env.NODE_ENV === which
 
-if ( !envIs('production') ) {
+if (!envIs('production')) {
   require('dotenv').config()
 }
 
@@ -460,7 +460,7 @@ const url = envIs('test') ? process.env.TEST_MONGODB_URI : process.env.MONGODB_U
 
 // ...
 
-const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT 
+const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
@@ -469,8 +469,8 @@ app.listen(PORT, () => {
 module.exports = app
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se ei ole sovelluskehitysmoodissa. 
-Tiedostossa  _.env_ on nyt määritelty erikseen sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite ja portti:
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se ei ole sovelluskehitysmoodissa.
+Tiedostossa _.env_ on nyt määritelty erikseen sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite ja portti:
 
 ```bash
 MONGODB_URI=mongodb://localhost/muistiinpanot
@@ -488,7 +488,7 @@ Tiedoston loppuun on myös lisätty komento
 module.exports = app
 ```
 
-tämä mahdollistaa sen, että sovellusolioon pääsee tarvittaessa käsiksi tiedoston ulkopuolelta, tämä on oleellsita kohta käyttöönottamammalle testikirjastolle.
+tämä mahdollistaa sen, että sovellusolioon pääsee tarvittaessa käsiksi tiedoston ulkopuolelta, tämä on oleellista kohta käyttöönottamallamme testikirjastolle.
 
 ### supertest
 
@@ -522,7 +522,7 @@ Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. 
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. 
+Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan.
 
 Huomionarvoista on myös testin lopettava komento <code>t.pass()</code>, joka "ei testaa mitään" vaan merkkaa testin suoritetuksi. Koska testissä ei ole varsinaisia "asserteja", kuten aiempien testiemme _t.is("tcaer", result)_ joudumme kertomaan avalle testien päättymisestä.
 
@@ -572,7 +572,7 @@ En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan.
 ## async-await
 
 ## Mongoose
-  - Monimutkaasemmat skeemat
+  - Monimutkaisemmat skeemat
   - Viittaukset kokoelmien välillä
 
 ## Web
@@ -580,7 +580,7 @@ En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan.
   - JWT
 
 ## Muu
-  -lint
+  - lint
 
 
 ## React
