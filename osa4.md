@@ -822,7 +822,7 @@ beforeAll(async () => {
   console.log('done')
 })
 
-test('notes are returned as json', async (done) => {
+test('notes are returned as json', async () => {
   console.log('entered test')
   // ...
 }
@@ -882,9 +882,9 @@ Voimme varmistaa refaktoroinnin onnistumisen selaimella, mutta suorittamalla juu
 
 ### testejä ja backendin refaktorinita
 
-Muutetaan nyt backend käyttämään kokonaisuudessaan promisejen suran käytön sijaan async/awaitia. Tehdään kuitenkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit.
+Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineen ominaisuudet hajaoavat. Tehdäänkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit. 
 
-Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että rajapinnan palauttamien mustiinpanojen määrä kasvaa, ja, että lisätty muistiinpano on palautettujen joukossa:
+Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että rajapinnan palauttamien mustiinpanojen määrä kasvaa, ja että lisätty muistiinpano on palautettujen joukossa:
 
 ```js
 test('a valid note can be added ', async () => {
@@ -1034,7 +1034,7 @@ routerRouter.post('/', async (request, response) => {
 })
 ```
 
-Koodiin jää kuitenkin pieni ongelma virhetilanteita ei nyt käsitellä ollenkaan. Miten niiden suhteen tulisi toimia?
+Koodiin jää kuitenkin pieni ongelma: virhetilanteita ei nyt käsitellä ollenkaan. Miten niiden suhteen tulisi toimia?
 
 ### virheiden käsittely ja async/await
 
@@ -1148,23 +1148,362 @@ routerRouter.delete('/:id', async (request, response) => {
 })
 ```
 
-Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos sanynkronisia kutsuja on tehtävä useampia.
+Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöty ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos asnynkronisia kutsuja on tehtävä useampia.
 
-Kaikki eivät ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
+Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
 ](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
 ## Testien refaktorointi
 
-Testimme ovasisältävät tällä hetkellä jossain määrin toistoa ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
+Testimme ova sisältävät tällä hetkellä jossain määrin toisteisia ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
 
 Parannellaan testejä hiukan.
 
-- describet
-- virhetilanteet
+Tehdään testejä varten muutama apufunktio moduuliin _test/test_helper.js_ 
 
-## Mongoose
-  - Monimutkaisemmat skeemat
-  - Viittaukset kokoelmien välillä
+```js
+const Note = require('../models/note')
+
+const initialNotes = [
+  {
+    content: 'HTML on helppoa',
+    important: false,
+  },
+  {
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    important: true
+  }
+]
+
+const format = (note) => {
+  return {
+    content: note.content,
+    important: note.important,
+    id: note._id
+  }
+}
+
+const nonExistingId = async () => {
+  const note = new Note()
+  await note.save()
+  await note.remove()
+  
+  return note._id.toString()
+}
+
+const notesInDb = async () => {
+  const notes = await Note.find({})
+  return notes.map(format)
+}
+
+module.exports = {
+  initialNotes, format, nonExistingId, notesInDb
+}
+```
+
+Jossain määrin parannellut testit seuraavassa:
+
+```js
+const supertest = require('supertest')
+const { app, server } = require('../index')
+const api = supertest(app)
+const Note = require('../models/note')
+const { format, initialNotes, nonExistingId, notesInDb } = require('./test_helper')
+
+describe('when there is initially some notes saved', async () => {
+  let notesInDatabaseAtStart = []
+  
+  beforeAll(async () => {
+    await Note.remove({})
+
+    const noteObjects = initialNotes.map(n=>new Note(n))
+    await Promise.all(noteObjects.map(n=>n.save()))
+    notesInDatabaseAtStart = noteObjects.map(n => format(n))    
+  })
+
+  test('all notes are returned as json by GET /api/notes', async () => {
+    const response = await api
+      .get('/api/notes')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.length).toBe(initialNotes.length)
+
+    const returnedContents = response.body.map(n=>n.content)
+    notesInDatabaseAtStart.forEach(note=>{
+      expect(returnedContents).toContain(note.content)
+    })
+
+  })
+
+  test('individual notes are returned as json by GET /api/notes/:id', async () => {
+    const aNote = notesInDatabaseAtStart[0]
+
+    const response = await api
+      .get(`/api/notes/${aNote.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.content).toBe(aNote.content)
+  })  
+
+  test('404 returned by GET /api/notes/:id with nonexisting valid id', async () => {
+    const validNonexistingId = await nonExistingId()
+
+    const response = await api
+      .get(`/api/notes/${validNonexistingId}`)
+      .expect(404)
+  }) 
+
+  test('400 returned by GET /api/notes/:id with invalid id', async () => {
+    const invalidId = "5a3d5da59070081a82a3445"
+
+    const response = await api
+      .get(`/api/notes/${invalidId}`)
+      .expect(400)
+  })  
+
+  describe('addition of a new note', async () => {
+
+    test('POST /api/notes succeeds with valid data', async () => {
+      const notesAtBeginningOfOperation = await notesInDb()
+
+      const newNote = {
+        content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+        important: true
+      }
+
+      await api
+        .post('/api/notes')
+        .send(newNote)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const notesAfterOperation = await notesInDb()
+
+      expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length + 1)
+
+      const contents = notesAfterOperation.map(r => r.content)
+      expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+      
+    })
+
+    test('POST /api/notes fails with proper statuscode if content is missing', async () => {
+      const newNote = {
+        important: true
+      }
+
+      const notesAtBeginningOfOperation = await notesInDb()
+
+      await api
+        .post('/api/notes')
+        .send(newNote)
+        .expect(400)
+
+      const notesAfterOperation = await notesInDb()
+
+      const contents = notesAfterOperation.map(r => r.content)
+
+      expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length)
+    })  
+  })
+
+  describe('deletion of a note', async () => {
+    let addedNote
+
+    beforeAll(async () => {
+      addedNote = new Note({
+        content: 'poisto pyynnöllä HTTP DELETE',
+        important: false
+      })
+      await addedNote.save()
+    })
+
+    test('DELETE /api/notes/:id succeeds with proper statuscode', async () => {
+      const notesAtBeginningOfOperation = await notesInDb()
+
+      await api
+        .delete(`/api/notes/${addedNote._id}`)
+        .expect(204)
+
+      const notesAfterOperation = await notesInDb()
+
+      const contents = notesAfterOperation.map(r => r.content)
+
+      expect(contents).not.toContain(addedNote.content)    
+      expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length-1)
+    })
+  })
+
+  afterAll(() => {
+    server.close()
+  })
+
+})
+```
+
+Muutama huomio testeistä. Olemme määritelleet jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi. Sisäkkäisten describe-lohkojen tapauksessa kaikki aulustuskoodi tulee suoritetuksi, ensin ulompana olevat _beforet_ ja lopulta ne _beforet_, jotka on määritelty siinä describe-lohkossa, jossa suoritettavat testit sijaitsevat.
+
+Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan
+
+![]({{ "/assets/4/5.png" | absolute_url }})
+
+Backendin tietokantaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
+
+```js
+const notesAtBeginningOfOperation = await notesInDb() 
+```
+
+suorittavat testattavan operaation:
+
+```js
+const newNote = {
+  content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+  important: true
+}
+
+await api
+  .post('/api/notes')
+  .send(newNote)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+```
+
+selvittävät tietokannan tilan operaation jälkeen
+
+```js
+const notesAfterOperation = await notesInDb()
+```
+
+ja varmentavat, että operaation suoritus vaikutti tietokantaan halutulla tavalla
+
+```js
+expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length + 1)
+
+const contents = notesAfterOperation.map(r => r.content)
+expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+```
+
+Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin. 
+
+Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
+
+## Mongoose - monimutkaisempi skeema
+
+Haluamme toteuttaa sovellukseemme käyttäjienhallinnan. Käyttäjät tulee tallettaa tietokantaan ja jokaisesta muistiinpanosta tulee tietää sen luonut käyttäjä. Muistiinpanojen poisto ja editointi tulee olla sallittua ainoastaan muistiinpanot tehneelle käyttäjälle.
+
+Aloitetaan lisäämällä tietokantaan tieto käyttäjistä. Käyttäjän (User) ja muistiinpanojen (Note) välillä on yhden suhde moneen -yhteys:
+ 
+![](https://yuml.me/a187045b.png)
+
+Relaatiotietokantoja käytettäessä ratkaisua ei tarvitisisi juuri miettiä. Molemmille olisi oma taulunsa ja muistiinpanoihin liitettäisiin sen luonutta käyttäjää vastaava id vierasavaimeksi (foreign key).
+
+Dokumenttitietokantoja käytettäessä tilanne on kuitenkin toinen, erilaisia tapoja mallintaa tilanne on useita.
+
+Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaansa, esim. nimeltään _users_.
+
+Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin alkioihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
+
+Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen mongo on tukenut useampaan kokoelmaan kohdistuvia aggregaattikyselyitä, emme kuitenkaan niitä kurssillamme käsittele). 
+
+Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa taustalla liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan, mutta mongoose tekee kuitekin taustalla useamman kyselyn.
+
+### viitteet kokoelmien välillä
+
+Relaatiotietokannoissa muistiinpano sisältää viiteavaimen sen tehneeseen käyttäjään. Dokumenttitietokannassa voidaan toimia samoin. Oletetaan että kokoelmassa _users_ on kaksi käyttäjää:
+
+```js
+  {
+    username: 'mluukkai',
+    _id: 123456,
+  },
+  {
+    content: 'hellas',
+    _id: 141414
+  }
+```
+
+Kokoelmassa _notes_ on kolme muistiinpanoa, molempien kenttä _user_id_ viittaa _users_-kentässä olevaan käyttäjään.
+
+```js
+  {
+    content: 'HTML on helppoa',
+    important: false,
+    _id: 221212,
+    user_id: 123456
+  },
+  {
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    important: true,
+    _id: 221255,
+    user_id: 123456
+  },
+  {
+    content: 'Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu',
+    important: false,
+    _id: 221244,
+    user_id: 141414
+  },
+```
+
+Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
+
+```js
+  {
+    username: 'mluukkai',
+    _id: 123456,
+    notes: [221212, 221255]
+  },
+  {
+    content: 'hellas',
+    _id: 141414,
+    notes: [141414]
+  }
+```
+
+Koska käyttäjiin liittyy potentiaalisesti useita muistiinpanoja, talletetaan niiden id:t käyttäjän yhteydessä olevaan taulukkoon.
+
+
+Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organisointiin, joissain tilanteissa saattaisi olla mielekästä tallettaa muistiinpanot käyttäjäolioiden kentäksi "embedattuna":
+
+```js
+  {
+    username: 'mluukkai',
+    _id: 123456,
+    notes: [
+      {
+        content: 'HTML on helppoa',
+        important: false,
+      },
+      {
+        content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+        important: true,
+
+      },
+    ]
+  },
+  {
+    content: 'hellas',
+    _id: 141414,
+    notes: [
+      {
+        content: 'Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu',
+        important: false,
+      }
+    ]
+  }
+```
+
+Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
+
+Dokumenttietietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samalla tavalla ilmeinen kuin relaatiotietokannoissa, ja valittava ratkaisu kannattaa määritellä siten että se tukee parhaalla tavalla sovelluksen käyttötapauksia. Tämä ei luonnollisestikaan ole helppoa, sillä järjestelmän kaikki käyttötapaukset eivät yleensä ole selvillä siinä vaiheessa kun projektin alkuvaiheissa mietitään datan organisointitapoja.
+
+Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin projektin alkuvaiheissa jopa radikaalimpia datan organisoimiseen liittyien ratkaisujen tekemistä kuin tietokannan tasolla skeemalliset relaatiotietokannat, jotka tarjoavat keskimäärin kaikkiin tilanteisiin melko hyvin sopivan tavan organisoida dataa.
+
+### käyttäjien mongoose-skeema
+
+### salasana bcrypti
+
 
 ## Web
   - Token-autentikaatio
