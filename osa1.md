@@ -6,7 +6,7 @@ permalink: /osa1/
 
 ## Yleistä
 
-Kurssilla tutustutaan javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa node.js:llä toteutetuissa REST-rajapinnoissa.
+Kurssilla tutustutaan Javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa Node.js:llä toteutetuissa REST-rajapinnoissa.
 
 Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suoritusympäristöjen hallintaa sekä NoSQL-tietokantoja.
 
@@ -14,17 +14,17 @@ Kurssilla käsitellään myös sovellusten testaamista, konfigurointia ja suorit
 
 Osallistujilta edellytetään vahvaa ohjelmointiruutiinia, web-ohjelmoinnin ja tietokantojen perustuntemusta (esim. opintojakson Tietokantasovellus-suoritusta) sekä valmiutta omatoimiseen tiedonhakuun.
 
-Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai javascript-kielen hallintaa.
+Kurssille osallistuminen ei edellytä käsiteltyjen tekniikoiden tai Javascript-kielen hallintaa.
 
 ## Kurssimateriaali, suoritustapa
 
-Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin jos esitiedot ovat muuten riittävät.
+Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Seassa on tehtäviä, jotka on tarkoitettu tehtäviksi suunnilleen siinä kohdassa materiaalia. Toki tehtävät voi tehdä materiaalia lukemattakin, jos esitiedot ovat muuten riittävät.
 
-Materiaali perustuu muutamien osasta osaan vaihtuvien koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
+Materiaali perustuu muutamien osasta osaan vaihtuvien koodiesimerkkien asteittaiseen laajentamiseen. Materiaali toiminee parhaiten, jos kirjoitat samalla koodin myös itse ja teet koodiin myös pieniä modifikaatioita.
 
-Kurssi koostuu osista joita ilmestyy viikoittain. On tarkoitus että etenet seuraavaan osaan vasta kun riittävä määrä (noin 80%) edellisen osan tehtävistä on tehty. Jokaisella osalla on myös hard deadline, esim. osan 1 deadline ei kuitenkaan ole vielä viikon 1 lopussa, joten etenemiselle on jonkun verran joustoa jotta ehdit tekemään kustakin osasta tarvittavan määrän tehtäviä.
+Kurssi koostuu osista, joita ilmestyy viikoittain. On tarkoitus, että etenet seuraavaan osaan vasta, kun riittävä määrä (noin 80%) edellisen osan tehtävistä on tehty. Jokaisella osalla on myös hard deadline, esim. osan 1 deadline ei kuitenkaan ole vielä viikon 1 lopussa. Etenemiselle on siis jonkun verran joustoa, jotta ehdit tekemään kustakin osasta tarvittavan määrän tehtäviä.
 
-Arvosana määräytyy tehtyjen tehtävien perusteella, noin 50% tehtävistä tuo arvosanan 1 ja 90% arvosanan 5. Kurssin lopussa on koe joka on suoritettava hyväksytysti, koe ei kuitenkaan vaikuta arvosanaan.
+Arvosana määräytyy tehtyjen tehtävien perusteella. Noin 50% tehtävistä tuo arvosanan 1 ja 90% arvosanan 5. Kurssin lopussa on koe, joka on suoritettava hyväksytysti. Koe ei kuitenkaan vaikuta arvosanaan.
 
 ## Alkutoimet
 
@@ -48,7 +48,7 @@ Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io
   - HTML:n perusteet
   - HTTP-protokolla: metodit GET ja POST, statuskoodit, headerit
   - palvelimella suoritettavan koodin rooli
-  - selaimessa suoritettava javascript:in rooli
+  - selaimessa suoritettavan javascript:in rooli
   - JSON-muotoinen data
   - DOM
   - sivujen ulkoasun muotoilun periaate CSS:llä
@@ -62,7 +62,7 @@ Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io
   - tapahtumankäsittelyn perusteet
 - Javascript
   - muuttujien määrittely
-  - taulukko ja sen perusoperointi (mm push, concat, forEach, join, map)
+  - taulukko ja sen perusoperointi (mm. push, concat, forEach, join ja map)
   - literaalisyntaksilla määritellyt oliot
   - funktioiden määrittely
   - this:in käyttäytyminen
@@ -122,7 +122,7 @@ Pyyntöön ja palvelimen lähettämään vastaukseen liittyy erinäinen määrä
 
 ![]({{ "/assets/1/4.png" | absolute_url }})
 
-Ylempänä oleva _Response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken. Tärkeä headeri _Content-Type_ kertoo, että vastaus on [utf-8](https://en.wikipedia.org/wiki/UTF-8) muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää että sen, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu, joka tulee renderöidä käyttäjän selaimeen.
+Ylempänä oleva _Response headers_ kertoo mm. vastauksen koon tavuina ja vastaushetken. Tärkeä headeri _Content-Type_ kertoo, että vastaus on [utf-8](https://en.wikipedia.org/wiki/UTF-8) muodossa oleva teksti-tiedosto, jonka sisältö on muotoiltu HTML:llä. Näin selain tietää, että kyseessä on normaali [HTML](https://en.wikipedia.org/wiki/HTML)-sivu, joka tulee renderöidä käyttäjän selaimeen.
 
 Välilehti _Preview_ näyttää miltä pyyntöön vastauksena lähetetty data näyttää. Kyseessä on siis normaali HTML-sivu, jonka _body_-osassa määritellään selaimessa näytettävän sivun rakenne:
 
@@ -402,7 +402,7 @@ lista.appendChild(uusi)
 
 ![]({{ "/assets/1/15.png" | absolute_url }})
 
-Vaikka selaimen näyttämä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json> haettavan JSON-muotoisen raakadatan perusteella.
+Vaikka selaimen näyttämä sivu päivittyy, ei muutos ole lopullinen. Jos sivu uudelleenladataan, katoaa uusi muistiinpano, sillä muutos ei mennyt palvelimelle asti. Selaimen lataama javascript luo muistiinpanojen listan aina palvelimelta osoitteesta <https://fullstack-exampleapp.herokuapp.com/data.json> haettavan JSON-muotoisen raakadatan perusteella.
 
 ### CSS ###
 
