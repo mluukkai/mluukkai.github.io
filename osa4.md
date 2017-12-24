@@ -14,7 +14,9 @@ permalink: /osa4/
   - Router
   - Helmet.js https://www.npmjs.com/package/helmet
 - Node-sovellusten testaut
-  - ava/supertest
+  - jest/supertest
+- JS
+  - async/await
 - Mongoose
   - Monimutkaasemmat skeemat
   - Viittaukset kokoelmien välillä
@@ -24,8 +26,7 @@ permalink: /osa4/
   - JWT
 - Muu
   - lint
-- JS
-  - async/await
+
 - React
   - Lisää formeista: mm refs
   - Bootstrap (reactstrap) tai Semantic UI
@@ -668,14 +669,17 @@ const initialNotes = [
 beforeAll(async () => {
   await Note.remove({})
 
-  initialNotes.forEach(async (note)=>{
-    const noteObject = new Note(note)
-    await noteObject.save()
-  })
+  let noteObject = new Note(initialNotes[0])
+  await noteObject.save()
+  
+  noteObject = new Note(initialNotes[1])
+  await noteObject.save()
 })
 ```
 
-Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi muuttujaan _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta. Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
+Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi taulukkoon _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta.
+
+Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
 
 ```js
 test('all notes are returned', async () => {
@@ -762,7 +766,7 @@ Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämä�
 
 Eli jotta, edelliset esimerkit toimisivat, olisi ne _käärittävä_ async-funktioiden sisälle:
 
-```
+```js
 const main = async () => {
   const notes = await Note.find({})
   console.log('operaatio palautti seuraavat muistiinpanot ', notes)
@@ -778,8 +782,365 @@ main()
 
 Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _main_, sen jälkeen se kutsuu metodia _main()_
 
+### 
+
+Voisimme yrittää optimoida testiemme _beforeAll_ metodia seuraavasti:
+
+```js
+beforeAll(async () => {
+  await Note.remove({})
+  console.log('clearead')
+
+  initialNotes.forEach(async (note) => { 
+    let noteObject = new Note(note)
+    await noteObject.save()   
+    console.log('saved')
+  })
+  console.log('done')
+})
+```
+
+Nyt siis talletamme taulukossa _initialNotes_ määritellyt muistiinpanot tietokantaan _forEach_-loopissa. Yllättäen ratkaisu ei async/awaitista huolimatta toimi niinkuin oletamme. 
+
+Konsoliin tulostuu
+
+<pre>
+cleared
+done
+saved
+saved
+</pre>
+
+Nyt siis hieman petollisesti käykin siten, että _forEach_-lauseen sisäällä olevia asynkronisia kutsuja _ei_ suoriteta ennen kuin metodin _beforeAll_ suoritus päättyy vaikka niitä odotetaankin awaitilla.
+
+Testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehdittäisiinkin jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
+
+Toimiva ratkaisu olisi odottaa asynkronisten talletusoperaatioiden valmistumista _beforeAll_-funktiossa, esim. metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla:
+
+```js
+beforeAll(async (done) => {
+  await Note.remove({})
+
+  const noteObjects = initialNotes.map(note => new Note(note))
+  await Promise.all( noteObjects.map(note => {
+      note.save()
+      console.log('saved')
+    })
+  )
+
+  console.log('done')
+})
+```
+
+Nyt konsoliin tulostu
+
+<pre>
+cleared
+saved
+saved
+done
+</pre>
+
+ja testien suoritusta ei aloiteta ennen kuin kaikki _beforeAll_-metodin koodi on kirjoitettu.
+
+Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa saa olla koko ajan tarkkana!
+
+### async/await backendissä
+
+Muutentaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkrooniset operaatiot tehdään joka tapauksessa funktioiden sisällä awaitin käyttämiseen riittää, että muutamme routejen käsittelijät async-funktioiksi
+
+Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
+
+```js
+routerRouter.get('/', async (request, response) => {
+  const notes = await Note.find({}, '-__v')
+  response.json(notes.map(formatNote))
+})
+```
+
+Voimme varmistaa refaktoroinnin onnistumisen selaimella, mutta suorittamalla juuri määrittelemämme testit.
+
+### testejä ja backendin refaktorinita
+
+Muutetaan nyt backend käyttämään kokonaisuudessaan promisejen suran käytön sijaan async/awaitia. Tehdään kuitenkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit.
+
+Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että rajapinnan palauttamien mustiinpanojen määrä kasvaa, ja, että lisätty muistiinpano on palautettujen joukossa:
+
+```js
+test('a valid note can be added ', async () => {
+  const newNote = {
+    content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+    important: true
+  }
+
+  await api
+    .post('/api/notes')
+    .send(newNote)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const res = await api
+    .get('/api/notes')
+
+  const contents = res.body.map(r => r.content)
+
+  expect(res.body.length).toBe(initialNotes.length+1)
+  expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+})
+```
+
+Tehdään myös testi, joka varmistaa, että muistiinpanoa, jolle ei ole asetettu sisältöä ei talleteta
+
+```js
+test('note without content is not be added ', async () => {
+  const newNote = {
+    important: true
+  }
+
+  const intialNotes = await api
+    .get('/api/notes')
+
+  await api
+    .post('/api/notes')
+    .send(newNote)
+    .expect(400)
+
+  const res = await api
+    .get('/api/notes')
+
+  const contents = res.body.map(r => r.content)
+
+  expect(res.body.length).toBe(intialNotes.body.length)
+})
+```
+
+Testi ei mene läpi. Käy ilmi, että operaation suoritus postman:illa johtaa myös virhetilanteeseen, eli koodissa on bugi.
+
+Konsoli paljastaa, että kyseessä on _Unhandled promise rejection_, eli koodi ei käsittele promisen virhetilannetta.
+
+<pre>
+Server running on port 3001
+Method: POST
+Path:   /api/notes/
+Body:   { important: true }
+---
+(node:28657) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): Error: Can't set headers after they are sent.
+(node:28657) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+</pre>
+
+Kuten jo edellisessä osassa mainittiin, tämä ei ole hyvä idea. Kannattaakin aloittaa lisäämällä promise-ketjuun metodilla _catch_ virheenkäisttelijä, joka tulostaa konsoliin virheen syyn:
+
+```js
+routerRouter.post('/', (request, response) => {
+  // ...
+
+  note
+    .save()
+    .then(note => {
+      return formatNote(note)
+    })
+    .then(formattedNote => {
+      response.json(formattedNote)
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).json({ error: 'something whent wrong...' })
+    })
+```
+
+Konsoliin tulostuu seuraava virheilmoitus
+
+<pre>
+Error: Can't set headers after they are sent.
+    at validateHeader (_http_outgoing.js:489:11)
+    at ServerResponse.setHeader (_http_outgoing.js:496:3)
+</pre>
+
+Aloittelijalle virheilmoitus ei välttämättä kerro paljoa, mutta googlaamalla virheilmoituksella, pieni etsiminen tuottaisi jo tuloksen.
+
+Kyse on siitä, että koodi kutsuu _response_-olion metodia _send_ kaksi kertaa, tai oikeastaan koodi kutsuu metodia _json_, joka kutsuu edelleen metodia _send_.
+
+Kaksi kertaa tapahtuva _send_-kutsu johtuu siitä, että koodin alun _if_-lauseessa on ongelma:
+
+```js
+routerRouter.post('/', (request, response) => {
+  const body = request.body
+
+  if (body.content === undefined) {
+    response.status(400).json({ error: 'content missing' })
+    // suoritus jatkuu!
+  }
+
+  //...
+}
+```
+
+kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koodin allaolevaa osaan ja se taas aiheuttaa uuden <code>response.json()</code>-kutsun. 
+
+Korjataan ongelma lisäämällä _if_-lauseeseen _return_:
+
+```js
+routerRouter.post('/', (request, response) => {
+  const body = request.body
+
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
+  //...
+}
+```
+
+Promiseja käyttävä koodi toimii nyt ja testitkin menevät läpi. Olemme valmiit muuttamaan koodin käyttämään async/await-syntaksia.
+
+Koodi muuttuu seuraavasti (huomaa, että käsittelijän alkuun on laitettava määre _async_):
+
+```js
+routerRouter.post('/', async (request, response) => {
+  const body = request.body
+
+  if (body.content === undefined) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+
+  const note = new Note({
+    content: body.content,
+    important: body.content === undefined ? false : body.important,
+    date: new Date(),
+  })
+
+  const savedNote = await note.save()
+  response.json(formatNote(note))
+})
+```
+
+Koodiin jää kuitenkin pieni ongelma virhetilanteita ei nyt käsitellä ollenkaan. Miten niiden suhteen tulisi toimia?
+
 ### virheiden käsittely ja async/await
 
+Jos sovellus nyt kaatuu jonkinlaiseen ajoiaikaiseen virheeseen, syntyy jäälleen tuttu tilanne:
+
+<pre>
+(node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
+</pre>
+
+eli käsittelemätön promisen rejektoituminen. Pyyntöön ei vastata tilanteessa mitenkään.
+
+Async/awaitia käyttäessä kannattaa käyttää vanhaa kunnon _try/catch_-mekanismia virheiden käsittelyyn:
+
+```js
+routerRouter.post('/', async (request, response) => {
+  try {
+    const body = request.body
+
+    if (body.content === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+
+    const note = new Note({
+      content: body.content,
+      important: body.content === undefined ? false : body.important,
+      date: new Date(),
+    })
+
+    const savedNote = await note.save()
+    response.json(formatNote(note))
+  } catch(exception) {
+    console.log(exception)
+    response.status(500).json({ error: 'something whent wrong...' })
+  }
+})
+```
+
+Iso try/catch tuo koodiin hieman ikävän vivahteen, mutta mikään ei ole ilmaista.
+
+Tehdään sitten testit yksittäisen muistiinpanon tietojen katsomiselle ja muistiinpanon poistolle:
+
+```js
+test('a specific note can be viewed', async () => {
+  const resultAll = await api
+    .get('/api/notes')
+
+  const aNoteFromAll = resultAll.body[0]
+
+  const resultNote = await api
+    .get(`/api/notes/${aNoteFromAll.id}`)
+
+  const noteObject = resultNote.body
+
+  expect(noteObject).toEqual(aNoteFromAll)
+})
+
+test('a note can be deleted', async () => {
+  const newNote = {
+    content: 'HTTP DELETE poistaa resurssin',
+    important: true
+  }
+
+  const addedNote = await api
+    .post('/api/notes')
+    .send(newNote)
+
+  const notesAtBeginningOfOperation = await api
+    .get('/api/notes')
+
+  await api
+    .delete(`/api/notes/${addedNote.body.id}`)
+
+  const notesAfterDelete = await api
+    .get('/api/notes')
+
+  const contents = notesAfterDelete.body.map(r => r.content)
+
+  expect(contents).not.toContain('HTTP DELETE poistaa resurssin')    
+  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length-1)    
+})
+```
+
+Testit eivät tässä vaiheessa ole optimaaliset, parannetaan niitä kohta. Ensin kuitenkin refaktoroidaan backend käyttämään async/awaitia.
+
+```js
+routerRouter.get('/:id', async (request, response) => {
+  try {
+    const note = await Note.findById(request.params.id)
+
+    if (note) {
+      response.json(formatNote(note))
+    } else {
+      response.status(404).end()
+    }
+    
+  } catch(exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+})
+
+routerRouter.delete('/:id', async (request, response) => {
+  try {
+    await Note.findByIdAndRemove(request.params.id)
+
+    response.status(204).end()
+  } catch (exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+})
+```
+
+Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos sanynkronisia kutsuja on tehtävä useampia.
+
+Kaikki eivät ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
+](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
+
+## Testien refaktorointi
+
+Testimme ovasisältävät tällä hetkellä jossain määrin toistoa ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
+
+Parannellaan testejä hiukan.
+
+- describet
+- virhetilanteet
 
 ## Mongoose
   - Monimutkaisemmat skeemat
@@ -792,7 +1153,6 @@ Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _mai
 ## Muu
   - lint
 
-
 ## React
   - Lisää formeista: mm refs
   - Bootstrap (reactstrap) tai Semantic UI
@@ -801,7 +1161,7 @@ Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _mai
   - child https://reactjs.org/docs/composition-vs-inheritance.html
 
 ## Frontendin testauksen alkeet
-  - Ava jsdom enzyme
+  - jsdom enzyme
 
 ## misc
   - Http-operaatioiden safety ja idempotency
