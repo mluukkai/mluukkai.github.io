@@ -669,14 +669,17 @@ const initialNotes = [
 beforeAll(async () => {
   await Note.remove({})
 
-  initialNotes.forEach(async (note)=>{
-    const noteObject = new Note(note)
-    await noteObject.save()
-  })
+  let noteObject = new Note(initialNotes[0])
+  await noteObject.save()
+  
+  noteObject = new Note(initialNotes[1])
+  await noteObject.save()
 })
 ```
 
-Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi muuttujaan _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta. Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
+Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi taulukkoon _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta.
+
+Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
 
 ```js
 test('all notes are returned', async () => {
@@ -778,6 +781,69 @@ main()
 ```
 
 Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _main_, sen jälkeen se kutsuu metodia _main()_
+
+### 
+
+Voisimme yrittää optimoida testiemme _beforeAll_ metodia seuraavasti:
+
+```js
+beforeAll(async () => {
+  await Note.remove({})
+  console.log('clearead')
+
+  initialNotes.forEach(async (note) => { 
+    let noteObject = new Note(note)
+    await noteObject.save()   
+    console.log('saved')
+  })
+  console.log('done')
+})
+```
+
+Nyt siis talletamme taulukossa _initialNotes_ määritellyt muistiinpanot tietokantaan _forEach_-loopissa. Yllättäen ratkaisu ei async/awaitista huolimatta toimi niinkuin oletamme. 
+
+Konsoliin tulostuu
+
+<pre>
+cleared
+done
+saved
+saved
+</pre>
+
+Nyt siis hieman petollisesti käykin siten, että _forEach_-lauseen sisäällä olevia asynkronisia kutsuja _ei_ suoriteta ennen kuin metodin _beforeAll_ suoritus päättyy vaikka niitä odotetaankin awaitilla.
+
+Testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehdittäisiinkin jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
+
+Toimiva ratkaisu olisi odottaa asynkronisten talletusoperaatioiden valmistumista _beforeAll_-funktiossa, esim. metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla:
+
+```js
+beforeAll(async (done) => {
+  await Note.remove({})
+
+  const noteObjects = initialNotes.map(note => new Note(note))
+  await Promise.all( noteObjects.map(note => {
+      note.save()
+      console.log('saved')
+    })
+  )
+
+  console.log('done')
+})
+```
+
+Nyt konsoliin tulostu
+
+<pre>
+cleared
+saved
+saved
+done
+</pre>
+
+ja testien suoritusta ei aloiteta ennen kuin kaikki _beforeAll_-metodin koodi on kirjoitettu.
+
+Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa saa olla koko ajan tarkkana!
 
 ### async/await backendissä
 
