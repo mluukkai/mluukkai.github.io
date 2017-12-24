@@ -699,15 +699,13 @@ test('a specific note is within the returned notes', async () => {
 })
 ```
 
-Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä async ja await tarkoittavat.
+Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä _async_ ja _await_ tarkoittavat.
 
 ## async-await
 
-Asyc- ja await ovat ES7:n mukannaan mukanaan tuoma uusi syntaksi, joka mahdollistaa asynkronisten funktioiden kutsumisen siten, että kirjoitettava koodi näyttää synkroniselta.
+Async- ja await ovat ES7:n mukannaan mukanaan tuoma uusi syntaksi, joka mahdollistaa _promisen palauttavien asynkronisten funktioiden_ kutsumisen siten, että kirjoitettava koodi näyttää synkroniselta.
 
-Olemme tähän asti käyttäneet promiseja asynkronisten operaatioiden suorittamisessa. 
-
-Esim. muistiinpanojen hakeminen tietokannasta hoidetaan seuraavasti:
+Esim. muistiinpanojen hakeminen tietokannasta hoidetaan promisejen avulla seuraavasti:
 
 ```js
   Note
@@ -719,9 +717,9 @@ Esim. muistiinpanojen hakeminen tietokannasta hoidetaan seuraavasti:
 
 Metodikutsu _Note.find()_ palauttaa promisen, ja saamme itse operaation tuloksen rekisteröimällä promiselle tapahtumankäsittelijän metodilla _then_.
 
-Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita synkronisia funktiokutsuja, meneisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäisttelijästä. Näin synstyisi potentiaalisesti monimutkaista koodia, jopa niinsanottu [callback hell](http://callbackhell.com/).
+Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäisttelijästä. Näin syntyise potentiaalisesti monimutkaista koodia, jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
 
-[Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hanskassa, tällöinen callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
+[Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hallinnassa, callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
 
 ```js
   Note
@@ -735,9 +733,9 @@ Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsitteli
     })
 ```
 
-Then-ketju on ok, mutta parempaankin pystytään. Jo ES6:ssa esitellyt [generaattorifunktiot](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) mahdollistivat [ovelan tavan](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch4.md#iterating-generators-asynchronously) määritellä asynkronista koodia siten että se "näytti synkroniselta". Syntaksi ei kuitenkaan ollut paras mahdollinen ja sitä ei käytetty kovin yleisesti.
+Then-ketju on ok, mutta parempaankin pystytään. Jo ES6:ssa esitellyt [generaattorifunktiot](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) mahdollistivat [ovelan tavan](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch4.md#iterating-generators-asynchronously) määritellä asynkronista koodia siten että se "näyttää synkroniselta". Syntaksi ei kuitenkaan ole täysin luonteva ja sitä ei käytetä kovin yleisesti.
 
-ES7:ssa Async ja Await tuvat generaattoreiden tarjoaman toiminnallisuuden ymmärrettävästi ja syntaktisesti koko javascript-kansan ulottuville.
+ES7:ssa async ja await tuovat generaattoreiden tarjoaman toiminnallisuuden ymmärrettävästi ja syntaktin puolesta selkeällä tavalla koko javascript-kansan ulottuville.
 
 Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)-funktiota hyödyntäen seuraavasti:
 
@@ -747,7 +745,7 @@ Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozi
   console.log('operaatio palautti seuraavat muistiinpanot ', notes)
 ```
 
-Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komennon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos palautetaan muuttujaan _notes_. 
+Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komentoon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos on sijoitettu muuttujaan _notes_. 
 
 Ylempänä oleva monimutkaisempi esimerkki suoritettaisiin awaitin avulla seuraavasti:
 
@@ -760,11 +758,11 @@ Ylempänä oleva monimutkaisempi esimerkki suoritettaisiin awaitin avulla seuraa
 
 Koodi siis yksinkertaistuu huomattavasti verrattuna suoraan promiseja käyttävään then-ketjuun. 
 
-Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja.
+Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja mikä ei sinänsä ole ongelma, sillä myös "normaaleja" callbcackeja käyttävä asynkroninen koodi on helppo kääriä promiseksi.
 
-Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään, se onnistuu ainoastaan jos ollaan  [async] https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function-funktiossa.
+Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
 
-Eli jotta, edelliset esimerkit toimisivat, olisi ne _käärittävä_ async-funktioiden sisälle:
+Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä:
 
 ```js
 const main = async () => {
@@ -780,11 +778,36 @@ const main = async () => {
 main()
 ```
 
-Koodi määrittelee ensin asynkronisen funktion joka sijoitetaan muuttujaan _main_, sen jälkeen se kutsuu metodia _main()_
+Koodi määrittelee ensin asynkronisen funktion, joka sijoitetaan muuttujaan _main_, sen jälkeen koodi kutsuu metodia  _main()_
 
-### 
+### testin beforeAll-metodin optimointi
 
-Voisimme yrittää optimoida testiemme _beforeAll_ metodia seuraavasti:
+Palataan takaisin testien pariin, ja tarkastellaan määrittelemäämme testit alustavaa funktiota _beforeAll_:
+
+```js
+const initialNotes = [
+  {
+    content: 'HTML on helppoa',
+    important: false,
+  },
+  {
+    content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
+    important: true
+  }
+]
+
+beforeAll(async () => {
+  await Note.remove({})
+
+  let noteObject = new Note(initialNotes[0])
+  await noteObject.save()
+  
+  noteObject = new Note(initialNotes[1])
+  await noteObject.save()
+})
+```
+
+Funktio tallettaa tietokantaan taulukon nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöidä. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useapia alkioita, olisi toisto parempi ratkaisu:
 
 ```js
 beforeAll(async () => {
@@ -798,52 +821,49 @@ beforeAll(async () => {
   })
   console.log('done')
 })
+
+test('notes are returned as json', async (done) => {
+  console.log('entered test')
+  // ...
+}
 ```
 
-Nyt siis talletamme taulukossa _initialNotes_ määritellyt muistiinpanot tietokantaan _forEach_-loopissa. Yllättäen ratkaisu ei async/awaitista huolimatta toimi niinkuin oletamme. 
+Talletamme siis taulukossa _initialNotes_ määritellyt muistiinpanot tietokantaan _forEach_-loopissa. Testeissä kuitenkin ilmenee jotain häikkää, ja sitä varten koodin sisään on lisätty aputulosteita.
 
 Konsoliin tulostuu
 
 <pre>
 cleared
 done
+entered test
 saved
 saved
 </pre>
 
-Nyt siis hieman petollisesti käykin siten, että _forEach_-lauseen sisäällä olevia asynkronisia kutsuja _ei_ suoriteta ennen kuin metodin _beforeAll_ suoritus päättyy vaikka niitä odotetaankin awaitilla.
+Yllättäen ratkaisu ei async/awaitista huolimatta toimi niinkuin oletamme, testin suoritus aloitetaan ennen kun tietokannan tila on saatu alustettua!
 
-Testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehdittäisiinkin jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
+Ongelma on siinä, että jokainen forEach-loopin läpikäynti generoi oman asynkronisen operaation ja _beforeAll_ ei odota näiden suoritusta. Eli forEach:in sisällä olevat _await_-komennot eivät ole funktiossa _beforeEach_ vaan erillisissä asynkronisesti suoritettavissa funktioissa.
+
+Koska testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehdittäisiin jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
 
 Toimiva ratkaisu olisi odottaa asynkronisten talletusoperaatioiden valmistumista _beforeAll_-funktiossa, esim. metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla:
 
 ```js
-beforeAll(async (done) => {
+beforeAll(async () => {
   await Note.remove({})
 
   const noteObjects = initialNotes.map(note => new Note(note))
-  await Promise.all( noteObjects.map(note => {
-      note.save()
-      console.log('saved')
-    })
-  )
-
-  console.log('done')
+  const promiseArray = noteObjects.map(note => note.save())
+  await Promise.all(promiseArray)
 })
+
 ```
 
-Nyt konsoliin tulostu
+Ratkaisu on varmasti aloittelijalle tiiviydestään huolimatta hieman haastava. Taulukkoon _noteObjects_ talletetaan taulukkoon _initialNotes_ talletettuja javascript-oliota vastaavat _Note_-konstruktorifunktiolla generoidut Mongoose-oliot. Seuraavalla rivillä luodaan uusi taulukko, joka muodostuu promiseista, jotka saadaan kun jokaiselle _noteObjects_ taulukon alkiolle kutsutaan metodia _save_, eli ne talletetaan kantaan.
 
-<pre>
-cleared
-saved
-saved
-done
-</pre>
+Viimeinen rivi, _await Promise.all(promiseArray)_ odottaa, että kaikki tietokantaan talletusta vastaavat promiset ovat valmiina, eli alkiot on talletettu tietokantaan.
 
-ja testien suoritusta ei aloiteta ennen kuin kaikki _beforeAll_-metodin koodi on kirjoitettu.
-
-Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa saa olla koko ajan tarkkana!
+Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa saa olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
 
 ### async/await backendissä
 
