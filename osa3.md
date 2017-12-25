@@ -448,7 +448,7 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
 
-Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi.  REST:in kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen REST-API:n määritelmää.
+Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. REST:in kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen REST-API:n määritelmää.
 
 Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://shop.oreilly.com/product/9780596529260.do)) edellä esitellyn kaltaista suoraviivaisehkoa resurssien [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)-tyylisen manipuloinnin mahdollistavaa API:a nimitetään REST:in sijaan [resurssipohjaiseksi](https://en.wikipedia.org/wiki/Resource-oriented_architecture) arkkitehtuurityyliksi. Emme nyt kuitenkaan takerru liian tarkasti määritelmällisiin asioihin vaan jatkamme sovelluksen parissa.
 
@@ -1200,7 +1200,7 @@ Voisimme hakea esim. ainoastaan tärkeät muistiinpanot seuraavasti:
 
 ```js
 Note
-  .find({ important:true })
+  .find({ important: true })
   .then(result => {
     // ...
   })
@@ -1294,7 +1294,7 @@ const formattedNote = { ...note._doc, id: note._id }
 
 Ennen olion palauttamista turhat kentät poistetaan.
 
-Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muisiinpanoja_ sopisi sama funktio niidenkin muotoiluun. Jatkon kannalta on kuitenkin parempi, että pidämme alkuperäisen version funktosta.
+Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muistiinpanoja_ sopisi sama funktio niidenkin muotoiluun. Jatkon kannalta on kuitenkin parempi, että pidämme alkuperäisen version funktiosta.
 
 On myös mahdollista estää mongoosea palauttasta tiettyjen kenttien arvoa. Saamme estettyä <em>\_\_v</em>:n seuraavasti:
 
@@ -1531,7 +1531,7 @@ app.put('/api/notes/:id', (request, response) => {
 
   const note = {
     content: body.content,
-    important: body.important,
+    important: body.important
   }
 
   Note
@@ -1575,7 +1575,7 @@ const formatNote = (note) => {
     id: note._id,
     content: note.content,
     date: note.date,
-    important: note.important,
+    important: note.important
   }
 }
 ```
@@ -1631,7 +1631,7 @@ app.post('/api/notes', (request, response) => {
 })
 ```
 
-koska  _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme:
+koska _formatNote_ on viite funktioon, on oleellisesti ottaen kyse samasta kuin kirjoittaisimme:
 
 ```js
 app.post('/api/notes', (request, response) => {
