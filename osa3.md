@@ -1294,7 +1294,7 @@ const formattedNote = { ...note._doc, id: note._id }
 
 Ennen olion palauttamista turhat kentät poistetaan.
 
-Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muisiinpanoja_ sopisi sama funktio niidenkin muotoiluun.
+Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muisiinpanoja_ sopisi sama funktio niidenkin muotoiluun. Jatkon kannalta on kuitenkin parempi, että pidämme alkuperäisen version funktosta.
 
 On myös mahdollista estää mongoosea palauttasta tiettyjen kenttien arvoa. Saamme estettyä <em>\_\_v</em>:n seuraavasti:
 
@@ -1571,11 +1571,12 @@ Useat routejen tapahtumankäsittelijöistä muuttivat palautettavan datan oikeaa
 
 ```js
 const formatNote = (note) => {
-  const formattedNote = { ...note._doc, id: note._id }
-  delete formattedNote._id
-  delete formattedNote.__v
-
-  return formattedNote
+  return {
+    id: note._id,
+    content: note.content,
+    date: note.date,
+    important: note.important,
+  }
 }
 ```
 

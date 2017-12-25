@@ -12,7 +12,7 @@ permalink: /osa4/
 
 - Node/express
   - Router
-  - Helmet.js https://www.npmjs.com/package/helmet
+  - sovelluksen jakaminen osiin
 - Node-sovellusten testaut
   - jest/supertest
 - JS
@@ -21,20 +21,10 @@ permalink: /osa4/
   - Monimutkaasemmat skeemat
   - Viittaukset kokoelmien välillä
 - Web
-  - Http-operaatioiden safety ja idempotency
   - Token-autentikaatio
   - JWT
 - Muu
   - lint
-
-- React
-  - Lisää formeista: mm refs
-  - Bootstrap (reactstrap) tai Semantic UI
-  - Periaatteita: Virtual dom
-  - Proptype
-  - child https://reactjs.org/docs/composition-vs-inheritance.html
-- Frontendin testauksen alkeet
-  - Ava jsdom enzyme
 
 ## Sovellukuksen rakenteen parantelu
 
@@ -49,10 +39,12 @@ const routerRouter = require('express').Router()
 const Note = require('../models/note')
 
 const formatNote = (note) => {
-  const formattedNote = { ...note._doc, id: note._id }
-  delete formattedNote._id
-
-  return formattedNote
+  return {
+    id: note._id,
+    content: note.content,
+    date: note.date,
+    important: note.important
+  }
 }
 
 routerRouter.get('/', (request, response) => {
@@ -1692,9 +1684,169 @@ Eli haetaan tietokannasta ne user-dokumentit, joiten _username_-kentän arvo on 
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
+Ennen kuin menemme eteenpäin, lisätäänalustava versio joka palauttaa kaikki käyttäjät palauttavasta käsitteijäfunktiosta:
+
+```js
+const formatUser = (user) => {
+  return {
+    id: user.id,
+    username: user.username,
+    name: user.name,
+    notes: user.notes
+  }
+}
+
+usersRouter.get('/', async (request, response) => {
+  const users = await User.find({})
+  response.json(users.map(formatUser))
+})
+```
+
 ### Muistiinpanon luominen
 
 Muistiinpanot luovaa koodia on nyt mukautettava siten, että muistiinpanot tulee liitetyksi ne luoneeseen käyttäjään.
+
+Laajennetaan ensin olemassaolevaa toteutusta siten, että tieto muistiinpanon luvovan käyttäjän id:stä lähetetään pyynnön rungossa kentän _userId_ arvona:
+
+```js
+notesRouter.post('/', async (request, response) => {
+  try {
+    const body = request.body
+
+    const userId = body.userId
+
+    if (body.content === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+
+    const user = await User.findById(userId)
+
+    const note = new Note({
+      content: body.content,
+      important: body.content === undefined ? false : body.important,
+      date: new Date(),
+      user: user._id 
+    })
+
+    const savedNote = await note.save()
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
+    response.json(formatNote(note))
+  } catch(exception) {
+    console.log(exception)
+    response.status(500).json({ error: 'something whent wrong...' })
+  }
+})
+```
+
+Huomionarvoista on nyt se, että myös _user_-olio muuttuu, sen kenttääm _notes_ talletetaan luodun muistiinpanon _id_:
+
+```js
+const user = User.findById(userId)
+
+user.notes = user.notes.concat(savedNote._id)
+await user.save()
+```
+
+Kokeillaan nyt lisätä uusi muistiinpano
+
+![]({{ "/assets/4/6.png" | absolute_url }})
+
+Operaatio vaikuttaa toimivan. Lisätään vielä yksi muistiinpano ja mennään kaikkien käyttäjien sivulle:
+
+![]({{ "/assets/4/7.png" | absolute_url }})
+
+Huomaamme siis, että käyttäjällä on kaksi muistiinpanoa.
+
+Jos laajennamme muistiinpanojen JSON:in muotoileman koodin näyttämään muistiinpanoon liittyvän käyttäjän
+
+```js
+const formatNote = (note) => {
+  return {
+    id: note._id,
+    content: note.content,
+    date: note.date,
+    important: note.important,
+    user: note.user
+  }
+}
+```
+
+On tulee muistiinpanon luoneenkäyttäjän id näkyviin muistiinpanon yhteyteen.
+
+![]({{ "/assets/4/8.png" | absolute_url }})
+
+### populate
+
+Haluaisimme API:n toimivan siten, että haettavissa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä haluaisimme nähdä käyttäjien tekemien muistiinpanojen id:iden lisäksi niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin liitoskyselyn avulla. 
+
+Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on koko liitoksen ajan konsistentti, ts. jos tehdään users- ja documents-kokoelmat liittävä kysely, kokoelmien tila muuttua kesken mongoosen liitos-operaation.
+
+Liitoksen tekeminen suoritetaan mongoosen komennolla [populate](http://mongoosejs.com/docs/populate.html). Päivitetään ensin kaikkien käyttäjien tietdot palauttava route:
+
+```js
+usersRouter.get('/', async (request, response) => {
+  const users = await User
+    .find({})
+    .populate('notes')
+    
+  response.json(users.map(formatUser))
+})
+```
+
+Funktion [populate](http://mongoosejs.com/docs/populate.html) kutsu siis ketjutetaan kyselyä vastaavan metodikutsun (tässä tapauksessa _find_) perään. Populaten parametri määrittelee, että _user_-dokumenttien _notes_-kentässä olevat _note_-olioihin viittaavat _id_:t korvataan dokumenttejä vastaavilla id:illä.
+
+Lopputulos on jo melkein haluamamme kaltainen:
+
+![]({{ "/assets/4/9.png" | absolute_url }})
+
+Populaten yhteydessä on myös mahdollista rajata mitä kenttiä _embedattavista_ olioista otetaan mukaan. Rajaus tapahtuu mogon [kyselysyntaksin](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/) tapaan:
+
+```js
+usersRouter.get('/', async (request, response) => {
+  const users = await User
+    .find({})
+    .populate('notes', { content: 1, date: 1 } )
+      
+  response.json(users.map(formatUser))
+})
+```
+
+Määrittelyjen jälkeen tulos on seuraava:
+
+![]({{ "/assets/4/10.png" | absolute_url }})
+
+Lisätään sopiva populointi, myös muistiinpanojen yhteyteen
+
+```js
+notesRouter.get('/', async (request, response) => {
+  const notes = await Note
+    .find({})
+    .populate('user', { username:1, name:1 } )
+    
+  response.json(notes.map(formatNote))
+})
+```
+
+Nyt käyttäjän tiedot tulevat muistiinpanon kenttään _user_.
+
+![]({{ "/assets/4/11.png" | absolute_url }})
+
+Korostetaan vielä, että tietokannan tasolla ei siis ole mitään määrittelyä siitä, että esim. muistiinpanojen kenttään _user_ talletetut id:t viittaavat käyttäjä-kokoelman dokumentteihin.
+
+Mongoosen _populate_-funktion toiminnallisuus perustuu siihen, että olemme määritelleet viitteiden "tyypit" olioiden mongoose-skeemaan _ref_-kentän avulla:
+
+```js
+const Note = mongoose.model('Note', {
+  content: String,
+  date: Date,
+  important: Boolean,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+})
+```
+
 
 ## Web
   - Token-autentikaatio
@@ -1703,13 +1855,6 @@ Muistiinpanot luovaa koodia on nyt mukautettava siten, että muistiinpanot tulee
 ## Muu
   - lint
 
-## React
-  - Lisää formeista: mm refs
-  - Bootstrap (reactstrap) tai Semantic UI
-  - Periaatteita: Virtual dom
-  - Proptype
-  - child https://reactjs.org/docs/composition-vs-inheritance.html
 
-## misc
+## misc (osaan 3)
   - Http-operaatioiden safety ja idempotency
-  - Helmet.js https://www.npmjs.com/package/helmet
