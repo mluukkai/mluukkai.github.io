@@ -1388,7 +1388,7 @@ Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin.
 
 Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
 
-## Mongoose - monimutkaisempi skeema
+## Käyttäjienhallinta ja monimutkaisempi tietokantarakenne
 
 Haluamme toteuttaa sovellukseemme käyttäjienhallinnan. Käyttäjät tulee tallettaa tietokantaan ja jokaisesta muistiinpanosta tulee tietää sen luonut käyttäjä. Muistiinpanojen poisto ja editointi tulee olla sallittua ainoastaan muistiinpanot tehneelle käyttäjälle.
 
@@ -1404,7 +1404,7 @@ Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _
 
 Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin alkioihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen mongo on tukenut useampaan kokoelmaan kohdistuvia aggregaattikyselyitä, emme kuitenkaan niitä kurssillamme käsittele). 
+Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen ;ongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä kurssillamme käsittele). 
 
 Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa taustalla liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan, mutta mongoose tekee kuitekin taustalla useamman kyselyn.
 
@@ -1502,8 +1502,199 @@ Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin pro
 
 ### käyttäjien mongoose-skeema
 
-### salasana bcrypti
+Päätetään tallettaa käyttäjän yhteyteen myös tieto käyttäjän luomista muistiinpanoista, eli käytännössä muistiinpanojen id:t. Määritellään käyttäjää edustava model tiedostoon _models/user:_
 
+```js
+const mongoose = require('mongoose')
+
+const User = mongoose.model('Note', {
+  username: String,
+  name: String,
+  passwordHash: String,
+  notes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Note' }]
+})
+
+module.exports = User
+```
+
+Muistiinpanojen id:t on talletettu käyttäjien sisälle taulukkona mongo-id:itä. Määrittely on seuraava
+
+```js
+{ type: mongoose.Schema.Types.ObjectId, ref: 'Note' }
+```
+
+kentän tyyppi on _ObjectId_ joka viittaa _Note_-tyyppisiin dokumentteihin. Mongo ei itsessään tiedä mitään siitä, että kyse on kentästä joka viittaa nimenomaan muistiinpanoihin, kyseessä onkin puhtaasti mongoosen syntaksi.
+
+Laajennetaan muistiinpanon skeemaa siten, että myös muistiinpanoissa on tieto ne luoneesta käyttäjästä
+
+
+```js
+const Note = mongoose.model('Note', {
+  content: String,
+  date: Date,
+  important: Boolean,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+})
+```
+
+Relaatiotietokannoista poiketen, viitteet on nyt talletettu molempiin dokumentteihin, muistiinpano viittaa sen luoneeseen käyttäjään ja käyttäjä sisältää taulukollisen viitteitä sen luomiin muistiinpanoihin.
+
+### Käyttäjien luominen
+
+Toteutetaan seuraavaksi route käyttäjien luomista varten. Käyttäjällä on siis _username_ jonka täytyy olla järjestelmässä yksikäsitteinen, nimi eli _name_ sekä _passwordHash_, eli salasanasta [yksisuuntaisen funktion](https://en.wikipedia.org/wiki/Cryptographic_hash_function) perusteella laskettu tunniste. Salasanojahan ei ole koskaan viisasta tallentaa tietokantaan selväsanaisena!
+
+Asennetaan salasanojen hashaamiseen käyttämämme [bcrypt](https://github.com/kelektiv/node.bcrypt.js)-kirjasto:
+
+```bash
+install bcrypt --save
+```
+
+Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_. 
+
+Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users_, ja liitetään se  _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
+
+```js
+const usersRouter = require('./controllers/users')
+app.use('/api/users', usersRouter)
+
+const notesRouter = require('./controllers/notes')
+app.use('/api/notes', notesRouter)
+
+// ...
+```
+
+Routerin alustava sisältö on seuraava:
+
+```js
+const bcrypt = require('bcrypt')
+const usersRouter = require('express').Router()
+const User = require('../models/user')
+const mongoose = require('mongoose')
+
+usersRouter.post('/', async (request, response) => {
+  try {
+    const body = request.body
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash(body.password, saltRounds)
+
+    const user = new User({
+      username: body.username,
+      name: body.name,
+      passwordHash
+    })
+
+    const savedUser = await user.save()
+
+    response.json(savedUser)
+  } catch (exception) {
+    console.log(exception)
+    response.status(500).json({ error: 'something whent wrong...' })
+  }
+})
+
+module.exports = usersRouter
+```
+
+Tietokantaan siis _ei_ talleteta pyynnön mukana tulevaa salasanaa, vaan funktion _bcrypt.hash_ avulla laskettu _hash_.
+
+Materiaalin tilamäärä ei valitettavasti riitä käsittelemään sen tarkemmin salasanojen [tallennuksen perusteita](https://codahale.com/how-to-safely-store-a-password/), esim mitä maaginen luku 10 muuttujan [saltRounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds) arvona tarkoittaa. Lue linkkien takaa lisää.
+
+Koodissa ei tällä hetkellä ole mitään virheidenkäisttelyä ja validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
+
+Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, eteenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan. 
+
+Pienellä vaivalla voimme tehdä automaattisesti suoritettavat testit, jotka helpottavat sovelluksen kehittämistä merkittävästi.
+
+Alustava testi näyttää seuraavalta:
+
+```js
+describe.only('when there is initially no users at db', async () => {
+  beforeAll(async () => {
+    await User.remove({})
+    const user = new User({ usernname: 'root', password: 'sekret' })
+    await user.save()
+  })  
+
+  test('POST /api/notes succeeds with a fresh username', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfterOperation = await usersInDb() 
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
+    const usernames = usersAfterOperation.map(u=>u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+})
+```
+
+Koska testi on määritelty _describe.only_-lohkoksi, suorittaa _jest_ ainoastaan lohkon sisälle määritellyt testit. Tämä on alkuvaiheessa hyödyllistä, sillä ennen kuin uusia käyttäjiä lisäävä toiminnallisuus on valmis, kannattaa suorittaa testeistä ainoastaan kyseistä toiminnallisuutta tutkivat testitapaukset.
+
+Testit käyttävät myös tiedostossa _tests/test_helper.js_ määsiteltyä apufunktiota _usersInDb()_ tarkastamaan lisäysoperaation jälkeisen tietokannan tilan.
+
+Lohkon _beforeAll_ lisää kantaan käyttäjän, jonka username on _root_. Voimmekin tehdä uuden testi, jolla varmistetaan, että samalla käyttäjätunnuksella ei voi luoda uutta käyttäjää:
+
+```js
+  test('POST /api/notes fails with proper statuscode and message if username already taken', async () => {
+    const usersBeforeOperation = await usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'salainen'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body).toEqual({ error: 'username must be unique'})
+
+    const usersAfterOperation = await usersInDb()
+    expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+  })  
+```
+
+Testi ei tietenkään mene läpi tässä vaiheessa. Toimimme nyt oleellisesti [TDD:n eli test driven developmentin](https://en.wikipedia.org/wiki/Test-driven_development) hengessä, uuden ominaisuudden testi on kirjoitettu ennen ominaisuuden ohjelmointia.
+
+Koodi laajenee seuraavasti:
+
+```js
+usersRouter.post('/', async (request, response) => {
+  try {
+    const body = request.body
+
+    const existingUser = await User.find({username: body.username})
+    if (existingUser.length>0) {
+      return response.status(400).json({ error: 'username must be unique' })
+    }
+
+    //...
+
+  }
+})
+```
+
+Eli haetaan tietokannasta ne user-dokumentit, joiten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla [400 bad request] ja kerrotaan syy ongelmaan. 
+
+Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
+
+### Muistiinpanon luominen
+
+Muistiinpanot luovaa koodia on nyt mukautettava siten, että muistiinpanot tulee liitetyksi ne luoneeseen käyttäjään.
 
 ## Web
   - Token-autentikaatio
@@ -1518,9 +1709,6 @@ Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin pro
   - Periaatteita: Virtual dom
   - Proptype
   - child https://reactjs.org/docs/composition-vs-inheritance.html
-
-## Frontendin testauksen alkeet
-  - jsdom enzyme
 
 ## misc
   - Http-operaatioiden safety ja idempotency
