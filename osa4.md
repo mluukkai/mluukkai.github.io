@@ -13,7 +13,7 @@ permalink: /osa4/
 - Node.js / Express
   - Router
   - sovelluksen jakaminen osiin
-- Node.js -sovellusten testaut
+- Node.js -sovellusten testaus
   - jest/supertest
 - JS
   - async/await
@@ -1937,15 +1937,81 @@ app.use('/api/login', loginRouter)
 
 Muutetaan vielä muistiinpanojen luomista, siten että luominen onnistuu ainoastaan jos luomista vastaavan pyynnön mukana on validi token. Muistiinpano talletetaan tokenin identifioiman käyttäjän tekemien muistiinpanojen listaan.
 
- ```js
+Tapoja tokenin välittämiseen selaimesta backendiin on useita. Käytämme ratkaisussamme [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)-headeria. Tokenin lisäksi headerin avulla kerrotaan mistä [autentikointiskeemasta](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) on kyse. Tämä voi olla tarpeen, jos palvein tarjoaa useita eri tapoja autentikointiin. Skeeman ilmaiseminen kertoo näissä tapauksissa palvelimelle, miten mukana olevat kredentiaalit tulee tulkita.
+Meidän käyttöömme sopii _Bearer_-skeema. 
 
+Käytännössä tämä tarkoittaa, että jos token one sim merkkijono _eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW_, laitetaan pyynnöissä headerin Authorization arvoksi merkkijono
+<pre>
+Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
+</pre>
+
+Modifioitu muisiinpanojen luomisesta  huolehtiva koodi seuraavassa:
+
+```js
+const getTokenFrom = (request) =>{
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
+notesRouter.post('/', async (request, response) => {
+  const body = request.body
+
+  try {
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id ) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    if (body.content === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    const note = new Note({
+      content: body.content,
+      important: body.content === undefined ? false : body.important,
+      date: new Date(),
+      user: user._id 
+    })
+
+    const savedNote = await note.save()
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
+    response.json(formatNote(note))
+  } catch(exception) {
+    if (exception.name === 'JsonWebTokenError' ) {
+      response.status(401).json({ error: exception.message })
+    } else {
+      console.log(exception)
+      response.status(500).json({ error: 'something whent wrong...' })
+    }
+  }
+})
 ```
+
+Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka  perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
+
+Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized]](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
+
+Tokenin verifiointi voi myös aiheuttaa poikkeuksen _JsonWebTokenError_. Syynä tälle voi olla viallinen, väärennetty tai eliniältään vanhentunut token. Poikkeus poikkeusten käsittelyssä haaraudutaan virheen tyypin perusteella ja vastataan 401 jos poikkeus johtuu tokenista, ja muuten vastataan [500 internal server error](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1).
 
 ### loppuhuomioita
 
 Testit uusiksi...
 
 HTTPS
+
+Tokenin expiroituminen
+
+Seuraavassa osassa kirjautuminen React-koodiin
 
 ## Muu
   - lint
