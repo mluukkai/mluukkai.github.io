@@ -18,7 +18,7 @@ permalink: /osa4/
 - JS
   - async/await
 - Mongoose
-  - Monimutkaasemmat skeemat
+  - Monimutkaisemmat skeemat
   - Viittaukset kokoelmien välillä
 - Web
   - Token-autentikaatio
@@ -26,9 +26,9 @@ permalink: /osa4/
 - Muu
   - lint
 
-## Sovellukuksen rakenteen parantelu
+## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta, siten että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret ja siirretään rotejen määrittely omaan tiedostoonsa.
+Muutetaan sovelluksen rakennetta, siten että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret ja siirretään routejen määrittely omaan tiedostoonsa.
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -315,19 +315,19 @@ Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_
 ```js
 const palindrom = require('../utils').palindrom
 
-test("palindrom of a", () => {
-  const result = palindrom('a') 
+test('palindrom of a', () => {
+  const result = palindrom('a')
 
   expect(result).toBe('a')
 })
 
-test("palindrom of react", () => {
+test('palindrom of react', () => {
   const result = palindrom('react')
 
   expect(result).toBe('tcaer')
 })
 
-test("palindrom of saippuakauppias", () => {
+test('palindrom of saippuakauppias', () => {
   const result = palindrom('saippuakauppias')
 
   expect(result).toBe('saippuakauppias')
@@ -338,7 +338,7 @@ Testi ottaa ensimmäisellä rivillä testattavan funktion sijoittaen sen muuttuj
 
 Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. testitapauksista toinen näyttää seuraavalta:
 
-```
+```js
 () => {
   const result = palindrom('react')
 
@@ -355,7 +355,7 @@ Kuten odotettua, testit menevät läpi:
 Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
 
 ```js
-test("palindrom of react", () => {
+test('palindrom of react', () => {
   const result = palindrom('react')
 
   expect(result).toBe('tkaer')
@@ -368,27 +368,26 @@ seurauksena on seuraava virheilmotus
 
 Jest olettaa oletusarvoisesti, että testitiedoston nimessä on sana testi. Käytetään tällä kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
-Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_. 
+Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
 
 ```js
 const average = require('../utils').average
 
-describe("average", () => {
+describe('average', () => {
 
-  test("of one value is the value itself", () => {
+  test('of one value is the value itself', () => {
     expect(average([1])).toBe(1)
   })
 
-  test("of many is caclulated right", () => {
+  test('of many is caclulated right', () => {
     expect(average([1, 2, 3, 4, 5, 6])).toBe(3.5)
   })
 
-  test("of empty array is zero", () => {
+  test('of empty array is zero', () => {
     expect(average([])).toBe(0)
   })
 
 })
-
 ```
 
 Testi paljastaa, että metodi toimii väärin tyhjällä taulukolla (sillä nollallajaon tulos on _NaN_):
@@ -406,10 +405,10 @@ const average = (array) => {
 }
 ```
 
-Pari huomiota keskiarvon testeistä. Määrittelimme testien ympärille nimellä "average" varustetun _describe_-lohkon. 
+Pari huomiota keskiarvon testeistä. Määrittelimme testien ympärille nimellä "average" varustetun _describe_-lohkon.
 
 ```js
-describe("average", () => {
+describe('average', () => {
   // testit
 })
 ```
@@ -423,10 +422,10 @@ Kuten myöhemmin tulemme näkemään, _describe_-lohkot ovat tarpeellisia siinä
 Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodossa, ottamatta testattavan metodin tulosta erikseen apumuuttujaan:
 
 ```js
-  test("of empty array is zero", () => {
+  test('of empty array is zero', () => {
     expect(average([])).toBe(0)
   })
-```  
+```
 
 ## Tehtäviä
 
@@ -479,7 +478,7 @@ Tehdään sovelluksen käynnistyspisteenä toimivaan tiedostoon _index.js_ muuta
 const http = require('http')
 // muut requiret
 
-const envIs = (which) => process.env.NODE_ENV === which 
+const envIs = (which) => process.env.NODE_ENV === which
 
 if ( !envIs('production') ) {
   require('dotenv').config()
@@ -489,7 +488,7 @@ const url = envIs('test') ? process.env.TEST_MONGODB_URI : process.env.MONGODB_U
 
 //...
 
-const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT 
+const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT
 
 const server = http.createServer(app)
 
@@ -573,16 +572,16 @@ afterAll(()=>{
 })
 ```
 
-Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backentdiin.
+Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backendiin.
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta. 
+Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
 
 Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
 
 ```js
-afterAll(()=>{
+afterAll(() => {
   server.close()
 })
 ```
@@ -605,7 +604,7 @@ test('the first note is about HTTP methods', async () => {
 })
 ```
 
-Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsillepääsemiseen promiseja ja takaisunkutsuja, mutta nyt kaikki menee mukavasti:
+Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsillepääsemiseen promiseja ja takaisinkutsuja, mutta nyt kaikki menee mukavasti:
 
 ```js
   const res = await api
@@ -639,9 +638,9 @@ En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan.
 
 ## Tietokannan alustaminen ennen testejä
 
-Testimme käyttää jo jestin metodia [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout) sulkemaan backendin testien suoritusten jäleen. Jest tarjoaa joukon muitakin [funktioita](https://facebook.github.io/jest/docs/en/setup-teardown.html#content), joiden avulla voidaan suorittaa operaatioita ennen yhdenkään testin suorittamista tai ennen jokaisen testin suoritusta.
+Testimme käyttää jo jestin metodia [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout) sulkemaan backendin testien suoritusten jälkeen. Jest tarjoaa joukon muitakin [funktioita](https://facebook.github.io/jest/docs/en/setup-teardown.html#content), joiden avulla voidaan suorittaa operaatioita ennen yhdenkään testin suorittamista tai ennen jokaisen testin suoritusta.
 
-Päätetään alustaa tietokanta ennen kaikkien testin suoritusta, eli funktiossa [beforeAll](https://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout): 
+Päätetään alustaa tietokanta ennen kaikkien testin suoritusta, eli funktiossa [beforeAll](https://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout):
 
 ```js
 const supertest = require('supertest')
@@ -665,13 +664,13 @@ beforeAll(async () => {
 
   let noteObject = new Note(initialNotes[0])
   await noteObject.save()
-  
+
   noteObject = new Note(initialNotes[1])
   await noteObject.save()
 })
 ```
 
-Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi taulukkoon _initialNotes_ talletettua muistinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta.
+Tietokanta siis tyhjennetään aluksi ja sen jälkeen sinne lisätään kaksi taulukkoon _initialNotes_ talletettua muistiinpanoa. Näin testien suoritus aloitetaan aina hallitusti samasta tilasta.
 
 Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
 
@@ -697,34 +696,34 @@ Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä _async_ ja _awa
 
 ## async-await
 
-Async- ja await ovat ES7:n mukannaan mukanaan tuoma uusi syntaksi, joka mahdollistaa _promisen palauttavien asynkronisten funktioiden_ kutsumisen siten, että kirjoitettava koodi näyttää synkroniselta.
+Async- ja await ovat ES7:n mukanaan tuoma uusi syntaksi, joka mahdollistaa _promisen palauttavien asynkronisten funktioiden_ kutsumisen siten, että kirjoitettava koodi näyttää synkroniselta.
 
 Esim. muistiinpanojen hakeminen tietokannasta hoidetaan promisejen avulla seuraavasti:
 
 ```js
-  Note
-    .find({})
-    .then(notes => {
-        console.log('operaatio palautti seuraavat muistiinpanot ', notes)
-    })
+Note
+  .find({})
+  .then(notes => {
+    console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+  })
 ```
 
 Metodikutsu _Note.find()_ palauttaa promisen, ja saamme itse operaation tuloksen rekisteröimällä promiselle tapahtumankäsittelijän metodilla _then_.
 
-Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäisttelijästä. Näin syntyise potentiaalisesti monimutkaista koodia, jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
+Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäsittelijästä. Näin syntyisi potentiaalisesti monimutkaista koodia, jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
 
 [Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hallinnassa, callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
 
 ```js
-  Note
-    .find({})
-    .then(notes => {
-      return note[0].remove()  
-    })
-    .then(response=>{
-      console.log('the first note is removed')
-      // more code here
-    })
+Note
+  .find({})
+  .then(notes => {
+    return notes[0].remove()
+  })
+  .then(response => {
+    console.log('the first note is removed')
+    // more code here
+  })
 ```
 
 Then-ketju on ok, mutta parempaankin pystytään. Jo ES6:ssa esitellyt [generaattorifunktiot](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) mahdollistivat [ovelan tavan](https://github.com/getify/You-Dont-Know-JS/blob/master/async%20%26%20performance/ch4.md#iterating-generators-asynchronously) määritellä asynkronista koodia siten että se "näyttää synkroniselta". Syntaksi ei kuitenkaan ole täysin luonteva ja sitä ei käytetä kovin yleisesti.
@@ -734,34 +733,34 @@ ES7:ssa async ja await tuovat generaattoreiden tarjoaman toiminnallisuuden ymmä
 Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)-funktiota hyödyntäen seuraavasti:
 
 ```js
-  const notes = await Note.find({})
+const notes = await Note.find({})
 
-  console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+console.log('operaatio palautti seuraavat muistiinpanot ', notes)
 ```
 
-Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komentoon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos on sijoitettu muuttujaan _notes_. 
+Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komentoon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos on sijoitettu muuttujaan _notes_.
 
 Ylempänä oleva monimutkaisempi esimerkki suoritettaisiin awaitin avulla seuraavasti:
 
 ```js
-  const notes = await Note.find({})
-  const response = await notes[0].remove()
+const notes = await Note.find({})
+const response = await notes[0].remove()
 
-  console.log('the first note is removed')
+console.log('the first note is removed')
 ```
 
-Koodi siis yksinkertaistuu huomattavasti verrattuna suoraan promiseja käyttävään then-ketjuun. 
+Koodi siis yksinkertaistuu huomattavasti verrattuna suoraan promiseja käyttävään then-ketjuun.
 
-Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja mikä ei sinänsä ole ongelma, sillä myös "normaaleja" callbcackeja käyttävä asynkroninen koodi on helppo kääriä promiseksi.
+Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja mikä ei sinänsä ole ongelma, sillä myös "normaaleja" callbackeja käyttävä asynkroninen koodi on helppo kääriä promiseksi.
 
-Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
+Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
 
 Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä:
 
 ```js
 const main = async () => {
   const notes = await Note.find({})
-  console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+  console.log('operaatio palautti seuraavat muistiinpanot', notes)
 
   const notes = await Note.find({})
   const response = await notes[0].remove()
@@ -772,7 +771,7 @@ const main = async () => {
 main()
 ```
 
-Koodi määrittelee ensin asynkronisen funktion, joka sijoitetaan muuttujaan _main_, sen jälkeen koodi kutsuu metodia  _main()_
+Koodi määrittelee ensin asynkronisen funktion, joka sijoitetaan muuttujaan _main_, sen jälkeen koodi kutsuu metodia _main()_
 
 ### testin beforeAll-metodin optimointi
 
@@ -795,7 +794,7 @@ beforeAll(async () => {
 
   let noteObject = new Note(initialNotes[0])
   await noteObject.save()
-  
+
   noteObject = new Note(initialNotes[1])
   await noteObject.save()
 })
@@ -808,9 +807,9 @@ beforeAll(async () => {
   await Note.remove({})
   console.log('clearead')
 
-  initialNotes.forEach(async (note) => { 
+  initialNotes.forEach(async (note) => {
     let noteObject = new Note(note)
-    await noteObject.save()   
+    await noteObject.save()
     console.log('saved')
   })
   console.log('done')
@@ -876,7 +875,7 @@ Voimme varmistaa refaktoroinnin onnistumisen selaimella, mutta suorittamalla juu
 
 ### testejä ja backendin refaktorinita
 
-Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineen ominaisuudet hajaoavat. Tehdäänkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit. 
+Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineen ominaisuudet hajoavat. Tehdäänkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit.
 
 Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että rajapinnan palauttamien mustiinpanojen määrä kasvaa, ja että lisätty muistiinpano on palautettujen joukossa:
 
@@ -989,7 +988,7 @@ routerRouter.post('/', (request, response) => {
 }
 ```
 
-kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koodin allaolevaa osaan ja se taas aiheuttaa uuden <code>response.json()</code>-kutsun. 
+kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koodin allaolevaa osaan ja se taas aiheuttaa uuden <code>response.json()</code>-kutsun.
 
 Korjataan ongelma lisäämällä _if_-lauseeseen _return_:
 
@@ -1106,8 +1105,8 @@ test('a note can be deleted', async () => {
 
   const contents = notesAfterDelete.body.map(r => r.content)
 
-  expect(contents).not.toContain('HTTP DELETE poistaa resurssin')    
-  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length-1)    
+  expect(contents).not.toContain('HTTP DELETE poistaa resurssin')
+  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length-1)
 })
 ```
 
@@ -1123,7 +1122,7 @@ routerRouter.get('/:id', async (request, response) => {
     } else {
       response.status(404).end()
     }
-    
+
   } catch(exception) {
     console.log(exception)
     response.status(400).send({ error: 'malformatted id' })
@@ -1153,7 +1152,7 @@ Testimme ova sisältävät tällä hetkellä jossain määrin toisteisia ja niid
 
 Parannellaan testejä hiukan.
 
-Tehdään testejä varten muutama apufunktio moduuliin _test/test_helper.js_ 
+Tehdään testejä varten muutama apufunktio moduuliin _test/test_helper.js_
 
 ```js
 const Note = require('../models/note')
@@ -1181,7 +1180,7 @@ const nonExistingId = async () => {
   const note = new Note()
   await note.save()
   await note.remove()
-  
+
   return note._id.toString()
 }
 
@@ -1206,13 +1205,13 @@ const { format, initialNotes, nonExistingId, notesInDb } = require('./test_helpe
 
 describe('when there is initially some notes saved', async () => {
   let notesInDatabaseAtStart = []
-  
+
   beforeAll(async () => {
     await Note.remove({})
 
     const noteObjects = initialNotes.map(n=>new Note(n))
     await Promise.all(noteObjects.map(n=>n.save()))
-    notesInDatabaseAtStart = noteObjects.map(n => format(n))    
+    notesInDatabaseAtStart = noteObjects.map(n => format(n))
   })
 
   test('all notes are returned as json by GET /api/notes', async () => {
@@ -1227,7 +1226,6 @@ describe('when there is initially some notes saved', async () => {
     notesInDatabaseAtStart.forEach(note=>{
       expect(returnedContents).toContain(note.content)
     })
-
   })
 
   test('individual notes are returned as json by GET /api/notes/:id', async () => {
@@ -1239,7 +1237,7 @@ describe('when there is initially some notes saved', async () => {
       .expect('Content-Type', /application\/json/)
 
     expect(response.body.content).toBe(aNote.content)
-  })  
+  })
 
   test('404 returned by GET /api/notes/:id with nonexisting valid id', async () => {
     const validNonexistingId = await nonExistingId()
@@ -1247,7 +1245,7 @@ describe('when there is initially some notes saved', async () => {
     const response = await api
       .get(`/api/notes/${validNonexistingId}`)
       .expect(404)
-  }) 
+  })
 
   test('400 returned by GET /api/notes/:id with invalid id', async () => {
     const invalidId = "5a3d5da59070081a82a3445"
@@ -1255,7 +1253,7 @@ describe('when there is initially some notes saved', async () => {
     const response = await api
       .get(`/api/notes/${invalidId}`)
       .expect(400)
-  })  
+  })
 
   describe('addition of a new note', async () => {
 
@@ -1279,7 +1277,6 @@ describe('when there is initially some notes saved', async () => {
 
       const contents = notesAfterOperation.map(r => r.content)
       expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
-      
     })
 
     test('POST /api/notes fails with proper statuscode if content is missing', async () => {
@@ -1299,7 +1296,7 @@ describe('when there is initially some notes saved', async () => {
       const contents = notesAfterOperation.map(r => r.content)
 
       expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length)
-    })  
+    })
   })
 
   describe('deletion of a note', async () => {
@@ -1324,7 +1321,7 @@ describe('when there is initially some notes saved', async () => {
 
       const contents = notesAfterOperation.map(r => r.content)
 
-      expect(contents).not.toContain(addedNote.content)    
+      expect(contents).not.toContain(addedNote.content)
       expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length-1)
     })
   })
@@ -1345,7 +1342,7 @@ Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan
 Backendin tietokantaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
 
 ```js
-const notesAtBeginningOfOperation = await notesInDb() 
+const notesAtBeginningOfOperation = await notesInDb()
 ```
 
 suorittavat testattavan operaation:
@@ -1378,16 +1375,16 @@ const contents = notesAfterOperation.map(r => r.content)
 expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
 ```
 
-Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin. 
+Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin.
 
-Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
+Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa tehdä testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
 
 ## Käyttäjienhallinta ja monimutkaisempi tietokantarakenne
 
 Haluamme toteuttaa sovellukseemme käyttäjienhallinnan. Käyttäjät tulee tallettaa tietokantaan ja jokaisesta muistiinpanosta tulee tietää sen luonut käyttäjä. Muistiinpanojen poisto ja editointi tulee olla sallittua ainoastaan muistiinpanot tehneelle käyttäjälle.
 
 Aloitetaan lisäämällä tietokantaan tieto käyttäjistä. Käyttäjän (User) ja muistiinpanojen (Note) välillä on yhden suhde moneen -yhteys:
- 
+
 ![](https://yuml.me/a187045b.png)
 
 Relaatiotietokantoja käytettäessä ratkaisua ei tarvitisisi juuri miettiä. Molemmille olisi oma taulunsa ja muistiinpanoihin liitettäisiin sen luonutta käyttäjää vastaava id vierasavaimeksi (foreign key).
@@ -1398,7 +1395,7 @@ Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _
 
 Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin alkioihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen ;ongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä kurssillamme käsittele). 
+Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä kurssillamme käsittele).
 
 Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa taustalla liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan, mutta mongoose tekee kuitekin taustalla useamman kyselyn.
 
@@ -1437,7 +1434,7 @@ Kokoelmassa _notes_ on kolme muistiinpanoa, molempien kenttä _user_id_ viittaa 
     important: false,
     _id: 221244,
     user_id: 141414
-  },
+  }
 ```
 
 Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
@@ -1472,8 +1469,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
       {
         content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
         important: true,
-
-      },
+      }
     ]
   },
   {
@@ -1543,9 +1539,9 @@ Asennetaan salasanojen hashaamiseen käyttämämme [bcrypt](https://github.com/k
 install bcrypt --save
 ```
 
-Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_. 
+Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_.
 
-Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users_, ja liitetään se  _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
+Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users_, ja liitetään se _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
 
 ```js
 const usersRouter = require('./controllers/users')
@@ -1594,9 +1590,9 @@ Tietokantaan siis _ei_ talleteta pyynnön mukana tulevaa salasanaa, vaan funktio
 
 Materiaalin tilamäärä ei valitettavasti riitä käsittelemään sen tarkemmin salasanojen [tallennuksen perusteita](https://codahale.com/how-to-safely-store-a-password/), esim mitä maaginen luku 10 muuttujan [saltRounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds) arvona tarkoittaa. Lue linkkien takaa lisää.
 
-Koodissa ei tällä hetkellä ole mitään virheidenkäisttelyä ja validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
+Koodissa ei tällä hetkellä ole mitään virheidenkäsittelyä ja validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
 
-Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, eteenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan. 
+Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, eteenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan.
 
 Pienellä vaivalla voimme tehdä automaattisesti suoritettavat testit, jotka helpottavat sovelluksen kehittämistä merkittävästi.
 
@@ -1608,7 +1604,7 @@ describe.only('when there is initially no users at db', async () => {
     await User.remove({})
     const user = new User({ usernname: 'root', password: 'sekret' })
     await user.save()
-  })  
+  })
 
   test('POST /api/notes succeeds with a fresh username', async () => {
     const usersBeforeOperation = await usersInDb()
@@ -1625,7 +1621,7 @@ describe.only('when there is initially no users at db', async () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const usersAfterOperation = await usersInDb() 
+    const usersAfterOperation = await usersInDb()
     expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
     const usernames = usersAfterOperation.map(u=>u.username)
     expect(usernames).toContain(newUser.username)
@@ -1659,10 +1655,10 @@ Lohkon _beforeAll_ lisää kantaan käyttäjän, jonka username on _root_. Voimm
 
     const usersAfterOperation = await usersInDb()
     expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
-  })  
+  })
 ```
 
-Testi ei tietenkään mene läpi tässä vaiheessa. Toimimme nyt oleellisesti [TDD:n eli test driven developmentin](https://en.wikipedia.org/wiki/Test-driven_development) hengessä, uuden ominaisuudden testi on kirjoitettu ennen ominaisuuden ohjelmointia.
+Testi ei tietenkään mene läpi tässä vaiheessa. Toimimme nyt oleellisesti [TDD:n eli test driven developmentin](https://en.wikipedia.org/wiki/Test-driven_development) hengessä, uuden ominaisuuden testi on kirjoitettu ennen ominaisuuden ohjelmointia.
 
 Koodi laajenee seuraavasti:
 
@@ -1682,11 +1678,11 @@ usersRouter.post('/', async (request, response) => {
 })
 ```
 
-Eli haetaan tietokannasta ne user-dokumentit, joiten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla [400 bad request] ja kerrotaan syy ongelmaan. 
+Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla [400 bad request] ja kerrotaan syy ongelmaan.
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
-Ennen kuin menemme eteenpäin, lisätäänalustava versio joka palauttaa kaikki käyttäjät palauttavasta käsitteijäfunktiosta:
+Ennen kuin menemme eteenpäin, lisätään alustava versio joka palauttaa kaikki käyttäjät palauttavasta käsittelijäfunktiosta:
 
 ```js
 const formatUser = (user) => {
@@ -1708,7 +1704,7 @@ usersRouter.get('/', async (request, response) => {
 
 Muistiinpanot luovaa koodia on nyt mukautettava siten, että muistiinpanot tulee liitetyksi ne luoneeseen käyttäjään.
 
-Laajennetaan ensin olemassaolevaa toteutusta siten, että tieto muistiinpanon luvovan käyttäjän id:stä lähetetään pyynnön rungossa kentän _userId_ arvona:
+Laajennetaan ensin olemassaolevaa toteutusta siten, että tieto muistiinpanon luovan käyttäjän id:stä lähetetään pyynnön rungossa kentän _userId_ arvona:
 
 ```js
 notesRouter.post('/', async (request, response) => {
@@ -1727,7 +1723,7 @@ notesRouter.post('/', async (request, response) => {
       content: body.content,
       important: body.content === undefined ? false : body.important,
       date: new Date(),
-      user: user._id 
+      user: user._id
     })
 
     const savedNote = await note.save()
@@ -1743,7 +1739,7 @@ notesRouter.post('/', async (request, response) => {
 })
 ```
 
-Huomionarvoista on nyt se, että myös _user_-olio muuttuu, sen kenttääm _notes_ talletetaan luodun muistiinpanon _id_:
+Huomionarvoista on nyt se, että myös _user_-olio muuttuu, sen kenttään _notes_ talletetaan luodun muistiinpanon _id_:
 
 ```js
 const user = User.findById(userId)
@@ -1776,15 +1772,15 @@ const formatNote = (note) => {
 }
 ```
 
-On tulee muistiinpanon luoneenkäyttäjän id näkyviin muistiinpanon yhteyteen.
+On tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ![]({{ "/assets/4/8.png" | absolute_url }})
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettavissa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä haluaisimme nähdä käyttäjien tekemien muistiinpanojen id:iden lisäksi niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin liitoskyselyn avulla. 
+Haluaisimme API:n toimivan siten, että haettavissa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä haluaisimme nähdä käyttäjien tekemien muistiinpanojen id:iden lisäksi niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin liitoskyselyn avulla.
 
-Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on koko liitoksen ajan konsistentti, ts. jos tehdään users- ja documents-kokoelmat liittävä kysely, kokoelmien tila muuttua kesken mongoosen liitos-operaation.
+Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on koko liitoksen ajan konsistentti, ts. jos tehdään users- ja documents-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
 
 Liitoksen tekeminen suoritetaan mongoosen komennolla [populate](http://mongoosejs.com/docs/populate.html). Päivitetään ensin kaikkien käyttäjien tietdot palauttava route:
 
@@ -1793,7 +1789,7 @@ usersRouter.get('/', async (request, response) => {
   const users = await User
     .find({})
     .populate('notes')
-    
+
   response.json(users.map(formatUser))
 })
 ```
@@ -1810,8 +1806,8 @@ Populaten yhteydessä on myös mahdollista rajata mitä kenttiä _embedattavista
 usersRouter.get('/', async (request, response) => {
   const users = await User
     .find({})
-    .populate('notes', { content: 1, date: 1 } )
-      
+    .populate('notes', { content: 1, date: 1 } )
+
   response.json(users.map(formatUser))
 })
 ```
@@ -1826,8 +1822,8 @@ Lisätään sopiva populointi, myös muistiinpanojen yhteyteen
 notesRouter.get('/', async (request, response) => {
   const notes = await Note
     .find({})
-    .populate('user', { username:1, name:1 } )
-    
+    .populate('user', { username: 1, name: 1 } )
+
   response.json(notes.map(formatNote))
 })
 ```
