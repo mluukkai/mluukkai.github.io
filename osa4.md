@@ -1999,21 +1999,129 @@ notesRouter.post('/', async (request, response) => {
 
 Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka  perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
 
-Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized]](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
+Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
 
 Tokenin verifiointi voi myös aiheuttaa poikkeuksen _JsonWebTokenError_. Syynä tälle voi olla viallinen, väärennetty tai eliniältään vanhentunut token. Poikkeus poikkeusten käsittelyssä haaraudutaan virheen tyypin perusteella ja vastataan 401 jos poikkeus johtuu tokenista, ja muuten vastataan [500 internal server error](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1).
 
 ### loppuhuomioita
 
-Testit uusiksi...
+Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypillinen kiivaasti etenevät ohjelmistoprojektin ilmiö: suuri osa testeistä on hajonnut. Koska kurssin tämä osa on jo muutenkin täyteen ladattu uutta asiaa, jätämme testien korjailun harjoitustehtäväksi.
 
-HTTPS
+Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyädyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta turvallisena sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
 
-Tokenin expiroituminen
+Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5)
 
-Seuraavassa osassa kirjautuminen React-koodiin
+## Lint
 
-## Muu
-  - lint
+Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin 
+
+> Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
+
+Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasisistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
+
+Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linntaukseen" on [ESlint](https://eslint.org/).
+
+Asennetaan Eslint kehitysaikaiseksi riippuvuudeksi komennolla
+
+```bash
+npm install eslint --save-dev
+```
+
+Tämän jälkeen voidaan muodostaa alustava ESlint-konfiguraatio komennolla
+
+```bash
+node_modules/.bin/eslint --init
+```
+
+Vastaillaan kysymyksiin
+
+![]({{ "/assets/3/15.png" | absolute_url }})
+
+Konfiguraatiot tallentuvat tiedostoon _.eslintrc.js_:
+
+```json
+module.exports = {
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ]
+    }
+};
+```
+
+Esim tiedoston _index.js_ tarkastus tapahtuu komennolla
+
+```bash
+node_modules/.bin/eslint index.js
+```
+
+Kannattaa ehkä tehdä linttaustakin varten _npm-skrpiti_:
+
+```bash
+{
+  // ...
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "NODE_ENV=test node_modules/.bin/jest --verbose test",
+    "lint": "node_modules/.bin/eslint ."
+  },
+  // ...
+}
+```
+
+Nyt komenot _npm run lint_ suorittaa tarkastukset koko projektille.
+
+Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
 
+Valmiit konfit mm airbnb
+
+
+<!---
+note left of kayttaja
+  käyttäjä täyttää kirjautumislomakkeelle
+  käyttäjätunnuksen ja salasanan
+end note
+kayttaja -> selain: painetaan login-nappia
+
+selain -> backend: HTTP POST /api/login {username, password}
+note left of backend
+  backend generoi käyttäjän identifioivan TOKE:in 
+end note
+backend -> selain: TOKEN palautetaan vastauksen bodyssä
+note left of selain
+  selain tallettaa TOKENin
+end note
+note left of kayttaja
+  käyttäjä luo uden muistiinpanon
+end note
+kayttaja -> selain: painetaan create note -nappia 
+selain -> backend: HTTP POST /api/notes {content} headereissa TOKEN
+note left of backend
+  backend tunnistaa TOKENin perusteella kuka käyttää kyseessä
+end note
+
+backend -> selain: 201 created
+
+kayttaja -> kayttaja: 
+-->
