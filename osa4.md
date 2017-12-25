@@ -10,10 +10,10 @@ permalink: /osa4/
 
 ## Osan 4 oppimistavoitteet
 
-- Node/express
+- Node.js / Express
   - Router
   - sovelluksen jakaminen osiin
-- Node-sovellusten testaut
+- Node.js -sovellusten testaut
   - jest/supertest
 - JS
   - async/await
@@ -28,7 +28,7 @@ permalink: /osa4/
 
 ## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta, siten että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret ja siirretään routejen määrittely omaan tiedostoonsa.
+Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret. Siirretään routejen määrittely omaan tiedostoonsa.
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -128,7 +128,7 @@ routerRouter.put('/:id', (request, response) => {
 module.exports = routerRouter;
 ```
 
-Käytännössä kyse melkein suora copypaste tiedostosta _index.js_.
+Kyseessä on käytännössä melkein suora copypaste tiedostosta _index.js_.
 
 Muutoksia on pari. Tiedoston alussa luodaan [router](http://expressjs.com/en/api.html#router)-olio:
 
@@ -162,7 +162,7 @@ Mistä routereissa oikeastaan on kyse? Expressin manuaalin sanoin
 
 Router on siis _middleware_, jonka avulla on mahdollista määritellä joukko "toisiinsa liittyviä" routeja yhdessä paikassa.
 
-Ohjelman käynnistyspiste, eli määrittetyt tekevä _index.js_ ottaa määrittelemämme routerin käyttöön seuraavasti:
+Ohjelman käynnistyspiste, eli määrittelyt tekevä _index.js_ ottaa määrittelemämme routerin käyttöön seuraavasti:
 
 ```js
 const notesRouter = require('./controllers/notes')
@@ -413,7 +413,7 @@ describe('average', () => {
 })
 ```
 
-Describejen avulla yksittäisessä tiedostossa olevat testit voidaan jaoitella loogisiin kokonaisuuksiin. Testituloste hyödyntää myös describe-kohkon nimeä:
+Describejen avulla yksittäisessä tiedostossa olevat testit voidaan jaoitella loogisiin kokonaisuuksiin. Testituloste hyödyntää myös describe-lohkon nimeä:
 
 ![]({{ "/assets/4/4.png" | absolute_url }})
 
@@ -435,7 +435,7 @@ Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodoss
 
 Joissain tilanteissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla, eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock)
 
-Koska sovelluksemme backendin on koodiltaan kuitenkin suhteellisen yksinkertainen, päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
+Koska sovelluksemme backend on koodiltaan kuitenkin suhteellisen yksinkertainen, päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
 
 ### test-ympäristö
 
