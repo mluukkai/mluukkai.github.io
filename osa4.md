@@ -2094,7 +2094,10 @@ Nyt komenot _npm run lint_ suorittaa tarkastukset koko projektille.
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
 
-Valmiit konfit mm airbnb
+Valmiit konfit mm airbnb ks
+https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
+
+https://github.com/airbnb/javascript
 
 
 <!---
