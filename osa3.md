@@ -1554,14 +1554,14 @@ Huomaa, että metodin _findOneAndUpdate_ parametrina tulee antaa normaali javasc
 
 Pieni, mutta tärkeä detalji liittyen operaatioon _findOneAndUpdate_. Oletusarvoisesti tapahtumankäsittelijä saa parametrikseen _updatedNote_ päivitetyn olion [ennen muutosta](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate) olleen tilan. Lisäsimme operaatioon parametrin <code>{ new: true }</code> jotta saamme muuttuneen olion palautetuksi kutsujalle.
 
-Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muistiinpanojen tärkeyden muuttaminen fronedissa kuitenkin sotkee muistiinpanojen järjestyksen. Syynä on se, että _id_-kentät eivät ole enää numeroja  vaan stringejä ja joudummekin muuttamaan järjestämisessä käytettävän metodissa _render_ olevan funktion esim. seuraavaan muotoon:
+Backend vaikuttaa nyt toimivan postmanista tehtyjen kokeilujen perusteella, muistiinpanojen tärkeyden muuttaminen frontendissa kuitenkin sotkee muistiinpanojen järjestyksen. Syynä on se, että _id_-kentät eivät ole enää numeroja vaan stringejä ja joudummekin muuttamaan järjestämisessä käytettävän metodissa _render_ olevan funktion esim. seuraavaan muotoon:
 
 ```js
 const byId = (note1, note2) =>
   note1.id < note2.id ? -1 : 1
 ```
 
-Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdollista vertailla <-operaattorilla, teemme vertailun ja palautamme vertailun tulokseen perustuen joko -1 tai 1.
+Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdollista vertailla < -operaattorilla, teemme vertailun ja palautamme vertailun tulokseen perustuen joko -1 tai 1.
 
 ### Tehtäviä
 
@@ -1582,7 +1582,7 @@ const formatNote = (note) => {
 }
 ```
 
-esim uuden muitiinpanon luomisessa metodia kutsutaan _then_:in parametrina palauttama olio parametrina:
+esim uuden muistiinpanon luomisessa metodia kutsutaan _then_:in parametrina palauttama olio parametrina:
 
 ```js
 app.post('/api/notes', (request, response) => {

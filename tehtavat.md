@@ -77,7 +77,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const App = () => {
-  const kurssi = "Half Stack -sovelluskehitys"
+  const kurssi = 'Half Stack -sovelluskehitys'
   const osa1 = 'Reactin perusteet'
   const tehtavia1 = 10
   const osa2 = 'Tiedonvälitys propseilla'
@@ -291,7 +291,7 @@ Jos olet määritellyt jokaiselle napille oman tapahtumankäsittelijän, refakto
 
 #### 17 unicafe osa6
 
-Toteuta tilastojen näyttäminen HTML:n [taulukkona](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics) siten, että saat sovelluksesi näyttämään suunilleen seuraavanlaiselta
+Toteuta tilastojen näyttäminen HTML:n [taulukkona](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics) siten, että saat sovelluksesi näyttämään suunnilleen seuraavanlaiselta
 
 <img src="/assets/teht/6.png" height="250">
 
@@ -817,7 +817,7 @@ Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 
 Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
 
-Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa  POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
+Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
 
 #### 49 puhelinluettelon backend osa 9
 
@@ -863,7 +863,7 @@ ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen kome
 node mongo.js 'Arto Vihavainen' 040-1234556
 ```
 
-Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js  </pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
+Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js</pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
 
 <pre>
 puhelinluettelo:

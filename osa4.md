@@ -299,7 +299,7 @@ npm install --save-dev jest
 
 määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```bash
+```json
 {
   //...
   "scripts": {
@@ -620,7 +620,7 @@ Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu ti
 
 ### Error: listen EADDRINUSE :::3002
 
-Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palvelin jää päälle. Tällöin uusi testiajao aiheuttaa ongelmia, ja seurauksena on virheilmoitus
+Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palvelin jää päälle. Tällöin uusi testiajo aiheuttaa ongelmia, ja seurauksena on virheilmoitus
 
 <pre>
 Error: listen EADDRINUSE :::3002
@@ -1848,25 +1848,24 @@ const Note = mongoose.model('Note', {
 
 ## Kirjautuminen
 
-Käyttäjien tulee pystyä kirjautumaan sovellukseemme ja muistiinpanot pitää automaattisesti liittää kirjautuneen käyttäjän tekemiksi. 
+Käyttäjien tulee pystyä kirjautumaan sovellukseemme ja muistiinpanot pitää automaattisesti liittää kirjautuneen käyttäjän tekemiksi.
 
-Toteutamme nyt backendiin tuen [token-perustaiselle](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication#toc-how-token-based-works)
-  autentikoinnille. 
+Toteutamme nyt backendiin tuen [token-perustaiselle](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication#toc-how-token-based-works) autentikoinnille.
 
 Token-autentikaation periaatetta kuvaa seuraava sekvenssikaatio:
 
 ![]({{ "/assets/4/12.png" | absolute_url }})
 
 - Alussa käyttäjä kirjaantuu Reactilla toteutettua lomaketta käyttäen
-- Tämän seurauksena selaimen React-koodi lähettää käyttäjätunnuksen ja salasanan HTTP POST -pyynnöllä palveimen osoitteeseen _/api/login_
+- Tämän seurauksena selaimen React-koodi lähettää käyttäjätunnuksen ja salasanan HTTP POST -pyynnöllä palvelimen osoitteeseen _/api/login_
 - Jos käyttäjätunnus ja salasana ovat oikein, generoi palvelin _Tokenin_, jonka jollain tavalla yksilöi kirjautumisen tehneen käyttäjän
-  - token on kryptattu, joten sen väärentäminen on (kryptografisesti)mahdotonta 
+  - token on kryptattu, joten sen väärentäminen on (kryptografisesti) mahdotonta
 - backend vastaa selaimelle onnistumisesta kertovalla statuskoodilla ja palauttaa Tokenin pyynnön mukana
 - Selain tallentaa tokenin esimerkiksi React-sovelluksen tilaan
 - Kun käyttäjä luo uuden muistiinpanon (tai tekee jonkin operaation, joka eellyttää tunnistautumista), lähettää React-koodi Tokenin pyynnön mukana palvelimelle
 - Palvelin tunnistaa pyynnön tekijän tokenin perusteella
 
-Tehdään ensin kirjautumistoimito. Asennetaan [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)-kirjasto, jonka avulla koodimme pystyy generoimaan [Javascript web token](https://jwt.io/) -muotoisia tokeneja.
+Tehdään ensin kirjautumistoiminto. Asennetaan [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)-kirjasto, jonka avulla koodimme pystyy generoimaan [Javascript web token](https://jwt.io/) -muotoisia tokeneja.
 
 ```bash
 npm install jsonwebtoken --save
@@ -1884,7 +1883,8 @@ loginRouter.post('/', async (request, response) => {
   const body = request.body
 
   const user = await User.findOne({ username: body.username })
-  const passwordCorrect = user===null ? false : 
+  const passwordCorrect = user === null ?
+    false :
     await bcrypt.compare(body.password, user.passwordHash)
 
   if ( !(user && passwordCorrect) ) {
@@ -1900,7 +1900,7 @@ loginRouter.post('/', async (request, response) => {
 
   response.status(200).send({ token })
 })
-  
+
 module.exports = loginRouter
 ```
 
@@ -1915,12 +1915,12 @@ Jos käyttäjää ei ole olemassa tai salasana on väärä, vastataan kyselyyn s
 Jos salasana on oikein, luodaan metodiln _jwt.sign_ avulla token, joka sisältää kryptatussa muodossa käyttäjätunnuksen ja käyttäjän id:
 
 ```js
-  const userForToken = {
-    username: user.username,
-    id: user._id
-  }
+const userForToken = {
+  username: user.username,
+  id: user._id
+}
 
-  const token = jwt.sign(userForToken, process.env.SECRET)
+const token = jwt.sign(userForToken, process.env.SECRET)
 ```
 
 Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token.
@@ -1939,7 +1939,7 @@ app.use('/api/login', loginRouter)
 Muutetaan vielä muistiinpanojen luomista, siten että luominen onnistuu ainoastaan jos luomista vastaavan pyynnön mukana on validi token. Muistiinpano talletetaan tokenin identifioiman käyttäjän tekemien muistiinpanojen listaan.
 
 Tapoja tokenin välittämiseen selaimesta backendiin on useita. Käytämme ratkaisussamme [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)-headeria. Tokenin lisäksi headerin avulla kerrotaan mistä [autentikointiskeemasta](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) on kyse. Tämä voi olla tarpeen, jos palvein tarjoaa useita eri tapoja autentikointiin. Skeeman ilmaiseminen kertoo näissä tapauksissa palvelimelle, miten mukana olevat kredentiaalit tulee tulkita.
-Meidän käyttöömme sopii _Bearer_-skeema. 
+Meidän käyttöömme sopii _Bearer_-skeema.
 
 Käytännössä tämä tarkoittaa, että jos token one sim merkkijono _eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW_, laitetaan pyynnöissä headerin Authorization arvoksi merkkijono
 <pre>
@@ -1964,7 +1964,7 @@ notesRouter.post('/', async (request, response) => {
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
 
-    if (!token || !decodedToken.id ) {
+    if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
@@ -1978,7 +1978,7 @@ notesRouter.post('/', async (request, response) => {
       content: body.content,
       important: body.content === undefined ? false : body.important,
       date: new Date(),
-      user: user._id 
+      user: user._id
     })
 
     const savedNote = await note.save()

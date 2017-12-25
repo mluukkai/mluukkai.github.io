@@ -447,7 +447,7 @@ Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_
 </form>
 ```
 
-Tilaan määritelty "placeholder"-teksti  _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
+Tilaan määritelty "placeholder"-teksti _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
 
 ![]({{ "/assets/2/4.png" | absolute_url }})
 
