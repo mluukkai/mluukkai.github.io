@@ -241,7 +241,7 @@ npm install express --save
 
 Riippuvuus tulee nyt määritellyksi tiedostoon _package.json_:
 
-```bash
+```json
 {
   // ...
   "dependencies": {
@@ -367,7 +367,7 @@ npm install --save-dev nodemon
 
 Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 
-```bash
+```json
 {
   //...
   "dependencies": {
@@ -393,7 +393,7 @@ Sovelluksen koodin muutokset aiheuttavat nyt automaattisen palvelimen uudelleenk
 
 Komento on ikävä, joten määritellään sitä varten _npm-skripti_ tiedostoon _package.json_:
 
-```bash
+```json
 {
   // ..
   "scripts": {
@@ -591,7 +591,7 @@ Ei ole täyttä yksimielisyyttä siitä mikä statuskoodi DELETE-pyynnöstä pit
 
 ### Postman
 
-Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa deletointia, mutta jokaiseen mahdolliseen tilanteeseen tesikoodinkaan tekeminen ei ole aina paras ratkaisu.
+Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on helppo testata selaimessa. Voisimme toki kirjoittaa javascript-koodin, joka testaa deletointia, mutta jokaiseen mahdolliseen tilanteeseen testikoodinkaan tekeminen ei ole aina paras ratkaisu.
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
@@ -947,7 +947,7 @@ Koska frontend toimii osoitteessa _localhost:3000_, menevät backendiin tehtäv�
 
 create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riittää, että tiedostoon _package.json_ lisätään seuraava määritelmä:
 
-```js
+```json
 {
   // ...
   "proxy": "http://localhost:3001"
@@ -1296,7 +1296,7 @@ Ennen olion palauttamista turhat kentät poistetaan.
 
 Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muistiinpanoja_ sopisi sama funktio niidenkin muotoiluun. Jatkon kannalta on kuitenkin parempi, että pidämme alkuperäisen version funktiosta.
 
-On myös mahdollista estää mongoosea palauttmasta tiettyjen kenttien arvoa, tai pyytää sitä palauttamaan vaan tietyt kentätä. Saamme estettyä parametrin <em>\_\_v</em>:n lisäämällä _find_-metodiin toiseksi parametriksi _{__v: 0}_ seuraavasti:
+On myös mahdollista estää mongoosea palauttamasta tiettyjen kenttien arvoa, tai pyytää sitä palauttamaan vaan tietyt kentät. Saamme estettyä parametrin <em>\_\_v</em>:n lisäämällä _find_-metodiin toiseksi parametriksi _{\_\_v: 0}_ seuraavasti:
 
 ```js
 app.get('/api/notes', (request, response) => {
@@ -1333,9 +1333,9 @@ const Note = mongoose.model('Note', {
 module.exports = Note
 ```
 
-Noden [moduulien](https://nodejs.org/docs/latest-v8.x/api/modules.html) määrittely poikkeaa hiukan osassa 2 määrittelemistäme frontendin käyttämistä [ES6-moduuleista](osa3/#refaktorointia---moduulit)
+Noden [moduulien](https://nodejs.org/docs/latest-v8.x/api/modules.html) määrittely poikkeaa hiukan osassa 2 määrittelemistämme frontendin käyttämistä [ES6-moduuleista](osa3/#refaktorointia---moduulit)
 
-Mouduulin ulos näkyvä osa määritellään asettamalla arvo muuttujalle _module.exports_. Asetamme arvoksi määsitellyn modelin _Note_. Muut moduulin sisällä määritellyt asiat, esim. muuttujat _mongoose_ ja _url_ eivät näy moduulin käyttäjälle.
+Mouduulin ulos näkyvä osa määritellään asettamalla arvo muuttujalle _module.exports_. Asetamme arvoksi määritellyn modelin _Note_. Muut moduulin sisällä määritellyt asiat, esim. muuttujat _mongoose_ ja _url_ eivät näy moduulin käyttäjälle.
 
 Moduulin käyttöönotto tapahtuu lisäämällä tiedostoon _index.js_ seuraava rivi
 
@@ -1355,7 +1355,7 @@ Uuden muistiinpanon luominen tapahtuu seuraavasti:
 app.post('/api/notes', (request, response) => {
   const body = request.body
 
-  if (body.content === undefined){
+  if (body.content === undefined) {
     response.status(400).json({error: 'content missing'})
   }
 
@@ -1485,7 +1485,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 Jos kannasta ei löydy haettua olioa, muuttujan _note_ arvo on _undefined_ ja koodi ajautuu _else_-haaraan. Siellä vastataan kyselyyn _404 not found_.
 
-Jos id ei ole hyväksyttämässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
+Jos id ei ole hyväksyttävässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
 
 > The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
 
@@ -1508,7 +1508,7 @@ Virheenkäsittelijään joutumisen syy voi olla joku ihan muu mitä on tullu alu
 
 Toteutetaan vielä jäljellä olevat operaatiot, eli yksittäisen muistiinpanon poisto ja muokkaus.
 
-Poisto onnistuu helpointen metodilla [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove):
+Poisto onnistuu helpoiten metodilla [findByIdAndRemove](http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove):
 
 ```js
 app.delete('/api/notes/:id', (request, response) => {
@@ -1523,7 +1523,7 @@ app.delete('/api/notes/:id', (request, response) => {
 })
 ```
 
-Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksissa, eli jos olio poistettiin tai olioa ei ollut mutta _id_ oli periaatteessa oikea. Takaisinkutsun parametrin _result_ peruteella olisi mahdollisuus haarautua ja palauttaa tilanteissa eri statuskoodi jos sille on tarvetta.
+Vastauksena on statauskoodi _204 no content_ molemmissa "onnistuneissa" tapauksissa, eli jos olio poistettiin tai olioa ei ollut mutta _id_ oli periaatteessa oikea. Takaisinkutsun parametrin _result_ perusteella olisi mahdollisuus haarautua ja palauttaa tilanteissa eri statuskoodi jos sille on tarvetta.
 
 Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys onnistuu helposti metodilla [findOneAndUpdate](http://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate):
 
@@ -1659,8 +1659,7 @@ app.post('/api/notes', (request, response) => {
 
 Sovelluksen pitäisi toimia tuotannossa, eli herokussa sellaisenaan. Frontendin muutosten takia on tehtävä siitä uusi tuotantoversio ja kopioitava se backendiin.
 
-Sovellusta voi käyttää sekä frontendin kautta
->https://radiant-plateau-25399.herokuapp.com/>, mutta myös API:n <https://radiant-plateau-25399.herokuapp.com/api/notes> suora käyttö selaimella ja postmanilla onnistuu.
+Sovellusta voi käyttää sekä frontendin kautta <https://radiant-plateau-25399.herokuapp.com/>, mutta myös API:n <https://radiant-plateau-25399.herokuapp.com/api/notes> suora käyttö selaimella ja postmanilla onnistuu.
 
 Sovelluksessamme on tällä hetkellä eräs ikävä piirre. Tietokannan osoite on kovakoodattu backendiin ja samaa tietokantaa käytetään sekä tuotannossa, että sovellusta kehitettäessä.
 
@@ -1670,7 +1669,7 @@ Huomaa, että kun luot mlab:issa tietokannan, tarkoitetaan käyttäjätunnuksell
 
 ![]({{ "/assets/3/16.png" | absolute_url }})
 
-Tietokannan osoitetta ei kannata kirjoittaa koodiin. Eräs hyvä tapa tietokannan osoitteen määrittelemiseen on [ympäristömuuttujien](https://en.wikipedia.org/wiki/Environment_variable) käyttö. Itseasiassa Herokussa solvelluksemme tietokannan osoite on talletettuna ympäristömuuttujaan _MONGODB_URI_, tämän kertoo myös komentoriviltä annettava komento _heroku config_
+Tietokannan osoitetta ei kannata kirjoittaa koodiin. Eräs hyvä tapa tietokannan osoitteen määrittelemiseen on [ympäristömuuttujien](https://en.wikipedia.org/wiki/Environment_variable) käyttö. Itseasiassa Herokussa sovelluksemme tietokannan osoite on talletettuna ympäristömuuttujaan _MONGODB_URI_, tämän kertoo myös komentoriviltä annettava komento _heroku config_
 
 Ympäristömuuttujiin pääsee Node-sovelluksesta käsiksi seuraavasti:
 
@@ -1713,7 +1712,7 @@ Otetaan dotenv käyttöön seuraavasti:
 ```js
 const mongoose = require('mongoose')
 
-if ( process.env.NODE_ENV!=='production' ) {
+if ( process.env.NODE_ENV !== 'production' ) {
   require('dotenv').config()
 }
 
@@ -1728,7 +1727,7 @@ Nyt dotenvissä olevat ympäristömuuttujat otetaan käyttöön ainoastaan sillo
 
 Uudelleenkäynnistyksen jälkeen sovellus toimii taas paikallisesti.
 
-Node-sovellusten konfigirointiin on olemassa ympäristömuuttujien ja dotenvin lisäksi lukuisia vaihtoehtoja, mm. [node-conf](https://github.com/lorenwest/node-config). Ympäristömuuttujien käyttö riittää meille nyt, joten emme rupea overengineeraamaan. Palaamme aiheeseen kenties myöhemmin.
+Node-sovellusten konfigurointiin on olemassa ympäristömuuttujien ja dotenvin lisäksi lukuisia vaihtoehtoja, mm. [node-conf](https://github.com/lorenwest/node-config). Ympäristömuuttujien käyttö riittää meille nyt, joten emme rupea overengineeraamaan. Palaamme aiheeseen kenties myöhemmin.
 
 ### Tehtäviä
 

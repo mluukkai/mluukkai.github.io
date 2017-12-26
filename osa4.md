@@ -1020,7 +1020,7 @@ routerRouter.post('/', async (request, response) => {
   const note = new Note({
     content: body.content,
     important: body.content === undefined ? false : body.important,
-    date: new Date(),
+    date: new Date()
   })
 
   const savedNote = await note.save()
@@ -1032,7 +1032,7 @@ Koodiin jää kuitenkin pieni ongelma: virhetilanteita ei nyt käsitellä ollenk
 
 ### virheiden käsittely ja async/await
 
-Jos sovellus nyt kaatuu jonkinlaiseen ajoiaikaiseen virheeseen, syntyy jäälleen tuttu tilanne:
+Jos sovellus nyt kaatuu jonkinlaiseen ajoaikaiseen virheeseen, syntyy jälleen tuttu tilanne:
 
 <pre>
 (node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
@@ -1946,7 +1946,7 @@ Käytännössä tämä tarkoittaa, että jos token one sim merkkijono _eyJhbGciO
 Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
 </pre>
 
-Modifioitu muisiinpanojen luomisesta  huolehtiva koodi seuraavassa:
+Modifioitu muistiinpanojen luomisesta huolehtiva koodi seuraavassa:
 
 ```js
 const getTokenFrom = (request) =>{
@@ -1998,7 +1998,7 @@ notesRouter.post('/', async (request, response) => {
 })
 ```
 
-Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka  perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
+Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
 
 Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
 
@@ -2014,13 +2014,13 @@ Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5)
 
 ## Lint
 
-Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin 
+Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin
 
 > Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
 
-Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasisistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
+Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
 
-Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linntaukseen" on [ESlint](https://eslint.org/).
+Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linttaukseen" on [ESlint](https://eslint.org/).
 
 Asennetaan Eslint kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -2040,7 +2040,7 @@ Vastaillaan kysymyksiin
 
 Konfiguraatiot tallentuvat tiedostoon _.eslintrc.js_:
 
-```json
+```js
 module.exports = {
     "env": {
         "browser": true,
@@ -2075,9 +2075,9 @@ Esim tiedoston _index.js_ tarkastus tapahtuu komennolla
 node_modules/.bin/eslint index.js
 ```
 
-Kannattaa ehkä tehdä linttaustakin varten _npm-skrpiti_:
+Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2090,7 +2090,7 @@ Kannattaa ehkä tehdä linttaustakin varten _npm-skrpiti_:
 }
 ```
 
-Nyt komenot _npm run lint_ suorittaa tarkastukset koko projektille.
+Nyt komennot _npm run lint_ suorittaa tarkastukset koko projektille.
 
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
@@ -2110,7 +2110,7 @@ kayttaja -> selain: painetaan login-nappia
 
 selain -> backend: HTTP POST /api/login {username, password}
 note left of backend
-  backend generoi käyttäjän identifioivan TOKE:in 
+  backend generoi käyttäjän identifioivan TOKE:in
 end note
 backend -> selain: TOKEN palautetaan vastauksen bodyssä
 note left of selain
@@ -2119,7 +2119,7 @@ end note
 note left of kayttaja
   käyttäjä luo uden muistiinpanon
 end note
-kayttaja -> selain: painetaan create note -nappia 
+kayttaja -> selain: painetaan create note -nappia
 selain -> backend: HTTP POST /api/notes {content} headereissa TOKEN
 note left of backend
   backend tunnistaa TOKENin perusteella kuka käyttää kyseessä
@@ -2127,5 +2127,5 @@ end note
 
 backend -> selain: 201 created
 
-kayttaja -> kayttaja: 
+kayttaja -> kayttaja:
 -->
