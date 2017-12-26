@@ -20,11 +20,12 @@ permalink: /osa4/
 - Mongoose
   - Monimutkaisemmat skeemat
   - Viittaukset kokoelmien välillä
+  - populointi
 - Web
   - Token-autentikaatio
   - JWT
-- Muu
-  - lint
+- konfiguraatiot
+  - ESlint
 
 ## Sovelluksen rakenteen parantelu
 
@@ -1800,7 +1801,7 @@ Lopputulos on jo melkein haluamamme kaltainen:
 
 ![]({{ "/assets/4/9.png" | absolute_url }})
 
-Populaten yhteydessä on myös mahdollista rajata mitä kenttiä _embedattavista_ olioista otetaan mukaan. Rajaus tapahtuu mogon [kyselysyntaksin](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/) tapaan:
+Populaten yhteydessä on myös mahdollista rajata mitä kenttiä _embedattavista_ olioista otetaan mukaan. Rajaus tapahtuu mongon [syntaksin](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/#return-the-specified-fields-and-the-id-field-only) tapaan:
 
 ```js
 usersRouter.get('/', async (request, response) => {

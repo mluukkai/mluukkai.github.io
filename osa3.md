@@ -1296,17 +1296,19 @@ Ennen olion palauttamista turhat kentät poistetaan.
 
 Jos ohjelma käyttäisi muunkin tyyppisiä olioita kuin _muistiinpanoja_ sopisi sama funktio niidenkin muotoiluun. Jatkon kannalta on kuitenkin parempi, että pidämme alkuperäisen version funktiosta.
 
-On myös mahdollista estää mongoosea palauttasta tiettyjen kenttien arvoa. Saamme estettyä <em>\_\_v</em>:n seuraavasti:
+On myös mahdollista estää mongoosea palauttmasta tiettyjen kenttien arvoa, tai pyytää sitä palauttamaan vaan tietyt kentätä. Saamme estettyä parametrin <em>\_\_v</em>:n lisäämällä _find_-metodiin toiseksi parametriksi _{__v: 0}_ seuraavasti:
 
 ```js
 app.get('/api/notes', (request, response) => {
   Note
-    .find({}, '-__v')
+    .find({}, {__v: 0})
     .then(notes => {
       response.json(notes.map(formatNote))
     })
 })
 ```
+
+Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/).
 
 ### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
