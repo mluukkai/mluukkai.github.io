@@ -1137,4 +1137,24 @@ Laajenna toteutusta siten, että testit menevät läpi.
 
 ### Lisää toiminnallisuutta ja testejä
 
-#### 69 blogilistan laajennus, osa 1
+#### 70 blogilistan laajennus, osa 1
+
+Refaktoroi projektin testit siten, että ne eivät enää ole riippuvaisia siitä, että HTTP GET -operaatioiden testit suoritetaan ennen uusien blogien lisäämisen testaamista. 
+
+#### 71 blogilistan laajennus, osa 2
+
+Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon. 
+
+Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
+
+#### 72 blogilistan laajennus, osa 3
+
+Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon. 
+
+Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
+
+Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiinn [osassa 3](osa3/#loput-operaatiot).
+
+### käyttäjä
+
+### token-autentikaatio...

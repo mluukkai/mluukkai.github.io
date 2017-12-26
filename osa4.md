@@ -1269,6 +1269,8 @@ module.exports = {
 }
 ```
 
+Tärkein apufunktioista on _notesInDb_ joka palauttaa kaikki tietokannassa kutsuhetkellä olevat oliot.
+
 Jossain määrin parannellut testit seuraavassa:
 
 ```js
@@ -1279,32 +1281,32 @@ const Note = require('../models/note')
 const { format, initialNotes, nonExistingId, notesInDb } = require('./test_helper')
 
 describe('when there is initially some notes saved', async () => {
-  let notesInDatabaseAtStart = []
-
   beforeAll(async () => {
     await Note.remove({})
 
-    const noteObjects = initialNotes.map(n=>new Note(n))
-    await Promise.all(noteObjects.map(n=>n.save()))
-    notesInDatabaseAtStart = noteObjects.map(n => format(n))
+    const noteObjects = initialNotes.map(n => new Note(n))
+    await Promise.all(noteObjects.map(n => n.save()))
   })
 
   test('all notes are returned as json by GET /api/notes', async () => {
+    const notesInDatabase = await notesInDb()
+
     const response = await api
       .get('/api/notes')
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    expect(response.body.length).toBe(initialNotes.length)
+    expect(response.body.length).toBe(notesInDatabase.length)
 
-    const returnedContents = response.body.map(n=>n.content)
-    notesInDatabaseAtStart.forEach(note=>{
+    const returnedContents = response.body.map(n => n.content)
+    notesInDatabase.forEach(note => {
       expect(returnedContents).toContain(note.content)
     })
   })
 
   test('individual notes are returned as json by GET /api/notes/:id', async () => {
-    const aNote = notesInDatabaseAtStart[0]
+    const notesInDatabase = await notesInDb()
+    const aNote = notesInDatabase[0]
 
     const response = await api
       .get(`/api/notes/${aNote.id}`)
@@ -1322,7 +1324,7 @@ describe('when there is initially some notes saved', async () => {
       .expect(404)
   })
 
-  test('400 returned by GET /api/notes/:id with invalid id', async () => {
+  test('400 is returned by GET /api/notes/:id with invalid id', async () => {
     const invalidId = "5a3d5da59070081a82a3445"
 
     const response = await api
@@ -1397,7 +1399,7 @@ describe('when there is initially some notes saved', async () => {
       const contents = notesAfterOperation.map(r => r.content)
 
       expect(contents).not.toContain(addedNote.content)
-      expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length-1)
+      expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length - 1)
     })
   })
 
@@ -1408,13 +1410,15 @@ describe('when there is initially some notes saved', async () => {
 })
 ```
 
-Muutama huomio testeistä. Olemme määritelleet jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi. Sisäkkäisten describe-lohkojen tapauksessa kaikki aulustuskoodi tulee suoritetuksi, ensin ulompana olevat _beforet_ ja lopulta ne _beforet_, jotka on määritelty siinä describe-lohkossa, jossa suoritettavat testit sijaitsevat.
+Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi. 
 
-Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan
+Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty. 
+
+Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
 ![]({{ "/assets/4/5.png" | absolute_url }})
 
-Backendin tietokantaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
+Backendin tietokannan tilaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi _'addition of a new note'_, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
 
 ```js
 const notesAtBeginningOfOperation = await notesInDb()
@@ -1450,17 +1454,17 @@ const contents = notesAfterOperation.map(r => r.content)
 expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
 ```
 
-Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin.
+Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtyä eteenpäin.
 
-Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa tehdä testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
+Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaan ainoa tai välttämättä edes paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testien tekoon ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
 
 ## Tehtäviä
 
-Tee nyt tehtävät [xx-](../tehtavat##Lisää-toiminnallisuutta-ja-testejä)
+Tee nyt tehtävät [70-72](../tehtavat##Lisää-toiminnallisuutta-ja-testejä)
 
-## Käyttäjienhallinta ja monimutkaisempi tietokantarakenne
+## Käyttäjien hallinta ja monimutkaisempi tietokantaskeema
 
-Haluamme toteuttaa sovellukseemme käyttäjienhallinnan. Käyttäjät tulee tallettaa tietokantaan ja jokaisesta muistiinpanosta tulee tietää sen luonut käyttäjä. Muistiinpanojen poisto ja editointi tulee olla sallittua ainoastaan muistiinpanot tehneelle käyttäjälle.
+Haluamme toteuttaa sovellukseemme käyttäjien hallinnan. Käyttäjät tulee tallettaa tietokantaan ja jokaisesta muistiinpanosta tulee tietää sen luonut käyttäjä. Muistiinpanojen poisto ja editointi tulee olla sallittua ainoastaan muistiinpanot tehneelle käyttäjälle.
 
 Aloitetaan lisäämällä tietokantaan tieto käyttäjistä. Käyttäjän (User) ja muistiinpanojen (Note) välillä on yhden suhde moneen -yhteys:
 
