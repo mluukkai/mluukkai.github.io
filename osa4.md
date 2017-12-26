@@ -926,7 +926,7 @@ Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
 
 ```js
 routerRouter.get('/', async (request, response) => {
-  const notes = await Note.find({}, '-__v')
+  const notes = await Note.find({})
   response.json(notes.map(formatNote))
 })
 ```
@@ -1217,13 +1217,13 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mlu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [66-68](../tehtavat##API:n-testaaminen)
+Tee nyt tehtävät [66-69](../tehtavat##API:n-testaaminen)
 
 ## Testien refaktorointi
 
-Järjestys... älä luota.
+Testimme sisältävät tällä hetkellä jossain määrin toisteisuutta ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
 
-Testimme ova sisältävät tällä hetkellä jossain määrin toisteisia ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
+Testeissä on myös eräs hieman ikävä ja jopa riskialtis piirre. Testit luottavat siihen, että ne suoritetaan siinä järjestyksessä, missä ne on kirjoitettu testitiedostoon. Tämä pitää kyllä paikkansa, vaikkakin ei ole kovin selkeästi määritelty ominaisuus eli siihen ei ole hyvä luottaa. Testit tuleekin kirjoittaa siten, että yksittäiset testit ovat riippumattoimia toistensa suorituksesta.
 
 Parannellaan testejä hiukan.
 

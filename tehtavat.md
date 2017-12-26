@@ -1129,9 +1129,9 @@ Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan
 
 Laajenna ohjelmaa siten, että testi menee läpi.
 
-#### 68 blogilistan testit, osa 3
+#### 69 blogilistan testit, osa 3
 
-Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kaikkia kenttiä _author_, _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä  _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
 
 Laajenna toteutusta siten, että testit menevät läpi.
 
