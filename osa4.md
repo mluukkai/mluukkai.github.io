@@ -581,6 +581,8 @@ Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kaut
 
 Sekä sovellus _app_ että sitä suorittava _server_-olio määritellään eksportattavaksi tiedostosta. Tämä mahdollistaa sen, että testit voivat käynnistää ja sammuttaa backendin.
 
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_integraatiotesteja) tagissä _ennen_integraatiotesteja_
+
 ### supertest
 
 Käytetään API:n testaamiseen avan apuna [supertest](https://github.com/visionmedia/supertest)-kirjastoa.
@@ -595,26 +597,26 @@ Luodaan heti ensimmäinen testi tiedostoon _test/note_api.test.js:_
 
 ```js
 const supertest = require('supertest')
-const {app, server} = require('../index')
+const { app, server } = require('../index')
 const api = supertest(app)
 
 test('notes are returned as json', async () => {
-  const res = await api
+  await api
     .get('/api/notes')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
-afterAll(()=>{
+afterAll(() => {
   server.close()
 })
 ```
 
-Alussa testi käynnistää backendin ja käärii sen funktiolla _supertest_ ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backendiin.
+Toisella rivillä testi käynnistää backendin ja käärii sen kolmannella rivillä funktion _supertest_ avulla ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backendiin.
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta myöhemmin. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
+Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](osa4/#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
 
 Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
 
@@ -624,25 +626,45 @@ afterAll(() => {
 })
 ```
 
+HTTP-pyyntöjen tiedot loggaava middleware _logger_ häiritsee hiukan testien tulostusta. Jos haluat hiljentää sen testien suorituksen ajaksi, muuta funktiota esim. seuraavasti:
+
+
+```js
+const logger = (request, response, next) => {
+  if ( process.env.NODE_ENV === 'test' ) {
+    return next()
+  }
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+```
+
+
 Tehdään pari testiä lisää:
 
 ```js
 test('there are five notes', async () => {
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  expect(res.body.length).toBe(5)
+  expect(response.body.length).toBe(5)
 })
 
 test('the first note is about HTTP methods', async () => {
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  expect(res.body[0].content).toBe('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
+  expect(response.body[0].content).toBe('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
 })
 ```
 
-Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsillepääsemiseen promiseja ja takaisinkutsuja, mutta nyt kaikki menee mukavasti:
+Molemmat testit sijoittavat pyynnön vastauksen muuttujaan _response_ ja toisin kuin edellinen testi, joka käytti _supertestin_ mekansimeja statuskoodin ja vastauksen headereiden oikeellisuuden varmistamiseen, tällä kertaa tutkitaan vastauksessa olevan datan, eli _response.body_:n oikeellisuutta Jestin [expect](https://facebook.github.io/jest/docs/en/expect.html#content):in avulla.
+
+
+Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsille pääsemiseen promiseja ja takaisinkutsuja, mutta nyt kaikki menee mukavasti:
 
 ```js
   const res = await api
@@ -653,7 +675,7 @@ Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimm
   expect(res.body.length).toBe(5)
 ```
 
-Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu tietokannan tilasta. Jotta saisimme robustimmat testit, tulee tietokannan tila nollata ensin testien alussa ja sen jälkeen kantaan voidaan laittaa hallitusti testien tarvitsemaa dataa.
+Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu tietokannan tilast. Jotta saisimme robustimmat testit, tulee tietokannan tila nollata testien alussa ja sen jälkeen laittaa kantaan hallitusti testien tarvitsema data.
 
 ### Error: listen EADDRINUSE :::3002
 
@@ -670,7 +692,7 @@ COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 node    8318 mluukkai   14u  IPv6 0x5428af4833b85e8b      0t0  TCP *:redwood-broker (LISTEN)
 ```
 
-Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
+Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
 
 En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
@@ -714,21 +736,23 @@ Muutetaan kahta jälkimmäistä testiä vielä seuraavasti:
 
 ```js
 test('all notes are returned', async () => {
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  expect(res.body.length).toBe(initialNotes.length)
+  expect(response.body.length).toBe(initialNotes.length)
 })
 
 test('a specific note is within the returned notes', async () => {
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  const contents = res.body.map(r=>r.content)
+  const contents = response.body.map(r=>r.content)
 
   expect(contents).toContain('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
 })
 ```
+
+Huomaa jälkimmäisen testin ekspekaatio. Komennolla <code>response.body.map(r=>r.content)</code> muodostetaan taulukko API:n palauttamien muistiinpanojen sisällöistä. Jestin [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem)-ekspektaatiometodilla tarkistetaan että parametrina oleva muistiinpano on kaikkien API:n palauttamien muistiinpanojen joukossa.
 
 Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä _async_ ja _await_ tarkoittavat.
 
@@ -1184,6 +1208,10 @@ Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöt
 Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
 ](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
+## Tehtäviä
+
+Tee nyt tehtävät [66-](../tehtavat##API:n-testaaminen)
+
 ## Testien refaktorointi
 
 Testimme ova sisältävät tällä hetkellä jossain määrin toisteisia ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
@@ -1416,6 +1444,10 @@ expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioid
 Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtä eteenpäin.
 
 Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaa ainoa tai paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa tehdä testausta ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
+
+## Tehtäviä
+
+Tee nyt tehtävät [xx-](../tehtavat##Lisää-toiminnallisuutta-ja-testejä)
 
 ## Käyttäjienhallinta ja monimutkaisempi tietokantarakenne
 

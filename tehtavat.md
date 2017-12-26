@@ -1064,6 +1064,8 @@ describe('total likes', () => {
 })
 ```
 
+Tärmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [dabuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
+
 #### 63 apufunktioita ja yksikkötestejä, osa 2
 
 Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää millä blogilla on eniten likejä. Paluuarvo voi olla esim. seuraavassa muodossa:
@@ -1103,3 +1105,15 @@ Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. 
 ```
 
 ### API:n testaaminen
+
+#### 66 blogilistan testit, osa 1
+
+get
+
+#### 66 blogilistan testit, osa 2
+
+post
+
+### Lisää toiminnallisuutta ja testejä
+
+#### 67 blogilista, osa 2
