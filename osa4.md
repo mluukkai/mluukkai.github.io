@@ -265,12 +265,7 @@ Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertai
 ```js
 //...
 const palindrom = (string) => {
-  const letters = []
-  for(let i = 0; i < string.length; i++) {
-    letters.push(string.charAt(i))
-  }
-
-  return letters.reverse().join('')
+  return string.split('').reverse().join('')
 }
 
 const average = (array) => {
@@ -772,7 +767,7 @@ Note
 
 Metodikutsu _Note.find()_ palauttaa promisen, ja saamme itse operaation tuloksen rekisteröimällä promiselle tapahtumankäsittelijän metodilla _then_.
 
-Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäsittelijästä. Näin syntyisi potentiaalisesti monimutkaista koodia, jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
+Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäsittelijästä. Näin syntyisi potentiaalisesti monimutkaista koodia, pahimmassa tapauksessa jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
 
 [Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hallinnassa, callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
 
@@ -792,7 +787,7 @@ Then-ketju on ok, mutta parempaankin pystytään. Jo ES6:ssa esitellyt [generaat
 
 ES7:ssa async ja await tuovat generaattoreiden tarjoaman toiminnallisuuden ymmärrettävästi ja syntaktin puolesta selkeällä tavalla koko javascript-kansan ulottuville.
 
-Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)-funktiota hyödyntäen seuraavasti:
+Voisimme hakea tietokannasta kaikki muistiinpanot [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await)-operaattoria hyödyntäen seuraavasti:
 
 ```js
 const notes = await Note.find({})
@@ -800,7 +795,7 @@ const notes = await Note.find({})
 console.log('operaatio palautti seuraavat muistiinpanot ', notes)
 ```
 
-Koodi siis näyttää täsmälleen synkroniselta koodilta, suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komentoon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Promisea vastaavan operaation tulos on sijoitettu muuttujaan _notes_.
+Koodi siis näyttää täsmälleen synkroniselta koodilta. Suoritettavan koodinpätkän suhteen tilanne on se, että suoritus pysähtyy komentoon <code>const notes = await Note.find({})</code> ja jatkuu kyselyä vastaavan promisen _fulfillmentin_ eli onnistuneen suorituksen jälkeen seuraavalta riviltä. Kun suoritus jatkuu, promisea vastaavan operaation tulos on muuttujassa _notes_.
 
 Ylempänä oleva monimutkaisempi esimerkki suoritettaisiin awaitin avulla seuraavasti:
 
@@ -811,13 +806,13 @@ const response = await notes[0].remove()
 console.log('the first note is removed')
 ```
 
-Koodi siis yksinkertaistuu huomattavasti verrattuna suoraan promiseja käyttävään then-ketjuun.
+Koodi siis yksinkertaistuu huomattavasti verrattuna promiseja käyttävään then-ketjuun.
 
-Awaitin käyttöön liittyy parikin tärkeeä seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja mikä ei sinänsä ole ongelma, sillä myös "normaaleja" callbackeja käyttävä asynkroninen koodi on helppo kääriä promiseksi.
+Awaitin käyttöön liittyy parikin tärkeää seikkaa. Jotta asynkronisia operaatioita voi kutsua awaitin avulla, niiden täytyy olla promiseja. Tämä ei sinänsä ole ongelma, sillä myös "normaaleja" callbackeja käyttävä asynkroninen koodi on helppo kääriä promiseksi.
 
-Mistä tahansa kohtaa javascript-koodia ei kuitenkaan pysty awaitia käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
+Mistä tahansa kohtaa Javascript-koodia ei awaitia kuitenkaan pysty käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
 
-Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä:
+Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä, huomaa funktion määrittelevä rivi:
 
 ```js
 const main = async () => {
@@ -833,7 +828,7 @@ const main = async () => {
 main()
 ```
 
-Koodi määrittelee ensin asynkronisen funktion, joka sijoitetaan muuttujaan _main_, sen jälkeen koodi kutsuu metodia _main()_
+Koodi määrittelee ensin asynkronisen funktion, joka sijoitetaan muuttujaan _main_. Määrittelyn jälkeen koodi kutsuu metodia komennolla <code>main()</code>
 
 ### testin beforeAll-metodin optimointi
 
@@ -862,7 +857,7 @@ beforeAll(async () => {
 })
 ```
 
-Funktio tallettaa tietokantaan taulukon nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöidä. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useapia alkioita, olisi toisto parempi ratkaisu:
+Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöiden. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useapia alkioita, olisi toisto parempi ratkaisu:
 
 ```js
 beforeAll(async () => {
@@ -895,13 +890,13 @@ saved
 saved
 </pre>
 
-Yllättäen ratkaisu ei async/awaitista huolimatta toimi niinkuin oletamme, testin suoritus aloitetaan ennen kun tietokannan tila on saatu alustettua!
+Yllättäen ratkaisu ei async/awaitista huolimatta toimi niin kuin oletamme, testin suoritus aloitetaan ennen kun tietokannan tila on saatu alustettua!
 
-Ongelma on siinä, että jokainen forEach-loopin läpikäynti generoi oman asynkronisen operaation ja _beforeAll_ ei odota näiden suoritusta. Eli forEach:in sisällä olevat _await_-komennot eivät ole funktiossa _beforeEach_ vaan erillisissä asynkronisesti suoritettavissa funktioissa.
+Ongelma on siinä, että jokainen forEach-loopin läpikäynti generoi oman asynkronisen operaation ja _beforeAll_ ei odota näiden suoritusta. Eli forEach:in sisällä olevat _await_-komennot eivät ole funktiossa _beforeEach_ vaan erillisissä funktioissa joiden päättymistä _beforeAll_ ei odota. 
 
-Koska testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehdittäisiin jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
+Koska testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehditään jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
 
-Toimiva ratkaisu olisi odottaa asynkronisten talletusoperaatioiden valmistumista _beforeAll_-funktiossa, esim. metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla:
+Toimiva ratkaisu tilanteessa on odottaa asynkronisten talletusoperaatioiden valmistumista _beforeAll_-funktiossa, esim. metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla:
 
 ```js
 beforeAll(async () => {
@@ -914,15 +909,15 @@ beforeAll(async () => {
 
 ```
 
-Ratkaisu on varmasti aloittelijalle tiiviydestään huolimatta hieman haastava. Taulukkoon _noteObjects_ talletetaan taulukkoon _initialNotes_ talletettuja javascript-oliota vastaavat _Note_-konstruktorifunktiolla generoidut Mongoose-oliot. Seuraavalla rivillä luodaan uusi taulukko, joka muodostuu promiseista, jotka saadaan kun jokaiselle _noteObjects_ taulukon alkiolle kutsutaan metodia _save_, eli ne talletetaan kantaan.
+Ratkaisu on varmasti aloittelijalle tiiviydestään huolimatta hieman haastava. Taulukkoon _noteObjects_ talletetaan taulukkoon _initialNotes_ talletettuja javascript-oliota vastaavat _Note_-konstruktorifunktiolla generoidut Mongoose-oliot. Seuraavalla rivillä luodaan uusi taulukko, joka _muodostuu promiseista_, jotka saadaan kun jokaiselle _noteObjects_ taulukon alkiolle kutsutaan metodia _save_, eli ne talletetaan kantaan.
 
-Viimeinen rivi, _await Promise.all(promiseArray)_ odottaa, että kaikki tietokantaan talletusta vastaavat promiset ovat valmiina, eli alkiot on talletettu tietokantaan.
+Viimeinen rivi, <code>await Promise.all(promiseArray)</code> odottaa, että kaikki tietokantaan talletusta vastaavat promiset ovat valmiina, eli alkiot on talletettu tietokantaan.
 
-Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa saa olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
+Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
 
 ### async/await backendissä
 
-Muutentaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkrooniset operaatiot tehdään joka tapauksessa funktioiden sisällä awaitin käyttämiseen riittää, että muutamme routejen käsittelijät async-funktioiksi
+Muutentaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkrooniset operaatiot tehdään joka tapauksessa funktioiden sisällä, awaitin käyttämiseen riittää, että muutamme routejen käsittelijät async-funktioiksi.
 
 Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
 
@@ -933,13 +928,13 @@ routerRouter.get('/', async (request, response) => {
 })
 ```
 
-Voimme varmistaa refaktoroinnin onnistumisen selaimella, mutta suorittamalla juuri määrittelemämme testit.
+Voimme varmistaa refaktoroinnin onnistumisen selaimella, sekä suorittamalla juuri määrittelemämme testit.
 
 ### testejä ja backendin refaktorinita
 
-Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineen ominaisuudet hajoavat. Tehdäänkin refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle ensin toimminnallisuuden varmistavat testit.
+Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineet ominaisuudet hajoavat. Tehdäänkin muiden operaatioiden refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle sen toimminnallisuuden varmistavat testit.
 
-Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että rajapinnan palauttamien mustiinpanojen määrä kasvaa, ja että lisätty muistiinpano on palautettujen joukossa:
+Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että API:n palauttamien mustiinpanojen määrä kasvaa, ja että lisätty muistiinpano on palautettujen joukossa:
 
 ```js
 test('a valid note can be added ', async () => {
@@ -954,15 +949,17 @@ test('a valid note can be added ', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  const contents = res.body.map(r => r.content)
+  const contents = response.body.map(r => r.content)
 
-  expect(res.body.length).toBe(initialNotes.length+1)
+  expect(response.body.length).toBe(initialNotes.length + 1)
   expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
 })
 ```
+
+Kuten odotimme ja toimoimme, menee testi läpi.
 
 Tehdään myös testi, joka varmistaa, että muistiinpanoa, jolle ei ole asetettu sisältöä ei talleteta
 
@@ -980,18 +977,20 @@ test('note without content is not be added ', async () => {
     .send(newNote)
     .expect(400)
 
-  const res = await api
+  const response = await api
     .get('/api/notes')
 
-  const contents = res.body.map(r => r.content)
+  const contents = response.body.map(r => r.content)
 
-  expect(res.body.length).toBe(intialNotes.body.length)
+  expect(response.body.length).toBe(intialNotes.body.length)
 })
 ```
 
-Testi ei mene läpi. Käy ilmi, että operaation suoritus postman:illa johtaa myös virhetilanteeseen, eli koodissa on bugi.
+Testi ei mene läpi. Käy ilmi, että myös operaation suoritus postman:illa johtaa virhetilanteeseen. Koodissa on siis bugi. 
 
-Konsoli paljastaa, että kyseessä on _Unhandled promise rejection_, eli koodi ei käsittele promisen virhetilannetta.
+> **Huom:** testejä tehdessä täytyy aina varmistua siitä, että testi testaa oikeaa asiaa, ja usein ensimmäistä kertaa testiä tehdessä se että testi ei mene läpi tarkoittaa sitä, että testi on tehty väärin. Myös päinvastaista tapahtuu, eli testi menee läpi mutta koodissa onkin virhe, eli testi ei testaa sitä mitä sen piti testata. Tämän takia testit kannattaa aina "testata" rikkomalla koodi ja varmistamalla, että testi huomaa koodiin tehdyt virheet.
+
+Kun suoritamme operaation postmanilla konsoli paljastaa, että kyseessä on _Unhandled promise rejection_, eli koodi ei käsittele promisen virhetilannetta:
 
 <pre>
 Server running on port 3001
@@ -1050,7 +1049,7 @@ routerRouter.post('/', (request, response) => {
 }
 ```
 
-kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koodin allaolevaa osaan ja se taas aiheuttaa uuden <code>response.json()</code>-kutsun.
+kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koodin alla olevaa osaan ja se taas aiheuttaa uuden <code>response.json()</code>-kutsun.
 
 Korjataan ongelma lisäämällä _if_-lauseeseen _return_:
 
@@ -1071,7 +1070,7 @@ Promiseja käyttävä koodi toimii nyt ja testitkin menevät läpi. Olemme valmi
 Koodi muuttuu seuraavasti (huomaa, että käsittelijän alkuun on laitettava määre _async_):
 
 ```js
-routerRouter.post('/', async (request, response) => {
+notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -1093,7 +1092,7 @@ Koodiin jää kuitenkin pieni ongelma: virhetilanteita ei nyt käsitellä ollenk
 
 ### virheiden käsittely ja async/await
 
-Jos sovellus nyt kaatuu jonkinlaiseen ajoaikaiseen virheeseen, syntyy jälleen tuttu tilanne:
+Jos sovellus POST-pyyntöä käsitellessään aiheuttaa jonkinlaiseen ajoaikaiseen virheen, syntyy jälleen tuttu tilanne:
 
 <pre>
 (node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
@@ -1104,7 +1103,7 @@ eli käsittelemätön promisen rejektoituminen. Pyyntöön ei vastata tilanteess
 Async/awaitia käyttäessä kannattaa käyttää vanhaa kunnon _try/catch_-mekanismia virheiden käsittelyyn:
 
 ```js
-routerRouter.post('/', async (request, response) => {
+notesRouter.post('/', async (request, response) => {
   try {
     const body = request.body
 
@@ -1120,7 +1119,7 @@ routerRouter.post('/', async (request, response) => {
 
     const savedNote = await note.save()
     response.json(formatNote(note))
-  } catch(exception) {
+  } catch (exception) {
     console.log(exception)
     response.status(500).json({ error: 'something whent wrong...' })
   }
@@ -1135,6 +1134,8 @@ Tehdään sitten testit yksittäisen muistiinpanon tietojen katsomiselle ja muis
 test('a specific note can be viewed', async () => {
   const resultAll = await api
     .get('/api/notes')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
 
   const aNoteFromAll = resultAll.body[0]
 
@@ -1161,6 +1162,7 @@ test('a note can be deleted', async () => {
 
   await api
     .delete(`/api/notes/${addedNote.body.id}`)
+    .expect(204)
 
   const notesAfterDelete = await api
     .get('/api/notes')
@@ -1168,14 +1170,14 @@ test('a note can be deleted', async () => {
   const contents = notesAfterDelete.body.map(r => r.content)
 
   expect(contents).not.toContain('HTTP DELETE poistaa resurssin')
-  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length-1)
+  expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length - 1)
 })
 ```
 
 Testit eivät tässä vaiheessa ole optimaaliset, parannetaan niitä kohta. Ensin kuitenkin refaktoroidaan backend käyttämään async/awaitia.
 
 ```js
-routerRouter.get('/:id', async (request, response) => {
+notesRouter.get('/:id', async (request, response) => {
   try {
     const note = await Note.findById(request.params.id)
 
@@ -1185,13 +1187,13 @@ routerRouter.get('/:id', async (request, response) => {
       response.status(404).end()
     }
 
-  } catch(exception) {
+  } catch (exception) {
     console.log(exception)
     response.status(400).send({ error: 'malformatted id' })
   }
 })
 
-routerRouter.delete('/:id', async (request, response) => {
+notesRouter.delete('/:id', async (request, response) => {
   try {
     await Note.findByIdAndRemove(request.params.id)
 
@@ -1208,11 +1210,15 @@ Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöt
 Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
 ](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
+
 ## Tehtäviä
 
-Tee nyt tehtävät [66-](../tehtavat##API:n-testaaminen)
+Tee nyt tehtävät [66-68](../tehtavat##API:n-testaaminen)
 
 ## Testien refaktorointi
+
+Järjestys... älä luota.
 
 Testimme ova sisältävät tällä hetkellä jossain määrin toisteisia ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
 

@@ -1108,12 +1108,24 @@ Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. 
 
 #### 66 blogilistan testit, osa 1
 
-get
+Tee API-tason testit blogilistan osoitteeseen /api/blogs tapahtuvalle HTTP GET -pyynnölle. 
 
-#### 66 blogilistan testit, osa 2
+Kun testi on valmis, refaktoroi operaaatio käyttämään promisejen sijaan async/awaitia.
 
-post
+Huomaa, että joudut tekemään koodiin osan 4 materiaalin tyylin joukon muutoksia (mm. testausympäristön määrittely), jotta saat järkevästi määriteltyä API-tason testejä.
+
+#### 67 blogilistan testit, osa 2
+
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle.
+
+Kun testi on valmis, refaktoroi operaaatio käyttämään promisejen sijaan async/awaitia.
+
+#### 68 blogilistan testit, osa 3
+
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kaikkia kenttiä _author_, _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
+
+Laajenna toteutusta siten, että testit menevät läpi.
 
 ### Lisää toiminnallisuutta ja testejä
 
-#### 67 blogilista, osa 2
+#### 69 blogilistan laajennus, osa 1
