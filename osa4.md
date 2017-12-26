@@ -29,14 +29,14 @@ permalink: /osa4/
 
 ## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa.
+Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](osa3/#tietokantamäärittelyjen -riyttäminen-omaksi-,oduuliksi).
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
 Tiedoston sisältö on seuraava:
 
 ```js
-const routerRouter = require('express').Router()
+const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
 const formatNote = (note) => {
@@ -48,15 +48,15 @@ const formatNote = (note) => {
   }
 }
 
-routerRouter.get('/', (request, response) => {
+notesRouter.get('/', (request, response) => {
   Note
-    .find({}, '-__v')
+    .find({})
     .then(notes => {
       response.json(notes.map(formatNote))
     })
 })
 
-routerRouter.get('/:id', (request, response) => {
+notesRouter.get('/:id', (request, response) => {
   Note
     .findById(request.params.id)
     .then(note => {
@@ -71,7 +71,7 @@ routerRouter.get('/:id', (request, response) => {
     })
 })
 
-routerRouter.delete('/:id', (request, response) => {
+notesRouter.delete('/:id', (request, response) => {
   Note
     .findByIdAndRemove(request.params.id)
     .then(result => {
@@ -83,7 +83,7 @@ routerRouter.delete('/:id', (request, response) => {
     })
 })
 
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -107,7 +107,7 @@ routerRouter.post('/', (request, response) => {
 
 })
 
-routerRouter.put('/:id', (request, response) => {
+notesRouter.put('/:id', (request, response) => {
   const body = request.body
 
   const note = {
@@ -126,22 +126,22 @@ routerRouter.put('/:id', (request, response) => {
     })
 })
 
-module.exports = routerRouter;
+module.exports = notesRouter
 ```
 
 Kyseessä on käytännössä melkein suora copypaste tiedostosta _index.js_.
 
-Muutoksia on pari. Tiedoston alussa luodaan [router](http://expressjs.com/en/api.html#router)-olio:
+Muutoksia on muutama. Tiedoston alussa luodaan [router](http://expressjs.com/en/api.html#router)-olio:
 
 ```js
-const routerRouter = require('express').Router()
+const notesRouter = require('express').Router()
 
 //...
 
-module.exports = routerRouter
+module.exports = notesRouter
 ```
 
-Tiedoston määrittelemä moduuli tarjoaa moduulin käyttäjille routerin.
+Tiedosto eksporttaa moduulin käyttäjille määritellyn routerin.
 
 Kaikki määriteltävät routet liitetään router-olioon, samaan tapaan kuin aiemmassa versiossa routet liitettiin sovellusta edustavaan olioon.
 
@@ -154,56 +154,53 @@ app.delete('/api/notes/:id', (request, response) => {
 nyt riittää määritellä
 
 ```js
-routerRouter.delete('/:id', (request, response) => {
+notesRouter.delete('/:id', (request, response) => {
 ```
 
 Mistä routereissa oikeastaan on kyse? Expressin manuaalin sanoin
 
 > A router object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.
 
-Router on siis _middleware_, jonka avulla on mahdollista määritellä joukko "toisiinsa liittyviä" routeja yhdessä paikassa.
+Router on siis _middleware_, jonka avulla on mahdollista määritellä joukko "toisiinsa liittyviä" routeja yhdessä paikassa, yleensä omassa moduulissaan.
 
-Ohjelman käynnistyspiste, eli määrittelyt tekevä _index.js_ ottaa määrittelemämme routerin käyttöön seuraavasti:
+Ohjelman käynnistystiedosto, eli määrittelyt tekevä _index.js_ ottaa määrittelemämme routerin käyttöön seuraavasti:
 
 ```js
 const notesRouter = require('./controllers/notes')
 app.use('/api/notes', notesRouter)
 ```
 
-Näin määrittelemäämme routeria käytetään _jos_ polun alkuosa on _/api/notes_. notesRouter-olion sisällä tarvitsee tämän takia käyttää ainoastaan polun loppuosia, eli tyhjää polkua _/_ tai pelkkää parametria _/:id_.
+Näin määrittelemäämme routeria käytetään _jos_ polun alkuosa on _/api/notes_. notesRouter-olion sisällä täytyy tämän takia käyttää ainoastaan polun loppuosia, eli tyhjää polkua _/_ tai pelkkää parametria _/:id_.
 
 ### sovelluksen muut osat
 
-Sovelluksen käynnistyspisteenä _index.js_ näyttää muutosten jälkeen seuraavalta:
+Sovelluksen käynnistyspisteenä toimiva _index.js_ näyttää muutosten jälkeen seuraavalta:
 
 ```js
 const http = require('http')
 const express = require('express')
-const mongoose = require('mongoose')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const utils = require('./utils')
-
-if ( process.env.NODE_ENV!=='production' ) {
-  require('dotenv').config()
-}
-
-const url = process.env.MONGODB_URI
-mongoose.connect(url, { useMongoClient: true })
-mongoose.Promise = global.Promise
+const mongoose = require('mongoose')
+const middleware = require('./utils/middleware')
+const Note = require('./models/note')
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.static('build'))
-app.use(utils.loggerMiddleware)
+app.use(middleware.error)
+
+const mongoUrl = process.env.MONGODB_URI
+mongoose.connect(mongoUrl, { useMongoClient: true })
+mongoose.Promise = global.Promise
 
 const notesRouter = require('./controllers/notes')
 app.use('/api/notes', notesRouter)
 
-app.use(utils.errorMiddleware)
+app.use(middleware.error)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
@@ -211,10 +208,10 @@ app.listen(PORT, () => {
 
 Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niinkuin jotkut sitä kutsuisivat) avataan yhteys tietokantaan ja käynnistetään sovellus.
 
-Middlewareista kaksi _utils.loggerMiddleware_ ja _utils.errorMiddleware_ on määritelty hakemiston _utils_ tiedostossa _index.js_:
+Middlewareista kaksi _middleware.logger_ ja _middleware.error_ on määritelty hakemiston _utils_ tiedostossa _middleware.js_:
 
 ```js
-const loggerMiddleware = (request, response, next) => {
+const logger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
@@ -222,13 +219,13 @@ const loggerMiddleware = (request, response, next) => {
   next()
 }
 
-const errorMiddleware = (request, response) => {
+const error = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 module.exports = {
-  loggerMiddleware,
-  errorMiddleware
+  logger,
+  error
 }
 ```
 
@@ -246,19 +243,24 @@ const Note = mongoose.model('Note', {
 module.exports = Note
 ```
 
-Tämän hetkinen koodi on kokonaisuudessaan githubissa repositoriossa xxx.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testeja) 
 
-Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei ole olemassa mitään standardia (samaan tapaan kuin esim Ruby on Railsissa). Tässä käyttämämme malli noudattaa eräitä internetissä mainittuja hyviä käytäntöjä.
+Huomaa, että repositorion master-haarassa on myöhemmän vaiheen koodi, tämän hetken koodi on
+tagissa [ennen_testeja](https://github.com/mluukkai/notes-backend/tree/ennen_testeja)_
 
-[express cli](https://expressjs.com/en/starter/generator.html)
+![]({{ "/assets/4/0.png" | absolute_url }})
 
-Tiedostonimi index
+Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei ole olemassa mitään standardia samaan tapaan kuin esim Ruby on Railsissa. Tässä käyttämämme malli noudattaa eräitä internetissä mainittuja hyviä käytäntöjä.
+
+## Tehtäviä
+
+Tee nyt tehtävät [59 ja 60](../tehtavat#sovelluksen-alustus-ja-rakenne)
 
 ## node-sovellusten testaaminen
 
 Olemme laiminlyöneet ikävästi yhtä oleellista ohjelmistokehityksen osa-aluetta, automatisoitua testausta.
 
-Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertaista, että siinä ei ole juurikaan mielekästä yksikkötestattavaa. Lisätäänkin tiedostoon _utils/index.js_ pari yksinketaista funktiota testattavaksi:
+Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertaista, että siinä ei ole juurikaan mielekästä yksikkötestattavaa. Luodaan tiedosto _utils/for_testing.js_ ja määritellään sinne pari yksinkertaista funktiota testattavaksi:
 
 ```js
 //...
@@ -280,14 +282,12 @@ const average = (array) => {
 }
 
 module.exports = {
-  loggerMiddleware,
-  errorMiddleware,
   palindrom,
   average
 }
 ```
 
-Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runneria_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
+Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runnereita_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
 
 Jest on tälle kurssille luoteva valinta, sillä sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
 
@@ -297,9 +297,9 @@ Koska testejä on tarkoitus suorittaa ainoastaan sovellusta kehitettäessä, ase
 npm install --save-dev jest
 ```
 
-määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan testien suorituksesta _verbose_-tyylillä:
+määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```json
+```bash
 {
   //...
   "scripts": {
@@ -311,10 +311,10 @@ määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan
 }
 ```
 
-Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_ ja sille sisältö
+Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_, jonka sisältö on seuraava
 
 ```js
-const palindrom = require('../utils').palindrom
+const palindrom = require('../utils/for_testing').palindrom
 
 test('palindrom of a', () => {
   const result = palindrom('a')
@@ -335,9 +335,9 @@ test('palindrom of saippuakauppias', () => {
 })
 ```
 
-Testi ottaa ensimmäisellä rivillä testattavan funktion sijoittaen sen muuttujaan _palindrom_.
+Testi ottaa ensimmäisellä rivillä käyttöön testattavan funktion sijoittaen sen muuttujaan _palindrom_.
 
-Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. testitapauksista toinen näyttää seuraavalta:
+Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. tosen testitapauksen toiminnallisuus näyttää seuraavalta:
 
 ```js
 () => {
@@ -367,12 +367,12 @@ seurauksena on seuraava virheilmotus
 
 ![]({{ "/assets/4/2.png" | absolute_url }})
 
-Jest olettaa oletusarvoisesti, että testitiedoston nimessä on sana testi. Käytetään tällä kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
+Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään  kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
 Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
 
 ```js
-const average = require('../utils').average
+const average = require('../utils/for_testing').average
 
 describe('average', () => {
 
@@ -391,7 +391,7 @@ describe('average', () => {
 })
 ```
 
-Testi paljastaa, että metodi toimii väärin tyhjällä taulukolla (sillä nollallajaon tulos on _NaN_):
+Testi paljastaa, että metodi toimii väärin tyhjällä taulukolla (sillä nollallajaon tulos on javascriptissä _NaN_):
 
 ![]({{ "/assets/4/3.png" | absolute_url }})
 
@@ -402,11 +402,13 @@ const average = (array) => {
   const reducer = (sum, item) => {
     return sum + item
   }
-  return array.length == 0 ? 0 : array.reduce(reducer, 0) / array.length
+  return array.length === 0 ? 0 : array.reduce(reducer, 0) / array.length
 }
 ```
 
-Pari huomiota keskiarvon testeistä. Määrittelimme testien ympärille nimellä "average" varustetun _describe_-lohkon.
+Eli jos taulukon pituus on 0, palautetaan 0 ja muussa tapauksessa palautetaan metodin _reduce_ avulla laskettu keskiarvo.
+
+Pari huomiota keskiarvon testeistä. Määrittelimme testien ympärille nimellä _average_ varustetun _describe_-lohkon.
 
 ```js
 describe('average', () => {
@@ -414,11 +416,11 @@ describe('average', () => {
 })
 ```
 
-Describejen avulla yksittäisessä tiedostossa olevat testit voidaan jaoitella loogisiin kokonaisuuksiin. Testituloste hyödyntää myös describe-lohkon nimeä:
+Describejen avulla yksittäisessä tiedostossa olevat testit voidaan jaotella loogisiin kokonaisuuksiin. Testituloste hyödyntää myös describe-lohkon nimeä:
 
 ![]({{ "/assets/4/4.png" | absolute_url }})
 
-Kuten myöhemmin tulemme näkemään, _describe_-lohkot ovat tarpeellisia siinä vaiheessa, jos haluamme osalle yksittäisen testitiedoston testitapauksista jotain yhteisiä alustustoimenpiteitä.
+Kuten myöhemmin tulemme näkemään, _describe_-lohkot ovat tarpeellisia siinä vaiheessa, jos haluamme osalle yksittäisen testitiedoston testitapauksista jotain yhteisiä alustus- tai lopetustoimenpiteitä.
 
 Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodossa, ottamatta testattavan metodin tulosta erikseen apumuuttujaan:
 
@@ -430,13 +432,13 @@ Toisena huomiona se, että kirjoitimme testit aavistuksen tiiviimmässä muodoss
 
 ## Tehtäviä
 
-### tee testit ja toteuta metodit...
+Tee nyt tehtävät [61-65](../tehtavat#yksikkötestaus)
 
 ## api:n testaaminen
 
-Joissain tilanteissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla, eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock)
+Joissain tilanteissa voisi olla mielekästä suorittaa ainakin osa backendin testauksesta siten, että oikea tietokanta eristettäisiin testeistä ja korvattaisiin "valekomponentilla" eli mockilla. Eräs tähän sopiva ratkaisu olisi [mongo-mock](https://github.com/williamkapke/mongo-mock).
 
-Koska sovelluksemme backend on koodiltaan kuitenkin suhteellisen yksinkertainen, päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämänkaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia _integraatiotesteiksi_.
+Koska sovelluksemme backend on koodiltaan kuitenkin suhteellisen yksinkertainen, päätämme testata sitä kokonaisuudessaan, siten että testeissä käytetään myös tietokantaa. Tämän kaltaisia, useita sovelluksen komponetteja yhtäaikaa käyttäviä testejä voi luonnehtia [integraatiotesteiksi](https://en.wikipedia.org/wiki/Integration_testing).
 
 ### test-ympäristö
 
@@ -454,62 +456,66 @@ Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovellusk
 
 Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovelluksen _NODE_ENV_ saa arvokseen _test_:
 
-```json
+```bash
 {
   // ...
   "scripts": {
-    "start": "node index.js",
-    "watch": "node_modules/.bin/nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "watch": "NODE_ENV=development node_modules/.bin/nodemon index.js",
     "test": "NODE_ENV=test node_modules/.bin/jest --verbose test"
   },
   // ...
 }
 ```
 
-Nyt voimme konfiguroida sovelluksen käyttäytymistä testien aikana, erityisesti voimme määritellä, että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
+Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
-Sovelluksen testikanta voidaan luoda tuotantokäyttöön ja sovellukehitykseen tapaan _mlabiin_. Ratkaisu ei kuitenkaan ole optimaalinen, jos sovellusta on tekemässä yhtä aikaa usea henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
+Nht sovelluksen toimintaa on mahdollista muokata sen syoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
-Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, jos jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu suhteellisen helposti mm. [keskusmuistissa toimivan mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontaineriaation avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia mongokantaa.
+Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
-Tehdään sovelluksen käynnistyspisteenä toimivaan tiedostoon _index.js_ muutama muutos:
+Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, että jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu "suhteellisen helposti" mm. [keskusmuistissa toimivan Mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontainereiden avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia Mongoa.
+
+Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tietodotoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin. 
+
+Ideana on, että _index.js_ voi käyttää konfiguraatioita seuraavasti:
 
 ```js
+const config = require('./utils/config')
+
 // ...
-const http = require('http')
-// muut requiret
 
-const envIs = (which) => process.env.NODE_ENV === which
+mongoose.connect(config.mongoUrl, { useMongoClient: true })
 
-if ( !envIs('production') ) {
+// ...
+
+const PORT = config.port
+```
+
+Konfiguraation suorittavan moduulin koodi on seuraavassa:
+
+```js
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-const url = envIs('test') ? process.env.TEST_MONGODB_URI : process.env.MONGODB_URI
+let port = process.env.PORT
+let mongoUrl = process.env.MONGODB_URI
 
-//...
-
-const PORT = envIs('test') ? process.env.TEST_PORT : process.env.PORT
-
-const server = http.createServer(app)
-
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
-
-server.on('close', () =>{
-  mongoose.connection.close()
-})
+if (process.env.NODE_ENV === 'test') {
+  port = process.env.TEST_PORT
+  mongoUrl = process.env.TEST_MONGODB_URI
+}
 
 module.exports = {
-  app, server
+  mongoUrl,
+  port
 }
 ```
 
-Metodin _envIs_ avulla voidaan testata onko sovellus _test_- tai _production_-moodissa.
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantmoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa.
-Tiedostossa _.env_ on nyt määritelty erikseen sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
+Tiedostossa _.env_ on nyt määritelty _erikseen_ sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
 ```bash
 MONGODB_URI=mongodb://localhost/muistiinpanot
@@ -521,16 +527,44 @@ TEST_MONGODB_URI=mongodb://localhost/test
 
 Eri porttien käyttö mahdollistaa sen, että sovellus voi olla käynnissä testien suorituksen aikana.
 
-Tiedoston loppu on muuttunut hieman:
+Omatekemämme eri ympäristöjen kongiguroinnista huolehtivaa _config_-moduuli toimii hieman samassa hengessä kun [node-config](https://github.com/lorenwest/node-config)-kirjasto. Omatekemä konfigurointiympäristö sopii tarkoitukseemme, sillä sovellus on yksinkertainen ja oman konfiguraatio-moduulin tekeminen on myös jossain määrin opettavaista. Isommissa sovelluksissa kannattaa harkita valmiiden kirjastojen, kuten [node-config](https://github.com/lorenwest/node-config):in käyttöä.
+
+Tiedosto _index.js_ muutetaan nyt muotoon:
 
 ```js
+const http = require('http')
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const mongoose = require('mongoose')
+
+const app = express()
+const middleware = require('./utils/middleware')
+const Note = require('./models/note')
+const config = require('./utils/config')
+
+app.use(cors())
+app.use(bodyParser.json())
+app.use(express.static('build'))
+app.use(middleware.logger)
+
+mongoose.connect(config.mongoUrl, { useMongoClient: true })
+mongoose.Promise = global.Promise
+
+const notesRouter = require('./controllers/notes')
+app.use('/api/notes', notesRouter)
+
+app.use(middleware.error)
+
+const PORT = config.port
+
 const server = http.createServer(app)
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-server.on('close', () =>{
+server.on('close', () => {
   mongoose.connection.close()
 })
 
@@ -539,10 +573,13 @@ module.exports = {
 }
 ```
 
+> **HUOM**: koska käytämme useimpia kirjastoja koodissa vain kerran, olisi mahdollista tiivistää koodia hiukan kirjoittamalla esim. <code>app.use(cors())</code> sijaan <code>app.use(require('cors')())</code> ja jättää apumuuttuja _cors_ kokonaan määrittelemättä. On kuitenkin epäselvää kannattaako tälläiseen koodirivien säästelyyn lähteä. Ei ainakaan silloin jos koodin ymmärrettävyys kärsisi.
+
+Tiedoston lopussa on muutama tärkeä muutos:
+
 Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kautta. Serverille määritellään tapahtumankäsitteljäfunktio tapahtumalle _close_ eli tilanteeseen, missä sovellus sammutetaan. Tapahtumankäsittelijä sulkee tietokantayhteyden.
 
 Sekä sovellus _app_ että sitä suorittava _server_-olio määritellään eksportattavaksi tiedostosta. Tämä mahdollistaa sen, että testit voivat käynnistää ja sammuttaa backendin.
-
 
 ### supertest
 

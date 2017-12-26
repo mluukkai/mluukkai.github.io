@@ -1,6 +1,6 @@
 # tehtävät
 
-Muut osat: [2](#osa-2) [3](#osa-3)
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4)
 
 ## Osa 1
 
@@ -705,7 +705,7 @@ Tällä hetkellä luetteloon lisättäviä uusia numeroita ei synkronoida palvel
 
 Siirrä palvelimen kanssa kommunikoinnista vastaava toiminnallisuus omaan monduuliin osan 2 [esimerkin](#palvelimen-kanssa-tapahtuvan-komunikoinnin-eristäminen-omaan-moduuliin) tapaan.
 
-#### 35 puhelinluettelo osa 9
+#### 36 puhelinluettelo osa 9
 
 Tee ohjelmaan mahdollisuus yhteystietojen poistamiseen. Poistaminen voi tapahtua esim. nimen yhteyteen liitetyllä napilla. Poiston suorittaminen voidaan varmistaa käyttäjältä [window.confirm](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)-metodilla:
 
@@ -943,3 +943,163 @@ Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron
 
 #### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
 Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen vieminen tuotantoon](osa3#sovelluksen-vieminen-tuotantoon).
+
+## Osa 4
+
+Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka aulla käyttäjien on mahollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
+
+Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehyvä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
+
+### sovelluksen alustus ja rakenne
+
+#### 59 blogilista, osa 1
+
+Saat sähköpostitse yhteen tiedostoon koodatun sovellusrungon:
+
+```js
+const http = require('http')
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const mongoose = require('mongoose')
+
+const Blog = mongoose.model('Blog', {
+  title: String,
+  author: String,
+  url: String,
+  likes: Number
+})
+
+module.exports = Blog
+
+app.use(cors())
+app.use(bodyParser.json())
+
+const mongoUrl =  'mongodb://localhost/bloglist'
+mongoose.connect(mongoUrl, { useMongoClient: true })
+mongoose.Promise = global.Promise
+
+app.get('/api/blogs', (request, response) => {
+  Blog
+    .find({})
+    .then(blogs => {
+      response.json(blogs)
+    })
+})
+
+app.post('/api/blogs', (request, response) => {
+  const blog = new Blog(request.body)
+  
+  blog
+    .save()
+    .then(result => {
+      response.status(201).json(result)
+    })
+})
+
+const PORT = 3003
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+```
+
+Tee sovelluksesta toimiva _npm_-projekti. Jotta sovelluskehitys olisi sujuvaa, konfiguroi sovellus suoritettavaksi _nodemon_:illa.
+
+#### 60 blogilista, osa 2
+
+Jaa sovelluksen koodi osan 4 [alun](/osa4) tapaan useaan moduuliin.
+
+**HUOM** etene todella pienin askelin, varmistaen että kaikki toimii koko ajan. Jos yrität "oikaista" tekemällä monta asiaa kerralla, on [Murphyn lain](https://fi.wikipedia.org/wiki/Murphyn_laki) perusteella käytännössä varmaa, että jokin menee pahasti pieleen ja "oikotien" takia maaliin päästään paljon myöhemmin kuin systemaattisin pienin askelin.
+
+Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on helppo palata aina toimivaan tilanteeseen jos koodi menee liian solmuun. 
+
+### yksikkötestaus
+
+Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funktiot esim. tiedoston _utils/list_helper.js_. Tee testit sopivasti nimettyyn tiedostoon hakemistoon _test_.
+
+#### 61 apufunktioita ja yksikkötestejä, osa 1
+
+Määrittele ensin funktio _dummy_ joka saa parametrikseen taulukollisen blogeja ja palauttaa aina luvun 1. Varmista testikonfiguraatiosi toimivuus seuraavalla testillä:
+
+```js
+  const dummy = require('../utils/list_helper')
+
+  test("dummy is called", () => {
+    const blogs = [
+    ]
+
+    const result = list.dummy(blogs)
+    expect(result).toBe(1)
+  })
+```
+
+#### 62 apufunktioita ja yksikkötestejä, osa 2
+
+Määrittele funktio _totalLikes_ joka saa parametrikseen taulukollisen blogeja. Funktio palauttaa blogien yhteenlaskettujen tykkäysten eli _likejen_ määrän.
+
+Määrittele funktiolle sopivat testit. Funktion testit kannattaa laittaa _describe_-lohkoon jolloin testien tulostus ryhmittyy miellyttävästi:
+
+![]({{ "/assets/teht/23.png" | absolute_url }})
+
+Testisyötteiden määrittely onnistuu esim. seuraavaan tapaan:
+
+```js
+describe('total likes', () => {
+  const listWithOneBlog = [
+      {
+      _id: "5a422aa71b54a676234d17f8",
+      title: "Go To Statement Considered Harmful",
+      author: "Edsger W. Dijkstra",
+      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+      likes: 5,
+      __v: 0
+    }
+  ]
+
+  test("when list has only one blog equals the likes of that", () => {
+    const result = listHelper.totalLikes(listWithOneBlog)
+    expect(result).toBe(5)
+  })
+})
+```
+
+#### 63 apufunktioita ja yksikkötestejä, osa 2
+
+Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää millä blogilla on eniten likejä. Paluuarvo voi olla esim. seuraavassa muodossa:
+
+```js
+{
+  title: "Canonical string reduction",
+  author: "Edsger W. Dijkstra",
+  likes: 12,  
+}
+```
+
+Tee myös tämän ja seuraavien kohtien testit kukin oman _describe_-lohkon sisälle.
+
+#### 64 apufunktioita ja yksikkötestejä, osa 4
+
+Tämä ja seuraava tehtävä ovat jo hieman haastavampia.
+
+Määrittele funktio _mostBlogs_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää _kirjoittajan_, kenellä on eniten blogeja. Funktion paluuarvo kertoo myös ennätysblogaajan blogien määrän:
+
+```js
+{  
+  author: "Robert C. Martin",
+  blogs: 3
+}
+```
+
+#### 65 apufunktioita ja yksikkötestejä, osa 5
+
+Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja.  Funktio selvittää kirjoittajan, kenen blogeilla on eniten likejä. Funktion paluuarvo kertoo myös suosikkiblogaajan likejen yhteenlasketun määrän:
+
+```js
+{  
+  author: "Edsger W. Dijkstra",
+  votes: 17
+}
+```
+
+### API:n testaaminen
