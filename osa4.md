@@ -299,7 +299,7 @@ npm install --save-dev jest
 
 määritellään _npm_ skripti _test_ suorittmaan testaus avalla ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```bash
+```json
 {
   //...
   "scripts": {
@@ -620,7 +620,7 @@ Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu ti
 
 ### Error: listen EADDRINUSE :::3002
 
-Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palvelin jää päälle. Tällöin uusi testiajao aiheuttaa ongelmia, ja seurauksena on virheilmoitus
+Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palvelin jää päälle. Tällöin uusi testiajo aiheuttaa ongelmia, ja seurauksena on virheilmoitus
 
 <pre>
 Error: listen EADDRINUSE :::3002
@@ -1020,7 +1020,7 @@ routerRouter.post('/', async (request, response) => {
   const note = new Note({
     content: body.content,
     important: body.content === undefined ? false : body.important,
-    date: new Date(),
+    date: new Date()
   })
 
   const savedNote = await note.save()
@@ -1032,7 +1032,7 @@ Koodiin jää kuitenkin pieni ongelma: virhetilanteita ei nyt käsitellä ollenk
 
 ### virheiden käsittely ja async/await
 
-Jos sovellus nyt kaatuu jonkinlaiseen ajoiaikaiseen virheeseen, syntyy jäälleen tuttu tilanne:
+Jos sovellus nyt kaatuu jonkinlaiseen ajoaikaiseen virheeseen, syntyy jälleen tuttu tilanne:
 
 <pre>
 (node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
@@ -1848,25 +1848,24 @@ const Note = mongoose.model('Note', {
 
 ## Kirjautuminen
 
-Käyttäjien tulee pystyä kirjautumaan sovellukseemme ja muistiinpanot pitää automaattisesti liittää kirjautuneen käyttäjän tekemiksi. 
+Käyttäjien tulee pystyä kirjautumaan sovellukseemme ja muistiinpanot pitää automaattisesti liittää kirjautuneen käyttäjän tekemiksi.
 
-Toteutamme nyt backendiin tuen [token-perustaiselle](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication#toc-how-token-based-works)
-  autentikoinnille. 
+Toteutamme nyt backendiin tuen [token-perustaiselle](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication#toc-how-token-based-works) autentikoinnille.
 
 Token-autentikaation periaatetta kuvaa seuraava sekvenssikaatio:
 
 ![]({{ "/assets/4/12.png" | absolute_url }})
 
 - Alussa käyttäjä kirjaantuu Reactilla toteutettua lomaketta käyttäen
-- Tämän seurauksena selaimen React-koodi lähettää käyttäjätunnuksen ja salasanan HTTP POST -pyynnöllä palveimen osoitteeseen _/api/login_
+- Tämän seurauksena selaimen React-koodi lähettää käyttäjätunnuksen ja salasanan HTTP POST -pyynnöllä palvelimen osoitteeseen _/api/login_
 - Jos käyttäjätunnus ja salasana ovat oikein, generoi palvelin _Tokenin_, jonka jollain tavalla yksilöi kirjautumisen tehneen käyttäjän
-  - token on kryptattu, joten sen väärentäminen on (kryptografisesti)mahdotonta 
+  - token on kryptattu, joten sen väärentäminen on (kryptografisesti) mahdotonta
 - backend vastaa selaimelle onnistumisesta kertovalla statuskoodilla ja palauttaa Tokenin pyynnön mukana
 - Selain tallentaa tokenin esimerkiksi React-sovelluksen tilaan
 - Kun käyttäjä luo uuden muistiinpanon (tai tekee jonkin operaation, joka eellyttää tunnistautumista), lähettää React-koodi Tokenin pyynnön mukana palvelimelle
 - Palvelin tunnistaa pyynnön tekijän tokenin perusteella
 
-Tehdään ensin kirjautumistoimito. Asennetaan [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)-kirjasto, jonka avulla koodimme pystyy generoimaan [Javascript web token](https://jwt.io/) -muotoisia tokeneja.
+Tehdään ensin kirjautumistoiminto. Asennetaan [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)-kirjasto, jonka avulla koodimme pystyy generoimaan [Javascript web token](https://jwt.io/) -muotoisia tokeneja.
 
 ```bash
 npm install jsonwebtoken --save
@@ -1884,7 +1883,8 @@ loginRouter.post('/', async (request, response) => {
   const body = request.body
 
   const user = await User.findOne({ username: body.username })
-  const passwordCorrect = user===null ? false : 
+  const passwordCorrect = user === null ?
+    false :
     await bcrypt.compare(body.password, user.passwordHash)
 
   if ( !(user && passwordCorrect) ) {
@@ -1900,7 +1900,7 @@ loginRouter.post('/', async (request, response) => {
 
   response.status(200).send({ token })
 })
-  
+
 module.exports = loginRouter
 ```
 
@@ -1915,12 +1915,12 @@ Jos käyttäjää ei ole olemassa tai salasana on väärä, vastataan kyselyyn s
 Jos salasana on oikein, luodaan metodiln _jwt.sign_ avulla token, joka sisältää kryptatussa muodossa käyttäjätunnuksen ja käyttäjän id:
 
 ```js
-  const userForToken = {
-    username: user.username,
-    id: user._id
-  }
+const userForToken = {
+  username: user.username,
+  id: user._id
+}
 
-  const token = jwt.sign(userForToken, process.env.SECRET)
+const token = jwt.sign(userForToken, process.env.SECRET)
 ```
 
 Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token.
@@ -1939,14 +1939,14 @@ app.use('/api/login', loginRouter)
 Muutetaan vielä muistiinpanojen luomista, siten että luominen onnistuu ainoastaan jos luomista vastaavan pyynnön mukana on validi token. Muistiinpano talletetaan tokenin identifioiman käyttäjän tekemien muistiinpanojen listaan.
 
 Tapoja tokenin välittämiseen selaimesta backendiin on useita. Käytämme ratkaisussamme [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)-headeria. Tokenin lisäksi headerin avulla kerrotaan mistä [autentikointiskeemasta](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) on kyse. Tämä voi olla tarpeen, jos palvein tarjoaa useita eri tapoja autentikointiin. Skeeman ilmaiseminen kertoo näissä tapauksissa palvelimelle, miten mukana olevat kredentiaalit tulee tulkita.
-Meidän käyttöömme sopii _Bearer_-skeema. 
+Meidän käyttöömme sopii _Bearer_-skeema.
 
 Käytännössä tämä tarkoittaa, että jos token one sim merkkijono _eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW_, laitetaan pyynnöissä headerin Authorization arvoksi merkkijono
 <pre>
 Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
 </pre>
 
-Modifioitu muisiinpanojen luomisesta  huolehtiva koodi seuraavassa:
+Modifioitu muistiinpanojen luomisesta huolehtiva koodi seuraavassa:
 
 ```js
 const getTokenFrom = (request) =>{
@@ -1964,7 +1964,7 @@ notesRouter.post('/', async (request, response) => {
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
 
-    if (!token || !decodedToken.id ) {
+    if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
@@ -1978,7 +1978,7 @@ notesRouter.post('/', async (request, response) => {
       content: body.content,
       important: body.content === undefined ? false : body.important,
       date: new Date(),
-      user: user._id 
+      user: user._id
     })
 
     const savedNote = await note.save()
@@ -1998,7 +1998,7 @@ notesRouter.post('/', async (request, response) => {
 })
 ```
 
-Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka  perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
+Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
 
 Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
 
@@ -2014,13 +2014,13 @@ Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5)
 
 ## Lint
 
-Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin 
+Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin
 
 > Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
 
-Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasisistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
+Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
 
-Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linntaukseen" on [ESlint](https://eslint.org/).
+Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linttaukseen" on [ESlint](https://eslint.org/).
 
 Asennetaan Eslint kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -2040,7 +2040,7 @@ Vastaillaan kysymyksiin
 
 Konfiguraatiot tallentuvat tiedostoon _.eslintrc.js_:
 
-```json
+```js
 module.exports = {
     "env": {
         "browser": true,
@@ -2084,9 +2084,9 @@ Esim tiedoston _index.js_ tarkastus tapahtuu komennolla
 node_modules/.bin/eslint index.js
 ```
 
-Kannattaa ehkä tehdä linttaustakin varten _npm-skrpiti_:
+Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2099,7 +2099,7 @@ Kannattaa ehkä tehdä linttaustakin varten _npm-skrpiti_:
 }
 ```
 
-Nyt komenot _npm run lint_ suorittaa tarkastukset koko projektille.
+Nyt komennot _npm run lint_ suorittaa tarkastukset koko projektille.
 
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
@@ -2204,7 +2204,7 @@ kayttaja -> selain: painetaan login-nappia
 
 selain -> backend: HTTP POST /api/login {username, password}
 note left of backend
-  backend generoi käyttäjän identifioivan TOKE:in 
+  backend generoi käyttäjän identifioivan TOKE:in
 end note
 backend -> selain: TOKEN palautetaan vastauksen bodyssä
 note left of selain
@@ -2213,7 +2213,7 @@ end note
 note left of kayttaja
   käyttäjä luo uden muistiinpanon
 end note
-kayttaja -> selain: painetaan create note -nappia 
+kayttaja -> selain: painetaan create note -nappia
 selain -> backend: HTTP POST /api/notes {content} headereissa TOKEN
 note left of backend
   backend tunnistaa TOKENin perusteella kuka käyttää kyseessä
@@ -2221,5 +2221,5 @@ end note
 
 backend -> selain: 201 created
 
-kayttaja -> kayttaja: 
+kayttaja -> kayttaja:
 -->

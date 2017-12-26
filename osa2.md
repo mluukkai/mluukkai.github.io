@@ -340,12 +340,12 @@ class App extends React.Component {
 Konstruktori asettaa nyt propseina saatavan _notes_-taulukon tilaan avaimen _notes_ arvoksi:
 
 ```js
-  constructor(props) {
-    super(props)
-    this.state = {
-      notes: props.notes
-    }
+constructor(props) {
+  super(props)
+  this.state = {
+    notes: props.notes
   }
+}
 ```
 
 tila siis näyttää komponentin alustuksen jälkeen seuraavalta:
@@ -447,7 +447,7 @@ Määritellään tilaan lisätty kenttä _input_-komponentin attribuutin _value_
 </form>
 ```
 
-Tilaan määritelty "placeholder"-teksti  _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
+Tilaan määritelty "placeholder"-teksti _uusi muistiinpano..._ ilmestyy syötekomponenttiin, tekstiä ei kuitenkaan voi muuttaa. Konsoliin tuleekin ikävä varoitus joka kertoo mistä on kyse
 
 ![]({{ "/assets/2/4.png" | absolute_url }})
 
@@ -640,7 +640,7 @@ const notesToShow =
 
 Käytössä on monissa muissakin kielissä oleva [ehdollinen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) operaatio.
 
-Operaatio toimi seuraavasti. Jos meillä on esim:
+Operaatio toimii seuraavasti. Jos meillä on esim:
 
 ```js
 const tulos = ehto ? val1 : val2
@@ -738,7 +738,7 @@ Käytetään nyt palvelimena sovelluskehitykseen tarkoitettua [JSON Serveriä](h
 
 Tee projektin juurihakemistoon tiedosto _db.json_, jolla on seuraava sisältö:
 
-```js
+```json
 {
   "notes": [
     {
@@ -792,7 +792,7 @@ Nykyään XHR:ää ei kuitenkaan kannata juurikaan käyttää ja selaimet tukeva
 
 Muistutuksena viime viikosta (oikeastaan tätä tapaa pitää lähinnä _muistaa olla käyttämättä_ ilman painavaa syytä), XHR:llä haettiin dataa seuraavasti
 
-```bash
+```js
 const xhttp = new XMLHttpRequest()
 
 xhttp.onreadystatechange = function () {
@@ -861,7 +861,7 @@ Käytetään selaimen ja palvelimen väliseen kommunikaatioon kuitenkin [axios](
 
 Nykyään lähes kaikki Javascript-projektit määritellään node "pakkausmanagerin" eli [npm](https://docs.npmjs.com/getting-started/what-is-npm):n avulla. Myös create-react-app:in avulla generoidut projektit ovat npm-muotoisia projekteja. Varma tuntomerkki siitä on projektin juuressa oleva tiedosto _package.json_:
 
-```js
+```json
 {
   "name": "osa2",
   "version": "0.1.0",
@@ -890,7 +890,7 @@ npm install axios --save
 
 Nyt axios on mukana riippuvuuksien joukossa:
 
-```js
+```json
 {
   "dependencies": {
     "axios": "^0.17.1",
@@ -940,7 +940,7 @@ Esimerkkimme ensimmäinen promise on _fulfilled_, eli vastaa vastaa onnistunutta
 
 Jos ja kun haluamme tietoon promisea vastaavan operaation tuloksen, tulee promiselle rekisteröidä tapahtumankuuntelija. Tämä tapahtuu metodilla _then_:
 
-```
+```js
 const promise = axios.get('http://localhost:3001/notes')
 
 promise.then(response => {
@@ -1070,7 +1070,7 @@ axios.get('http://localhost:3001/notes').then(response => {
 
 Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponenentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
 
-Emme kuitenkaan ehdi huomaammaan asiaa, sillä palvelimen vastaus tulee pian, ja se taas saa aikaan tapahtumankäsittelijän suorituksen. Tapahtumankäsittelijä päivittää komponentin tilaa kutsumalla _setState_ ja tämä saa aikaan komponentin uudelleenrenderöinnin.
+Emme kuitenkaan ehdi huomaamaan asiaa, sillä palvelimen vastaus tulee pian, ja se taas saa aikaan tapahtumankäsittelijän suorituksen. Tapahtumankäsittelijä päivittää komponentin tilaa kutsumalla _setState_ ja tämä saa aikaan komponentin uudelleenrenderöinnin.
 
 Mieti tarkasti äsken läpikäytyä tapahtumasarjaa, sen ymmärtäminen on erittäin tärkeää!
 
@@ -1161,7 +1161,7 @@ addNote = (e) => {
   const noteObject = {
     content: this.state.new_note,
     date: new Date(),
-    important: Math.random() > 0.5,
+    important: Math.random() > 0.5
   }
 
   axios.post('http://localhost:3001/notes', noteObject)
