@@ -1106,6 +1106,9 @@ Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. 
 
 ### API:n testaaminen
 
+**Huom** materiaalissa käytetään muutamaan kertaan ekspektaatiota [toCOntain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem) tarkastettaessa että jokin arvo on taulukossa. Kannattaa huomata, että metodi käyttää samuuden vertailuun ===-operaattoria ja olioiden kohdalla tämä ei ole useinkaan se mitä halutaan ja parempi vaihtoehto onkin
+[toContainEqual](https://facebook.github.io/jest/docs/en/expect.html#tocontainequalitem).
+
 #### 66 blogilistan testit, osa 1
 
 Tee API-tason testit blogilistan osoitteeseen /api/blogs tapahtuvalle HTTP GET -pyynnölle. 
@@ -1119,6 +1122,12 @@ Huomaa, että joudut tekemään koodiin osan 4 materiaalin tyylin joukon muutoks
 Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle.
 
 Kun testi on valmis, refaktoroi operaaatio käyttämään promisejen sijaan async/awaitia.
+
+#### 68 blogilistan testit, osa 2
+
+Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
+
+Laajenna ohjelmaa siten, että testi menee läpi.
 
 #### 68 blogilistan testit, osa 3
 
