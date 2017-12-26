@@ -11,6 +11,7 @@ permalink: /osa3/
     - HTTP-pyyntötyypit
     - statuskoodit
     - resurssiperustaiset URL:it
+    - HTTP-pyyntöjen- safety ja idempotence-ominaisuudet
 - node.js/express
   - npm
     - sovelluksen luominen
@@ -715,6 +716,32 @@ jos sovelluksen vastaanottamassa muuttujaan _body_ talletetussa datassa on kentt
 ## Tehtäviä
 
 Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
+
+## Huomioita HTTP pyyntötyyppien käytöstä
+
+[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **save** ja **idemponent**.
+
+HTTP-pyynnöistä GET:in tulisi olla _safe_:
+
+> In particular, the convention has been established that the GET and HEAD methods SHOULD NOT have the significance of taking an action other than retrieval. These methods ought to be considered "safe".
+
+Safety siis tarkoittaa, että pyynnön suorittaminen ei saa aiheutta palvelimelle _sivuvaikutuksia_ eli esim. muuttaa palvelimen tietokannan tilaa, pyynnön tulee ainoastaan palauttaa palvelimella olevaa dataa. 
+
+Mikään ei automaattisesti takaa, että GET-pyynnöt olisivat luonteeltaan _safe_, kyseessä onkin HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET-pyyntöjä käytetäänkin aina siten, että ne ovat safe.
+
+HTTP-standardi määrittelee myös pyyntötyypin [HEAD](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4), jonka tulee olla safe. Käytännössä HEAD:in tulee toimia kuten GET, mutta se ei palauta vastauksenaan muuta kuin statuskoodin ja headerit, viestin bodyä HEAD ei palauta ollenkaan. 
+
+HTTP-pyynnöistä muiden paitsi POST:in tulisi olla _idemponent_:
+
+> Methods can also have the property of "idempotence" in that (aside from error or expiration issues) the side-effects of N > 0 identical requests is the same as for a single request. The methods GET, HEAD, PUT and DELETE share this property
+
+Eli jos pyynnöllä on sivuvaikutuksia, lopputulos on sama suoritetaanko pyyntö yhden tai useamman kerran.
+
+Esim. jos tehdään HTTP POST pyyntö osoitteeseen _/notes/10_ ja pyynnön mukana on <code>{ content: "vain yksi sivuvaikutus", important: true }</code>, on lopputulos sama riippumatta siitä kuinka monta kertaa pyyntö suoritetaan.
+
+Kuten metodin GET _safety_ myös _idempotence_ on HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET, HEAD, PUT ja DELETE-pyyntöjä käytetäänkin aina siten, että ne ovat idemponent.
+
+HTTP pyyntötyypeistä POST on ainoa joka ei ole safe eikä idemponent. Jos tehdään 5 kertaa HTTP POST -pyyntö osoitteeseen _/notes_ siten että pyynnön mukana on <code>{ content: "monta samaa", important: true }</code>, tulee palvelimelle 5 saman siältöistä muistiinpanoa.
 
 ## Middlewaret
 

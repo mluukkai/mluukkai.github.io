@@ -29,7 +29,7 @@ permalink: /osa4/
 
 ## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ lähinnä ainoastaan konfiguroi sovelluksen tietokannan ja middlewaret. Siirretään routejen määrittely omaan tiedostoonsa.
+Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa.
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -2069,6 +2069,15 @@ module.exports = {
 };
 ```
 
+Muutetaan heti konfiguraatioista seisennystä määrittelevä sääntö, siten että sisennystaso on 2 välilyöntiä
+
+```
+"indent": [
+    "error",
+    2
+],
+```
+
 Esim tiedoston _index.js_ tarkastus tapahtuu komennolla
 
 ```bash
@@ -2094,12 +2103,97 @@ Nyt komenot _npm run lint_ suorittaa tarkastukset koko projektille.
 
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
+ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/rules/), joita on helppo ottaa käyttöön muokkaamalla tietostoa _.eslintrc.js_.
 
-Valmiit konfit mm airbnb ks
-https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
+Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
-https://github.com/airbnb/javascript
+```bash
+    "rules": {
+        // ...
+        "eqeqeq": "error"
+    },
+```
 
+Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
+
+Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyjä säätntöjä _eslint:recommended_
+
+```bash
+"extends": "eslint:recommended",
+```
+
+Mukana on myös _console.log_-komennoista varoittava sääntö-
+Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/docs/user-guide/configuring#configuring-rules) määrittelemällä sen "arvoksi" konfiguraatiossa 0. Tehdään toistaiseksi näin säännölle _no-console_.
+
+```bash
+    "rules": {
+        // ...
+        "eqeqeq": "error",
+        "no-console": 0,
+    },
+```
+
+ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa ympäristömuuttujiin _globaalin_ muuttujan _process_ kautta. ESlintin silmissä on tämä kuitenkin näyttää määrittelemättömän muuttujan käytöltä.
+
+Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
+(https://eslint.org/docs/rules/no-process-env), omalla koneellani täm ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
+
+```bash
+module.exports = {
+    // ...
+    "globals": {
+        "process": true,
+    },
+    // ...
+}
+
+Ympäristömuuttujien käyttö suoraan globaalin muuttujan _process_ kautta ei välttämättä ole paras mahdollinen idea. Tutustumme seuraavissa osissa vaihtoehtoisiin tapoihin.
+
+Tällä hetkellä ESlint valittaa _async_-määreellä varustetuista nuolifunktioista, kyse on siitä, että ESlint ei vielä osaa tulkita uutta syntaksia kunnolla. Pääsemme valituksesta eroon asentamalla _babel-eslint_-pluginin:
+
+```bash
+npm install babel-eslint --save-dev
+```
+
+Pluginin käyttöönotto tulee määritellä konfiguraatiotiedostossa, jonka tämän vaiheen versio on seuraavassa:
+
+```js
+module.exports = {
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "globals": {
+        "process": true,
+    },
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "rules": {
+        "indent": [
+            "error",
+            2
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "eqeqeq": "error",
+        "no-console": 0,
+        "no-process-env": 0
+    },
+}
+```
+
+Monissa yrityksissä on tapana määritellä yrityksen laajuiset koodausstandardit ja näiden käyttöä valvova ESlint-konfiguraatio. Pyörää ei kannata välttämättä keksiä uudelleen ja voi olla hyvä idea ottaa omaan projektiin joku käyttöön jossain muualla hyväksi havaittu konfiguraatio. Viime aikoina monissa projekteissa on omaksuttu AirBnB:n [javascript](https://github.com/airbnb/javascript)-tyyliohjeet ottamalla käyttöön firman määrittelemä [ESLint](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)-konfiguraatio.
 
 <!---
 note left of kayttaja
