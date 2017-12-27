@@ -8,8 +8,7 @@ Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4)
 
 #### 1 HTML ja CSS ####
 
-Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
-[CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
+Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja [CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
 
 #### 2 HTML:n lomakkeet
 
@@ -1192,13 +1191,13 @@ ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näky
 
 #### 76 blogilistan laajennus, osa 7
 
-Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi. 
+Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi.
 
 Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP POST -pyynnössä on mukana validi token. Tokenin haltija määritellään blogin lisääjäksi.
 
 #### 77 blogilistan laajennus, osa 8
 
-Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla. 
+Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla.
 
 Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
 
@@ -1208,20 +1207,20 @@ Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
 app.use(middleware.tokenExtractor)
 ```
 
-pääsevät routet tokeniin käsiksi suoraan viittaamalla _requet.token_:
+pääsevät routet tokeniin käsiksi suoraan viittaamalla _request.token_:
 
 ```js
 blogsRouter.post('/', async (request, response) => {
     // ..
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    //..
+    // ..
   }
 })
 ```
 
 #### 78 blogilistan laajennus, osa 9
 
-Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä. 
+Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
 
 Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaankuuluva statuskoodi.
 
@@ -1245,4 +1244,4 @@ Tee testit tehtävän 78 toiminnallisuudelle.
 
 #### 80 lint-konfiguraatio
 
-Ota sovellukseesi käyttöön ESlint. 
+Ota sovellukseesi käyttöön ESlint.
