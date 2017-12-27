@@ -1472,19 +1472,20 @@ Relaatiotietokantoja käytettäessä ratkaisua ei tarvitsisi juuri miettiä. Mol
 
 Dokumenttitietokantoja käytettäessä tilanne on kuitenkin toinen, erilaisia tapoja mallintaa tilanne on useita.
 
-Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaansa, esim. nimeltään _users_.
+Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaana, esim. nimeltään _users_.
 
-Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin alkioihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
+Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin dokumentteihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä kurssillamme käsittele).
+Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen ;ongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
 
-Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa taustalla liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan, mutta mongoose tekee kuitekin taustalla useamman kyselyn.
+Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
-### viitteet kokoelmien välillä
+### Viitteet kokoelmien välillä
 
 Relaatiotietokannoissa muistiinpano sisältää viiteavaimen sen tehneeseen käyttäjään. Dokumenttitietokannassa voidaan toimia samoin. Oletetaan että kokoelmassa _users_ on kaksi käyttäjää:
 
 ```js
+[
   {
     username: 'mluukkai',
     _id: 123456,
@@ -1493,34 +1494,38 @@ Relaatiotietokannoissa muistiinpano sisältää viiteavaimen sen tehneeseen käy
     content: 'hellas',
     _id: 141414
   }
+]
 ```
 
-Kokoelmassa _notes_ on kolme muistiinpanoa, molempien kenttä _user_id_ viittaa _users_-kentässä olevaan käyttäjään.
+Kokoelmassa _notes_ on kolme muistiinpanoa, kaikkien kenttä _user_ viittaa _users_-kentässä olevaan käyttäjään:
 
 ```js
+[
   {
     content: 'HTML on helppoa',
     important: false,
     _id: 221212,
-    user_id: 123456
+    user: 123456
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
     important: true,
     _id: 221255,
-    user_id: 123456
+    user: 123456
   },
   {
     content: 'Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu',
     important: false,
     _id: 221244,
-    user_id: 141414
+    user: 141414
   }
+]
 ```
 
 Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
 
 ```js
+[
   {
     username: 'mluukkai',
     _id: 123456,
@@ -1531,14 +1536,16 @@ Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on tal
     _id: 141414,
     notes: [141414]
   }
+]
 ```
 
-Koska käyttäjiin liittyy potentiaalisesti useita muistiinpanoja, talletetaan niiden id:t käyttäjän yhteydessä olevaan taulukkoon.
+Koska käyttäjiin liittyy potentiaalisesti useita muistiinpanoja, niiden id:t talletetaan käyttäjän kentässä _notes_ olevaan taulukkoon.
 
 
-Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organisointiin, joissain tilanteissa saattaisi olla mielekästä tallettaa muistiinpanot käyttäjäolioiden kentäksi "embedattuna":
+Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organisointiin, joissain tilanteissa saattaisi olla mielekästä tallettaa muistiinpanot kokonaisuudessa käyttäjien sisälle:
 
 ```js
+[
   {
     username: 'mluukkai',
     _id: 123456,
@@ -1563,6 +1570,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
       }
     ]
   }
+]  
 ```
 
 Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
@@ -1571,14 +1579,14 @@ Dokumenttietietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samal
 
 Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin projektin alkuvaiheissa jopa radikaalimpia datan organisoimiseen liittyien ratkaisujen tekemistä kuin tietokannan tasolla skeemalliset relaatiotietokannat, jotka tarjoavat keskimäärin kaikkiin tilanteisiin melko hyvin sopivan tavan organisoida dataa.
 
-### käyttäjien mongoose-skeema
+### Käyttäjien mongoose-skeema
 
 Päätetään tallettaa käyttäjän yhteyteen myös tieto käyttäjän luomista muistiinpanoista, eli käytännössä muistiinpanojen id:t. Määritellään käyttäjää edustava model tiedostoon _models/user:_
 
 ```js
 const mongoose = require('mongoose')
 
-const User = mongoose.model('Note', {
+const User = mongoose.model('User', {
   username: String,
   name: String,
   passwordHash: String,
@@ -1608,7 +1616,7 @@ const Note = mongoose.model('Note', {
 })
 ```
 
-Relaatiotietokannoista poiketen, viitteet on nyt talletettu molempiin dokumentteihin, muistiinpano viittaa sen luoneeseen käyttäjään ja käyttäjä sisältää taulukollisen viitteitä sen luomiin muistiinpanoihin.
+Relaatiotietokantojen käytänteistä poiketen _viitteet on nyt talletettu molempiin dokumentteihin_, muistiinpano viittaa sen luoneeseen käyttäjään ja käyttäjä sisältää taulukollisen viitteitä sen luomiin muistiinpanoihin.
 
 ### Käyttäjien luominen
 
@@ -1617,7 +1625,7 @@ Toteutetaan seuraavaksi route käyttäjien luomista varten. Käyttäjällä on s
 Asennetaan salasanojen hashaamiseen käyttämämme [bcrypt](https://github.com/kelektiv/node.bcrypt.js)-kirjasto:
 
 ```bash
-install bcrypt --save
+npm install bcrypt --save
 ```
 
 Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_.
@@ -1640,7 +1648,6 @@ Routerin alustava sisältö on seuraava:
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
-const mongoose = require('mongoose')
 
 usersRouter.post('/', async (request, response) => {
   try {
@@ -1669,9 +1676,9 @@ module.exports = usersRouter
 
 Tietokantaan siis _ei_ talleteta pyynnön mukana tulevaa salasanaa, vaan funktion _bcrypt.hash_ avulla laskettu _hash_.
 
-Materiaalin tilamäärä ei valitettavasti riitä käsittelemään sen tarkemmin salasanojen [tallennuksen perusteita](https://codahale.com/how-to-safely-store-a-password/), esim mitä maaginen luku 10 muuttujan [saltRounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds) arvona tarkoittaa. Lue linkkien takaa lisää.
+Materiaalin tilamäärä ei valitettavasti riitä käsittelemään sen tarkemmin salasanojen [tallennuksen perusteita](https://codahale.com/how-to-safely-store-a-password/), esim. mitä maaginen luku 10 muuttujan [saltRounds](https://github.com/kelektiv/node.bcrypt.js/#a-note-on-rounds) arvona tarkoittaa. Lue linkkien takaa lisää.
 
-Koodissa ei tällä hetkellä ole mitään virheidenkäsittelyä ja validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
+Koodissa ei tällä hetkellä ole mitään virheidenkäsittelyä eikä validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
 
 Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, eteenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan.
 
@@ -1680,10 +1687,15 @@ Pienellä vaivalla voimme tehdä automaattisesti suoritettavat testit, jotka hel
 Alustava testi näyttää seuraavalta:
 
 ```js
-describe.only('when there is initially no users at db', async () => {
+const User = require('../models/user')
+const { format, initialNotes, nonExistingId, notesInDb, usersInDb } = require('./test_helper')
+
+//...
+
+describe.only('when there is initially one user at db', async () => {
   beforeAll(async () => {
     await User.remove({})
-    const user = new User({ usernname: 'root', password: 'sekret' })
+    const user = new User({ username: 'root', password: 'sekret' })
     await user.save()
   })
 
@@ -1710,9 +1722,24 @@ describe.only('when there is initially no users at db', async () => {
 })
 ```
 
-Koska testi on määritelty _describe.only_-lohkoksi, suorittaa _jest_ ainoastaan lohkon sisälle määritellyt testit. Tämä on alkuvaiheessa hyödyllistä, sillä ennen kuin uusia käyttäjiä lisäävä toiminnallisuus on valmis, kannattaa suorittaa testeistä ainoastaan kyseistä toiminnallisuutta tutkivat testitapaukset.
+Koska testi on määritelty [describe.only](https://facebook.github.io/jest/docs/en/api.html#describeonlyname-fn)-lohkoksi, suorittaa _Jest_ ainoastaan lohkon sisälle määritellyt testit. Tämä on alkuvaiheessa hyödyllistä, sillä ennen kuin uusia käyttäjiä lisäävä toiminnallisuus on valmis, kannattaa suorittaa testeistä ainoastaan kyseistä toiminnallisuutta tutkivat testitapaukset.
 
-Testit käyttävät myös tiedostossa _tests/test_helper.js_ määsiteltyä apufunktiota _usersInDb()_ tarkastamaan lisäysoperaation jälkeisen tietokannan tilan.
+Testit käyttävät myös tiedostossa _tests/test_helper.js_ määriteltyä apufunktiota _usersInDb()_ tarkastamaan lisäysoperaation jälkeisen tietokannan tilan:
+
+```js
+const User = require('../models/user')
+
+// ...
+
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users
+}
+
+module.exports = {
+  initialNotes, format, nonExistingId, notesInDb, usersInDb
+}
+```
 
 Lohkon _beforeAll_ lisää kantaan käyttäjän, jonka username on _root_. Voimmekin tehdä uuden testi, jolla varmistetaan, että samalla käyttäjätunnuksella ei voi luoda uutta käyttäjää:
 
@@ -1759,7 +1786,7 @@ usersRouter.post('/', async (request, response) => {
 })
 ```
 
-Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla [400 bad request] ja kerrotaan syy ongelmaan.
+Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
@@ -1783,22 +1810,24 @@ usersRouter.get('/', async (request, response) => {
 
 ### Muistiinpanon luominen
 
-Muistiinpanot luovaa koodia on nyt mukautettava siten, että muistiinpanot tulee liitetyksi ne luoneeseen käyttäjään.
+Muistiinpanot luovaa koodia on nyt mukautettava siten, että uusi muistiinpano tulee liitetyksi sen luoneeseen käyttäjään.
 
 Laajennetaan ensin olemassaolevaa toteutusta siten, että tieto muistiinpanon luovan käyttäjän id:stä lähetetään pyynnön rungossa kentän _userId_ arvona:
 
 ```js
+const User = require('../models/user')
+
+//...
+
 notesRouter.post('/', async (request, response) => {
   try {
     const body = request.body
-
-    const userId = body.userId
 
     if (body.content === undefined) {
       return response.status(400).json({ error: 'content missing' })
     }
 
-    const user = await User.findById(userId)
+    const user = await User.findById(body.userId)
 
     const note = new Note({
       content: body.content,
@@ -1853,15 +1882,15 @@ const formatNote = (note) => {
 }
 ```
 
-On tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
+tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ![]({{ "/assets/4/8.png" | absolute_url }})
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettavissa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä haluaisimme nähdä käyttäjien tekemien muistiinpanojen id:iden lisäksi niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin liitoskyselyn avulla.
+Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksin äyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
 
-Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on koko liitoksen ajan konsistentti, ts. jos tehdään users- ja documents-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
+Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
 
 Liitoksen tekeminen suoritetaan mongoosen komennolla [populate](http://mongoosejs.com/docs/populate.html). Päivitetään ensin kaikkien käyttäjien tietdot palauttava route:
 
@@ -1875,13 +1904,13 @@ usersRouter.get('/', async (request, response) => {
 })
 ```
 
-Funktion [populate](http://mongoosejs.com/docs/populate.html) kutsu siis ketjutetaan kyselyä vastaavan metodikutsun (tässä tapauksessa _find_) perään. Populaten parametri määrittelee, että _user_-dokumenttien _notes_-kentässä olevat _note_-olioihin viittaavat _id_:t korvataan dokumenttejä vastaavilla id:illä.
+Funktion [populate](http://mongoosejs.com/docs/populate.html) kutsu siis ketjutetaan kyselyä vastaavan metodikutsun (tässä tapauksessa _find_) perään. Populaten parametri määrittelee, että _user_-dokumenttien _notes_-kentässä olevat _note_-olioihin viittaavat _id_:t korvataan niitä vastaavilla dokumenteilla.
 
 Lopputulos on jo melkein haluamamme kaltainen:
 
 ![]({{ "/assets/4/9.png" | absolute_url }})
 
-Populaten yhteydessä on myös mahdollista rajata mitä kenttiä _embedattavista_ olioista otetaan mukaan. Rajaus tapahtuu mongon [syntaksin](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/#return-the-specified-fields-and-the-id-field-only) tapaan:
+Populaten yhteydessä on myös mahdollista rajata mitä kenttiä sisällytettävistä dokumenteista otetaan mukaan. Rajaus tapahtuu Mongon [syntaksilla](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/#return-the-specified-fields-and-the-id-field-only):
 
 ```js
 usersRouter.get('/', async (request, response) => {
@@ -1893,11 +1922,11 @@ usersRouter.get('/', async (request, response) => {
 })
 ```
 
-Määrittelyjen jälkeen tulos on seuraava:
+Tulos on nyt halutun kaltainen (**HUOM**: kuvassa on 'bugi', myös content-kenttien pitäisi olla mukana):
 
 ![]({{ "/assets/4/10.png" | absolute_url }})
 
-Lisätään sopiva populointi, myös muistiinpanojen yhteyteen
+Lisätään sopiva käyttäjän tietojen populointi, muistiinpanojen yhteyteen:
 
 ```js
 notesRouter.get('/', async (request, response) => {
@@ -1936,13 +1965,14 @@ Token-autentikaation periaatetta kuvaa seuraava sekvenssikaatio:
 
 ![]({{ "/assets/4/12.png" | absolute_url }})
 
-- Alussa käyttäjä kirjaantuu Reactilla toteutettua lomaketta käyttäen
+- Alussa käyttäjä kirjaantuu Reactilla toteutettua kirjautumislomaketta käyttäen
+  - lisäämme kirjautumislomakkeen frontendiin [osassa 5](osa5)
 - Tämän seurauksena selaimen React-koodi lähettää käyttäjätunnuksen ja salasanan HTTP POST -pyynnöllä palvelimen osoitteeseen _/api/login_
-- Jos käyttäjätunnus ja salasana ovat oikein, generoi palvelin _Tokenin_, jonka jollain tavalla yksilöi kirjautumisen tehneen käyttäjän
+- Jos käyttäjätunnus ja salasana ovat oikein, generoi palvelin _Tokenin_, jonka yksilöi jollain tavalla kirjautumisen tehneen käyttäjän
   - token on kryptattu, joten sen väärentäminen on (kryptografisesti) mahdotonta
-- backend vastaa selaimelle onnistumisesta kertovalla statuskoodilla ja palauttaa Tokenin pyynnön mukana
+- backend vastaa selaimelle onnistumisesta kertovalla statuskoodilla ja palauttaa Tokenin vastauksen mukana
 - Selain tallentaa tokenin esimerkiksi React-sovelluksen tilaan
-- Kun käyttäjä luo uuden muistiinpanon (tai tekee jonkin operaation, joka eellyttää tunnistautumista), lähettää React-koodi Tokenin pyynnön mukana palvelimelle
+- Kun käyttäjä luo uuden muistiinpanon (tai tekee jonkin operaation, joka edellyttää tunnistautumista), lähettää React-koodi Tokenin pyynnön mukana palvelimelle
 - Palvelin tunnistaa pyynnön tekijän tokenin perusteella
 
 Tehdään ensin kirjautumistoiminto. Asennetaan [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)-kirjasto, jonka avulla koodimme pystyy generoimaan [Javascript web token](https://jwt.io/) -muotoisia tokeneja.
@@ -2003,7 +2033,7 @@ const userForToken = {
 const token = jwt.sign(userForToken, process.env.SECRET)
 ```
 
-Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token.
+Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token. Ympäristömuuttujalle pitää muistaa asettaa arvo tiedostoon .env.
 
 Onnistuneeseen pyyntöön vastataan statuskoodilla _200 ok_ ja generoitu token lähetetään vastauksen bodyssä pyynnön tekijälle.
 
@@ -2014,14 +2044,14 @@ const loginRouter = require('./controllers/login')
 app.use('/api/login', loginRouter)
 ```
 
-### muistiinpanojen luominen vain kirjautuneille
+### Muistiinpanojen luominen vain kirjautuneille
 
 Muutetaan vielä muistiinpanojen luomista, siten että luominen onnistuu ainoastaan jos luomista vastaavan pyynnön mukana on validi token. Muistiinpano talletetaan tokenin identifioiman käyttäjän tekemien muistiinpanojen listaan.
 
 Tapoja tokenin välittämiseen selaimesta backendiin on useita. Käytämme ratkaisussamme [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)-headeria. Tokenin lisäksi headerin avulla kerrotaan mistä [autentikointiskeemasta](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#Authentication_schemes) on kyse. Tämä voi olla tarpeen, jos palvein tarjoaa useita eri tapoja autentikointiin. Skeeman ilmaiseminen kertoo näissä tapauksissa palvelimelle, miten mukana olevat kredentiaalit tulee tulkita.
 Meidän käyttöömme sopii _Bearer_-skeema.
 
-Käytännössä tämä tarkoittaa, että jos token one sim merkkijono _eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW_, laitetaan pyynnöissä headerin Authorization arvoksi merkkijono
+Käytännössä tämä tarkoittaa, että jos token on esimerkiksi merkkijono _eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW_, laitetaan pyynnöissä headerin Authorization arvoksi merkkijono
 <pre>
 Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
 </pre>
@@ -2029,6 +2059,10 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW
 Modifioitu muistiinpanojen luomisesta huolehtiva koodi seuraavassa:
 
 ```js
+const jwt = require('jsonwebtoken')
+
+// ...
+
 const getTokenFrom = (request) =>{
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -2078,19 +2112,41 @@ notesRouter.post('/', async (request, response) => {
 })
 ```
 
-Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka perusteella token on laadittu. Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
+Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin oikeellisuus varmistetaan metodilla _jwt.verify_. Metodi myös dekoodaa tokenin, eli palauttaa olion, jonka perusteella token on laadittu:
 
-Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä, palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
+```js
+const decodedToken = jwt.verify(token, process.env.SECRET)
+```
 
-Tokenin verifiointi voi myös aiheuttaa poikkeuksen _JsonWebTokenError_. Syynä tälle voi olla viallinen, väärennetty tai eliniältään vanhentunut token. Poikkeus poikkeusten käsittelyssä haaraudutaan virheen tyypin perusteella ja vastataan 401 jos poikkeus johtuu tokenista, ja muuten vastataan [500 internal server error](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1).
+Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. 
 
-### loppuhuomioita
+Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä (eli _decodedToken.id_ ei ole määritelty), palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä:
 
-Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypillinen kiivaasti etenevät ohjelmistoprojektin ilmiö: suuri osa testeistä on hajonnut. Koska kurssin tämä osa on jo muutenkin täyteen ladattu uutta asiaa, jätämme testien korjailun harjoitustehtäväksi.
+```js
+if (!token || !decodedToken.id) {
+  return response.status(401).json({ error: 'token missing or invalid' })
+}
+```
 
-Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyädyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta turvallisena sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
+Kun pyynnön tekijän identiteetti on selvillä, jatkuu suoritus entiseen tapaan.
 
-Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5)
+Tokenin verifiointi voi myös aiheuttaa poikkeuksen _JsonWebTokenError_. Syynä tälle voi olla viallinen, väärennetty tai eliniältään vanhentunut token. Poikkeusten käsittelyssä haaraudutaan virheen tyypin perusteella ja vastataan 401 jos poikkeus johtuu tokenista, ja muuten vastataan [500 internal server error](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1).
+
+Uuden muistiinpanon luominen onnistuu nyt postmanilla jos _authorization_-headerille asetetaan oikeanlainen arvo, eli merkkijono _bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ_, missä osa on _login_-operaation palauttama token:
+
+![]({{ "/assets/4/14.png" | absolute_url }})
+
+### Loppuhuomioita
+
+Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypillinen kiivaasti etenevät ohjelmistoprojektin ilmiö: suuri osa testeistä on hajonnut. Koska kurssin tämä osa on jo muutenkin täynnä uutta asiaa, jätämme testien korjailun harjoitustehtäväksi.
+
+Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyödyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta suojattuna sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
+
+Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5).
+
+## Tehtäviä
+
+Tee nyt tehtävät [73-78](../tehtavat#Blogilistan-käyttäjät)
 
 ## Lint
 
@@ -2116,7 +2172,7 @@ node_modules/.bin/eslint --init
 
 Vastaillaan kysymyksiin
 
-![]({{ "/assets/3/15.png" | absolute_url }})
+![]({{ "/assets/4/15.png" | absolute_url }})
 
 Konfiguraatiot tallentuvat tiedostoon _.eslintrc.js_:
 
@@ -2275,6 +2331,10 @@ module.exports = {
 
 Monissa yrityksissä on tapana määritellä yrityksen laajuiset koodausstandardit ja näiden käyttöä valvova ESlint-konfiguraatio. Pyörää ei kannata välttämättä keksiä uudelleen ja voi olla hyvä idea ottaa omaan projektiin joku käyttöön jossain muualla hyväksi havaittu konfiguraatio. Viime aikoina monissa projekteissa on omaksuttu AirBnB:n [javascript](https://github.com/airbnb/javascript)-tyyliohjeet ottamalla käyttöön firman määrittelemä [ESLint](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)-konfiguraatio.
 
+## Tehtäviä
+
+Tee nyt tehtävä [79](../tehtavat#eslint)
+
 <!---
 note left of kayttaja
   käyttäjä täyttää kirjautumislomakkeelle
@@ -2284,7 +2344,7 @@ kayttaja -> selain: painetaan login-nappia
 
 selain -> backend: HTTP POST /api/login {username, password}
 note left of backend
-  backend generoi käyttäjän identifioivan TOKE:in
+  backend generoi käyttäjän identifioivan TOKEMin
 end note
 backend -> selain: TOKEN palautetaan vastauksen bodyssä
 note left of selain

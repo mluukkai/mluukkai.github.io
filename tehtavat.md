@@ -1153,6 +1153,38 @@ Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteut
 
 Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiinn [osassa 3](osa3/#loput-operaatiot).
 
-### käyttäjä
+### Blogilistan käyttäjät
 
-### token-autentikaatio...
+Seuraavien tehtävien myötä Blogilistalle luodaan käyttäjienhallinnan perusteet. Varminta on seurata melko tarkkaa osan 4 luvusta [Käyttäjien hallinta ja monimutkaisempi tietokantaskeema](osa4/#Käyttäjien-hallinta-ja-monimutkaisempi-tietokantaskeema) alkavaa tarinaa. Toki luovuus on sallittua.
+
+#### 73 blogilistan laajennus, osa 4
+
+Käyttäjien luominen, koodi, testit. Käyttäjätunnus uniikki, pituus min 3 merkkiä, salasana min 3 merkkiä, ei saa olla sama kuin käyttäjätunnus. Hyvä virheilmo.
+
+#### 74 blogilistan laajennus, osa 5
+
+Blogille käyttäjä, käyttäjään joukko blogeja.
+
+Lisäys kovakoodaamalla käyttäjäid, populoidut reitit
+
+#### 75 blogilistan laajennus, osa 6
+
+Blogin lisäys vain kirjautuneelle
+
+#### 76 blogilistan laajennus, osa 7
+
+Middleware joka asettaa tokenin request.token-kenttään
+
+#### 77 blogilistan laajennus, osa 8
+
+Middleware joka palauttaa 401 jos ei tokenia ja ei sallitulla routella
+
+#### 78 blogilistan laajennus, osa 9
+
+Testien päivitys
+
+### ESlint
+
+#### 79 lint-konfiguraatio
+
+määrittele sopiva...
