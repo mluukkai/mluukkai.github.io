@@ -6,7 +6,7 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt [ensimmäinen](/osa1), [toinen](/osa2), [kolmas](/osa3) ja [neljäs](/osa3). Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua. Jäljellä olevein osien tämän hetken tavoiteaikataulu on
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt [ensimmäinen](/osa1), [toinen](/osa2), [kolmas](/osa3) ja [neljäs](/osa3). Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua. Jäljellä olevien osien tämän hetken tavoiteaikataulu on
 
 - osa 5 ti 2.1
 - osa 6 la 6.1
