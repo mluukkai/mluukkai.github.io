@@ -1470,7 +1470,7 @@ Aloitetaan lisäämällä tietokantaan tieto käyttäjistä. Käyttäjän (User)
 
 ![](https://yuml.me/a187045b.png)
 
-Relaatiotietokantoja käytettäessä ratkaisua ei tarvitisisi juuri miettiä. Molemmille olisi oma taulunsa ja muistiinpanoihin liitettäisiin sen luonutta käyttäjää vastaava id vierasavaimeksi (foreign key).
+Relaatiotietokantoja käytettäessä ratkaisua ei tarvitsisi juuri miettiä. Molemmille olisi oma taulunsa ja muistiinpanoihin liitettäisiin sen luonutta käyttäjää vastaava id vierasavaimeksi (foreign key).
 
 Dokumenttitietokantoja käytettäessä tilanne on kuitenkin toinen, erilaisia tapoja mallintaa tilanne on useita.
 
