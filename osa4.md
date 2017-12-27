@@ -2240,10 +2240,10 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
 ```bash
-    "rules": {
-        // ...
-        "eqeqeq": "error"
-    },
+"rules": {
+  // ...
+  "eqeqeq": "error"
+},
 ```
 
 Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
@@ -2292,35 +2292,35 @@ Pluginin käyttöönotto tulee määritellä konfiguraatiotiedostossa, jonka tä
 ```js
 module.exports = {
   "env": {
-      "browser": true,
-      "commonjs": true,
-      "es6": true
+    "browser": true,
+    "commonjs": true,
+    "es6": true
   },
   "globals": {
-      "process": true,
+    "process": true,
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",
   "rules": {
-      "indent": [
-          "error",
-          2
-      ],
-      "linebreak-style": [
-          "error",
-          "unix"
-      ],
-      "quotes": [
-          "error",
-          "single"
-      ],
-      "semi": [
-          "error",
-          "never"
-      ],
-      "eqeqeq": "error",
-      "no-console": 0,
-      "no-process-env": 0
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "eqeqeq": "error",
+    "no-console": 0,
+    "no-process-env": 0
   }
 }
 ```

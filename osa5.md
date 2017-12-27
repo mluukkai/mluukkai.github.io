@@ -29,7 +29,7 @@ React+redux
 - Storagen välittäminen propseilla ja kontekstissa
 
 Javascript
-- Spread-operaatio 
+- Spread-operaatio
 - Reduxin edellyttämästä funktionaalisesta ohjelmoinnista
   - puhtaat funktiot
   - immutable
