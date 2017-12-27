@@ -1176,7 +1176,7 @@ addNote = (e) => {
 
 Palvelimen palauttama uusi muistiinpano siis lisätään tilassa olevien muiden muistiinpanojen joukkoon (kannattaa [muistaa tärkeä detalji](osa1/#taulukon-käsittelyä) siitä, että metodi _concat_ ei muuta komponentin alkuperäistä tilaa, vaan luo uuden uuden taulukon) ja tyhjennetään lomakkeen teksti.
 
-Kun palvelimella oleva data alkaa vaikuttaa web-sovelluksen toimintalogiikkaan, tulee sovelluskehitykseen heti iso joukko uusia haasteita, joita tuo mukanaan mm. kommunikoinnin asynkroonisuus. Debuggaamiseenin tarvitaan uusia strategiota, debug-printtaukset ym muuttuvat vain tärkeämmäksi, myös javascriptin runtimen periaatteita ja React-komponenttien elinkaarta on pakko tuntea riittävällä tasolla, arvaileminen ei riitä.
+Kun palvelimella oleva data alkaa vaikuttaa web-sovelluksen toimintalogiikkaan, tulee sovelluskehitykseen heti iso joukko uusia haasteita, joita tuo mukanaan mm. kommunikoinnin asynkronisuus. Debuggaamiseenin tarvitaan uusia strategiota, debug-printtaukset ym muuttuvat vain tärkeämmäksi, myös javascriptin runtimen periaatteita ja React-komponenttien elinkaarta on pakko tuntea riittävällä tasolla, arvaileminen ei riitä.
 
 Palvelimen tilaa kannattaa tarkastella myös suoraan, esim. selaimella:
 
@@ -1213,7 +1213,7 @@ toggleImportanceOf = (id) => {
 }
 ```
 
-Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisälttöön kohta.
+Kyseessä on jälleen funktio, joka palauttaa funktion. Palataan sen sisältöön kohta.
 
 Komponentin _App_ metodissa _render_ välitetään jokaiselle muistiinpanolle tapahtumankäsittelijäfunktio:
 

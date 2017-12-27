@@ -1889,7 +1889,7 @@ Mistä on kyse? Tapahtumankäsittelijäksi on tarkoitus määritllä viite _funk
 <button onClick={this.asetaArvoon(0)}>
 ```
 
-tapahtumakäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittäin kun React suorittaa metodin _render_, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin _setState_ kutsun. Tämä taas aiheuttaa uuden _render_-kutsun jne...
+tapahtumankäsittelijäksi tulee määriteltyä funktiokutsu. Sekin on monissa tilanteissa ok, mutta ei nyt, nimittäin kun React suorittaa metodin _render_, se suorittaa kutsun <code>this.asetaArvoon(0)</code>. Kutsu aiheuttaa metodin _setState_ kutsun. Tämä taas aiheuttaa uuden _render_-kutsun jne...
 
 Tässä tilanteessa meidän onkin käytettävä yleistä Javascriptin ja yleisemminkin funktionaalisen ohjelmoinnin kikkaa, eli määritellä _funktio joka palauttaa funktion_:
 
@@ -2096,7 +2096,7 @@ render() {
 
 Koska meillä on nyt uudelleenkäytettävä nappi, sovellukselle on lisätty uutena toiminnallisuutena nappi, jolla laskurin arvoa voi vähentää.
 
-Tapahtumakäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
+Tapahtumankäsittelijä välitetään napeille propsin _handleClick_ välityksellä. Propsin nimellä ei ole sinänsä merkitystä, mutta valinta ei ollut täysin sattumanvarainen, esim. Reactin [tutoriaali](https://reactjs.org/tutorial/tutorial.html) suosittelee tätä konventiota.
 
 ### Monimutkaisemman tilan päivittäminen
 

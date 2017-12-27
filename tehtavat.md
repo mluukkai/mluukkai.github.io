@@ -946,7 +946,7 @@ Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen 
 
 ## Osa 4
 
-Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka aulla käyttäjien on mahollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
+Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka aulla käyttäjien on mahdollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
 
 Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehyvä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
 
@@ -990,7 +990,7 @@ app.get('/api/blogs', (request, response) => {
 
 app.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body)
-  
+
   blog
     .save()
     .then(result => {
@@ -1012,7 +1012,7 @@ Jaa sovelluksen koodi osan 4 [alun](/osa4) tapaan useaan moduuliin.
 
 **HUOM** etene todella pienin askelin, varmistaen että kaikki toimii koko ajan. Jos yrität "oikaista" tekemällä monta asiaa kerralla, on [Murphyn lain](https://fi.wikipedia.org/wiki/Murphyn_laki) perusteella käytännössä varmaa, että jokin menee pahasti pieleen ja "oikotien" takia maaliin päästään paljon myöhemmin kuin systemaattisin pienin askelin.
 
-Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on helppo palata aina toimivaan tilanteeseen jos koodi menee liian solmuun. 
+Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on helppo palata aina toimivaan tilanteeseen jos koodi menee liian solmuun.
 
 ### yksikkötestaus
 
@@ -1023,15 +1023,14 @@ Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funkt
 Määrittele ensin funktio _dummy_ joka saa parametrikseen taulukollisen blogeja ja palauttaa aina luvun 1. Varmista testikonfiguraatiosi toimivuus seuraavalla testillä:
 
 ```js
-  const dummy = require('../utils/list_helper')
+const dummy = require('../utils/list_helper')
 
-  test("dummy is called", () => {
-    const blogs = [
-    ]
+test('dummy is called', () => {
+  const blogs = []
 
-    const result = list.dummy(blogs)
-    expect(result).toBe(1)
-  })
+  const result = list.dummy(blogs)
+  expect(result).toBe(1)
+})
 ```
 
 #### 62 apufunktioita ja yksikkötestejä, osa 2
@@ -1047,24 +1046,24 @@ Testisyötteiden määrittely onnistuu esim. seuraavaan tapaan:
 ```js
 describe('total likes', () => {
   const listWithOneBlog = [
-      {
-      _id: "5a422aa71b54a676234d17f8",
-      title: "Go To Statement Considered Harmful",
-      author: "Edsger W. Dijkstra",
-      url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
       __v: 0
     }
   ]
 
-  test("when list has only one blog equals the likes of that", () => {
+  test('when list has only one blog equals the likes of that', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
     expect(result).toBe(5)
   })
 })
 ```
 
-Tärmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [dabuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
+Törmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [dabuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
 
 #### 63 apufunktioita ja yksikkötestejä, osa 2
 
@@ -1074,7 +1073,7 @@ Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogej
 {
   title: "Canonical string reduction",
   author: "Edsger W. Dijkstra",
-  likes: 12,  
+  likes: 12
 }
 ```
 
@@ -1087,7 +1086,7 @@ Tämä ja seuraava tehtävä ovat jo hieman haastavampia.
 Määrittele funktio _mostBlogs_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää _kirjoittajan_, kenellä on eniten blogeja. Funktion paluuarvo kertoo myös ennätysblogaajan blogien määrän:
 
 ```js
-{  
+{
   author: "Robert C. Martin",
   blogs: 3
 }
@@ -1095,10 +1094,10 @@ Määrittele funktio _mostBlogs_ joka saa parametrikseen taulukollisen blogeja. 
 
 #### 65 apufunktioita ja yksikkötestejä, osa 5
 
-Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja.  Funktio selvittää kirjoittajan, kenen blogeilla on eniten likejä. Funktion paluuarvo kertoo myös suosikkiblogaajan likejen yhteenlasketun määrän:
+Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää kirjoittajan, kenen blogeilla on eniten likejä. Funktion paluuarvo kertoo myös suosikkiblogaajan likejen yhteenlasketun määrän:
 
 ```js
-{  
+{
   author: "Edsger W. Dijkstra",
   votes: 17
 }
@@ -1106,14 +1105,13 @@ Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. 
 
 ### API:n testaaminen
 
-**Huom** materiaalissa käytetään muutamaan kertaan ekspektaatiota [toCOntain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem) tarkastettaessa että jokin arvo on taulukossa. Kannattaa huomata, että metodi käyttää samuuden vertailuun ===-operaattoria ja olioiden kohdalla tämä ei ole useinkaan se mitä halutaan ja parempi vaihtoehto onkin
-[toContainEqual](https://facebook.github.io/jest/docs/en/expect.html#tocontainequalitem).
+**Huom** materiaalissa käytetään muutamaan kertaan ekspektaatiota [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem) tarkastettaessa että jokin arvo on taulukossa. Kannattaa huomata, että metodi käyttää samuuden vertailuun ===-operaattoria ja olioiden kohdalla tämä ei ole useinkaan se mitä halutaan ja parempi vaihtoehto onkin [toContainEqual](https://facebook.github.io/jest/docs/en/expect.html#tocontainequalitem).
 
 #### 66 blogilistan testit, osa 1
 
-Tee API-tason testit blogilistan osoitteeseen /api/blogs tapahtuvalle HTTP GET -pyynnölle. 
+Tee API-tason testit blogilistan osoitteeseen /api/blogs tapahtuvalle HTTP GET -pyynnölle.
 
-Kun testi on valmis, refaktoroi operaaatio käyttämään promisejen sijaan async/awaitia.
+Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
 
 Huomaa, että joudut tekemään koodiin osan 4 materiaalin tyylin joukon muutoksia (mm. testausympäristön määrittely), jotta saat järkevästi määriteltyä API-tason testejä.
 
@@ -1121,7 +1119,7 @@ Huomaa, että joudut tekemään koodiin osan 4 materiaalin tyylin joukon muutoks
 
 Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle.
 
-Kun testi on valmis, refaktoroi operaaatio käyttämään promisejen sijaan async/awaitia.
+Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
 
 #### 68 blogilistan testit, osa 2
 
@@ -1131,7 +1129,7 @@ Laajenna ohjelmaa siten, että testi menee läpi.
 
 #### 69 blogilistan testit, osa 3
 
-Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä  _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
 
 Laajenna toteutusta siten, että testit menevät läpi.
 
@@ -1139,17 +1137,17 @@ Laajenna toteutusta siten, että testit menevät läpi.
 
 #### 70 blogilistan laajennus, osa 1
 
-Refaktoroi projektin testit siten, että ne eivät enää ole riippuvaisia siitä, että HTTP GET -operaatioiden testit suoritetaan ennen uusien blogien lisäämisen testaamista. 
+Refaktoroi projektin testit siten, että ne eivät enää ole riippuvaisia siitä, että HTTP GET -operaatioiden testit suoritetaan ennen uusien blogien lisäämisen testaamista.
 
 #### 71 blogilistan laajennus, osa 2
 
-Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon. 
+Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon.
 
 Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
 
 #### 72 blogilistan laajennus, osa 3
 
-Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon. 
+Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon.
 
 Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
 

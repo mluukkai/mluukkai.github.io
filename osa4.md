@@ -243,10 +243,9 @@ const Note = mongoose.model('Note', {
 module.exports = Note
 ```
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testeja) 
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-backend/tree/ennen_testeja)
 
-Huomaa, että repositorion master-haarassa on myöhemmän vaiheen koodi, tämän hetken koodi on
-tagissa [ennen_testeja](https://github.com/mluukkai/notes-backend/tree/ennen_testeja)_
+Huomaa, että repositorion master-haarassa on myöhemmän vaiheen koodi, tämän hetken koodi on tagissa [ennen_testeja](https://github.com/mluukkai/notes-backend/tree/ennen_testeja).
 
 ![]({{ "/assets/4/0.png" | absolute_url }})
 
@@ -471,7 +470,7 @@ Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tap
 
 Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, että jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu "suhteellisen helposti" mm. [keskusmuistissa toimivan Mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontainereiden avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia Mongoa.
 
-Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tietodotoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin. 
+Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tietodotoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin.
 
 Ideana on, että _index.js_ voi käyttää konfiguraatioita seuraavasti:
 
@@ -607,11 +606,11 @@ afterAll(() => {
 })
 ```
 
-Toisella rivillä testi käynnistää backendin ja käärii sen kolmannella rivillä funktion _supertest_ avulla ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitataan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backendiin.
+Toisella rivillä testi käynnistää backendin ja käärii sen kolmannella rivillä funktion _supertest_ avulla ns. [superagent](https://github.com/visionmedia/superagent)-olioksi. Tämä olio sijoitetaan muuttujaan _api_ ja sen kautta testit voivat tehdä HTTP-pyyntöjä backendiin.
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](osa4/#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkroonisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
+Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](osa4/#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkronisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
 
 Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
 
@@ -656,7 +655,7 @@ test('the first note is about HTTP methods', async () => {
 })
 ```
 
-Molemmat testit sijoittavat pyynnön vastauksen muuttujaan _response_ ja toisin kuin edellinen testi, joka käytti _supertestin_ mekansimeja statuskoodin ja vastauksen headereiden oikeellisuuden varmistamiseen, tällä kertaa tutkitaan vastauksessa olevan datan, eli _response.body_:n oikeellisuutta Jestin [expect](https://facebook.github.io/jest/docs/en/expect.html#content):in avulla.
+Molemmat testit sijoittavat pyynnön vastauksen muuttujaan _response_ ja toisin kuin edellinen testi, joka käytti _supertestin_ mekanismeja statuskoodin ja vastauksen headereiden oikeellisuuden varmistamiseen, tällä kertaa tutkitaan vastauksessa olevan datan, eli _response.body_:n oikeellisuutta Jestin [expect](https://facebook.github.io/jest/docs/en/expect.html#content):in avulla.
 
 
 Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimme asynkronisten pyyntöjen vastauksiin käsille pääsemiseen promiseja ja takaisinkutsuja, mutta nyt kaikki menee mukavasti:
@@ -741,7 +740,7 @@ test('a specific note is within the returned notes', async () => {
   const response = await api
     .get('/api/notes')
 
-  const contents = response.body.map(r=>r.content)
+  const contents = response.body.map(r => r.content)
 
   expect(contents).toContain('HTTP-protokollan tärkeimmät metodit ovat GET ja POST')
 })
@@ -892,7 +891,7 @@ saved
 
 Yllättäen ratkaisu ei async/awaitista huolimatta toimi niin kuin oletamme, testin suoritus aloitetaan ennen kun tietokannan tila on saatu alustettua!
 
-Ongelma on siinä, että jokainen forEach-loopin läpikäynti generoi oman asynkronisen operaation ja _beforeAll_ ei odota näiden suoritusta. Eli forEach:in sisällä olevat _await_-komennot eivät ole funktiossa _beforeEach_ vaan erillisissä funktioissa joiden päättymistä _beforeAll_ ei odota. 
+Ongelma on siinä, että jokainen forEach-loopin läpikäynti generoi oman asynkronisen operaation ja _beforeAll_ ei odota näiden suoritusta. Eli forEach:in sisällä olevat _await_-komennot eivät ole funktiossa _beforeEach_ vaan erillisissä funktioissa joiden päättymistä _beforeAll_ ei odota.
 
 Koska testien suoritus alkaa heti _beforeAll_ metodin suorituksen jälkeen. Testien suoritus ehditään jo aloittaa, ennen kuin tietokanta on alustettu toivottuun alkutilaan.
 
@@ -911,16 +910,16 @@ beforeAll(async () => {
 
 Ratkaisu on varmasti aloittelijalle tiiviydestään huolimatta hieman haastava. Taulukkoon _noteObjects_ talletetaan taulukkoon _initialNotes_ talletettuja javascript-oliota vastaavat _Note_-konstruktorifunktiolla generoidut Mongoose-oliot. Seuraavalla rivillä luodaan uusi taulukko, joka _muodostuu promiseista_, jotka saadaan kun jokaiselle _noteObjects_ taulukon alkiolle kutsutaan metodia _save_, eli ne talletetaan kantaan.
 
-Metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla saadaan koostettua taulukollinen promiseja yhdeksi promiseksi, joka valmistuu, eli menee tilaan _fulfilled_ kun kaikki sen parametrina olevan taulukon promiset ovat valmisutneet.
-Siispä viimeinen rivi, <code>await Promise.all(promiseArray)</code> odottaa, että kaikki tietokantaan talletusta vastaavat promiset ovat valmiina, eli alkiot on talletettu tietokantaan.
+Metodin [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) avulla saadaan koostettua taulukollinen promiseja yhdeksi promiseksi, joka valmistuu, eli menee tilaan _fulfilled_ kun kaikki sen parametrina olevan taulukon promiset ovat valmistuneet.
+Siispä viimeinen rivi, <code>await Promise.all(promiseArray)</code> odottaa, että kaikki tietokantaan talletetusta vastaavat promiset ovat valmiina, eli alkiot on talletettu tietokantaan.
 
 > Promise.all-metodia käyttäessä päästään tarvittaessa käsiksi sen parametrina olevien yksittäisten promisejen arvoihin, eli promiseja vastaavien operaatioiden tuloksiin. Jos odotetaan promisejen valmistumista _await_-syntaksilla <code>const results = await Promise.all(promiseArray)</code> palauttaa operaatio taulukon, jonka alkioina on _promiseArray_:n promiseja vastaavat arvot samassa järjestyksessä kuin promiset ovat taulukossa.
 
-Javascriptin asynkrooninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
+Javascriptin asynkroninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
 
 ### async/await backendissä
 
-Muutentaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkrooniset operaatiot tehdään joka tapauksessa funktioiden sisällä, awaitin käyttämiseen riittää, että muutamme routejen käsittelijät async-funktioiksi.
+Muutetaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkroniset operaatiot tehdään joka tapauksessa funktioiden sisällä, awaitin käyttämiseen riittää, että muutamme routejen käsittelijät async-funktioiksi.
 
 Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
 
@@ -942,7 +941,7 @@ Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpano
 ```js
 test('a valid note can be added ', async () => {
   const newNote = {
-    content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+    content: 'async/await yksinkertaistaa asynkronisten funktioiden kutsua',
     important: true
   }
 
@@ -958,11 +957,11 @@ test('a valid note can be added ', async () => {
   const contents = response.body.map(r => r.content)
 
   expect(response.body.length).toBe(initialNotes.length + 1)
-  expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+  expect(contents).toContain('async/await yksinkertaistaa asynkronisten funktioiden kutsua')
 })
 ```
 
-Kuten odotimme ja toimoimme, menee testi läpi.
+Kuten odotimme ja toimimme, menee testi läpi.
 
 Tehdään myös testi, joka varmistaa, että muistiinpanoa, jolle ei ole asetettu sisältöä ei talleteta
 
@@ -989,7 +988,7 @@ test('note without content is not be added ', async () => {
 })
 ```
 
-Testi ei mene läpi. Käy ilmi, että myös operaation suoritus postman:illa johtaa virhetilanteeseen. Koodissa on siis bugi. 
+Testi ei mene läpi. Käy ilmi, että myös operaation suoritus postman:illa johtaa virhetilanteeseen. Koodissa on siis bugi.
 
 > **Huom:** testejä tehdessä täytyy aina varmistua siitä, että testi testaa oikeaa asiaa, ja usein ensimmäistä kertaa testiä tehdessä se että testi ei mene läpi tarkoittaa sitä, että testi on tehty väärin. Myös päinvastaista tapahtuu, eli testi menee läpi mutta koodissa onkin virhe, eli testi ei testaa sitä mitä sen piti testata. Tämän takia testit kannattaa aina "testata" rikkomalla koodi ja varmistamalla, että testi huomaa koodiin tehdyt virheet.
 
@@ -1210,8 +1209,7 @@ notesRouter.delete('/:id', async (request, response) => {
 
 Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöty ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos asnynkronisia kutsuja on tehtävä useampia.
 
-Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction
-](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
+Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
 
@@ -1338,7 +1336,7 @@ describe('when there is initially some notes saved', async () => {
       const notesAtBeginningOfOperation = await notesInDb()
 
       const newNote = {
-        content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+        content: 'async/await yksinkertaistaa asynkronisten funktioiden kutsua',
         important: true
       }
 
@@ -1353,7 +1351,7 @@ describe('when there is initially some notes saved', async () => {
       expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length + 1)
 
       const contents = notesAfterOperation.map(r => r.content)
-      expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+      expect(contents).toContain('async/await yksinkertaistaa asynkronisten funktioiden kutsua')
     })
 
     test('POST /api/notes fails with proper statuscode if content is missing', async () => {
@@ -1428,7 +1426,7 @@ suorittavat testattavan operaation:
 
 ```js
 const newNote = {
-  content: 'async/await yksinkertaistaa asynkroonisten funktioiden kutsua',
+  content: 'async/await yksinkertaistaa asynkronisten funktioiden kutsua',
   important: true
 }
 
@@ -1451,7 +1449,7 @@ ja varmentavat, että operaation suoritus vaikutti tietokantaan halutulla tavall
 expect(notesAfterOperation.length).toBe(notesAtBeginningOfOperation.length + 1)
 
 const contents = notesAfterOperation.map(r => r.content)
-expect(contents).toContain('async/await yksinkertaistaa asynkroonisten funktioiden kutsua')
+expect(contents).toContain('async/await yksinkertaistaa asynkronisten funktioiden kutsua')
 ```
 
 Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtyä eteenpäin.
@@ -2208,11 +2206,11 @@ Mukana on myös _console.log_-komennoista varoittava sääntö-
 Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/docs/user-guide/configuring#configuring-rules) määrittelemällä sen "arvoksi" konfiguraatiossa 0. Tehdään toistaiseksi näin säännölle _no-console_.
 
 ```bash
-    "rules": {
-        // ...
-        "eqeqeq": "error",
-        "no-console": 0,
-    },
+"rules": {
+  // ...
+  "eqeqeq": "error",
+  "no-console": 0,
+},
 ```
 
 ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa ympäristömuuttujiin _globaalin_ muuttujan _process_ kautta. ESlintin silmissä on tämä kuitenkin näyttää määrittelemättömän muuttujan käytöltä.
@@ -2222,11 +2220,11 @@ Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
 
 ```bash
 module.exports = {
-    // ...
-    "globals": {
-        "process": true,
-    },
-    // ...
+  // ...
+  "globals": {
+      "process": true,
+  },
+  // ...
 }
 
 Ympäristömuuttujien käyttö suoraan globaalin muuttujan _process_ kautta ei välttämättä ole paras mahdollinen idea. Tutustumme seuraavissa osissa vaihtoehtoisiin tapoihin.
@@ -2241,37 +2239,37 @@ Pluginin käyttöönotto tulee määritellä konfiguraatiotiedostossa, jonka tä
 
 ```js
 module.exports = {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es6": true
-    },
-    "globals": {
-        "process": true,
-    },
-    "extends": "eslint:recommended",
-    "parser": "babel-eslint",
-    "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "never"
-        ],
-        "eqeqeq": "error",
-        "no-console": 0,
-        "no-process-env": 0
-    },
+  "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true
+  },
+  "globals": {
+      "process": true,
+  },
+  "extends": "eslint:recommended",
+  "parser": "babel-eslint",
+  "rules": {
+      "indent": [
+          "error",
+          2
+      ],
+      "linebreak-style": [
+          "error",
+          "unix"
+      ],
+      "quotes": [
+          "error",
+          "single"
+      ],
+      "semi": [
+          "error",
+          "never"
+      ],
+      "eqeqeq": "error",
+      "no-console": 0,
+      "no-process-env": 0
+  }
 }
 ```
 
