@@ -1159,7 +1159,9 @@ Seuraavien tehtävien myötä Blogilistalle luodaan käyttäjienhallinnan perust
 
 #### 73 blogilistan laajennus, osa 4
 
-Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö osoitteeseen _api/users_. Käyttäjillä on käyttäjätunnus ja nimi sekä totuusarvoinen kenttä, joka kertoo onko käyttäjä täysi-ikäinen.
+Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö osoitteeseen _api/users_. Käyttäjillä on käyttäjätunnus, salasana ja nimi sekä totuusarvoinen kenttä, joka kertoo onko käyttäjä täysi-ikäinen.
+
+Älä talleta tietokantaan salasanoja selväkielisenä vaan käytä osan 4 luvun [Käyttäjien luominen](osa4/#Käyttäjien-luominen) tapaan _bcrypt_-kirjastoa.
 
 Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
 
@@ -1178,7 +1180,7 @@ Tee testit, jotka varmistavat, että viheellisiä käyttäjiä ei luoda, ja ett�
 
 Laajenna blogia siten, että blogiin tulee tieto sen lisänneestä käyttäjästä.
 
-Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan ssite, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä).
+Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä). Tässä vaiheessa ei ole väliä kuka käyttäjistä määritellään lisääväksi. Toiminnallisuus viimeistellään tehtävässä 77
 
 Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
 
@@ -1188,17 +1190,17 @@ ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näky
 
 ![]({{ "/assets/teht/26.png" | absolute_url }})
 
-#### 75 blogilistan laajennus, osa 6
+#### 76 blogilistan laajennus, osa 7
 
-Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi, eli mahdollisuus kirjautua. 
+Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi. 
 
 Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP POST -pyynnössä on mukana validi token. Tokenin haltija määritellään blogin lisääjäksi.
 
-#### 76 blogilistan laajennus, osa 7
+#### 77 blogilistan laajennus, osa 8
 
 Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla. 
 
-Jos käytit samaa ratkaisua refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin Authorization-headerista ja sijoittaa sen _request_-olion kenttään _token_.
+Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
 
 Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
 
@@ -1206,29 +1208,41 @@ Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
 app.use(middleware.tokenExtractor)
 ```
 
-pääsevät routet tokeniin käsiksi suoraan viittaamalla _requet.token:
+pääsevät routet tokeniin käsiksi suoraan viittaamalla _requet.token_:
 
 ```js
 blogsRouter.post('/', async (request, response) => {
-  const body = request.body
-
-  try {
+    // ..
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-   //..
+    //..
   }
 })
 ```
 
-#### 77 blogilistan laajennus, osa 8
-
-Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
-
 #### 78 blogilistan laajennus, osa 9
 
-Tee testit edellisen tehtävän toiminnallisuudelle.
+Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä. 
+
+Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaankuuluva statuskoodi.
+
+Huomaa, että jos haet blogin tietokannasta
+
+```js
+const blog = await Blog.findById(...)
+```
+
+ei kenttä _blog.user_ ole tyypiltään merkkijono vaan _object_. Eli jos haluat verrata kannasta haetun olion id:tä merkkijonomuodossa olevaan id:hen, ei normaali vertailu toimi. Kannasta haettu id tulee muuttaa vertailua varten merkkijonoksi:
+
+```js
+if ( blog.user.toString() === userid ) ...
+```
+
+#### 79 blogilistan laajennus, osa 10
+
+Tee testit tehtävän 78 toiminnallisuudelle.
 
 ### ESlint
 
-#### 79 lint-konfiguraatio
+#### 80 lint-konfiguraatio
 
 Ota sovellukseesi käyttöön ESlint. 

@@ -4,10 +4,6 @@ title: osa 4
 permalink: /osa4/
 ---
 
-<div class="important">
-  <h1>KESKEN, ÄLÄ LUE</h1>
-</div>
-
 ## Osan 4 oppimistavoitteet
 
 - Node.js / Express
@@ -2146,7 +2142,7 @@ Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5).
 
 ## Tehtäviä
 
-Tee nyt tehtävät [73-78](../tehtavat#Blogilistan-käyttäjät)
+Tee nyt tehtävät [73-79](../tehtavat#Blogilistan-käyttäjät)
 
 ## Lint
 
@@ -2333,7 +2329,7 @@ Monissa yrityksissä on tapana määritellä yrityksen laajuiset koodausstandard
 
 ## Tehtäviä
 
-Tee nyt tehtävä [79](../tehtavat#eslint)
+Tee osan huipentava tehtävä [80](../tehtavat#eslint)
 
 <!---
 note left of kayttaja
