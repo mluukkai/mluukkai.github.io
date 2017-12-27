@@ -1159,32 +1159,76 @@ Seuraavien tehtävien myötä Blogilistalle luodaan käyttäjienhallinnan perust
 
 #### 73 blogilistan laajennus, osa 4
 
-Käyttäjien luominen, koodi, testit. Käyttäjätunnus uniikki, pituus min 3 merkkiä, salasana min 3 merkkiä, ei saa olla sama kuin käyttäjätunnus. Hyvä virheilmo.
+Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö osoitteeseen _api/users_. Käyttäjillä on käyttäjätunnus ja nimi sekä totuusarvoinen kenttä, joka kertoo onko käyttäjä täysi-ikäinen.
+
+Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
+
+Käyttäjäien lista voi näyttää esim. seuraavalta:
+![]({{ "/assets/teht/24.png" | absolute_url }})
 
 #### 74 blogilistan laajennus, osa 5
 
-Blogille käyttäjä, käyttäjään joukko blogeja.
+Laajenna käyttäjätunnusten luomista siten, että käyttäjätunnuksen ja salasanan tulee olla vähintään 3 merkkiä pitkiä ja käyttäjätunnus on järjestelmässä uniikki. Jos täysi-ikäisyydelle ei määritellä luotaessa arvoa, on se oletusarvoisesti true.
 
-Lisäys kovakoodaamalla käyttäjäid, populoidut reitit
+Luomisoperaation tulee palauttaa sopiva statuskoodi ja kuvaava virheilmoitus, jos yritetään luoda epävalidi käyttäjä.
+
+Tee testit, jotka varmistavat, että viheellisiä käyttäjiä ei luoda, ja että virheellisen käyttäjän luomisoperaatioon vastaus on järkevä statuskoodin ja virheilmoituksen osalta.
 
 #### 75 blogilistan laajennus, osa 6
 
-Blogin lisäys vain kirjautuneelle
+Laajenna blogia siten, että blogiin tulee tieto sen lisänneestä käyttäjästä.
+
+Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan ssite, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä).
+
+Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
+
+![]({{ "/assets/teht/25.png" | absolute_url }})
+
+ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näkyvillä
+
+![]({{ "/assets/teht/26.png" | absolute_url }})
+
+#### 75 blogilistan laajennus, osa 6
+
+Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi, eli mahdollisuus kirjautua. 
+
+Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP POST -pyynnössä on mukana validi token. Tokenin haltija määritellään blogin lisääjäksi.
 
 #### 76 blogilistan laajennus, osa 7
 
-Middleware joka asettaa tokenin request.token-kenttään
+Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla. 
+
+Jos käytit samaa ratkaisua refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin Authorization-headerista ja sijoittaa sen _request_-olion kenttään _token_.
+
+Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
+
+```js
+app.use(middleware.tokenExtractor)
+```
+
+pääsevät routet tokeniin käsiksi suoraan viittaamalla _requet.token:
+
+```js
+blogsRouter.post('/', async (request, response) => {
+  const body = request.body
+
+  try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+   //..
+  }
+})
+```
 
 #### 77 blogilistan laajennus, osa 8
 
-Middleware joka palauttaa 401 jos ei tokenia ja ei sallitulla routella
+Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
 
 #### 78 blogilistan laajennus, osa 9
 
-Testien päivitys
+Tee testit edellisen tehtävän toiminnallisuudelle.
 
 ### ESlint
 
 #### 79 lint-konfiguraatio
 
-määrittele sopiva...
+Ota sovellukseesi käyttöön ESlint. 

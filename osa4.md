@@ -2150,15 +2150,15 @@ Tee nyt tehtävät [73-78](../tehtavat#Blogilistan-käyttäjät)
 
 ## Lint
 
-Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin
+Ennen osan lopetusta katsomme vielä nopeasti paitsioon jäänyttä tärkeää työkalua [lintiä](https://en.wikipedia.org/wiki/Lint_(software)). Wikipedian sanoin:
 
 > Generically, lint or a linter is any tool that detects and flags errors in programming languages, including stylistic errors. The term lint-like behavior is sometimes applied to the process of flagging suspicious language usage. Lint-like tools generally perform static analysis of source code.
 
-Staattisesti tyypitetyissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
+Staattisesti tyypitetyissä, käännettävissä kielissä kuten Javassa ohjelmointiympäristöt, kuten NetBeans osaavat huomautella monista koodiin liittyvistä asioista, sellasistakin, jotka eivät ole välttämättä käännösvirheitä. Erilaisten [staattisen analyysin](https://en.wikipedia.org/wiki/Static_program_analysis) lisätyökalujen, kuten [checkstylen](http://checkstyle.sourceforge.net/) avulla voidaan vielä laajentaa Javassa huomautettavien asioiden määrää koskemaan koodin tyylillisiä seikkoja, esim. sisentämistä.
 
 Javascript-maailmassa tämän hetken johtava työkalu staattiseen analyysiin, eli "linttaukseen" on [ESlint](https://eslint.org/).
 
-Asennetaan Eslint kehitysaikaiseksi riippuvuudeksi komennolla
+Asennetaan ESlint kehitysaikaiseksi riippuvuudeksi komennolla
 
 ```bash
 npm install eslint --save-dev
@@ -2170,7 +2170,7 @@ Tämän jälkeen voidaan muodostaa alustava ESlint-konfiguraatio komennolla
 node_modules/.bin/eslint --init
 ```
 
-Vastaillaan kysymyksiin
+Vastaillaan kysymyksiin:
 
 ![]({{ "/assets/4/15.png" | absolute_url }})
 
@@ -2222,7 +2222,7 @@ node_modules/.bin/eslint index.js
 
 Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```json
+```bash
 {
   // ...
   "scripts": {
