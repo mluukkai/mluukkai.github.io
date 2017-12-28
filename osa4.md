@@ -1403,9 +1403,9 @@ describe('when there is initially some notes saved', async () => {
 })
 ```
 
-Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi. 
+Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi.
 
-Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty. 
+Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty.
 
 Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
@@ -1467,11 +1467,11 @@ Relaatiotietokantoja käytettäessä ratkaisua ei tarvitsisi juuri miettiä. Mol
 
 Dokumenttitietokantoja käytettäessä tilanne on kuitenkin toinen, erilaisia tapoja mallintaa tilanne on useita.
 
-Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaana, esim. nimeltään _users_.
+Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaansa, esim. nimeltään _users_.
 
 Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin dokumentteihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen ;ongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
+Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
 
 Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
@@ -1565,7 +1565,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
       }
     ]
   }
-]  
+]
 ```
 
 Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
@@ -1781,7 +1781,7 @@ usersRouter.post('/', async (request, response) => {
 })
 ```
 
-Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
+Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
@@ -2113,9 +2113,9 @@ Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin 
 const decodedToken = jwt.verify(token, process.env.SECRET)
 ```
 
-Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. 
+Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pyynnön on tehnyt.
 
-Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä (eli _decodedToken.id_ ei ole määritelty), palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä:
+Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä (eli _decodedToken.id_ ei ole määritelty), palautetaan virheestä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä:
 
 ```js
 if (!token || !decodedToken.id) {
@@ -2239,10 +2239,10 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
 ```bash
-    "rules": {
-        // ...
-        "eqeqeq": "error"
-    },
+"rules": {
+  // ...
+  "eqeqeq": "error"
+},
 ```
 
 Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
@@ -2291,35 +2291,35 @@ Pluginin käyttöönotto tulee määritellä konfiguraatiotiedostossa, jonka tä
 ```js
 module.exports = {
   "env": {
-      "browser": true,
-      "commonjs": true,
-      "es6": true
+    "browser": true,
+    "commonjs": true,
+    "es6": true
   },
   "globals": {
-      "process": true,
+    "process": true,
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",
   "rules": {
-      "indent": [
-          "error",
-          2
-      ],
-      "linebreak-style": [
-          "error",
-          "unix"
-      ],
-      "quotes": [
-          "error",
-          "single"
-      ],
-      "semi": [
-          "error",
-          "never"
-      ],
-      "eqeqeq": "error",
-      "no-console": 0,
-      "no-process-env": 0
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "eqeqeq": "error",
+    "no-console": 0,
+    "no-process-env": 0
   }
 }
 ```
@@ -2339,7 +2339,7 @@ kayttaja -> selain: painetaan login-nappia
 
 selain -> backend: HTTP POST /api/login {username, password}
 note left of backend
-  backend generoi käyttäjän identifioivan TOKEMin
+  backend generoi käyttäjän identifioivan TOKENin
 end note
 backend -> selain: TOKEN palautetaan vastauksen bodyssä
 note left of selain
