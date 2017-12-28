@@ -951,7 +951,7 @@ Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin mi
 
 ### sovelluksen alustus ja rakenne
 
-#### 59 blogilista, osa 1
+#### 60 blogilista, osa 1
 
 Saat sähköpostitse yhteen tiedostoon koodatun sovellusrungon:
 
