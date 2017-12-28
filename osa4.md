@@ -3,7 +3,6 @@ layout: page
 title: osa 4
 permalink: /osa4/
 ---
-
 ## Osan 4 oppimistavoitteet
 
 - Node.js / Express
@@ -2004,7 +2003,7 @@ loginRouter.post('/', async (request, response) => {
 
   const token = jwt.sign(userForToken, process.env.SECRET)
 
-  response.status(200).send({ token })
+  response.status(200).send({ token, username: user.username, name: user.name })
 })
 
 module.exports = loginRouter
@@ -2031,7 +2030,7 @@ const token = jwt.sign(userForToken, process.env.SECRET)
 
 Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token. Ympäristömuuttujalle pitää muistaa asettaa arvo tiedostoon .env.
 
-Onnistuneeseen pyyntöön vastataan statuskoodilla _200 ok_ ja generoitu token lähetetään vastauksen bodyssä pyynnön tekijälle.
+Onnistuneeseen pyyntöön vastataan statuskoodilla _200 ok_ ja generoitu token sekä kirjautuneen käyttäjän käyttäjätunnus ja nimi lähetetään vastauksen bodyssä pyynnön tekijälle.
 
 Kirjautumisesta huolehtiva koodi on vielä liitettävä sovellukseen lisäämällä tiedostoon _index.js_ muiden routejen käyttöönoton yhteyteen
 
