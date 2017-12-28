@@ -18,7 +18,7 @@ Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4h
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Materiaalin seassa on linkkejä tehtäviin jotka on tarkoitettu tehtäviksi suunnilleen linkitetyissä kohdassa materiaalin opiskelua.
 
-Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
+Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa. Kerro aina kun saat yhden osan valmiiksi niin saan pidettyä kirjapindon ajan tasalla.
 
 Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän.
 
