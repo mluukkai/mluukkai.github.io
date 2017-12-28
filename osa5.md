@@ -19,15 +19,13 @@ permalink: /osa5/
   - Proptype
   - child https://reactjs.org/docs/composition-vs-inheritance.html
 - Frontendin testauksen alkeet
-  - Ava jsdom enzyme
+  - jsdom enzyme
 - Redux
-Redux
 - Flux-pattern
 - Storage, reducerit, actionit
 - Testaus mm deepfreeze
 React+redux
 - Storagen välittäminen propseilla ja kontekstissa
-
 Javascript
 - Spread-operaatio
 - Reduxin edellyttämästä funktionaalisesta ohjelmoinnista
@@ -316,6 +314,8 @@ render() {
 
     return (
       <div>
+        <div><em>{this.state.user.name} logged in</em></div>
+
         <h2>Luo uusi muistiinpano</h2>
 
         <form onSubmit={this.addNote}>
@@ -345,10 +345,144 @@ render() {
 }
 ```
 
-Lomakkeet generoiva koodi on nyt erotettu funktioihin, joissa lomakkeet generoidaan ehdollisesti, eli esim. login-lomake ainoastaan jos käyttäjä ei jo ole kirjautunut.
+Lomakkeet generoiva koodi on nyt erotettu funktioihin, joissa lomakkeet generoidaan ehdollisesti, eli esim. login-lomake ainoastaan jos käyttäjä ei jo ole kirjautunut. Kirjautuneen käyttäjän nimi renderöidään hieman epätyylikkäästi muistiinpanojen luontiin tarkoitetun lomakkeen koodin generoivassa funktiossa.
 
 Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutos on aivan ilmeinen signaali siitä, että lomakkeet olisi syyt ärefaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
 ## Muistiinpanojen luominen
 
+Fronend on siis tallettanut onnistuneen kirjautumisen yhteydessä backendilta saamansa tokenin sovelluksen tilaan _this.state.user.token_.
+
+Korjataan uusien muistiinpanojen luominen siihen muotoon, mitä backend edellyttää, eli lisätään kirjautuneen käyttäjän token HTTP-pyynnön Authorization-headeriin. 
+
+_noteService_-moduuli muuttuu seuraavasti
+
+```js
+import axios from 'axios'
+const baseUrl = '/api/notes'
+
+let token = null
+
+const setToken = (newToken) => {
+  token = `bearer ${newToken}`
+}
+
+const create = async (newObject) => {
+  const config = {
+    headers: { 'Authorization': token }
+  }  
+
+  const response = await axios.post(baseUrl, newObject, config)
+  return response.data
+}
+
+export default { getAll, create, update, setToken }
+```
+
+Moduulille on määritelty vain moduulin sisällä näkyvä muuttuja _token_ jolle voidaan asettaa arvo moduulin exporttaamalla funktiolla _setToken_. Async/await-syntaksiin muutettu _create_ asettaa moduulin tallessa pitämän tokenin _Authorization_-headeriin, jonka se antaa axiosille metodin _post_ kolmantena parametrina.
+
+Kirjautumisesta huolehtivaa tapahtumankäsittelijää pitää vielä viilata sen verran, että kutsuu <code>noteService.setToken(user.token)</code> onnistuneen kirjautumisen yhteydessä: 
+
+```js
+  login = async (e) => {
+    e.preventDefault()
+    try{
+      const user = await loginService.login({
+        username: this.state.username, password: this.state.password
+      })
+
+      noteService.setToken(user.token)
+      this.setState({ username: '', password: '', user})
+    } catch(exception) {
+      // ...
+    }
+  }
+```
+
+Kirjautuminen toimii taas!
+
 ## Tokenin tallettaminen selaimen local storageen
+
+Sovelluksessamme on ikävä piirre, kun sivu uudelleenladataan, tieto käyttäjän kirjautumisesta katoaa. Tämä hidastaa melkoisesti myös sovelluskehitystä, esim. testatessamme uuden muistiinpanon luomista, joudumme joka kerta kirjautumaan järjestelmään.
+
+Ongelma korjaantuu helposti tallettamalla kirjautumistiedot [local storageen](https://developer.mozilla.org/en-US/docs/Web/API/Storage) eli selaimessa olevaan pieneen tietokantaan.
+
+Local storage on erittäin helppokäyttöinen. Metodilla [setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) voidaan storageen tallentaa tiettyä _avainta_ vastaava _arvo_, esim:
+
+```js
+window.localStorage.setItem('nimi', 'juha tauriainen')
+```
+
+tallettaa avaimen _nimi_ arvoksi toisena parametrina olevan merkkijonon. 
+
+Avaimen arvo selviää metodilla [getItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem):
+
+```js
+window.localStorage.getItem('nimi')
+```
+
+ja [removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem) poistaa avaimen.
+
+Storageen talletetut arvot säilyvät vaikka sivu uudelleenladattaisiin. Storage on ns [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin)-kohtainen, eli jokaisella selaimella käytettävällä web-sovelluksella on oma storagensa. 
+
+Laajennetaan sovellusta siten, että se asettaa kirjautneen käyttäjän tiedot local storageen.
+
+Koska storageen talletettavat arvot ovat [merkkijonoja](https://developer.mozilla.org/en-US/docs/Web/API/DOMString), emme voi tallettaa storageen suoraan javascript-oliota, vaan ne on muutettava ensin JSON-muotoon metodilla _JSON.stringify_. Vastaavasti kun JSON-muotoinen olio luetaan local storagesta, on se parsittava takaisin Javascript-olioksi metodilla _JSON.parse_.
+
+Kirjautumisen yhteyteen tehtävä muutos on seuraava:
+
+```js
+  login = async (e) => {
+    e.preventDefault()
+    try{
+      const user = await loginService.login({
+        username: this.state.username, password: this.state.password
+      })
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      noteService.setToken(user.token)
+      this.setState({ username: '', password: '', user})
+    } catch(exception) {
+      // ...
+    }
+   
+  }
+```
+
+Kirjaantuneen käyttäjän tiedot tallentuvat nyt localstorageen ja niitä voidaan tarkastella konsolista:
+
+![]({{ "/assets/5/2.png" | absolute_url }})
+
+Sovellusta on vielä laajennettava siten, että kun sivulle tullaan uudelleen, esim. selaimen uudelleenlataamisen yhteydessä, tulee sovelluksen tarkistaa löytyykö local storagesta tiedot kirjautuneesta käyttäjästä. Jos löytyy, asetetaan ne sovelluksen tilaan ja _noteServicelle_.
+
+Sopiva paikka tähän on _App_-komponentin metodi [componentwillmount](https://reactjs.org/docs/react-component.html#componentwillmount) johon tutustuimme jo [osassa 2](osa2/#Komponenttien-lifecycle-metodit).
+
+Kyseessä on siis ns. lifecycle-metodi, jota React-kutsuu juuri ennen kuin komponentti ollaan renderöimässä ensimmäistä kertaa. Metodissa on tällähetkellä jo muistiinpanot palvelimelta lataava koodi. Muutetaan koodia seuraavasti
+
+```js
+  componentWillMount() {
+    noteService.getAll().then(notes =>
+      this.setState({ notes })
+    )
+
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON ){
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({user})
+      noteService.setToken(user.token)
+    }
+  }
+```
+
+Nyt käyttäjä pysyy kirjautuneena sovellukseen ikuisesti. Sovellukseen olisikin kenties syytä lisätä _logout_-toiminnallisuus, joka poistaisi kirjautumistiedot local storagesta. Jätämme kuitenkin uloskirjautumisen harjoitustehtäväksi.
+
+Meille riittää se, että sovelluksesta on mahdollista kirjautua ulos kirjoittamalla konsoliin
+
+```js
+window.localStorage.removeItem('loggedUser')
+```
+
+## toggle
+
+## testaus
+
+## redux

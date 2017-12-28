@@ -1019,10 +1019,22 @@ Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funkt
 
 #### 61 apufunktioita ja yksikkötestejä, osa 1
 
-Määrittele ensin funktio _dummy_ joka saa parametrikseen taulukollisen blogeja ja palauttaa aina luvun 1. Varmista testikonfiguraatiosi toimivuus seuraavalla testillä:
+Määrittele ensin funktio _dummy_ joka saa parametrikseen taulukollisen blogeja ja palauttaa aina luvun 1. Tiedoston _list_helper.js_ sisällöksi siis tulee tässä vaiheessa
 
 ```js
-const dummy = require('../utils/list_helper')
+const dummy = (blogs) => {
+  // ...
+}
+
+module.exports = {
+  dummy
+}
+```
+
+Varmista testikonfiguraatiosi toimivuus seuraavalla testillä:
+
+```js
+const list = require('../utils/list_helper')
 
 test('dummy is called', () => {
   const blogs = []
