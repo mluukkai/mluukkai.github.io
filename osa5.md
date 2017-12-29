@@ -782,15 +782,15 @@ ja otetaan se käyttöön seuraavasti
 <div>
   <Togglable buttonLabel="1" ref={component=>this.t1 = component}>
     ensimmäinen
-  <Togglable/>
+  </Togglable>
 
   <Togglable buttonLabel="2" ref={component=>this.t2 = component}>
     toinen
-  <Togglable/>
+  </Togglable>
 
   <Togglable buttonLabel="3" ref={component=>this.t3 = component}>
     kolmas
-  <Togglable/>
+  </Togglable>
 </div>
 ```
 
@@ -802,16 +802,93 @@ _ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin 
 
 ## Proptype
 
-voidaan vahingossa jättää _buttonLabel_ määrittelemättä:
+Komponenntti _Togglable_ olettaa, että sille määritellään propsina _buttonLabel_ napin teksti. Jos määrittely unohtuu
+
 ```html
-  <Togglable>
-    ensimmäinen
-  <Togglable/>
+<Togglable>
+  buttonLabel unohtui...
+</Togglable>
 ```
 
-proptypes to the rescue
-https://reactjs.org/docs/typechecking-with-proptypes.html
-https://github.com/facebook/prop-types
+Sovellus kyllä toimii, mutta selaimeen renderöityy hämäävästi nappi, jolla ei ole mitään tekstiä.
+
+Haluaisimmekin varmistaa että jos _Togglable_-komponenttia käytetään, on propsille "pakko" antaa arvo. 
+
+Kirjaston olettamat ja edellyttämät propsit ja niiden tyypit voidaan määritellä kirjaston 
+[prop-types](https://github.com/facebook/prop-types) avulla. Asennetaan kirjasto
+
+```bash
+npm install --save prop-types
+```
+
+_buttonLabel_ voidaan määritellä _pakolliseksi_ string-tyyppiseksi propsiksi seuraavasti
+
+```react
+import PropTypes from 'prop-types'
+
+class Togglable extends React.Component {
+  // ...
+}
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+}
+```
+
+Jos propsia ei määritellä, seurauksena on konsoliin tulostuva virheilmoitus
+
+![]({{ "/assets/5/6.png" | absolute_url }})
+
+Koodi kuitenkin toimii edelleen, eli mikään ei pakota määrittelemään propseja PropTypes-määrittelyistä huolimatta. On kuitenkin erittäin epäprofessionaalia jättää konsoliin _mitään_ punaisia tulosteita.
+
+Määritellään Proptypet myös _LoginForm_-komponentille:
+
+```react
+import PropTypes from 'prop-types'
+
+const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
+  return (
+    // ...
+  )
+} 
+
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired, 
+  handleChange: PropTypes.func.isRequired, 
+  username: PropTypes.string.isRequired, 
+  password: PropTypes.string.isRequired
+}
+```
+
+Funtionaalisen komponentin proptypejen määrittely tapahtuu samalla tavalla kuin luokkaperustaisten.
+
+Jos propsin tyyppi on väärä, esim. yritetään määritellä propsiksi _handleChange_ merkkijono, seurauksena on varoitus:
+
+![]({{ "/assets/5/7.png" | absolute_url }})
+
+Luokkaperustaisille komponenteille ProcTypet on mahdollista määritellä myös _luokkamuuttujina_, seuraavalla syntaksilla:
+
+```react
+import PropTypes from 'prop-types'
+
+class Togglable extends React.Component {
+  static propTypes = {
+    buttonLabel: PropTypes.string.isRequired,
+  }
+  
+  // ...
+}
+```
+
+Muuttujamäärittelyn edessä oleva _static_ määrittelee, nyt että _propTypes_-kenttä on nimenomaan komponentin määrittelevällä luokalla _Togglable_ eikä luokan instansseilla. Oleellisesti ottaen kyseessä on ainoastaan javascriptin vielä standardoimattoman [ominaisuuden](https://github.com/tc39/proposal-class-fields) mahdollistava syntatinen oikotie määritellä seuraava:
+
+```js
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+}
+```
+
+Surfatessasi internetissä saatata vielä nähdä ennen Reactin versiota 0.16. tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
 
 ## testaus
 
