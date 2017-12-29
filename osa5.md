@@ -890,6 +890,258 @@ Togglable.propTypes = {
 
 Surfatessasi internetissä saatata vielä nähdä ennen Reactin versiota 0.16. tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
 
-## testaus
+## React-sovelluksen testaus
+
+Reactilla tehtyjen fronendien testaamiseen on monia tapoja. Aloteaan niihin tutustuminen nyt.
+
+Testit tehdään samaan tapaan kuin edellisessä osassa eli Facebookin [Jest](https://facebook.github.io/jest/)-kirjastolla. Jest onkin valmiiksi konfiguroitu create-react-app:illa luotuihin projekteihin.
+
+Jestin lisäksi käytetään AirBnB:n kehittämää [enzyme](https://github.com/airbnb/enzyme)-kirjastoa. 
+
+Asennetaan enzyme komennolla:
+
+```bash
+npm i --save-dev enzyme enzyme-adapter-react-16
+```
+
+Testataan maluksi muisiinpanon renderöivää komponenttia:
+
+```js
+const Note = ({ note, toggleImportance }) => {
+  const label = note.important ? 'make not important' : 'make important'
+  return (
+    <div className='wrapper'>
+      <div className='content'>
+        {note.content}
+      </div>
+      <div>
+        <button onClick={toggleImportance}>{label}</button>
+      </div>
+    </div>
+  )
+}
+```
+
+Testauksen helpottamiseksi komponenttiin on lisätty sisällön määrittelevälle _div_-elementille [CSS-luokka](https://reactjs.org/docs/dom-elements.html#classname) _content_. 
+
+### shallow-renderöinti
+
+Ennen testien tekemisä, tehdään _enzymen_ konfiguraatioita varten tiedosto _src/setupTests.js_ ja sille seuraava sisältö:
+
+```js
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() })
+```
+
+Nyt olemme valmiina testine tekemiseen.
+
+Koska _Note_ on yksinkertainen komponentti, joka ei käytä yhtään monimutkaista alikomponenttia vaan renderöi suoraan HTML:ää, sopii sen testaamiseen hyvin enzymen [shallow](http://airbnb.io/enzyme/docs/api/shallow.html)-renderöijä
+
+Tehdään testi tiedoston _src/components/Note.test.js_, eli samaan hakemistoon, missä komponentti itsekin sijaitsee.
+
+Ensimmäinen testi varmistaa, että
+
+```js
+import React from 'react'
+import { shallow } from 'enzyme'
+import Note from './Note'
+
+describe.only('<Note />', () => {
+  it('renders content', () => {
+    const note = {
+      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+
+    const noteComponent = shallow(<Note note={note} />)
+    const contentDiv = noteComponent.find('.content')
+
+    expect(contentDiv.text()).toContain(note.content)
+  })
+})
+```
+
+Alun konfiguroinnin jälkeen testi renderöi komponentin metodin _shallow_ avulla:
+
+```js
+const noteComponent = shallow(<Note note={note} />)
+```
+
+Normaalisti React-komponentit renderöityvät _DOM_:iin. Nyt kuitenkin renderöimme komponentteja [shallowWrapper](http://airbnb.io/enzyme/docs/api/shallow.html)-tyyppisiksi, testaukseen sopiviksi olioiksi.
+
+ShallowWrapper-mutoon renderöidyillä React-komponenteilla on runsaasta metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
+
+```js
+const contentDiv = noteComponent.find('.content')
+```
+
+ekspektaatiossa vaarmistamme, että elementtiin on renderöitynyt oikea teksti, eli muistiinpanon sisältö:
+
+```js
+expect(contentDiv.text()).toContain(note.content)
+```
+
+### testien sijainti
+
+Reactissa on (ainakin) [kaksi erilaista](https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850) konventiota testien sijoittamiseen. Sijoitimme testit ehkä vallitsevan tavan mukaan, eli samaan hakemistoon missä testattava komponentti sijaitsee. 
+
+Toinen tapa olisi sijoittaa testit "normaaliin" tapaan omaan erilliseen hakemistoon. Valitaanpa kumpi tahansa tapa, on 100% varmaan että se on jonkun mielestä täysin väärin.
+
+Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. Noudatanne kuitenkin nyt tätä tapaa sillä create-react-app:illa konfiguroidut sovellukset suosivat oletusarvoisesti tätä tapaa.
+
+### testien debuggaaminen
+
+Testejä tehdessä törmäämme tyypillisesti moniin ongelmiin. Näissä tilanteissa vanha kunnon _console.log_ on hyödyllinen. Voimme tulostaa _shallow_-metodin avulla renderöityjä komponentteja ja niiden sisällä olevia elementtejä seuraavasti:
+
+```js
+describe.only('<Note />', () => {
+  it('renders content', () => {
+    const note = {
+      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+
+    const noteComponent = shallow(<Note note={note} />)
+    console.log(noteComponent.debug())
+
+    
+    const contentDiv = noteComponent.find('.content')
+    console.log(contentDiv.debug())
+
+    // ...
+  })
+})
+```
+
+Konsoliin tulostuu komponentinn generoima html:
+
+```bash
+console.log src/components/Note.test.js:16
+  <div className="wrapper">
+    <div className="content">
+      Komonenttitestaus tapahtuu jestillä ja enzymellä
+    </div>
+    <div>
+      <button onClick={[undefined]}>
+        make not important
+      </button>
+    </div>
+  </div>
+
+console.log src/components/Note.test.js:20
+  <div className="content">
+    Komonenttitestaus tapahtuu jestillä ja enzymellä
+  </div>
+```
+
+### nappien painelu testeissä
+
+Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva asia on huolehtia siitä, että painettaessa noten yhteydesssä olevaa nappia, tulee propsina välitetyä tapahtumankäsittelijäfunktota _toggleImportance_ kutsua.
+
+Testaus onnistuu seuraavasti:
+
+```bash
+  it('clicking the button calls event handler once', () => {
+    const note = {
+      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+
+    const mockHandler = jest.fn()
+
+    const noteComponent = shallow(
+      <Note 
+        note={note} 
+        toggleImportance={mockHandler}
+      />
+    )
+    
+    const button = noteComponent.find('button')
+    button.simulate('click')
+
+    expect(mockHandler.mock.calls.length).toBe(1)
+  })  
+})
+```
+
+Testissä on muutama mielenkiintoinen seikka. Tapahtumankäsittelijäksi annetaan Jestin avulla määritelty [mock](https://facebook.github.io/jest/docs/en/mock-functions.html)-funktio:
+
+```js
+const mockHandler = jest.fn()
+```
+
+Testi hakee renderöidystä komponentista _button_-elementin ja klikkaa sitä. Koska komponentissa on ainoastaan yksi nappi, on sen hakeminen helppoa:
+
+```js
+const button = noteComponent.find('button')
+button.simulate('click')
+```
+
+Klikkaaminen tapahtuu metodin [simulate] (http://airbnb.io/enzyme/docs/api/ShallowWrapper/simulate.html) avulla.
+
+Testin ekspektaatio varmistaa, että _mock-funktiota_ on kutsuttu täsmälleen kerran:
+
+```js
+expect(mockHandler.mock.calls.length).toBe(1)
+```
+
+
+[Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien tarkkailemisen testatessa. 
+
+Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla oli hyvä varmistaa, että metodia on kutsuttu täsmälleen kerran. Testiä olisi mahdollisa myös parantaa varmistamalla, että mock-olion metodikutsussa annettu parametri on odotetun kaltainen. Jätämme kuitenkin testien parantelun harjoitustehtäväksi.
+
+### full dom render
+
+shallow ei renderöi kuin yhden tason, esim
+
+```
+describe.only('<Togglable />', () => {
+  it('renders content', () => {
+    const note = {
+      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+
+    const noteComponent = shallow(
+      <Togglable buttonLabel='show...'>
+        <Note note={note} />
+      </Togglable>)
+    
+    console.log(noteComponent.debug())
+
+  })
+})
+```
+
+tuloksena
+
+```bash
+<div>
+  <div style={{...}}>
+    <button onClick={[Function]}>
+      show...
+    </button>
+  </div>
+  <div style={{...}}>
+    <Note note={{...}} />
+    <button onClick={[Function]}>
+      cancel
+    </button>
+  </div>
+</div>
+```
+
+joskus tämä riittää, joskus ei. jos ei tarvitaan http://airbnb.io/enzyme/docs/api/mount.html
+
+### snapshot
+
+maininta, lisää myöhemmin
+
+### headless-testaus
+
+maininta, lisää myöhemmin
 
 ## redux
+
