@@ -82,7 +82,7 @@ Kurssin suosittelemaa tyyliä noudattavan koodin kirjoittaminen alkaa luvusta [R
 
 Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta.
 
-Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/) tai sen [varaversio](https://exampleapp-ghqykidlgq.now.sh/)
+Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/).
 
 <div class="important">
   <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
