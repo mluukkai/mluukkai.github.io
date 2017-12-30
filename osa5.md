@@ -1464,4 +1464,736 @@ E2E-testeihin liittyy myös ikäviä puolia. Niiden konfigurointi on haastavampa
 
 Palaamme end to end -testeihin kurssin viimeisessä, eli seitsemännessä osassa.
 
-## redux
+## Sovellusten tilan hallinta Reduxilla
+
+Olemme noudattaneet sovelluksen tilan hallinnassa Reactin suosittelemaa käytäntöä määritellä tila ja sitä käsittelevät metodit [sovelluksen juurikomponentissa](https://reactjs.org/docs/lifting-state-up.html). Tilaa ja sitä käsitteleviä metodeja on välitetty propsien avulla niitä tarvitseville komponenteille. Tämä toimii johonkin pisteeseen, saakka, mutta kun sovellusten koko kasvaa, muuttuu tilan hallinta haasteelliseksi.
+
+### Flux-arkkitehtuuri
+
+Facebook kehitti tilan hallinnan ongelmian helpottamaan [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content)-arkkitehtuurin. Fluxissa sovelluksen tilan hallinta erotetaan kokonaan Reactin komponenttien ulkopuolisiin varastoihin eli _storeihin_. Storessa olevaa tilaa ei muuteta suoraan, vaan tapahtumien eli _actionien_ avulla.
+
+Kun action muuttaa storen tilaa, renderöidään näkymät uudelleen:
+
+![](https://facebook.github.io/flux/img/flux-simple-f8-diagram-1300w.png)
+
+Jos sovelluksen käyttö, esim. napin painaminen aiheuttaa tarpeen tilan muutokseen, tehdään tilanmuutos actonin avulla. Tämä taas aiheuttaa uuden näytön renderöitymisen:
+
+![](https://facebook.github.io/flux/img/flux-simple-f8-diagram-with-client-action-1300w.png)
+
+Flux tarjoaa siis standardin tavan sille miten ja missä sovelluksen tila talletetaan sekä tavalle tehdä tilaan muutoksia. 
+
+### Redux
+
+Facebookilla on myös olemassa valmist toteutus Fluxille, käytämme kuitenkin saman periaatteen mukaan toimivaa, mutta hieman yksinkertaisempaa [Redux](https://redux.js.org)-kirjastoa, jota myös Facebookissa käytetään nykyään aluperäisen Flux-toteutuksen sijaan.
+
+Tutustutaan Reduxiin toteuttamalla klassinen laskurin toteuttava sovellus:
+
+![]({{ "/assets/5/10.png" | absolute_url }})
+
+Tehdään uusi create-react-app-sovellus ja asennetaan siihen _redux_ komennolla
+
+```bash
+install redux --save
+```
+
+Fluxin tapaan Reduxissa sovelluksen tila talletetaan [storeen](https://redux.js.org/docs/basics/Store.html). 
+
+Koko sovelluksen tila talletetaan _yhteen_ storen tallettamaan javascript-objektiin. Koska sovelluksemme ei tarvitse mitään muuta tilaa kuin laskurin arvon, talletetaan se storeen suoraan. Jos sovelluksen tila olisi monipuolisempi, talletettaisiin "eri asiat" storessa olevan olioon erillisinä kenttinä.
+
+Storen tilaa muutetaan [actionien](https://redux.js.org/docs/basics/Actions.html) avulla. Actionit ovat olioita joilla on vähintään actionin _tyypin_ määrittelevä kenttä _type_. Sovelluksessamme tarvitsemme esimerkiksi seuraavaa actionia:
+
+```js
+{ 
+  type: 'INCREMENT'
+}
+```
+
+Jos actioneihin liittyy dataa, määritellään niille tarpeen vaatiessa muitakin kenttiä. Laskurisovelluksemme on kuitenkin niin yksinkertainen, että actioneille riittää pelkkä tyyppikenttä.
+
+Actioinien vaikutus sovelluksen tilaan määritellään [reducerin](https://redux.js.org/docs/basics/Reducers.html) avulla. Käytännössä reducer on funktio, joka saa parametrikseen olemassaolevan staten tilan sekä actionin ja _palauttaa_ staten uuden tilan.
+
+Määritellään nyt sovellukselleme reduceri:
+
+```js
+{ 
+const counterReducer = (state, action) => {
+  if (action.type==='INCREMENT') {
+    return state + 1
+  } else if (action.type==='DECREMENT') {
+    return state - 1
+  } else if (action.type==='ZERO') {
+    return 0
+  }
+
+  return state
+}
+```
+
+Ensimmäinen parametri on siis storessa oleva _tila_. Reducer palauttaa uuden tilan actionin tyypin mukaan. 
+
+Muutetaan koodia vielä hiukan. Reducereissa on tapana käyttää if:ien sijaan [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)-komentoa. 
+Määritellään myös parametrille _state_ [oletusarvoksi](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters) 0. Näin reducer toimii vaikka store tilaa ei olisi vielä alustettu.
+
+```js
+{ 
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    case 'ZERO':
+      return 0      
+  }
+  return state
+}
+```
+
+Reduceria ei ole tarkoitus kutsua koskaan suoraan sovelluksen koodista. Reducer ainoataan annetaan parametrina storen luovalle _createStore_-funktiolle:
+
+```js
+import {createStore} from 'redux'
+
+const counterReducer = (state = 0, action) => {
+  // ...
+}
+
+const store = createStore(counterReducer)
+```
+
+Store käyttää nyt reduceria käsitelläkseen _actioneja_ jotka _dispatchataan_ eli suoritetaan storagelle sen [dispatch](https://redux.js.org/docs/api/Store.html#dispatch)-metodilla:
+
+```js
+store.dispatch({type: 'INCREMENT'})
+```
+
+Storen tilan saa selville metodilla [getState](https://redux.js.org/docs/api/Store.html#getState).
+
+Esim. seuraava koodi
+
+```js
+const store = createStore(counterReducer)
+console.log(store.getState())
+store.dispatch({type: 'INCREMENT'})
+store.dispatch({type: 'INCREMENT'})
+store.dispatch({type: 'INCREMENT'})
+console.log(store.getState())
+store.dispatch({type: 'ZERO'})
+store.dispatch({type: 'DECREMENT'})
+console.log(store.getState())
+```
+
+tulostaisi konsoliin
+
+<pre>
+0
+3
+-1
+</pre>
+
+Kolmas tärkeä metodi storella on [subscribe](https://redux.js.org/docs/api/Store.html#subscribe), jonka avulla voidaan määritellä takaisinkutsufunktioita, joita store kutsuu sen tilan muuttumisen yhteydessä. 
+
+Jos esim. lisäisimme seuraavan funktion sublscribellä, tulostuisi jokainen storen muutos konsoliin.
+
+```js
+store.subscribe(()=> {
+  const storeNow = store.getState()
+  console.log(storeNow)
+})
+```
+
+Laskurisovelluksemme koodi on seuraavassa. Kaikki koodi on kirjoitettu samaan tiedostoon, jolloin _store_ on suoraan React-koodin käytettävissä. Tutustumme React/Redux-koodin parempiin strukturointitapoihin myöhemmin.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore} from 'redux'
+
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    case 'ZERO':
+      return 0      
+  }
+  return state
+}
+
+const store = createStore(counterReducer)
+
+class App extends React.Component {
+  render() {
+    return(
+      <div>
+        <div>
+          {store.getState()}
+        </div>
+        <button onClick={e => store.dispatch({ type: 'INCREMENT'})}>
+          plus
+        </button>
+        <button onClick={e => store.dispatch({ type: 'DECREMENT' })}>
+          minus
+        </button>
+        <button onClick={e => store.dispatch({ type: 'ZERO' })}>
+          zero
+        </button>
+      </div>
+    )
+  }
+}
+
+const renderApp = () => {
+  ReactDOM.render(<App />, document.getElementById('root'))
+}
+
+renderApp()
+store.subscribe(renderApp)
+```
+
+Koodissa on pari huomionarvoista seikkaa. _App_ renderöi laskurin arvon kysymällä sitä storesta metodilla _store.getState()_. Nappien tapahtumankäsittelijät _dispatchaavat_ suoraan oikean tyyppiset actionit storelle.
+
+Kun storessa olevan tilan arvo muuttu, ei React osaa automaattisesti renderöidä sovellusta uudelleen. Olemmekin rekisteröineet koko sovelluksen renderöinnin suorittavan funktion _renderApp_ kuuntelemaan storen muutoksia metodilla _store.subscribe_. Huomaa, että joudumme kutsumaan heti alussa metodia _renderApp()_, ilman kutsua sovelluksen ensimmäistä renderöintiä ei koskaan tapahdu.
+
+## Redux-muistiinpanot
+
+Tavoitteenamme on muuttaa muistiinpanosovellus käyttämään tilanhallintaan reduxia. Katsotaan kuitenkin ensin eräitä konsepteja hieman yksinkertaistetun muistiinpanosovelluksen kautta.
+
+Sovelluksen ensimmäinen versio seuraavassa
+
+```react
+const noteReducer = (state = [], action) => {
+  if ( action.type==='NEW_NOTE') {
+    state.push(action.data)
+    return state
+  }
+
+  return state
+}
+
+const store = createStore(noteReducer)
+
+store.dispatch({
+  type: 'NEW_NOTE',
+  data: {
+    content: 'sovelluksen tila talletetaan storeen',
+    important: true,
+    id: 1
+  }
+})
+
+store.dispatch({
+  type: 'NEW_NOTE',
+  data: {
+    content: 'tilanmuutokset tehdään actioneilla',
+    important: false,
+    id: 2 
+  }
+})
+
+class App extends React.Component {
+  render() {
+    return(
+      <div>
+        <ul>
+          {store.getState().map(note=>
+            <li key={note.id}>
+              {note.content} <strong>{note.important? 'tärkeä': ''}</strong>
+            </li>
+          )}
+         </ul> 
+      </div>
+    )
+  }
+}
+```
+
+Toistaiseksi sovelluksessa ei siis ole toiminnallisuutta uusien muistiinpanojen lisäämiseen, voimme kuitenkin tehdä sen dipatchaamalla _NEW_NOTE_-tyyppisiä actioneja koodista.
+
+Actioneissa on nyt tyypin lisäksi kenttä _data_, joka sisältää lisättävän muistinpanon:
+
+```js
+{
+  type: 'NEW_NOTE',
+  data: {
+    content: 'tilanmuutokset tehdään actioneilla',
+    important: false,
+    id: 2 
+  }
+}
+```
+
+### puhtaat funktiot, immutable
+
+Reducerimme alustava versio on yksinkertainen:
+
+```js
+const noteReducer = (state = [], action) => {
+  if ( action.type==='NEW_NOTE') {
+    state.push(action.data)
+    return state
+  }
+
+  return state
+}
+```
+
+Tila on nyt taulukko. _NEW_NOTE_-tyyppisen actionin seurauksena tilaan lisätään uusi muistiinpano metodilla [push](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push).
+
+Sovellus näyttää toimivan, mutta määrittelemämme reduceri on huono, se rikkoo Reactin reducerien [perusolettamusta](https://github.com/reactjs/redux/blob/master/docs/basics/Reducers.md#handling-actions) siitä, että reducerien tulee olla [puhtaita funktioita](https://en.wikipedia.org/wiki/Pure_function).
+
+Puhtaat funktiot ovat sellaisia, että ne _eivät aiheuta mitään sivuvaikutuksia_ ja niiden tulee aina palauttaa sama vastaus samoilla parametreilla kutsuttaessa.
+
+Lisäsimme tilaan uuden muistiinpanon metodilla _state.push(action.data)_ joka _muuttaa_ state-olion tilaa. Tämä ei ole sallittua. Ongelma korjautuu helposti käyttämällä metodia [conact](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), joka luo _uuden taulukon_, jonka sisältönä on vanhan taulukon alkiot sekä lisättävä alkio:
+
+```js
+const noteReducer = (state = [], action) => {
+  if ( action.type==='NEW_NOTE') {
+    return state.concat(action.data)
+  }
+
+  return state
+}
+```
+
+Reducen tilan tulee koostua  muuttumattomista eli [immutable](https://en.wikipedia.org/wiki/Immutable_object) olioista. Jos tilaan tulee muuttua, ei vanhaa olioa muuteta, vaan se korvataan uudella muuttuneella oliolla. Juuri näin toimimme uudistuneessa reducerissa. Vanha taulukko korvaantuu uudella. Tutustumme seuraavassa osassa [immutable.js](https://facebook.github.io/immutable-js/)-kirjastoon, joka helpottaa tietyissä tapauksissa muuttumattomien tietorakenteiden käyttöä. Tässä osassa käytämme kuitenkin suoraan Javascriptin tietotyyppejä.
+
+Laajennetaan reduceria siten, että se osaa käsitellä muistiinpanon tärkeyteen liittyvän muutoksen:
+
+```js
+{
+  type: 'TOGGLE_IMPORTANCE',
+  data: {
+    id: 2
+  }
+}
+```
+
+Koska meillä ei ole vielä koodia joka käyttää ominaisuutta, laajennetaan reduceria testivetoisesti. Aloitetaan tekemällä testi actionin _NEW_NOTE_ käsittelylle.
+
+Jotta testaus olisi helpompaa, siirretään reducerin koodi ensin omaan moduuliinsa tiedostoon _src/noteReducer.js_. Otetaan käyttöön myös kirjasto [deep-freeze](https://github.com/substack/deep-freeze), jonka avulla voimme varmistaa, että reducer on määritelty oikeaoppisesti puhtaana funktiona. Testi on seuraavassa:
+
+```js
+import noteReducer from './noteReducer'
+import deepFreeze from 'deep-freeze'
+
+describe('noteRenderer', ()=>{
+  it('returns new state with action NEW_NOTE', () => {
+    const state = []
+    const action = {
+      type: 'NEW_NOTE',
+      data: {
+        content: 'sovelluksen tila talletetaan storeen',
+        important: true,
+        id: 1
+      }
+    }
+
+    deepFreeze(state)
+    const newState = noteReducer(state, action)
+
+    expect(newState.length).toBe(1)
+    expect(newState).toContainEqual(action.data)
+  })
+})
+```
+
+Komento _deepFreeze(state)_ varmistaa, että reducer ei muuta parametrina olevaa storen tilaa. Jos reduceri käyttää state:n manipulointiin komentoa _push_, testi ei mene läpi
+
+![]({{ "/assets/5/11.png" | absolute_url }})
+
+
+Tehdään sitten testi actionin _TOGGLE_IMPORTANCE_ käsittelylle:
+
+```js
+it('returns new state with action TOGGLE_IMPORTANCE', () => {
+  const state = [ 
+    {
+      content: 'sovelluksen tila talletetaan storeen',
+      important: true,
+      id: 1
+    }, 
+    {
+      content: 'tilanmuutokset tehdään actioneilla',
+      important: false,
+      id: 2
+    }]
+
+  const action = {
+    type: 'TOGGLE_IMPORTANCE',
+    data: {
+      id: 2
+    }
+  }
+
+  deepFreeze(state)
+  const newState = noteReducer(state, action)
+
+  expect(newState.length).toBe(2)
+  
+  expect(newState).toContainEqual(state[0])
+
+  expect(newState).toContainEqual({
+    content: 'tilanmuutokset tehdään actioneilla',
+    important: true,
+    id: 2
+  })
+})  
+```
+
+Reduceri laajenee seuraavasti
+
+```js
+const noteReducer = (state = [], action) => {
+  switch(action.type) {
+    case 'NEW_NOTE':
+      return state.concat(action.data)
+    case 'TOGGLE_IMPORTANCE':
+      const id = action.data.id
+      const newState = state.filter(n=>n.id!==id)
+      const noteToChange = state.find(n => n.id === id)
+      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+
+      return newState.concat(chagedNote)
+    default: 
+    return state
+  }
+}
+```
+
+Luomme tärkeyttä muuttaneesta muistiinpanosta kopion osasta 2 [tutulla syntaksilla][osa2/#Muistiinpanon-tärkeyden-muutos].
+
+### array spread -syntakis
+
+Koska reducerilla on nyt suhteellisen hyvät testit, voimme refaktoroida koodia turvallisesti.
+
+Molemmat tapaukset luovat palautettavan stilan taulukon _concat_-funktiolla. Katsotaan nyt miten voimme toteuttaa saman hyödyntämällä Javascriptin [array spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) -syntaksia:
+
+```js
+const noteReducer = (state = [], action) => {
+  switch(action.type) {
+    case 'NEW_NOTE':
+      return [...state, action.data]
+    case 'TOGGLE_IMPORTANCE':
+      const id = action.data.id
+      const newState = state.filter(n=>n.id!==id)
+      const noteToChange = state.find(n => n.id === id)
+      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+
+      return [...newState, chagedNote]
+    default: 
+    return state
+  }
+}
+```
+
+Spread-syntaksi toimii seuraavasti. Jos määrittelemme 
+
+```js
+const luvut = [1, 2, 3]
+```
+
+niin <code>...luvut</code> hajottaa taulukon yksittäisiksi alkioiksi, eli voimme sijoittaa sen esim, toisen taulukon sisään:
+
+```js
+[...luvut, 4, 5]
+```
+
+ja lopputuloksena on taulukko, jonka sisältö on _[1, 2, 3, 4, 5]_.
+
+Jos olisimme sijoittaneet taulukon toisen sisälle ilman spreadia, eli
+
+```js
+[luvut, 4, 5]
+```
+
+lopputulos olisi ollut _[ [1, 2, 3], 4, 5]_.
+
+Saman näköinen syntaksi toimii taulukosta [destrukturoimalla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) alkoita otettaessa siten, että se _kerää_ loput alkiot:
+
+```js
+const luvut = [1, 2, 3, 4, 5, 6]
+
+const [eka, toka, ...loput] = luvut
+
+console.log(eka)  // tulostuu 1
+console.log(toka)  // tulostuu 2
+console.log(loput)  // tulostuu [3, 4, 5, 6]
+```
+
+### lisää toiminnallisuutta ja eikontrolloitu lomake
+
+Lisätään sovellukseen mahdollisuus uusien muistiinpanojen tekemiseen sekä tärkeyden muuttamiseen:
+
+```js
+const generateId = () => Number((Math.random() * 1000000).toFixed(0))
+
+class App extends React.Component {
+  addNote = (e) => {
+    e.preventDefault()
+    const content = e.target.note.value 
+    store.dispatch({
+      type: 'NEW_NOTE',
+      data: {
+        content: content,
+        important: false,
+        id: generateId()
+      }
+    })
+    e.target.note.value = ''
+  }
+  toggleImportance = (id) => (e) => {
+    store.dispatch({
+      type: 'TOGGLE_IMPORTANCE',
+      data: { id }
+    })
+  }
+  render() {
+    return(
+      <div>
+        <form onSubmit={this.addNote}>
+          <input name='note'/>
+          <button>lisää</button>
+        </form>  
+        <ul>
+          {store.getState().map(note=>
+            <li key={note.id} onClick={this.toggleImportance(note.id)}>
+              {note.content} <strong>{note.important? 'tärkeä': ''}</strong>
+            </li>
+          )}
+         </ul> 
+      </div>
+    )
+  }
+}
+```
+
+Molemmat toiminnallisuudet on toteutettu suoraviivaisesti. Huomionarvoista uuden muistiinpanon lisäämisessä on nyt se, että toisin kuin aiemmat Reactilla toteutetut lomakkeet emme ole nyt sitoneet lomakkeen kentän arvoa komponentin _App_ tilaan. React kutsuu tälläisiä lomakkeita [eikontrolloiduiksi](https://reactjs.org/docs/uncontrolled-components.html). 
+
+> Eikontrolloiduilla lomakkeilla on tiettyjä rajoitteita (ne eivät esim. mahdollista lennossa annettavia validointiviestejä, lomakkeen lähetysnapin disabloimista sisällön perusteella ym...), meidän käyttötapaukseemme ne kuitenkin tällä kertaa sopivat.
+Voit halutessasi lukea aiheesta enemmän [täältä](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/).
+
+Muistiinpanon lisäämisen käsittelevä metodi on yksinkertainen, se ainoastaan dispatchaa muistiinpanon lisäävän actionin:
+
+```js
+  addNote = (e) => {
+    e.preventDefault()
+    store.dispatch({
+      type: 'NEW_NOTE',
+      data: {
+        content: e.target.note.value,
+        important: false,
+        id: generateId()
+      }
+    })
+    e.target.note.value = ''
+  }
+```
+
+Tärkeyden muuttaminen tapahtuu klikkaamalla muistiinpanon nimeä. Käsittelijä on erittäin yksinkertainen:
+
+```js
+  toggleImportance = (id) => (e) => {
+    store.dispatch({
+      type: 'TOGGLE_IMPORTANCE',
+      data: { id }
+    })
+  }
+```
+
+Kyseessä on jälleen tuttu _funktio, joka palauttaa funktion_, eli kullekin muistiinpanolle generoituu käsittelijäksi funktio, jolla on muistiinpanon yksilöllinen id.
+
+```js
+(e) => {
+  store.dispatch({
+    type: 'TOGGLE_IMPORTANCE',
+    data: { id: 12345 }
+  })
+}
+```
+
+### action creatorit
+
+Alamme huomata, että jo näinkin yksinkertaisessa sovelluksessa Reduxin käyttö yksinkertaistaa sovelluksen ulkoasusta vastaavaa koodia melkoisesti. React-komponenttien on oikestaan tarpeetonta tuntea reduxin actionien tyyppejä ja esitysmuotoja. Eristetään ne erilliseen olioon, _action creatoriin_:
+
+```js
+const actionFor = {
+  noteCreation(content) {
+    return {
+      type: 'NEW_NOTE',
+      data: {
+        content,
+        important: false,
+        id: generateId()
+      }
+    }  
+  },
+  importanceToggling(id) {
+    return {
+      type: 'TOGGLE_IMPORTANCE',
+      data: { id }
+    }
+  }
+}
+```
+
+Komponentin _App_ ei tarvitse enää tietää mitään actionejen sisäisestä esitystavasta:
+
+```js
+class App extends React.Component {
+  addNote = (e) => {
+    e.preventDefault()
+    store.dispatch(
+      actionFor.noteCreation(e.target.note.value)
+    )
+    e.target.note.value = ''
+  }
+  toggleImportance = (id) => (e) => {  
+    store.dispatch(
+      actionFor.importanceToggling(id)
+    )
+  }
+
+  // ...
+}
+```
+
+### staten välittäminen propseissa ja contextissa
+
+Sovelluksemme on reduceria lukuunottamatta tehty samaan tiedostoon. Kyseessä ei tietenkään ole järkevä käytäntö, eli eriytetään _App_ omaan moduuliinsa. Herää kuitenkin kysymys miten _App_ pääsee muutoksen jälkeen käsiksi _storeen_? Ja yleisemminkin, kun komponentti koostuu suuresta määrästä komponentteja, tulee olla jokin mekanismi, minkä avulla komponentit pääsevät käsiksi storeen.
+
+Tapoja muutama, käsitellään tässä osassa kahta helpoimmin ymmärrettävää. Parhaan tavan eli kirjaston React-redux määrittelevän [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)-metodin säästämme seuraavaan osaan sillä se on hieman abstrakti ja on kenties hyvä totutella Reduxiin aluksi ilman connectin tuomia käsitteellisiä haasteita. 
+
+Yksinkertaisin vaihtoehto on välittää store propsien avulla. Sovelluksen käynnistyspiste _index.js_ typistyy seuraavasti
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore } from 'redux'
+import App from './App'
+import noteReducer from './noteReducer'
+
+const store = createStore(noteReducer)
+
+const render = () => {
+  ReactDOM.render(<App store={store}/>, document.getElementById('root'))
+}
+
+render()
+store.subscribe(render)
+store.subscribe(()=>console.log(store.getState()))
+```
+
+Muutos omaan moduuliinsa eriytettyyn komponenttiin _App_ on pieni storeen viitavaan _propsien_ kautta _this.props.store_:
+
+```js
+import React from 'react'
+import actionFor from './actionCreators'
+
+class App extends React.Component {
+  addNote = (e) => {
+    e.preventDefault()
+    this.props.store.dispatch(
+      actionFor.noteCreation(e.target.note.value)
+    )
+    e.target.note.value = ''
+  }
+  toggleImportance = (id) => (e) => {
+    this.props.store.dispatch(
+      actionFor.importanceToggling(id)
+    )
+  }
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.addNote}>
+          <input name='note' />
+          <button>lisää</button>
+        </form>
+        <ul>
+          {this.props.store.getState().map(note =>
+            <li key={note.id} onClick={this.toggleImportance(note.id)}>
+              {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
+            </li>
+          )}
+        </ul>
+      </div>
+    )
+  }
+}
+
+export default App
+```
+
+Jos sovelluksessa on enemmän komponentteja, jotka tarvitsevat myös storea, tulee _App_-komponentin välittää _store_ propseina issitätä tarvitseville komponenteille. 
+
+Eriytetään uuden muistiinpanon luominen sekä yksittäisen muisiinpanon esittäminen omiksi komponenteiksi:
+
+```react
+class NoteForm extends React.Component {
+  addNote = (e) => {
+    e.preventDefault()
+    this.props.store.dispatch(
+      actionFor.noteCreation(e.target.note.value)
+    )
+    e.target.note.value = ''
+  }
+  render() {
+    console.log(this.props)
+    return(
+      <form onSubmit={this.addNote}>
+        <input name='note' />
+        <button>lisää</button>
+      </form> 
+    )
+   
+  }
+}
+
+class Note extends React.Component {
+  toggleImportance = (id) => (e) => {
+    this.props.store.dispatch(
+      actionFor.importanceToggling(id)
+    )
+  }
+  render(){
+    const {note} = this.props
+    return(
+      <li onClick={this.toggleImportance(note.id)}>
+        {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
+      </li>
+    )
+  }
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <NoteForm store={this.props.store}/>
+        <ul>
+          {this.props.store.getState().map(note =>
+            <Note 
+              key={note.id} 
+              note={note} 
+              store={this.props.store}
+            />
+          )}
+        </ul>
+      </div>
+    )
+  }
+}
+```
+
+Komponentti _App_ muuttuu nyt melko yksinkertaiseksi, ei ole enää mitään syytä pitää tapahtumankäsittelijöitäkään määriteltyä komponentissa _App_, sovelluksen tilahan on jokatapauksessa hallitusti redux-storessa.
+
+Sovelluksen ikävänä puolena on se, että vaikka _App_ ei itse tarvitsekaan _storea_, tulee sen välittää store alikomponentteihin. Isommassa sovelluksessa storen väittäminen propseina alkaa olla häiritsevää.
+
+Tutustumme vielä tämän osan lopuksi _storen_ välittämiseen Reactin [contextiin](https://reactjs.org/docs/context.html).
+
+Manuaalin sanoin:
+> In some cases, you want to pass data through the component tree without having to pass the props down manually at every level. You can do this directly in React with the powerful “context” API.
+
+Reactin Context API on vielä kokeellinen ja se voi hävitä tulevista versiosta. Contextin käyttö ei olekaan kovin suositeltavaa. Katsomme kuitenkin mistä on kyse.
