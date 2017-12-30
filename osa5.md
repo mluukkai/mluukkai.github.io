@@ -15,22 +15,21 @@ permalink: /osa5/
 - React
   - child 
   - ref
-  - Proptype
-  - Bootstrap (reactstrap) tai material UI
-  - Periaatteita: Virtual dom
+  - PropTypes
 - Frontendin testauksen alkeet
-  - jsdom enzyme
+  - enzyme
+  - shallow ja full DOM -rendering
 - Redux
-- Flux-pattern
-- Storage, reducerit, actionit
-- Testaus mm deepfreeze
-React+redux
-- Storagen välittäminen propseilla ja kontekstissa
-Javascript
-- Spread-operaatio
-- Reduxin edellyttämästä funktionaalisesta ohjelmoinnista
-  - puhtaat funktiot
-  - immutable
+  - Flux-pattern
+  - Storage, reducerit, actionit
+  - Testaus mm deepfreeze
+- React+redux
+  - Storagen välittäminen propseilla ja kontekstissa
+- Javascript
+  - Spread-operaatio
+  - Reduxin edellyttämästä funktionaalisesta ohjelmoinnista
+    - puhtaat funktiot
+    - immutable
 
 ##  Kirjautuminen React-sovelluksesta
 
@@ -984,6 +983,16 @@ ekspektaatiossa vaarmistamme, että elementtiin on renderöitynyt oikea teksti, 
 expect(contentDiv.text()).toContain(note.content)
 ```
 
+### testien suorittaminen
+
+Create-react-app:issa on konfiguroitu testit oletusarvoisesti suoritettavaksi ns. watch-moodissa, eli jos suoritat testit komennolla _npm test_ jää konsoli odottamaan koodissa tapahtuvia muutoksia. Muutosten jälkeen testit suoritetaan automaattisesti ja jest alkaa taas odottaa uusia muutoksia koodiin.
+
+Jos haluat ajaa testit "normaalisti", se onnistuu komennolla
+
+```bash
+CI=true npm test
+```
+
 ### testien sijainti
 
 Reactissa on (ainakin) [kaksi erilaista](https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850) konventiota testien sijoittamiseen. Sijoitimme testit ehkä vallitsevan tavan mukaan, eli samaan hakemistoon missä testattava komponentti sijaitsee. 
@@ -1164,7 +1173,7 @@ Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallowrenderöi _Toggl
 Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class='testDiv' />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
 
 
-### mount ja full dom render
+### mount ja full DOM -renderöinti
 
 Käyttämämme _shallow_-renderöijä on useimmissta tapauksissa riittävä. Joskus tarvitsemme kuitenkin järeämmän työkalun sillä _shallow_ renderöi ainoastaan "yhden tason", eli sen komponentin, jolle metodia kutsutaan. 
 
@@ -1294,26 +1303,165 @@ Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat
 
 Toistaiseksi kaikki fronendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan ykikkötestaus ei riitä koskaan antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
 
+Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää localstoragea kirjautuneen käyttäjän tietojen tallettamiseen. 
 
+Localstorage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii localstoragea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests). 
+
+Koska testimme ei edellytä localstoragelta juuri mitään toiminnallisuutta, teemme tiedostoon[src/setupTests.js](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#initializing-test-environment) hyvin yksinkertaisen mockin
+
+```js
+let savedItem
+
+const localStorageMock = {
+  getItem: (item) => {
+    savedItem = item
+  },
+  setItem: () => savedItem,
+  clear: jest.fn()
+}
+
+window.localStorage = localStorageMock
+```
+
+Toinen ongelmistamme on se, että sovellus hakee näytettävät muistiinpanot palvelimelta. Muistiinpanojen haku tapahtuu heti komponentin _App_ luomisen jälkeen, kun metodi _componentWillMount_ kutsuu _noteService_:n metodia _getAll_:
+
+
+
+```js
+  componentWillMount() {
+    noteService.getAll().then(notes =>
+      this.setState({ notes })
+    )
+
+    // ...
+  }
+```
+
+Jestin [manual mock](https://facebook.github.io/jest/docs/en/manual-mocks.html#content) -konsepti tarjoaa tilanteeseen hyvän ratkaisun. Manual mockien avulla voidaan kokonainen moduuli, tässä tapauksessa _noteService_ korvata testien ajaksi vaihtoehtoisella esim. kovakoodattua dataa tarjoavalla toiminnallisuudella.
+
+Luodaan Jestin ohjeiden mukaisesti hakemistoon _src/services_ alihakemisto *__mock__* ja sinne tiedosto _notes.js_ jonka määrittelemä metodi _getAll_ palauttaa kovakoodatun listan muistiinpanoja:
+
+```js
+let token = null
+
+const notes = [
+  {
+    id: "5a451df7571c224a31b5c8ce",
+    content: "HTML on helppoa",
+    date: "2017-12-28T16:38:15.541Z",
+    important: false,
+    user: {
+      _id: "5a437a9e514ab7f168ddf138",
+      username: "mluukkai",
+      name: "Matti Luukkainen"
+    }
+  },
+  {
+    id: "5a451e21e0b8b04a45638211",
+    content: "Selain pystyy suorittamaan vain javascriptiä",
+    date: "2017-12-28T16:38:57.694Z",
+    important: true,
+    user: {
+      _id: "5a437a9e514ab7f168ddf138",
+      username: "mluukkai",
+      name: "Matti Luukkainen"
+    }
+  },
+  {
+    id: "5a451e30b5ffd44a58fa79ab",
+    content: "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
+    date: "2017-12-28T16:39:12.713Z",
+    important: true,
+    user: {
+      _id: "5a437a9e514ab7f168ddf138",
+      username: "mluukkai",
+      name: "Matti Luukkainen"
+    }
+  }
+]
+
+const getAll = () => {
+  return Promise.resolve(notes)
+}
+
+export default { getAll, notes }
+```
+
+Määritelty metodi _getAll_ palauttaa muistiinpanojen listan käärittynä promiseksi metodin[Promise.resolve](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve)
+avulla sillä käytettäessä metodia, oletetaan sen paluuarvon olevan promise:
+
+```js
+noteService.getAll().then(notes =>
+```
+
+Olemme valmiina määrittelemään testin:
+
+```js
+import React from 'react'
+import { mount } from 'enzyme'
+import App from './App'
+import Note from './components/Note'
+jest.mock('./services/notes')
+import noteService from './services/notes'
+
+describe('<App />', ()=>{
+
+  let app
+  beforeAll( () =>{
+    app = mount(<App />)
+  })
+
+  it('renders all notes it gets from backend', () => {
+    app.update()
+    const noteComponents = app.find(Note)
+    expect(noteComponents.length).toEqual(5)
+  })
+})
+```
+
+Komennolla _jest.mock('./services/notes')_ otetaan juuri määritelty mock käyttöön. Loogisempi paikka komennolle olisi kenties testien määrittelyt tekevä tiedosto _src/testSetup.js_
+
+Testin toimivuuden kannalta on oleellista metodin [app.update](http://airbnb.io/enzyme/docs/api/ReactWrapper/update.html) kutsuminen, näin pakotetaan sovellus renderöitymään uudelleen siten, että myös mockatun backendin palauttamat muistiinpanot renderöityvät.
+
+## testikattavuus
+
+[Testauskattavuus](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#coverage-reporting)  saadaan helposti selville 
+suorittamalla testit komennolla
+
+```bash
+CI=true npm test -- --coverage 
+```
+
+![]({{ "/assets/5/8.png" | absolute_url }})
+
+Melko primitiivinen HTML-mutoinen raportti generoituu hakemistoon _coverage/lcov-report_. HTML-mutoinen raportti kertoo mm. yksittäisen komponenttien testaamattomien koodirivit:
+
+![]({{ "/assets/5/9.png" | absolute_url }})
+
+Huomaamme, että parannettavaa jäi vielä runstaasti.
 
 ## snapshot-testaus
 
 Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns. 
 [snapshot](https://facebook.github.io/jest/docs/en/snapshot-testing.html)-testauksen. Mielenkiintoista snapshot-testauksessa on se, että sovelluskehittäjän ei tarvitse itse määritellä ollenkaan testejä, snapshot-testauksen käyttöönotto riittää.
 
-Periaatteena tässä on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta. 
+Periaatteena on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta. 
 
-Jos spanshot-testauksessa huomataan muutos komponenttien määrittelemäsä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snaphshot-testaus huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
+Jos spanshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snaphshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
 
 Palaamme aiheeseen myöhemmin kurssilla.
 
 ## end to end -testaus
 
-headless-testaus, selenium, puppeteer...
+Olemme nyt tehneet sekä backendille että frontendille hieman niitä kokonaisuutena testavia integraatiotestejä. Eräs tärkeä testauksen kategoria on vielä käsittelemättä, [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) testaavat "end to end" (eli E2E) -testit. 
 
-hitaita.
+Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. [headless browseria]
+(https://en.wikipedia.org/wiki/Headless_browser) eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää. Esim. Chromea on mahdollista suorittaa Headless-moodissa.
 
-maininta, lisää myöhemmin
+E2E testit ovat potentiaalisesti kaikkein hyödyllisin testikategoria, sillä ne tutkivat järjestelmää mahdollisimman samanlaisena, mikä käyttöönotettava sovellus todellisuudessa on.
+
+E2E-testeihin liittyy myös ikäviä puolia. Niiden konfigurointi on haastavampaa kuin yksikkö- ja integraatiotestien. E2E-testit ovat tyypillisesti myös melko hitaita ja isommassa ohjelmistossa niiden suortitusaika voi helposti nousta minuutteihin, tai jopa tunteihin. Tämä on ikävää sovelluskehityksen kannalta, sovellusta koodatessa olisi erittäin hyödyllistä pystyä ajamaan testejä mahdollisimman usein koodin regressioiden varalta.
+
+Palaamme end to end -testeihin kurssin viimeisessä, eli seitsemännessä osassa.
 
 ## redux
-
