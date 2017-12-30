@@ -1158,9 +1158,7 @@ Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteut
 
 #### 72 blogilistan laajennus, osa 3
 
-Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon.
-
-Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
+Toteuta sovellukseen mahdollisuus yksittäisen blogin muokkaamiseen.
 
 Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiinn [osassa 3](osa3/#loput-operaatiot).
 

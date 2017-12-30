@@ -684,10 +684,11 @@ Toisin kuin "normaalit" propsit, _children_ on Reactin automaattisesti määritt
 
 on _this.props.children_ tyhjä taulukko.
 
-[this.props.children](https://reactjs.org/docs/glossary.html#propschildren)
-
-
 Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemään myös uuden muistiinpanon luomisesta huolehtivan fromin vastaavalla tavalla tarpeen mukaan näytettäväksi. 
+
+Määrittelimme jo komponentin
+
+<div style={showWhenVisible} class='togglableContent'>
 
 Eristetään ensin muistiinpanojen luominen omaksi komponentiksi
 
@@ -1092,30 +1093,106 @@ expect(mockHandler.mock.calls.length).toBe(1)
 
 Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla oli hyvä varmistaa, että metodia on kutsuttu täsmälleen kerran. Testiä olisi mahdollisa myös parantaa varmistamalla, että mock-olion metodikutsussa annettu parametri on odotetun kaltainen. Jätämme kuitenkin testien parantelun harjoitustehtäväksi.
 
-### full dom render
+### Komponentin Togglable testit
 
-shallow ei renderöi kuin yhden tason, esim
+Tehdään komponentille _Togglable_ muutama testi. Lisätään komponentin lapset renderöivään div-elementtiin CSS-luokka _togglableContent_:
 
+```react
+class Togglable extends React.Component {
+
+  render() {
+    const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
+    const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
+        </div>
+        <div style={showWhenVisible} class='togglableContent'>
+          {this.props.children}
+          <button onClick={this.toggleVisibility}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+}
 ```
-describe.only('<Togglable />', () => {
-  it('renders content', () => {
-    const note = {
-      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
-      important: true
-    }
 
-    const noteComponent = shallow(
+Testit ovat seuraavassa
+
+```js
+import React from 'react'
+import { shallow } from 'enzyme'
+import foo from 'enzyme-matchers'
+import Adapter from 'enzyme-adapter-react-16';
+import Note from './Note'
+import Togglable from './Togglable'
+
+describe('<Togglable />', () => {
+  let togglableComponent
+
+  beforeEach(() => {
+    togglableComponent = shallow(
       <Togglable buttonLabel='show...'>
-        <Note note={note} />
+        <div class='testDiv' />
       </Togglable>)
-    
-    console.log(noteComponent.debug())
-
   })
+
+  it('renders its children', () => {
+    expect(togglableComponent.contains(<div class='testDiv' />)).toEqual(true)
+  })
+
+  it('at start the children are not displayed', () => {
+    const div = togglableComponent.find('.togglableContent')
+    expect(div.getElement().props.style).toEqual({display: 'none'})
+  })
+
+  it('after clicking the button, children are displayed', () => {
+    const button = togglableComponent.find('button')
+
+    button.at(0).simulate('click')
+    const div = togglableComponent.find('.togglableContent')
+    expect(div.getElement().props.style).toEqual({ display: '' })
+  })
+
 })
 ```
 
-tuloksena
+Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallowrenderöi _Togglable_-komponentin muuttujaan _togglableComponent_. 
+
+Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class='testDiv' />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
+
+
+### mount ja full dom render
+
+Käyttämämme _shallow_-renderöijä on useimmissta tapauksissa riittävä. Joskus tarvitsemme kuitenkin järeämmän työkalun sillä _shallow_ renderöi ainoastaan "yhden tason", eli sen komponentin, jolle metodia kutsutaan. 
+
+Jos yritämme esim. sijoittaa kaksi _Note_-komponenttia _Togglable_-komponentin sisälle ja tulostamme syntyvän _ShallowWrapper_ olion
+
+```
+it('shallow renders only one level', () => {
+  const note1 = {
+    content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+    important: true
+  }
+  const note12= {
+    content: 'shallow ei renderöi alikomponentteja',
+    important: true
+  }
+
+  const togglableComponent = shallow(
+    <Togglable buttonLabel='show...'>
+      <Note note={note1} />
+      <Note note={note2} />
+    </Togglable>)
+  
+  console.log(togglableComponent.debug())
+})
+
+```
+
+huomaamme, että _Togglable_ komponentti on renderöitynyt, eli "muuttunut" HTML:ksi, mutta sen sisällä olevat _Note_-komponentit eivät ole HTML:ää vaan React-komponentteja.
 
 ```bash
 <div>
@@ -1124,7 +1201,8 @@ tuloksena
       show...
     </button>
   </div>
-  <div style={{...}}>
+  <div style={{...}} className="togglableContent">
+    <Note note={{...}} />
     <Note note={{...}} />
     <button onClick={[Function]}>
       cancel
@@ -1133,13 +1211,107 @@ tuloksena
 </div>
 ```
 
-joskus tämä riittää, joskus ei. jos ei tarvitaan http://airbnb.io/enzyme/docs/api/mount.html
+Jos komponetille tehdään edellisten esimerkkien tapaan yksikkötestejä, _shallow_-renderöinti on useimmiten riittävä. Jos haluamme testata isompia kokonaisuuksia, eli tehdä fronendin _integraatiotestausta_, ei _shallow_-renderöinti riitä vaan on turvauduttava komponentit kokonaisuudessaan renderöivään [mount](http://airbnb.io/enzyme/docs/api/mount.html):iin.
 
-### snapshot
+Muutetaan testi käyttämään _shallowin_ sijaan _mountia_:
 
-maininta, lisää myöhemmin
+```js
+import React from 'react'
+import { shallow, mount } from 'enzyme'
+import Note from './Note'
+import Togglable from './Togglable'
 
-### headless-testaus
+it('mount renders all components', () => {
+  const note1 = {
+    content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+    important: true
+  }
+  const note2 = {
+    content: 'mount renderöi myös alikomponentit',
+    important: true
+  }
+
+  const noteComponent = mount(
+    <Togglable buttonLabel='show...'>
+      <Note note={note1} />
+      <Note note={note2} />
+    </Togglable>)
+
+  console.log(noteComponent.debug())
+})
+```
+
+Tuloksena on kokonaisuudessaan HTML:ksi renderöitynyt _Togglable_-komponentti:
+
+```html
+<Togglable buttonLabel="show...">
+  <div>
+    <div style={{...}}>
+      <button onClick={[Function]}>
+        show...
+      </button>
+    </div>
+    <div style={{...}} className="togglableContent">
+      <Note note={{...}}>
+        <div className="wrapper">
+          <div className="content">
+            Komonenttitestaus tapahtuu jestillä ja enzymellä
+          </div>
+          <div>
+            <button onClick={[undefined]}>
+              make not important
+            </button>
+          </div>
+        </div>
+      </Note>
+      <Note note={{...}}>
+        <div className="wrapper">
+          <div className="content">
+            mount renderöi myös alikomponentit
+          </div>
+          <div>
+            <button onClick={[undefined]}>
+              make not important
+            </button>
+          </div>
+        </div>
+      </Note>
+      <button onClick={[Function]}>
+        cancel
+      </button>
+    </div>
+  </div>
+</Togglable>
+```
+
+Mountin avulla renderöitäessä testi pääsee siis käsiksi periaatteessa samaan HTML-koodiin, joka todellisuudessa renderöidään selaimeen ja tämä luonnollisesti mahdollistaa huomattavasti monipuolisemman testauksen kuin _shallow_-renderöinti. Komennolla _mount_ tapahtuva renderöinti on kuitenkin hitaampaa, joten jos _shallow_ riittää, sitä kannattaa käyttää.
+
+Komennon _mount_ palauttamaa renderöidyn "komponenttipuun" [ReactWrapper](http://airbnb.io/enzyme/docs/api/mount.htm)-tyyppisenä oliona, joka tarjoaa hyvin samantyyppisen rajapinnan komponentin sisällön tutkimiseen kuin _ShallowWrapper_.
+
+## fronendin integraatiotestaus
+
+Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat backendin tarjoaman API:n läpi backendia ja tietokantaa. Backendin testauksessa tehtiin tietoinen päätös olla kirjoittamatta yksikkötestejä sillä backendin koodi on sinänsä erittäin suoraviivaista ja ongelmat tulevatkin esiin todennäköisemmin juuri monimutkaisemmissa skenaarioissa, joita integraatiotestit hyvin testaavat
+
+Toistaiseksi kaikki fronendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan ykikkötestaus ei riitä koskaan antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
+
+
+
+## snapshot-testaus
+
+Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns. 
+[snapshot](https://facebook.github.io/jest/docs/en/snapshot-testing.html)-testauksen. Mielenkiintoista snapshot-testauksessa on se, että sovelluskehittäjän ei tarvitse itse määritellä ollenkaan testejä, snapshot-testauksen käyttöönotto riittää.
+
+Periaatteena tässä on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta. 
+
+Jos spanshot-testauksessa huomataan muutos komponenttien määrittelemäsä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snaphshot-testaus huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
+
+Palaamme aiheeseen myöhemmin kurssilla.
+
+## end to end -testaus
+
+headless-testaus, selenium, puppeteer...
+
+hitaita.
 
 maininta, lisää myöhemmin
 
