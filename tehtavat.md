@@ -1,6 +1,6 @@
 # tehtävät
 
-Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4)
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5)
 
 ## Osa 1
 
@@ -1255,3 +1255,27 @@ Tee testit tehtävän 78 toiminnallisuudelle.
 #### 80 lint-konfiguraatio
 
 Ota sovellukseesi käyttöön ESlint.
+
+## Osa 5
+
+### 
+
+#### 81 
+#### 82
+#### 83 
+#### 84 
+#### 85 
+#### 86 
+#### 87
+#### 88 
+#### 89 
+#### 90  
+#### 91 
+#### 92
+#### 93 
+#### 94 
+#### 95 
+#### 96 
+#### 97
+#### 98 
+#### 99 
