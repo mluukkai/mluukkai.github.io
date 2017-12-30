@@ -1423,7 +1423,7 @@ Komennolla _jest.mock('./services/notes')_ otetaan juuri määritelty mock käyt
 
 Testin toimivuuden kannalta on oleellista metodin [app.update](http://airbnb.io/enzyme/docs/api/ReactWrapper/update.html) kutsuminen, näin pakotetaan sovellus renderöitymään uudelleen siten, että myös mockatun backendin palauttamat muistiinpanot renderöityvät.
 
-## testikattavuus
+## Testauskattavuus
 
 [Testauskattavuus](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#coverage-reporting)  saadaan helposti selville 
 suorittamalla testit komennolla
