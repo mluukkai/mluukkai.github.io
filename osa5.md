@@ -2128,7 +2128,7 @@ export default App
 
 Jos sovelluksessa on enemmän komponentteja, jotka tarvitsevat myös storea, tulee _App_-komponentin välittää _store_ propseina issitätä tarvitseville komponenteille. 
 
-Eriytetään uuden muistiinpanon luominen sekä yksittäisen muisiinpanon esittäminen omiksi komponenteiksi:
+Eriytetään uuden muistiinpanon luominen sekä muistiinpanojen lista ja yksittäisen muisiinpanon esittäminen omiksi komponenteiksi:
 
 ```react
 class NoteForm extends React.Component {
@@ -2140,7 +2140,6 @@ class NoteForm extends React.Component {
     e.target.note.value = ''
   }
   render() {
-    console.log(this.props)
     return(
       <form onSubmit={this.addNote}>
         <input name='note' />
@@ -2151,49 +2150,180 @@ class NoteForm extends React.Component {
   }
 }
 
-class Note extends React.Component {
+const Note = ({note, handleClick}) => {
+  return(
+    <li onClick={handleClick}>
+      {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
+    </li>
+  )
+}
+
+class NoteList extends React.Component {
   toggleImportance = (id) => (e) => {
     this.props.store.dispatch(
       actionFor.importanceToggling(id)
     )
   }
-  render(){
-    const {note} = this.props
+  render() {
     return(
-      <li onClick={this.toggleImportance(note.id)}>
-        {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
-      </li>
+      <ul>
+        {this.props.store.getState().map(note =>
+          <Note
+            key={note.id}
+            note={note}
+            handleClick={this.toggleImportance(note.id)}
+          />
+        )}
+      </ul>
     )
   }
 }
+```
 
+Komponettiin _App_ ei jää enää paljoa koodia:
+
+```js
 class App extends React.Component {
   render() {
     return (
       <div>
-        <NoteForm store={this.props.store}/>
-        <ul>
-          {this.props.store.getState().map(note =>
-            <Note 
-              key={note.id} 
-              note={note} 
-              store={this.props.store}
-            />
-          )}
-        </ul>
+        <NoteForm store={this.props.store} />
+        <NoteList store={this.props.store} />
       </div>
     )
   }
 }
 ```
 
-Komponentti _App_ muuttuu nyt melko yksinkertaiseksi, ei ole enää mitään syytä pitää tapahtumankäsittelijöitäkään määriteltyä komponentissa _App_, sovelluksen tilahan on jokatapauksessa hallitusti redux-storessa.
+Toisin kuin aiemmin ilman Reduxia tekemässämme React-koodissa, tapahtumankäsittelijät on nyt siirretty pois _App_-komponentista. Yksittäisen muistiinpanon renderöinnistä huolehtiva _Note_ on erittäin yksinkertainen, eikä ole tietoinen siitä, että on sen propsina saama tapahtumankäsittelijä dispatchaa actionin. Tälläisiä komponentteja kutsutaan Reactin terminologiassa [presentational](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)-komponenteiksi.
 
-Sovelluksen ikävänä puolena on se, että vaikka _App_ ei itse tarvitsekaan _storea_, tulee sen välittää store alikomponentteihin. Isommassa sovelluksessa storen väittäminen propseina alkaa olla häiritsevää.
+_NoteList_ taas on sellainen mitä kutsutaan [container](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)-komponenteiksi, se sisältää sovelluslogiikkaa, eli määrittelee mitä _Note_-komponenttien tapahtumankäsittelijät tekevät ja koordinoi _presentational_-komponenttien, eli _Notejen_ konfigurointia.
 
-Tutustumme vielä tämän osan lopuksi _storen_ välittämiseen Reactin [contextiin](https://reactjs.org/docs/context.html).
+Palaamme presentational/container-jakoon tarkemin seuraavassa osassa.
+
+
+_storen_ välittäminen sitä tarvitseviin komponentteihin propsien avulla on melko ikävää, esim. vaikka _App_ ei itse tarvitse storea, sen on otettava store vastaan, jotta pystyy edelleen välittämään sen komponenteille _NoteForm_ ja _NoteList_.
+
+Tutustumme vielä tämän osan lopuksi _storen_ välittämiseen Reactin [contextin](https://reactjs.org/docs/context.html) avulla.
 
 Manuaalin sanoin:
 > In some cases, you want to pass data through the component tree without having to pass the props down manually at every level. You can do this directly in React with the powerful “context” API.
 
 Reactin Context API on vielä kokeellinen ja se voi hävitä tulevista versiosta. Contextin käyttö ei olekaan kovin suositeltavaa. Katsomme kuitenkin mistä on kyse.
+
+Ennen contextin käyttöä, tehdään sovelluksene pieni muutos. Eristetään komponentista _App_ 
+
+Asennetaan ensin contextin käyttöä helpottava [react-redux](https://github.com/reactjs/react-redux)-kirjasto sekä contextien määrittelyyn tarvittava _prop-types_:
+
+```bash
+npm install react-redux prop-types --save
+```
+
+Muutetaan tiedostoa _index.js_ seuraavasti:
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './App'
+import noteReducer from './noteReducer'
+
+const store = createStore(noteReducer)
+
+const render = () => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App/>
+    </Provider>, 
+  document.getElementById('root'))
+}
+
+render()
+store.subscribe(render)
+```
+
+Komponentti _App_ on sijoitettu react-redux-kirjaston tarjoavan [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store) komponentin lapseksi. Store on annettu _Providerille_ propsina.
+
+Provider määrittelee _storen_ saataville komponentin _App_ ja sen alikomponenttien _kontekstista_.
+
+Koska _App_ ei tarvitse itse storea, voi sen muuttaa muotoon:
+
+```react
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <NoteForm />
+        <NoteList />
+      </div>
+    )
+  }
+}
+```
+
+_NoteList_ muuttuu seuraavasti:
+
+```react
+class NoteList extends React.Component {
+  toggleImportance = (id) => (e) => {
+    this.context.store.dispatch(
+      actionFor.importanceToggling(id)
+    )
+  }
+  render() {
+    return(
+      <ul>
+        {this.context.store.getState().map(note =>
+          <Note
+            key={note.id}
+            note={note}
+            handleClick={this.toggleImportance(note.id)}
+          />
+        )}
+      </ul>
+    )
+  }
+}
+
+NoteList.contextTypes = {
+  store: PropTypes.object
+}
+```
+
+Muutos on siis hyvin pieni propsien sijaan storen viite on _this.context.store_. Komponentille on myös pakko määritellä sen vastaanottaman kontekstin tyyppi, ilman määrittelyä konteksti jää tyhjäksi.
+
+Komponenttiin _NoteForm_ tehtävä muutos on samanlainen. Koska _Note_ ei riipu millään tavalla _storesta_, se jää muuttumattomaksi.
+
+Tehdään sovellukseen vielä yksi parannus. Lisätään storea käyttäviin komponentteihin _NoteForm_ ja _NoteList_ seuraavan koodin sisältävät metodit _componentDidMount_ ja _componentWillUnmount_:
+
+```react
+class NoteForm extends React.Component {
+  componentDidMount() {
+    const { store } = this.context
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    )
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
+
+  // ...
+}
+```
+
+Näin komponentit rekisteröivät kuuntelemaan storessa tapahtuvia muutoksia ja niiden tapahtuessa
+uudelleenrenderöimään itsensä (ja lapsikomponenttinsa) metodilla [forceUpdate](https://reactjs.org/docs/react-component.html#forceupdate). 
+
+Nyt pääsemme eroon tiedostossa _index.js_ tapahtuneesta koko sovelluksen uudelleenrenderöinnistä ja koodi yksinkertaistuu muotoon.
+
+```react
+ReactDOM.render(
+  <Provider store={createStore(noteReducer)}>
+    <App />
+  </Provider>, 
+  document.getElementById('root')
+)
+```
