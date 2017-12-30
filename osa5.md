@@ -13,7 +13,7 @@ permalink: /osa5/
 ## Osan 5 oppimistavoitteet
 
 - React
-  - child 
+  - child
   - ref
   - PropTypes
 - Frontendin testauksen alkeet
@@ -34,11 +34,11 @@ permalink: /osa5/
 
 ##  Kirjautuminen React-sovelluksesta
 
-Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla. 
+Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla.
 
-Fronend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identiteetin varmistava token.
+Frontend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identiteetin varmistava token.
 
-Toteutetaan nyt osa käyttäjienhallinnan edellyttämästä toiminnallisuudesta fronendiin. Aloitetaan käyttäjän kirjaantumisesta. Oletetaan vielä tässä osassa, että käyttäjät luodaan suoraan backendiin.
+Toteutetaan nyt osa käyttäjienhallinnan edellyttämästä toiminnallisuudesta frontendiin. Aloitetaan käyttäjän kirjaantumisesta. Oletetaan vielä tässä osassa, että käyttäjät luodaan suoraan backendiin.
 
 Sovelluksen yläosaan on nyt lisätty kirjautumislomake, myös uuden muistinpanon lisäämisestä huolehtiva lomake on siirretty sivun yläosaan:
 
@@ -191,20 +191,20 @@ Lisätään _input_ elementteihin nimet _name_-attribuutteina ja vaihdetaan mole
     />
   </div>
   <button>kirjaudu</button>
-</form> 
+</form>
 ```
 
 Yhteinen muutoksista huolehtiva tapahtumankäsittelijä on seuraava:
 
 ```js
 handleLoginFieldChange = (e) => {
-  if ( e.target.name === 'password') {
+  if (e.target.name === 'password') {
     this.setState({ password: e.target.value })
-  } else if ( e.target.name === 'username') {
+  } else if (e.target.name === 'username') {
     this.setState({ username: e.target.value })
   }
 }
-```  
+```
 
 Tapahtumankäsittelijän parametrina olevan tapahtumaolion _e_ kentän _target.name_ arvona on tapahtuman aiheuttaneen komponentin _name_-attribuutti, eli joko _username_ tai _password_. Koodi haarautuu nimen perusteella ja asettaa tilaan oikean kentän arvon.
 
@@ -225,7 +225,7 @@ Näin saamme eliminoitua if-lauseen tapahtumankäsittelijästä ja se pelkistyy 
 handleLoginFieldChange = (e) => {
   this.setState({ [e.target.name]: e.target.value })
 }
-``` 
+```
 
 Kirjautuminen tapahtuu tekemällä HTTP POST -pyyntö palvelimen osoitteeseen _api/login_. Eristetään pyynnön tekevä koodi omaan moduuliin tiedostoon _services/login.js_
 
@@ -250,7 +250,7 @@ login = async (e) => {
   e.preventDefault()
   try{
     const user = await loginService.login({
-      username: this.state.username, 
+      username: this.state.username,
       password: this.state.password
     })
 
@@ -278,7 +278,7 @@ Määritellään ensin komponentin _App_ metodiin render apufunktiot lomakkeiden
 const loginForm = () => (
   <div>
     <h2>Kirjaudu</h2>
-        
+
     <form onSubmit={this.login}>
       <div>
         käyttäjätunnus
@@ -298,7 +298,7 @@ const loginForm = () => (
         />
       </div>
       <button>kirjaudu</button>
-    </form> 
+    </form>
   </div>
 )
 
@@ -338,8 +338,8 @@ class App extends React.Component {
       // ...
 
     </di>
-  ) 
-}    
+  )
+}
 ```
 
 Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta Reactin yhteydessä [yleisesti käytettyä kikkaa](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator):
@@ -353,13 +353,13 @@ Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman eri
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-2) tagissä _v5-2_.
 
-Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutos on aivan ilmeinen signaali siitä, että lomakkeet olisi syyt ärefaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
+Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutos on aivan ilmeinen signaali siitä, että lomakkeet olisi syytä refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
 ## Muistiinpanojen luominen
 
-Fronend on siis tallettanut onnistuneen kirjautumisen yhteydessä backendilta saamansa tokenin sovelluksen tilaan _this.state.user.token_.
+Frontend on siis tallettanut onnistuneen kirjautumisen yhteydessä backendilta saamansa tokenin sovelluksen tilaan _this.state.user.token_.
 
-Korjataan uusien muistiinpanojen luominen siihen muotoon, mitä backend edellyttää, eli lisätään kirjautuneen käyttäjän token HTTP-pyynnön Authorization-headeriin. 
+Korjataan uusien muistiinpanojen luominen siihen muotoon, mitä backend edellyttää, eli lisätään kirjautuneen käyttäjän token HTTP-pyynnön Authorization-headeriin.
 
 _noteService_-moduuli muuttuu seuraavasti
 
@@ -376,7 +376,7 @@ const setToken = (newToken) => {
 const create = async (newObject) => {
   const config = {
     headers: { 'Authorization': token }
-  }  
+  }
 
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
@@ -387,22 +387,23 @@ export default { getAll, create, update, setToken }
 
 Moduulille on määritelty vain moduulin sisällä näkyvä muuttuja _token_ jolle voidaan asettaa arvo moduulin exporttaamalla funktiolla _setToken_. Async/await-syntaksiin muutettu _create_ asettaa moduulin tallessa pitämän tokenin _Authorization_-headeriin, jonka se antaa axiosille metodin _post_ kolmantena parametrina.
 
-Kirjautumisesta huolehtivaa tapahtumankäsittelijää pitää vielä viilata sen verran, että kutsuu <code>noteService.setToken(user.token)</code> onnistuneen kirjautumisen yhteydessä: 
+Kirjautumisesta huolehtivaa tapahtumankäsittelijää pitää vielä viilata sen verran, että kutsuu <code>noteService.setToken(user.token)</code> onnistuneen kirjautumisen yhteydessä:
 
 ```js
-  login = async (e) => {
-    e.preventDefault()
-    try{
-      const user = await loginService.login({
-        username: this.state.username, password: this.state.password
-      })
+login = async (e) => {
+  e.preventDefault()
+  try{
+    const user = await loginService.login({
+      username: this.state.username,
+      password: this.state.password
+    })
 
-      noteService.setToken(user.token)
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
-      // ...
-    }
+    noteService.setToken(user.token)
+    this.setState({ username: '', password: '', user})
+  } catch(exception) {
+    // ...
   }
+}
 ```
 
 Kirjautuminen toimii taas!
@@ -419,7 +420,7 @@ Local storage on erittäin helppokäyttöinen. Metodilla [setItem](https://devel
 window.localStorage.setItem('nimi', 'juha tauriainen')
 ```
 
-tallettaa avaimen _nimi_ arvoksi toisena parametrina olevan merkkijonon. 
+tallettaa avaimen _nimi_ arvoksi toisena parametrina olevan merkkijonon.
 
 Avaimen arvo selviää metodilla [getItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem):
 
@@ -429,32 +430,34 @@ window.localStorage.getItem('nimi')
 
 ja [removeItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/removeItem) poistaa avaimen.
 
-Storageen talletetut arvot säilyvät vaikka sivu uudelleenladattaisiin. Storage on ns [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin)-kohtainen, eli jokaisella selaimella käytettävällä web-sovelluksella on oma storagensa. 
+Storageen talletetut arvot säilyvät vaikka sivu uudelleenladattaisiin. Storage on ns. [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin)-kohtainen, eli jokaisella selaimella käytettävällä web-sovelluksella on oma storagensa.
 
-Laajennetaan sovellusta siten, että se asettaa kirjautneen käyttäjän tiedot local storageen.
+Laajennetaan sovellusta siten, että se asettaa kirjautuneen käyttäjän tiedot local storageen.
 
 Koska storageen talletettavat arvot ovat [merkkijonoja](https://developer.mozilla.org/en-US/docs/Web/API/DOMString), emme voi tallettaa storageen suoraan javascript-oliota, vaan ne on muutettava ensin JSON-muotoon metodilla _JSON.stringify_. Vastaavasti kun JSON-muotoinen olio luetaan local storagesta, on se parsittava takaisin Javascript-olioksi metodilla _JSON.parse_.
 
 Kirjautumisen yhteyteen tehtävä muutos on seuraava:
 
 ```js
-  login = async (e) => {
-    e.preventDefault()
-    try{
-      const user = await loginService.login({
-        username: this.state.username, password: this.state.password
-      })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      noteService.setToken(user.token)
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
-      // ...
-    }
-   
+login = async (e) => {
+  e.preventDefault()
+
+  try {
+    const user = await loginService.login({
+      username: this.state.username,
+      password: this.state.password
+    })
+
+    window.localStorage.setItem('loggedUser', JSON.stringify(user))
+    noteService.setToken(user.token)
+    this.setState({ username: '', password: '', user})
+  } catch(exception) {
+    // ...
   }
+}
 ```
 
-Kirjaantuneen käyttäjän tiedot tallentuvat nyt localstorageen ja niitä voidaan tarkastella konsolista:
+Kirjautuneen käyttäjän tiedot tallentuvat nyt localstorageen ja niitä voidaan tarkastella konsolista:
 
 ![]({{ "/assets/5/2.png" | absolute_url }})
 
@@ -462,21 +465,21 @@ Sovellusta on vielä laajennettava siten, että kun sivulle tullaan uudelleen, e
 
 Sopiva paikka tähän on _App_-komponentin metodi [componentwillmount](https://reactjs.org/docs/react-component.html#componentwillmount) johon tutustuimme jo [osassa 2](osa2/#Komponenttien-lifecycle-metodit).
 
-Kyseessä on siis ns. lifecycle-metodi, jota React-kutsuu juuri ennen kuin komponentti ollaan renderöimässä ensimmäistä kertaa. Metodissa on tällähetkellä jo muistiinpanot palvelimelta lataava koodi. Muutetaan koodia seuraavasti
+Kyseessä on siis ns. lifecycle-metodi, jota React-kutsuu juuri ennen kuin komponentti ollaan renderöimässä ensimmäistä kertaa. Metodissa on tällä hetkellä jo muistiinpanot palvelimelta lataava koodi. Muutetaan koodia seuraavasti
 
 ```js
-  componentWillMount() {
-    noteService.getAll().then(notes =>
-      this.setState({ notes })
-    )
+componentWillMount() {
+  noteService.getAll().then(notes =>
+    this.setState({ notes })
+  )
 
-    const loggedUserJSON = window.localStorage.getItem('loggedUser')
-    if (loggedUserJSON ){
-      const user = JSON.parse(loggedUserJSON)
-      this.setState({user})
-      noteService.setToken(user.token)
-    }
+  const loggedUserJSON = window.localStorage.getItem('loggedUser')
+  if (loggedUserJSON) {
+    const user = JSON.parse(loggedUserJSON)
+    this.setState({user})
+    noteService.setToken(user.token)
   }
+}
 ```
 
 Nyt käyttäjä pysyy kirjautuneena sovellukseen ikuisesti. Sovellukseen olisikin kenties syytä lisätä _logout_-toiminnallisuus, joka poistaisi kirjautumistiedot local storagesta. Jätämme kuitenkin uloskirjautumisen harjoitustehtäväksi.
@@ -494,7 +497,6 @@ Muutetaan sovellusta siten, että kirjautumislomaketta ei oletusarvoisesti näyt
 ![]({{ "/assets/5/3.png" | absolute_url }})
 
 Lomake aukeaa, jos käyttäjä painaa nappia _login_:
-
 
 ![]({{ "/assets/5/4.png" | absolute_url }})
 
@@ -530,10 +532,10 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
       </form>
     </div>
   )
-} 
+}
 ```
 
-Reactin [suosittelemaan tyyliin](https://reactjs.org/docs/lifting-state-up.html) tila ja tilaa käsittelevät funktiot on kaikki määritelty komponentin ulkopuolella ja välitetään komponentille propseina. 
+Reactin [suosittelemaan tyyliin](https://reactjs.org/docs/lifting-state-up.html) tila ja tilaa käsittelevät funktiot on kaikki määritelty komponentin ulkopuolella ja välitetään komponentille propseina.
 
 Huomaa, että propsit otetaan vastaan _destrukturoimalla_, eli sensijaan että määriteltäisiin
 
@@ -554,10 +556,10 @@ const LoginForm = (props) => {
       </form>
     </div>
   )
-} 
+}
 ```
 
-jolloinen muuttujan _props_ kenttiin on viitattava muuttujan kautta esim. _props.handleSubmit_ , otetaan kentät suoraan vastaan omiin muuttujiinsa.
+jolloin muuttujan _props_ kenttiin on viitattava muuttujan kautta esim. _props.handleSubmit_, otetaan kentät suoraan vastaan omiin muuttujiinsa.
 
 Nopea tapa toiminnallisuuden toteuttamiseen on seuraava:
 
@@ -579,7 +581,7 @@ Nopea tapa toiminnallisuuden toteuttamiseen on seuraava:
 </div>
 ```
 
-Komponentin _App_ tilaan on nyt määritelty kenttä _loginVisible_ joka määrittelee sen näytetäänkö kenttä. 
+Komponentin _App_ tilaan on nyt määritelty kenttä _loginVisible_ joka määrittelee sen näytetäänkö kenttä.
 
 Näkyvyyttä säätelevää tilaa vaihdellaan kahden napin avulla, molempiin on kirjoitettu tapahtumankäsittelijän koodi suoraan:
 
@@ -589,12 +591,13 @@ Näkyvyyttä säätelevää tilaa vaihdellaan kahden napin avulla, molempiin on 
 <button onClick={e => this.setState({ loginVisible: false })}>cancel</button>
 ```
 
-Komponenttien näkyvyys on määritelty asettamalla komponetille CSS-määrittely, jossa [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)-propertyn arvoksi asetetaan _none_ jos komponentin ei haluta näkyvän:
+Komponenttien näkyvyys on määritelty asettamalla komponentille CSS-määrittely, jossa [display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)-propertyn arvoksi asetetaan _none_ jos komponentin ei haluta näkyvän:
 
 ```html
 <div style={{ display: this.state.loginVisible ? '' : 'none' }}>
 ```
-Käytössä on taas kysymysmerkkioperaattori, eli jos _this.state.visible_ on _false_, tulee napin CSS-määrittelyksi 
+
+Käytössä on taas kysymysmerkkioperaattori, eli jos _this.state.visible_ on _false_, tulee napin CSS-määrittelyksi
 
 ```css
 display: 'none';
@@ -611,7 +614,7 @@ Kirjautumislomakkeen näkyvyyttä ympäröivä koodin voi ajatella olevan oma lo
 Tavoitteena on luoda komponentti _Togglable_ jota käytetän seruaavalla tavalla:
 
 ```html
-<Togglable buttonLabel='login'>
+<Togglable buttonLabel="login">
   <LoginForm
     visible={this.state.visible}
     username={this.state.username}
@@ -627,7 +630,7 @@ Komponentin käyttö poikkeaa aiemmin näkemistämme siinä, että käytössä o
 _Togglablen_ avaavan ja sulkevan tagin sisälle voi sijoittaa lapsiks mitä tahansa react-elementtejä, esim.:
 
 ```html
-<Togglable buttonLabel='paljasta'>
+<Togglable buttonLabel="paljasta">
   <p>tämä on aluksi piilossa</p>
   <p>toinen salainen rivi</p>
 </Togglable>
@@ -667,7 +670,7 @@ class Togglable extends React.Component {
 }
 ```
 
-Mielenkiintoista ja meille uutta on [this.props.children](https://reactjs.org/docs/glossary.html#propschildren), jonka avulla koodi viittaa komponentin  lapsiin, eli tagien sisällä määriteltyihin React-elementteihin.
+Mielenkiintoista ja meille uutta on [this.props.children](https://reactjs.org/docs/glossary.html#propschildren), jonka avulla koodi viittaa komponentin lapsiin, eli tagien sisällä määriteltyihin React-elementteihin.
 
 Tällä kertaa lapset ainoastaan renderöidään komponentin oman renderöivän koodin seassa:
 
@@ -690,7 +693,7 @@ Toisin kuin "normaalit" propsit, _children_ on Reactin automaattisesti määritt
 
 on _this.props.children_ tyhjä taulukko.
 
-Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemään myös uuden muistiinpanon luomisesta huolehtivan fromin vastaavalla tavalla tarpeen mukaan näytettäväksi. 
+Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemään myös uuden muistiinpanon luomisesta huolehtivan fromin vastaavalla tavalla tarpeen mukaan näytettäväksi.
 
 Määrittelimme jo komponentin
 
@@ -710,7 +713,7 @@ const NoteForm = ({ onSubmit, handleChange, value}) => {
           onChange={handleChange}
         />
         <button>tallenna</button>
-      </form>    
+      </form>
     </div>
   )
 }
@@ -718,8 +721,8 @@ const NoteForm = ({ onSubmit, handleChange, value}) => {
 ja määritellääm lomakkeen näyttävä koodi komponentin _Togglable_ sisällä
 
 ```html
-<Togglable button='new note'>
-  <NoteForm 
+<Togglable button="new note">
+  <NoteForm
     onSubmit={this.addNote}
     value={this.state.new_note}
     handleChange={this.handleNoteChange}
@@ -729,20 +732,20 @@ ja määritellääm lomakkeen näyttävä koodi komponentin _Togglable_ sisäll�
 
 ## ref eli viite komponenttiin
 
-Ratkaisu on melko hyvä, haluaisimme kuitenkin parantaa sitä erään seikan osalta. 
+Ratkaisu on melko hyvä, haluaisimme kuitenkin parantaa sitä erään seikan osalta.
 
-Kun uusi muistiinpano luodaan, olisi logista jos luomislomake menisi piiloon, nyt lomake pysyy näkyvillä. Lomakkeen piilottamiseen sisältyy kuitenkin pieni ongelma sillä näkyvyyttä kontrolloidaan _Togglable_-komponentin tilassa olevalla muuttujalla ja komponentissa määritellyllä metodilla _toggleVisibility_ miten pääsemme hiihin käsiksi komponentin ulkopuolelta?
+Kun uusi muistiinpano luodaan, olisi logista jos luomislomake menisi piiloon, nyt lomake pysyy näkyvillä. Lomakkeen piilottamiseen sisältyy kuitenkin pieni ongelma sillä näkyvyyttä kontrolloidaan _Togglable_-komponentin tilassa olevalla muuttujalla ja komponentissa määritellyllä metodilla _toggleVisibility_ miten pääsemme niihin käsiksi komponentin ulkopuolelta?
 
 Koska React-komponentit ovat Javascript-oliota, on niiden metodeja mahdollista kutsua jos komponenttia vastaavaan olioon onnistutaan saamaan viite.
 
-Eräs keino viitteen saamiseen on React-komponenttien attribuutti [ref](https://reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component). 
+Eräs keino viitteen saamiseen on React-komponenttien attribuutti [ref](https://reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component).
 
 Muutetaan lomakkeen renderöivää koodia seuraavasti:
 
 ```html
 <div>
-  <Togglable buttonLabel='new note' ref={component => this.noteForm = component}>
-    <NoteForm 
+  <Togglable buttonLabel="new note" ref={component => this.noteForm = component}>
+    <NoteForm
       //...
     />
   </Togglable>
@@ -763,13 +766,13 @@ Voimme nyt piilottaa lomakkeen kutsumalla _this.noteForm.toggleVisibility()_ sam
 
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    this.noteForm.toggleVisibility()
+addNote = (e) => {
+  e.preventDefault()
+  this.noteForm.toggleVisibility()
 
-    // ..
-  }
-```  
+  // ..
+}
+```
 
 Refeille on myös [muita käyttötarkoituksia](https://reactjs.org/docs/refs-and-the-dom.html) kuin React-komponentteihin käsiksi pääseminen.
 
@@ -787,15 +790,15 @@ ja otetaan se käyttöön seuraavasti
 
 ```html
 <div>
-  <Togglable buttonLabel="1" ref={component=>this.t1 = component}>
+  <Togglable buttonLabel="1" ref={component => this.t1 = component}>
     ensimmäinen
   </Togglable>
 
-  <Togglable buttonLabel="2" ref={component=>this.t2 = component}>
+  <Togglable buttonLabel="2" ref={component => this.t2 = component}>
     toinen
   </Togglable>
 
-  <Togglable buttonLabel="3" ref={component=>this.t3 = component}>
+  <Togglable buttonLabel="3" ref={component => this.t3 = component}>
     kolmas
   </Togglable>
 </div>
@@ -805,7 +808,7 @@ syntyy kolme erillsitä komponenttiolioa, joilla on kaikilla oma tilansa:
 
 ![]({{ "/assets/5/5.png" | absolute_url }})
 
-_ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin _this.t1_, _this.t2_, ja _this.t3_, 
+_ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin _this.t1_, _this.t2_, ja _this.t3_,
 
 ## Proptype
 
@@ -819,9 +822,9 @@ Komponenntti _Togglable_ olettaa, että sille määritellään propsina _buttonL
 
 Sovellus kyllä toimii, mutta selaimeen renderöityy hämäävästi nappi, jolla ei ole mitään tekstiä.
 
-Haluaisimmekin varmistaa että jos _Togglable_-komponenttia käytetään, on propsille "pakko" antaa arvo. 
+Haluaisimmekin varmistaa että jos _Togglable_-komponenttia käytetään, on propsille "pakko" antaa arvo.
 
-Kirjaston olettamat ja edellyttämät propsit ja niiden tyypit voidaan määritellä kirjaston 
+Kirjaston olettamat ja edellyttämät propsit ja niiden tyypit voidaan määritellä kirjaston
 [prop-types](https://github.com/facebook/prop-types) avulla. Asennetaan kirjasto
 
 ```bash
@@ -857,12 +860,12 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
   return (
     // ...
   )
-} 
+}
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired, 
-  handleChange: PropTypes.func.isRequired, 
-  username: PropTypes.string.isRequired, 
+  handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired
 }
 ```
@@ -882,7 +885,7 @@ class Togglable extends React.Component {
   static propTypes = {
     buttonLabel: PropTypes.string.isRequired,
   }
-  
+
   // ...
 }
 ```
@@ -899,11 +902,11 @@ Surfatessasi internetissä saatata vielä nähdä ennen Reactin versiota 0.16. t
 
 ## React-sovelluksen testaus
 
-Reactilla tehtyjen fronendien testaamiseen on monia tapoja. Aloteaan niihin tutustuminen nyt.
+Reactilla tehtyjen frontendien testaamiseen on monia tapoja. Aloitetaan niihin tutustuminen nyt.
 
 Testit tehdään samaan tapaan kuin edellisessä osassa eli Facebookin [Jest](https://facebook.github.io/jest/)-kirjastolla. Jest onkin valmiiksi konfiguroitu create-react-app:illa luotuihin projekteihin.
 
-Jestin lisäksi käytetään AirBnB:n kehittämää [enzyme](https://github.com/airbnb/enzyme)-kirjastoa. 
+Jestin lisäksi käytetään AirBnB:n kehittämää [enzyme](https://github.com/airbnb/enzyme)-kirjastoa.
 
 Asennetaan enzyme komennolla:
 
@@ -911,14 +914,14 @@ Asennetaan enzyme komennolla:
 npm i --save-dev enzyme enzyme-adapter-react-16
 ```
 
-Testataan maluksi muisiinpanon renderöivää komponenttia:
+Testataan aluksi muistiinpanon renderöivää komponenttia:
 
 ```js
 const Note = ({ note, toggleImportance }) => {
   const label = note.important ? 'make not important' : 'make important'
   return (
-    <div className='wrapper'>
-      <div className='content'>
+    <div className="wrapper">
+      <div className="content">
         {note.content}
       </div>
       <div>
@@ -929,11 +932,11 @@ const Note = ({ note, toggleImportance }) => {
 }
 ```
 
-Testauksen helpottamiseksi komponenttiin on lisätty sisällön määrittelevälle _div_-elementille [CSS-luokka](https://reactjs.org/docs/dom-elements.html#classname) _content_. 
+Testauksen helpottamiseksi komponenttiin on lisätty sisällön määrittelevälle _div_-elementille [CSS-luokka](https://reactjs.org/docs/dom-elements.html#classname) _content_.
 
 ### shallow-renderöinti
 
-Ennen testien tekemisä, tehdään _enzymen_ konfiguraatioita varten tiedosto _src/setupTests.js_ ja sille seuraava sisältö:
+Ennen testien tekemistä, tehdään _enzymen_ konfiguraatioita varten tiedosto _src/setupTests.js_ ja sille seuraava sisältö:
 
 ```js
 import { configure } from 'enzyme'
@@ -942,9 +945,9 @@ import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() })
 ```
 
-Nyt olemme valmiina testine tekemiseen.
+Nyt olemme valmiina testien tekemiseen.
 
-Koska _Note_ on yksinkertainen komponentti, joka ei käytä yhtään monimutkaista alikomponenttia vaan renderöi suoraan HTML:ää, sopii sen testaamiseen hyvin enzymen [shallow](http://airbnb.io/enzyme/docs/api/shallow.html)-renderöijä
+Koska _Note_ on yksinkertainen komponentti, joka ei käytä yhtään monimutkaista alikomponenttia vaan renderöi suoraan HTML:ää, sopii sen testaamiseen hyvin enzymen [shallow](http://airbnb.io/enzyme/docs/api/shallow.html)-renderöijä.
 
 Tehdään testi tiedoston _src/components/Note.test.js_, eli samaan hakemistoon, missä komponentti itsekin sijaitsee.
 
@@ -958,7 +961,7 @@ import Note from './Note'
 describe.only('<Note />', () => {
   it('renders content', () => {
     const note = {
-      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
       important: true
     }
 
@@ -978,13 +981,13 @@ const noteComponent = shallow(<Note note={note} />)
 
 Normaalisti React-komponentit renderöityvät _DOM_:iin. Nyt kuitenkin renderöimme komponentteja [shallowWrapper](http://airbnb.io/enzyme/docs/api/shallow.html)-tyyppisiksi, testaukseen sopiviksi olioiksi.
 
-ShallowWrapper-mutoon renderöidyillä React-komponenteilla on runsaasta metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
+ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasta metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
 
 ```js
 const contentDiv = noteComponent.find('.content')
 ```
 
-ekspektaatiossa vaarmistamme, että elementtiin on renderöitynyt oikea teksti, eli muistiinpanon sisältö:
+ekspektaatiossa varmistamme, että elementtiin on renderöitynyt oikea teksti, eli muistiinpanon sisältö:
 
 ```js
 expect(contentDiv.text()).toContain(note.content)
@@ -1002,11 +1005,11 @@ CI=true npm test
 
 ### testien sijainti
 
-Reactissa on (ainakin) [kaksi erilaista](https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850) konventiota testien sijoittamiseen. Sijoitimme testit ehkä vallitsevan tavan mukaan, eli samaan hakemistoon missä testattava komponentti sijaitsee. 
+Reactissa on (ainakin) [kaksi erilaista](https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850) konventiota testien sijoittamiseen. Sijoitimme testit ehkä vallitsevan tavan mukaan, eli samaan hakemistoon missä testattava komponentti sijaitsee.
 
-Toinen tapa olisi sijoittaa testit "normaaliin" tapaan omaan erilliseen hakemistoon. Valitaanpa kumpi tahansa tapa, on 100% varmaan että se on jonkun mielestä täysin väärin.
+Toinen tapa olisi sijoittaa testit "normaaliin" tapaan omaan erilliseen hakemistoon. Valitaanpa kumpi tahansa tapa, on 100% varmaa että se on jonkun mielestä täysin väärin.
 
-Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. Noudatanne kuitenkin nyt tätä tapaa sillä create-react-app:illa konfiguroidut sovellukset suosivat oletusarvoisesti tätä tapaa.
+Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. Noudatamme kuitenkin nyt tätä tapaa sillä create-react-app:illa konfiguroidut sovellukset suosivat oletusarvoisesti tätä tapaa.
 
 ### testien debuggaaminen
 
@@ -1016,14 +1019,14 @@ Testejä tehdessä törmäämme tyypillisesti moniin ongelmiin. Näissä tilante
 describe.only('<Note />', () => {
   it('renders content', () => {
     const note = {
-      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+      content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
       important: true
     }
 
     const noteComponent = shallow(<Note note={note} />)
     console.log(noteComponent.debug())
 
-    
+
     const contentDiv = noteComponent.find('.content')
     console.log(contentDiv.debug())
 
@@ -1038,7 +1041,7 @@ Konsoliin tulostuu komponentinn generoima html:
 console.log src/components/Note.test.js:16
   <div className="wrapper">
     <div className="content">
-      Komonenttitestaus tapahtuu jestillä ja enzymellä
+      Komponenttitestaus tapahtuu jestillä ja enzymellä
     </div>
     <div>
       <button onClick={[undefined]}>
@@ -1049,7 +1052,7 @@ console.log src/components/Note.test.js:16
 
 console.log src/components/Note.test.js:20
   <div className="content">
-    Komonenttitestaus tapahtuu jestillä ja enzymellä
+    Komponenttitestaus tapahtuu jestillä ja enzymellä
   </div>
 ```
 
@@ -1060,26 +1063,25 @@ Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva as
 Testaus onnistuu seuraavasti:
 
 ```bash
-  it('clicking the button calls event handler once', () => {
-    const note = {
-      content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
-      important: true
-    }
+it('clicking the button calls event handler once', () => {
+  const note = {
+    content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
+    important: true
+  }
 
-    const mockHandler = jest.fn()
+  const mockHandler = jest.fn()
 
-    const noteComponent = shallow(
-      <Note 
-        note={note} 
-        toggleImportance={mockHandler}
-      />
-    )
-    
-    const button = noteComponent.find('button')
-    button.simulate('click')
+  const noteComponent = shallow(
+    <Note
+      note={note}
+      toggleImportance={mockHandler}
+    />
+  )
 
-    expect(mockHandler.mock.calls.length).toBe(1)
-  })  
+  const button = noteComponent.find('button')
+  button.simulate('click')
+
+  expect(mockHandler.mock.calls.length).toBe(1)
 })
 ```
 
@@ -1096,7 +1098,7 @@ const button = noteComponent.find('button')
 button.simulate('click')
 ```
 
-Klikkaaminen tapahtuu metodin [simulate] (http://airbnb.io/enzyme/docs/api/ShallowWrapper/simulate.html) avulla.
+Klikkaaminen tapahtuu metodin [simulate](http://airbnb.io/enzyme/docs/api/ShallowWrapper/simulate.html) avulla.
 
 Testin ekspektaatio varmistaa, että _mock-funktiota_ on kutsuttu täsmälleen kerran:
 
@@ -1105,7 +1107,7 @@ expect(mockHandler.mock.calls.length).toBe(1)
 ```
 
 
-[Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien tarkkailemisen testatessa. 
+[Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien tarkkailemisen testatessa.
 
 Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla oli hyvä varmistaa, että metodia on kutsuttu täsmälleen kerran. Testiä olisi mahdollisa myös parantaa varmistamalla, että mock-olion metodikutsussa annettu parametri on odotetun kaltainen. Jätämme kuitenkin testien parantelun harjoitustehtäväksi.
 
@@ -1125,7 +1127,7 @@ class Togglable extends React.Component {
         <div style={hideWhenVisible}>
           <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
         </div>
-        <div style={showWhenVisible} class='togglableContent'>
+        <div style={showWhenVisible} class="togglableContent">
           {this.props.children}
           <button onClick={this.toggleVisibility}>cancel</button>
         </div>
@@ -1150,9 +1152,10 @@ describe('<Togglable />', () => {
 
   beforeEach(() => {
     togglableComponent = shallow(
-      <Togglable buttonLabel='show...'>
-        <div class='testDiv' />
-      </Togglable>)
+      <Togglable buttonLabel="show..."">
+        <div class="testDiv" />
+      </Togglable>
+    )
   })
 
   it('renders its children', () => {
@@ -1175,34 +1178,35 @@ describe('<Togglable />', () => {
 })
 ```
 
-Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallowrenderöi _Togglable_-komponentin muuttujaan _togglableComponent_. 
+Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow _Togglable_-komponentin muuttujaan _togglableComponent_.
 
-Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class='testDiv' />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
+Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class="testDiv" />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
 
 
 ### mount ja full DOM -renderöinti
 
-Käyttämämme _shallow_-renderöijä on useimmissta tapauksissa riittävä. Joskus tarvitsemme kuitenkin järeämmän työkalun sillä _shallow_ renderöi ainoastaan "yhden tason", eli sen komponentin, jolle metodia kutsutaan. 
+Käyttämämme _shallow_-renderöijä on useimmista tapauksissa riittävä. Joskus tarvitsemme kuitenkin järeämmän työkalun sillä _shallow_ renderöi ainoastaan "yhden tason", eli sen komponentin, jolle metodia kutsutaan.
 
 Jos yritämme esim. sijoittaa kaksi _Note_-komponenttia _Togglable_-komponentin sisälle ja tulostamme syntyvän _ShallowWrapper_ olion
 
 ```
 it('shallow renders only one level', () => {
   const note1 = {
-    content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+    content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
     important: true
   }
-  const note12= {
+  const note12 = {
     content: 'shallow ei renderöi alikomponentteja',
     important: true
   }
 
   const togglableComponent = shallow(
-    <Togglable buttonLabel='show...'>
+    <Togglable buttonLabel="show...">
       <Note note={note1} />
       <Note note={note2} />
-    </Togglable>)
-  
+    </Togglable>
+  )
+
   console.log(togglableComponent.debug())
 })
 
@@ -1227,7 +1231,7 @@ huomaamme, että _Togglable_ komponentti on renderöitynyt, eli "muuttunut" HTML
 </div>
 ```
 
-Jos komponetille tehdään edellisten esimerkkien tapaan yksikkötestejä, _shallow_-renderöinti on useimmiten riittävä. Jos haluamme testata isompia kokonaisuuksia, eli tehdä fronendin _integraatiotestausta_, ei _shallow_-renderöinti riitä vaan on turvauduttava komponentit kokonaisuudessaan renderöivään [mount](http://airbnb.io/enzyme/docs/api/mount.html):iin.
+Jos komponentille tehdään edellisten esimerkkien tapaan yksikkötestejä, _shallow_-renderöinti on useimmiten riittävä. Jos haluamme testata isompia kokonaisuuksia, eli tehdä frontendin _integraatiotestausta_, ei _shallow_-renderöinti riitä vaan on turvauduttava komponentit kokonaisuudessaan renderöivään [mount](http://airbnb.io/enzyme/docs/api/mount.html):iin.
 
 Muutetaan testi käyttämään _shallowin_ sijaan _mountia_:
 
@@ -1239,7 +1243,7 @@ import Togglable from './Togglable'
 
 it('mount renders all components', () => {
   const note1 = {
-    content: 'Komonenttitestaus tapahtuu jestillä ja enzymellä',
+    content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
     important: true
   }
   const note2 = {
@@ -1248,7 +1252,7 @@ it('mount renders all components', () => {
   }
 
   const noteComponent = mount(
-    <Togglable buttonLabel='show...'>
+    <Togglable buttonLabel="show...">
       <Note note={note1} />
       <Note note={note2} />
     </Togglable>)
@@ -1271,7 +1275,7 @@ Tuloksena on kokonaisuudessaan HTML:ksi renderöitynyt _Togglable_-komponentti:
       <Note note={{...}}>
         <div className="wrapper">
           <div className="content">
-            Komonenttitestaus tapahtuu jestillä ja enzymellä
+            Komponenttitestaus tapahtuu jestillä ja enzymellä
           </div>
           <div>
             <button onClick={[undefined]}>
@@ -1304,17 +1308,17 @@ Mountin avulla renderöitäessä testi pääsee siis käsiksi periaatteessa sama
 
 Komennon _mount_ palauttamaa renderöidyn "komponenttipuun" [ReactWrapper](http://airbnb.io/enzyme/docs/api/mount.htm)-tyyppisenä oliona, joka tarjoaa hyvin samantyyppisen rajapinnan komponentin sisällön tutkimiseen kuin _ShallowWrapper_.
 
-## fronendin integraatiotestaus
+## frontendin integraatiotestaus
 
 Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat backendin tarjoaman API:n läpi backendia ja tietokantaa. Backendin testauksessa tehtiin tietoinen päätös olla kirjoittamatta yksikkötestejä sillä backendin koodi on sinänsä erittäin suoraviivaista ja ongelmat tulevatkin esiin todennäköisemmin juuri monimutkaisemmissa skenaarioissa, joita integraatiotestit hyvin testaavat
 
-Toistaiseksi kaikki fronendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan ykikkötestaus ei riitä koskaan antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
+Toistaiseksi kaikki frontendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan yksikkötestaus ei riitä koskaan antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
 
-Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää localstoragea kirjautuneen käyttäjän tietojen tallettamiseen. 
+Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää localstoragea kirjautuneen käyttäjän tietojen tallettamiseen.
 
-Localstorage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii localstoragea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests). 
+Localstorage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii localstoragea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests).
 
-Koska testimme ei edellytä localstoragelta juuri mitään toiminnallisuutta, teemme tiedostoon[src/setupTests.js](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#initializing-test-environment) hyvin yksinkertaisen mockin
+Koska testimme ei edellytä localstoragelta juuri mitään toiminnallisuutta, teemme tiedostoon [src/setupTests.js](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#initializing-test-environment) hyvin yksinkertaisen mockin
 
 ```js
 let savedItem
@@ -1331,7 +1335,6 @@ window.localStorage = localStorageMock
 ```
 
 Toinen ongelmistamme on se, että sovellus hakee näytettävät muistiinpanot palvelimelta. Muistiinpanojen haku tapahtuu heti komponentin _App_ luomisen jälkeen, kun metodi _componentWillMount_ kutsuu _noteService_:n metodia _getAll_:
-
 
 
 ```js
@@ -1411,8 +1414,7 @@ import Note from './components/Note'
 jest.mock('./services/notes')
 import noteService from './services/notes'
 
-describe('<App />', ()=>{
-
+describe('<App />', () => {
   let app
   beforeAll( () =>{
     app = mount(<App />)
@@ -1432,16 +1434,15 @@ Testin toimivuuden kannalta on oleellista metodin [app.update](http://airbnb.io/
 
 ## Testauskattavuus
 
-[Testauskattavuus](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#coverage-reporting)  saadaan helposti selville 
-suorittamalla testit komennolla
+[Testauskattavuus](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#coverage-reporting) saadaan helposti selville suorittamalla testit komennolla
 
 ```bash
-CI=true npm test -- --coverage 
+CI=true npm test -- --coverage
 ```
 
 ![]({{ "/assets/5/8.png" | absolute_url }})
 
-Melko primitiivinen HTML-mutoinen raportti generoituu hakemistoon _coverage/lcov-report_. HTML-mutoinen raportti kertoo mm. yksittäisen komponenttien testaamattomien koodirivit:
+Melko primitiivinen HTML-muotoinen raportti generoituu hakemistoon _coverage/lcov-report_. HTML-muotoinen raportti kertoo mm. yksittäisen komponenttien testaamattomien koodirivit:
 
 ![]({{ "/assets/5/9.png" | absolute_url }})
 
@@ -1449,10 +1450,10 @@ Huomaamme, että parannettavaa jäi vielä runstaasti.
 
 ## snapshot-testaus
 
-Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns. 
+Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns.
 [snapshot](https://facebook.github.io/jest/docs/en/snapshot-testing.html)-testauksen. Mielenkiintoista snapshot-testauksessa on se, että sovelluskehittäjän ei tarvitse itse määritellä ollenkaan testejä, snapshot-testauksen käyttöönotto riittää.
 
-Periaatteena on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta. 
+Periaatteena on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta.
 
 Jos spanshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snaphshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
 
@@ -1460,7 +1461,7 @@ Palaamme aiheeseen myöhemmin kurssilla.
 
 ## end to end -testaus
 
-Olemme nyt tehneet sekä backendille että frontendille hieman niitä kokonaisuutena testavia integraatiotestejä. Eräs tärkeä testauksen kategoria on vielä käsittelemättä, [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) testaavat "end to end" (eli E2E) -testit. 
+Olemme nyt tehneet sekä backendille että frontendille hieman niitä kokonaisuutena testavia integraatiotestejä. Eräs tärkeä testauksen kategoria on vielä käsittelemättä, [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) testaavat "end to end" (eli E2E) -testit.
 
 Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. [headless browseria]
 (https://en.wikipedia.org/wiki/Headless_browser) eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää. Esim. Chromea on mahdollista suorittaa Headless-moodissa.
@@ -1473,7 +1474,7 @@ Palaamme end to end -testeihin kurssin viimeisessä, eli seitsemännessä osassa
 
 ## Sovellusten tilan hallinta Reduxilla
 
-Olemme noudattaneet sovelluksen tilan hallinnassa Reactin suosittelemaa käytäntöä määritellä tila ja sitä käsittelevät metodit [sovelluksen juurikomponentissa](https://reactjs.org/docs/lifting-state-up.html). Tilaa ja sitä käsitteleviä metodeja on välitetty propsien avulla niitä tarvitseville komponenteille. Tämä toimii johonkin pisteeseen, saakka, mutta kun sovellusten koko kasvaa, muuttuu tilan hallinta haasteelliseksi.
+Olemme noudattaneet sovelluksen tilan hallinnassa Reactin suosittelemaa käytäntöä määritellä tila ja sitä käsittelevät metodit [sovelluksen juurikomponentissa](https://reactjs.org/docs/lifting-state-up.html). Tilaa ja sitä käsitteleviä metodeja on välitetty propsien avulla niitä tarvitseville komponenteille. Tämä toimii johonkin pisteeseen saakka, mutta kun sovellusten koko kasvaa, muuttuu tilan hallinta haasteelliseksi.
 
 ### Flux-arkkitehtuuri
 
@@ -1487,11 +1488,11 @@ Jos sovelluksen käyttö, esim. napin painaminen aiheuttaa tarpeen tilan muutoks
 
 ![](https://facebook.github.io/flux/img/flux-simple-f8-diagram-with-client-action-1300w.png)
 
-Flux tarjoaa siis standardin tavan sille miten ja missä sovelluksen tila talletetaan sekä tavalle tehdä tilaan muutoksia. 
+Flux tarjoaa siis standardin tavan sille miten ja missä sovelluksen tila talletetaan sekä tavalle tehdä tilaan muutoksia.
 
 ### Redux
 
-Facebookilla on myös olemassa valmist toteutus Fluxille, käytämme kuitenkin saman periaatteen mukaan toimivaa, mutta hieman yksinkertaisempaa [Redux](https://redux.js.org)-kirjastoa, jota myös Facebookissa käytetään nykyään aluperäisen Flux-toteutuksen sijaan.
+Facebookilla on myös olemassa valmis toteutus Fluxille, käytämme kuitenkin saman periaatteen mukaan toimivaa, mutta hieman yksinkertaisempaa [Redux](https://redux.js.org)-kirjastoa, jota myös Facebookissa käytetään nykyään aluperäisen Flux-toteutuksen sijaan.
 
 Tutustutaan Reduxiin toteuttamalla klassinen laskurin toteuttava sovellus:
 
@@ -1503,14 +1504,14 @@ Tehdään uusi create-react-app-sovellus ja asennetaan siihen _redux_ komennolla
 install redux --save
 ```
 
-Fluxin tapaan Reduxissa sovelluksen tila talletetaan [storeen](https://redux.js.org/docs/basics/Store.html). 
+Fluxin tapaan Reduxissa sovelluksen tila talletetaan [storeen](https://redux.js.org/docs/basics/Store.html).
 
 Koko sovelluksen tila talletetaan _yhteen_ storen tallettamaan javascript-objektiin. Koska sovelluksemme ei tarvitse mitään muuta tilaa kuin laskurin arvon, talletetaan se storeen suoraan. Jos sovelluksen tila olisi monipuolisempi, talletettaisiin "eri asiat" storessa olevan olioon erillisinä kenttinä.
 
 Storen tilaa muutetaan [actionien](https://redux.js.org/docs/basics/Actions.html) avulla. Actionit ovat olioita joilla on vähintään actionin _tyypin_ määrittelevä kenttä _type_. Sovelluksessamme tarvitsemme esimerkiksi seuraavaa actionia:
 
 ```js
-{ 
+{
   type: 'INCREMENT'
 }
 ```
@@ -1522,13 +1523,13 @@ Actioinien vaikutus sovelluksen tilaan määritellään [reducerin](https://redu
 Määritellään nyt sovellukselleme reduceri:
 
 ```js
-{ 
+{
 const counterReducer = (state, action) => {
-  if (action.type==='INCREMENT') {
+  if (action.type === 'INCREMENT') {
     return state + 1
-  } else if (action.type==='DECREMENT') {
+  } else if (action.type === 'DECREMENT') {
     return state - 1
-  } else if (action.type==='ZERO') {
+  } else if (action.type === 'ZERO') {
     return 0
   }
 
@@ -1536,13 +1537,13 @@ const counterReducer = (state, action) => {
 }
 ```
 
-Ensimmäinen parametri on siis storessa oleva _tila_. Reducer palauttaa uuden tilan actionin tyypin mukaan. 
+Ensimmäinen parametri on siis storessa oleva _tila_. Reducer palauttaa uuden tilan actionin tyypin mukaan.
 
-Muutetaan koodia vielä hiukan. Reducereissa on tapana käyttää if:ien sijaan [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)-komentoa. 
+Muutetaan koodia vielä hiukan. Reducereissa on tapana käyttää if:ien sijaan [switch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch)-komentoa.
 Määritellään myös parametrille _state_ [oletusarvoksi](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters) 0. Näin reducer toimii vaikka store tilaa ei olisi vielä alustettu.
 
 ```js
-{ 
+{
 const counterReducer = (state = 0, action) => {
   switch (action.type) {
     case 'INCREMENT':
@@ -1550,13 +1551,13 @@ const counterReducer = (state = 0, action) => {
     case 'DECREMENT':
       return state - 1
     case 'ZERO':
-      return 0      
+      return 0
   }
   return state
 }
 ```
 
-Reduceria ei ole tarkoitus kutsua koskaan suoraan sovelluksen koodista. Reducer ainoataan annetaan parametrina storen luovalle _createStore_-funktiolle:
+Reduceria ei ole tarkoitus kutsua koskaan suoraan sovelluksen koodista. Reducer ainoastaan annetaan parametrina storen luovalle _createStore_-funktiolle:
 
 ```js
 import {createStore} from 'redux'
@@ -1598,9 +1599,9 @@ tulostaisi konsoliin
 -1
 </pre>
 
-Kolmas tärkeä metodi storella on [subscribe](https://redux.js.org/docs/api/Store.html#subscribe), jonka avulla voidaan määritellä takaisinkutsufunktioita, joita store kutsuu sen tilan muuttumisen yhteydessä. 
+Kolmas tärkeä metodi storella on [subscribe](https://redux.js.org/docs/api/Store.html#subscribe), jonka avulla voidaan määritellä takaisinkutsufunktioita, joita store kutsuu sen tilan muuttumisen yhteydessä.
 
-Jos esim. lisäisimme seuraavan funktion sublscribellä, tulostuisi jokainen storen muutos konsoliin.
+Jos esim. lisäisimme seuraavan funktion subscribellä, tulostuisi jokainen storen muutos konsoliin.
 
 ```js
 store.subscribe(()=> {
@@ -1623,7 +1624,7 @@ const counterReducer = (state = 0, action) => {
     case 'DECREMENT':
       return state - 1
     case 'ZERO':
-      return 0      
+      return 0
   }
   return state
 }
@@ -1671,7 +1672,7 @@ Sovelluksen ensimmäinen versio seuraavassa
 
 ```react
 const noteReducer = (state = [], action) => {
-  if ( action.type==='NEW_NOTE') {
+  if ( action.type === 'NEW_NOTE') {
     state.push(action.data)
     return state
   }
@@ -1695,7 +1696,7 @@ store.dispatch({
   data: {
     content: 'tilanmuutokset tehdään actioneilla',
     important: false,
-    id: 2 
+    id: 2
   }
 })
 
@@ -1706,19 +1707,19 @@ class App extends React.Component {
         <ul>
           {store.getState().map(note=>
             <li key={note.id}>
-              {note.content} <strong>{note.important? 'tärkeä': ''}</strong>
+              {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
             </li>
           )}
-         </ul> 
+         </ul>
       </div>
     )
   }
 }
 ```
 
-Toistaiseksi sovelluksessa ei siis ole toiminnallisuutta uusien muistiinpanojen lisäämiseen, voimme kuitenkin tehdä sen dipatchaamalla _NEW_NOTE_-tyyppisiä actioneja koodista.
+Toistaiseksi sovelluksessa ei siis ole toiminnallisuutta uusien muistiinpanojen lisäämiseen, voimme kuitenkin tehdä sen dispatchaamalla _NEW_NOTE_-tyyppisiä actioneja koodista.
 
-Actioneissa on nyt tyypin lisäksi kenttä _data_, joka sisältää lisättävän muistinpanon:
+Actioneissa on nyt tyypin lisäksi kenttä _data_, joka sisältää lisättävän muistiinpanon:
 
 ```js
 {
@@ -1726,7 +1727,7 @@ Actioneissa on nyt tyypin lisäksi kenttä _data_, joka sisältää lisättävä
   data: {
     content: 'tilanmuutokset tehdään actioneilla',
     important: false,
-    id: 2 
+    id: 2
   }
 }
 ```
@@ -1737,7 +1738,7 @@ Reducerimme alustava versio on yksinkertainen:
 
 ```js
 const noteReducer = (state = [], action) => {
-  if ( action.type==='NEW_NOTE') {
+  if (action.type === 'NEW_NOTE') {
     state.push(action.data)
     return state
   }
@@ -1752,11 +1753,11 @@ Sovellus näyttää toimivan, mutta määrittelemämme reduceri on huono, se rik
 
 Puhtaat funktiot ovat sellaisia, että ne _eivät aiheuta mitään sivuvaikutuksia_ ja niiden tulee aina palauttaa sama vastaus samoilla parametreilla kutsuttaessa.
 
-Lisäsimme tilaan uuden muistiinpanon metodilla _state.push(action.data)_ joka _muuttaa_ state-olion tilaa. Tämä ei ole sallittua. Ongelma korjautuu helposti käyttämällä metodia [conact](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), joka luo _uuden taulukon_, jonka sisältönä on vanhan taulukon alkiot sekä lisättävä alkio:
+Lisäsimme tilaan uuden muistiinpanon metodilla _state.push(action.data)_ joka _muuttaa_ state-olion tilaa. Tämä ei ole sallittua. Ongelma korjautuu helposti käyttämällä metodia [concat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/concat), joka luo _uuden taulukon_, jonka sisältönä on vanhan taulukon alkiot sekä lisättävä alkio:
 
 ```js
 const noteReducer = (state = [], action) => {
-  if ( action.type==='NEW_NOTE') {
+  if ( action.type === 'NEW_NOTE') {
     return state.concat(action.data)
   }
 
@@ -1764,7 +1765,7 @@ const noteReducer = (state = [], action) => {
 }
 ```
 
-Reducen tilan tulee koostua  muuttumattomista eli [immutable](https://en.wikipedia.org/wiki/Immutable_object) olioista. Jos tilaan tulee muuttua, ei vanhaa olioa muuteta, vaan se korvataan uudella muuttuneella oliolla. Juuri näin toimimme uudistuneessa reducerissa. Vanha taulukko korvaantuu uudella. Tutustumme seuraavassa osassa [immutable.js](https://facebook.github.io/immutable-js/)-kirjastoon, joka helpottaa tietyissä tapauksissa muuttumattomien tietorakenteiden käyttöä. Tässä osassa käytämme kuitenkin suoraan Javascriptin tietotyyppejä.
+Reducen tilan tulee koostua muuttumattomista eli [immutable](https://en.wikipedia.org/wiki/Immutable_object) olioista. Jos tilaan tulee muuttua, ei vanhaa oliota muuteta, vaan se korvataan uudella muuttuneella oliolla. Juuri näin toimimme uudistuneessa reducerissa. Vanha taulukko korvaantuu uudella. Tutustumme seuraavassa osassa [immutable.js](https://facebook.github.io/immutable-js/)-kirjastoon, joka helpottaa tietyissä tapauksissa muuttumattomien tietorakenteiden käyttöä. Tässä osassa käytämme kuitenkin suoraan Javascriptin tietotyyppejä.
 
 Laajennetaan reduceria siten, että se osaa käsitellä muistiinpanon tärkeyteen liittyvän muutoksen:
 
@@ -1785,7 +1786,7 @@ Jotta testaus olisi helpompaa, siirretään reducerin koodi ensin omaan moduulii
 import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
 
-describe('noteRenderer', ()=>{
+describe('noteRenderer', () => {
   it('returns new state with action NEW_NOTE', () => {
     const state = []
     const action = {
@@ -1815,12 +1816,12 @@ Tehdään sitten testi actionin _TOGGLE_IMPORTANCE_ käsittelylle:
 
 ```js
 it('returns new state with action TOGGLE_IMPORTANCE', () => {
-  const state = [ 
+  const state = [
     {
       content: 'sovelluksen tila talletetaan storeen',
       important: true,
       id: 1
-    }, 
+    },
     {
       content: 'tilanmuutokset tehdään actioneilla',
       important: false,
@@ -1838,7 +1839,7 @@ it('returns new state with action TOGGLE_IMPORTANCE', () => {
   const newState = noteReducer(state, action)
 
   expect(newState.length).toBe(2)
-  
+
   expect(newState).toContainEqual(state[0])
 
   expect(newState).toContainEqual({
@@ -1846,7 +1847,7 @@ it('returns new state with action TOGGLE_IMPORTANCE', () => {
     important: true,
     id: 2
   })
-})  
+})
 ```
 
 Reduceri laajenee seuraavasti
@@ -1858,12 +1859,12 @@ const noteReducer = (state = [], action) => {
       return state.concat(action.data)
     case 'TOGGLE_IMPORTANCE':
       const id = action.data.id
-      const newState = state.filter(n=>n.id!==id)
+      const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
       const chagedNote = { ...noteToChange, important: !noteToChange.important }
 
       return newState.concat(chagedNote)
-    default: 
+    default:
     return state
   }
 }
@@ -1875,7 +1876,7 @@ Luomme tärkeyttä muuttaneesta muistiinpanosta kopion osasta 2 [tutulla syntaks
 
 Koska reducerilla on nyt suhteellisen hyvät testit, voimme refaktoroida koodia turvallisesti.
 
-Molemmat tapaukset luovat palautettavan stilan taulukon _concat_-funktiolla. Katsotaan nyt miten voimme toteuttaa saman hyödyntämällä Javascriptin [array spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) -syntaksia:
+Molemmat tapaukset luovat palautettavan tilan taulukon _concat_-funktiolla. Katsotaan nyt miten voimme toteuttaa saman hyödyntämällä Javascriptin [array spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) -syntaksia:
 
 ```js
 const noteReducer = (state = [], action) => {
@@ -1884,18 +1885,18 @@ const noteReducer = (state = [], action) => {
       return [...state, action.data]
     case 'TOGGLE_IMPORTANCE':
       const id = action.data.id
-      const newState = state.filter(n=>n.id!==id)
+      const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
       const chagedNote = { ...noteToChange, important: !noteToChange.important }
 
       return [...newState, chagedNote]
-    default: 
+    default:
     return state
   }
 }
 ```
 
-Spread-syntaksi toimii seuraavasti. Jos määrittelemme 
+Spread-syntaksi toimii seuraavasti. Jos määrittelemme
 
 ```js
 const luvut = [1, 2, 3]
@@ -1917,7 +1918,7 @@ Jos olisimme sijoittaneet taulukon toisen sisälle ilman spreadia, eli
 
 lopputulos olisi ollut _[ [1, 2, 3], 4, 5]_.
 
-Saman näköinen syntaksi toimii taulukosta [destrukturoimalla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) alkoita otettaessa siten, että se _kerää_ loput alkiot:
+Saman näköinen syntaksi toimii taulukosta [destrukturoimalla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) alkioita otettaessa siten, että se _kerää_ loput alkiot:
 
 ```js
 const luvut = [1, 2, 3, 4, 5, 6]
@@ -1939,7 +1940,7 @@ const generateId = () => Number((Math.random() * 1000000).toFixed(0))
 class App extends React.Component {
   addNote = (e) => {
     e.preventDefault()
-    const content = e.target.note.value 
+    const content = e.target.note.value
     store.dispatch({
       type: 'NEW_NOTE',
       data: {
@@ -1960,23 +1961,23 @@ class App extends React.Component {
     return(
       <div>
         <form onSubmit={this.addNote}>
-          <input name='note'/>
+          <input name="note" />
           <button>lisää</button>
-        </form>  
+        </form>
         <ul>
           {store.getState().map(note=>
             <li key={note.id} onClick={this.toggleImportance(note.id)}>
-              {note.content} <strong>{note.important? 'tärkeä': ''}</strong>
+              {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
             </li>
           )}
-         </ul> 
+         </ul>
       </div>
     )
   }
 }
 ```
 
-Molemmat toiminnallisuudet on toteutettu suoraviivaisesti. Huomionarvoista uuden muistiinpanon lisäämisessä on nyt se, että toisin kuin aiemmat Reactilla toteutetut lomakkeet emme ole nyt sitoneet lomakkeen kentän arvoa komponentin _App_ tilaan. React kutsuu tälläisiä lomakkeita [eikontrolloiduiksi](https://reactjs.org/docs/uncontrolled-components.html). 
+Molemmat toiminnallisuudet on toteutettu suoraviivaisesti. Huomionarvoista uuden muistiinpanon lisäämisessä on nyt se, että toisin kuin aiemmat Reactilla toteutetut lomakkeet emme ole nyt sitoneet lomakkeen kentän arvoa komponentin _App_ tilaan. React kutsuu tälläisiä lomakkeita [eikontrolloiduiksi](https://reactjs.org/docs/uncontrolled-components.html).
 
 > Eikontrolloiduilla lomakkeilla on tiettyjä rajoitteita (ne eivät esim. mahdollista lennossa annettavia validointiviestejä, lomakkeen lähetysnapin disabloimista sisällön perusteella ym...), meidän käyttötapaukseemme ne kuitenkin tällä kertaa sopivat.
 Voit halutessasi lukea aiheesta enemmän [täältä](https://goshakkk.name/controlled-vs-uncontrolled-inputs-react/).
@@ -1984,29 +1985,29 @@ Voit halutessasi lukea aiheesta enemmän [täältä](https://goshakkk.name/contr
 Muistiinpanon lisäämisen käsittelevä metodi on yksinkertainen, se ainoastaan dispatchaa muistiinpanon lisäävän actionin:
 
 ```js
-  addNote = (e) => {
-    e.preventDefault()
-    store.dispatch({
-      type: 'NEW_NOTE',
-      data: {
-        content: e.target.note.value,
-        important: false,
-        id: generateId()
-      }
-    })
-    e.target.note.value = ''
-  }
+addNote = (e) => {
+  e.preventDefault()
+  store.dispatch({
+    type: 'NEW_NOTE',
+    data: {
+      content: e.target.note.value,
+      important: false,
+      id: generateId()
+    }
+  })
+  e.target.note.value = ''
+}
 ```
 
 Tärkeyden muuttaminen tapahtuu klikkaamalla muistiinpanon nimeä. Käsittelijä on erittäin yksinkertainen:
 
 ```js
-  toggleImportance = (id) => (e) => {
-    store.dispatch({
-      type: 'TOGGLE_IMPORTANCE',
-      data: { id }
-    })
-  }
+toggleImportance = (id) => (e) => {
+  store.dispatch({
+    type: 'TOGGLE_IMPORTANCE',
+    data: { id }
+  })
+}
 ```
 
 Kyseessä on jälleen tuttu _funktio, joka palauttaa funktion_, eli kullekin muistiinpanolle generoituu käsittelijäksi funktio, jolla on muistiinpanon yksilöllinen id.
@@ -2034,7 +2035,7 @@ const actionFor = {
         important: false,
         id: generateId()
       }
-    }  
+    }
   },
   importanceToggling(id) {
     return {
@@ -2056,7 +2057,7 @@ class App extends React.Component {
     )
     e.target.note.value = ''
   }
-  toggleImportance = (id) => (e) => {  
+  toggleImportance = (id) => (e) => {
     store.dispatch(
       actionFor.importanceToggling(id)
     )
@@ -2070,7 +2071,7 @@ class App extends React.Component {
 
 Sovelluksemme on reduceria lukuunottamatta tehty samaan tiedostoon. Kyseessä ei tietenkään ole järkevä käytäntö, eli eriytetään _App_ omaan moduuliinsa. Herää kuitenkin kysymys miten _App_ pääsee muutoksen jälkeen käsiksi _storeen_? Ja yleisemminkin, kun komponentti koostuu suuresta määrästä komponentteja, tulee olla jokin mekanismi, minkä avulla komponentit pääsevät käsiksi storeen.
 
-Tapoja muutama, käsitellään tässä osassa kahta helpoimmin ymmärrettävää. Parhaan tavan eli kirjaston React-redux määrittelevän [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)-metodin säästämme seuraavaan osaan sillä se on hieman abstrakti ja on kenties hyvä totutella Reduxiin aluksi ilman connectin tuomia käsitteellisiä haasteita. 
+Tapoja muutama, käsitellään tässä osassa kahta helpoimmin ymmärrettävää. Parhaan tavan eli kirjaston React-redux määrittelevän [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)-metodin säästämme seuraavaan osaan sillä se on hieman abstrakti ja on kenties hyvä totutella Reduxiin aluksi ilman connectin tuomia käsitteellisiä haasteita.
 
 Yksinkertaisin vaihtoehto on välittää store propsien avulla. Sovelluksen käynnistyspiste _index.js_ typistyy seuraavasti
 
@@ -2089,7 +2090,7 @@ const render = () => {
 
 render()
 store.subscribe(render)
-store.subscribe(()=>console.log(store.getState()))
+store.subscribe(() => console.log(store.getState()))
 ```
 
 Muutos omaan moduuliinsa eriytettyyn komponenttiin _App_ on pieni storeen viitavaan _propsien_ kautta _this.props.store_:
@@ -2115,7 +2116,7 @@ class App extends React.Component {
     return (
       <div>
         <form onSubmit={this.addNote}>
-          <input name='note' />
+          <input name="note" />
           <button>lisää</button>
         </form>
         <ul>
@@ -2133,7 +2134,7 @@ class App extends React.Component {
 export default App
 ```
 
-Jos sovelluksessa on enemmän komponentteja, jotka tarvitsevat myös storea, tulee _App_-komponentin välittää _store_ propseina issitätä tarvitseville komponenteille. 
+Jos sovelluksessa on enemmän komponentteja, jotka tarvitsevat myös storea, tulee _App_-komponentin välittää _store_ propseina sitä tarvitseville komponenteille.
 
 Eriytetään uuden muistiinpanon luominen sekä muistiinpanojen lista ja yksittäisen muisiinpanon esittäminen omiksi komponenteiksi:
 
@@ -2149,11 +2150,10 @@ class NoteForm extends React.Component {
   render() {
     return(
       <form onSubmit={this.addNote}>
-        <input name='note' />
+        <input name="note" />
         <button>lisää</button>
-      </form> 
+      </form>
     )
-   
   }
 }
 
@@ -2218,7 +2218,7 @@ Manuaalin sanoin:
 
 Reactin Context API on vielä kokeellinen ja se voi hävitä tulevista versiosta. Contextin käyttö ei olekaan kovin suositeltavaa. Katsomme kuitenkin mistä on kyse.
 
-Ennen contextin käyttöä, tehdään sovelluksene pieni muutos. Eristetään komponentista _App_ 
+Ennen contextin käyttöä, tehdään sovelluksene pieni muutos. Eristetään komponentista _App_
 
 Asennetaan ensin contextin käyttöä helpottava [react-redux](https://github.com/reactjs/react-redux)-kirjasto sekä contextien määrittelyyn tarvittava _prop-types_:
 
@@ -2242,7 +2242,7 @@ const render = () => {
   ReactDOM.render(
     <Provider store={store}>
       <App/>
-    </Provider>, 
+    </Provider>,
   document.getElementById('root'))
 }
 
@@ -2322,7 +2322,7 @@ class NoteForm extends React.Component {
 ```
 
 Näin komponentit rekisteröivät kuuntelemaan storessa tapahtuvia muutoksia ja niiden tapahtuessa
-uudelleenrenderöimään itsensä (ja lapsikomponenttinsa) metodilla [forceUpdate](https://reactjs.org/docs/react-component.html#forceupdate). 
+uudelleenrenderöimään itsensä (ja lapsikomponenttinsa) metodilla [forceUpdate](https://reactjs.org/docs/react-component.html#forceupdate).
 
 Nyt pääsemme eroon tiedostossa _index.js_ tapahtuneesta koko sovelluksen uudelleenrenderöinnistä ja koodi yksinkertaistuu muotoon.
 
@@ -2330,7 +2330,7 @@ Nyt pääsemme eroon tiedostossa _index.js_ tapahtuneesta koko sovelluksen uudel
 ReactDOM.render(
   <Provider store={createStore(noteReducer)}>
     <App />
-  </Provider>, 
+  </Provider>,
   document.getElementById('root')
 )
 ```
