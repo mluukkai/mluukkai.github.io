@@ -1260,9 +1260,17 @@ Ota sovellukseesi käyttöön ESlint.
 
 Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
 
+Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti. 
+
+Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkailu.
+
+**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua. 
+
+Kun siirryt kehittämään uutta sovellusta, onkin varminta aina aluksi nollata local storage konsolista komennolla <code>window.localstorage.clear()</code>
+
 ### kirjautuminen ja blogien luonto
 
-#### 81
+#### 81 blogilistan frontend, osa 1
 
 Toteuta frontendiin kirjautumisen mahdollistava toiminnallisuus. Kirjautumisen yhteydessä backendin palauttama token tallennetaan sovelluksen tilan kenttään _user_ .
 
@@ -1302,7 +1310,7 @@ Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa lo
   }
 ```
 
-#### 82
+#### 82 blogilistan frontend, osa 2
 
 Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus ulkokirjautumiseen
 
@@ -1310,7 +1318,7 @@ Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahd
 
 Uloskirjautumisen jälkeen selain enää saa muistaa kirjautunutta käyttäjää reloadauksen jäleen.
 
-#### 83
+#### 83 blogilistan frontend, osa 3
 
 Laajenna sovellusta siten, että kirjautunut käyttäjä voi luoda uusia blogeja:
 
@@ -1318,7 +1326,7 @@ Laajenna sovellusta siten, että kirjautunut käyttäjä voi luoda uusia blogeja
 
 Bloginluomislomakkeesta kannattanee tehdä oma komponenttinsa joka hallitsee lomakkeen kenttien sisältöä tilansa avulla.
 
-#### 84
+#### 84 blogilistan frontend, osa 4
 
 Toteuta sovellukseen notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä. Esim. blogin lisäämisen yhteydessä voi antaa seuraavan notifikaation
 
@@ -1330,13 +1338,103 @@ epäonnistunut kirjautuminen taas johtaa notifikaatioon
 
 Notifikaation tulee olla näkyvillä muutaman sekunnin ajan. Värien lisääminen ei ole pakollista.
 
-###
+### komponenttien näyttäminen vain tarvittaessa
 
-#### 85
-#### 86
-#### 87
-#### 88
-#### 89
+#### 85 blogilistan frontend, osa 5
+
+Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näytettävä osan 4 tapaan. Voit halutessasi hyödyntää osassa 4 määriteltyä komponenttia _Togglable_.
+
+#### 86 blogilistan frontend, osa 6
+ 
+Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
+
+![]({{ "/assets/teht/33.png" | absolute_url }})
+
+Uusi klikkaus blogin nimeen pienentää näkymän.
+
+Napin _like_ ei tässä vaiheessa tarvitse tehdä mitään.
+
+Kuvassa on myös käytetty hieman CSS:ää parantamaan sovelluksen ulkoasua.
+
+Tyylejä voidaan määritellä osan 5 tapaan helposti [inline](https://react-cn.github.io/react/tips/inline-styles.html)-tyyleinä seuraavasti:
+
+```js
+class Blog extends React.Component {
+  // ...
+
+  render() {
+    // ..
+
+    const blogStyle = { 
+      paddingTop: 10, 
+      paddingLeft: 2, 
+      border: 'solid', 
+      borderWidth: 1,
+      marginBottom: 5
+    }
+
+    return (
+      <div style={blogStyle}>
+        ...
+      </div>
+    )
+  }
+}
+```
+
+#### 87 blogilistan frontend, osa 7
+
+Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä. 
+
+Koska backendin operaatio korvaa aina koko blogin, joudut lähettämään operaation mukana blogin kaikki kentät, eli jos seuraavaa blogia liketetään
+
+```js
+{
+  _id: "5a43fde2cbd20b12a2c34e91",
+  user: {
+    _id: "5a43e6b6c37f3d065eaaa581",
+    username: "mluukkai",
+    name: "Matti Luukkainen"
+  },
+  likes: 0,
+  author: "Joel Spolsky",
+  title: "The Joel Test: 12 Steps to Better Code",
+  url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
+},
+```
+
+tulee palvelimelle tehdä PUT-pyyntö osoitteeseen _/api/blogs/5a43fde2cbd20b12a2c34e91_ ja sisällyttää pyynnön mukaan seuraava data:
+
+```js
+{
+  user: "5a43e6b6c37f3d065eaaa581",
+  likes: 1,
+  author: "Joel Spolsky",
+  title: "The Joel Test: 12 Steps to Better Code",
+  url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
+},
+```
+
+**Bonus:** järjestä sovellus näyttämään blogit _likejen_ mukaisessa suuruusjärjestyksessä.
+
+#### 88 blogilistan frontend, osa 8
+
+Lisää nappi blogin poistamiselle. Nappi näytetään ainoastaan jos kyseessä on kirjautuneen käyttäjän lisäämä blogi _tai_ blogi, jolle ei ole määritelty lisääjää.
+
+Toteuta myös poiston tekevä logiikka. Laajenna backendiä siten, että ne blogit joihin ei liity lisääjää ovat kaikkien kirjautuneiden käyttäjien positettavissa.
+
+Ohjelmasi voi näyttää esim. seuraavalta:
+
+![]({{ "/assets/teht/34.png" | absolute_url }})
+
+### ProcTypet
+
+#### 89 blogilistan frontend, osa 9
+
+Määrittele joillekin sovelluksesi komponenteille ProcTypet. 
+
+### komponenttien testaaminen
+
 #### 90
 #### 91
 #### 92
