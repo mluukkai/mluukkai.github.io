@@ -164,7 +164,7 @@ class App extends React.Component {
 export default App
 ```
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fontend/tree/v5-1) tagissä _v5-1_.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-1) tagissä _v5-1_.
 
 Kirjautumislomakkeen käsittely noudattaa samaa periaatetta, kun [osassa 2](osa2/#Lomakkeet). Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePaswordChange_) joka synkronoi kenttään tehdyt muutokset komponentin _App_ tilan. Kirjautumislomakkeen lähettämisetä vastaava metodi _login_ ei tee vielä mitään.
 
@@ -404,7 +404,7 @@ return (
 
 Ratkaisu näyttää hieman rumalta, mutta jätämme sen koodiin toistaiseksi.
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fontend/tree/v5-2) tagissä _v5-2_.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-2) tagissä _v5-2_.
 
 Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
