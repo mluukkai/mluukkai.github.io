@@ -1258,12 +1258,80 @@ Ota sovellukseesi käyttöön ESlint.
 
 ## Osa 5
 
-###
+Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän fronendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-fronend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
+
+### kirjautuminen ja blogien luonto
 
 #### 81
+
+Toteuta fronendiin kirjautumisen mahdollistava toiminnallisuus. Kirjautumisen yhteydessä backendin palauttama token tallennetaan sovelluksen tilan kenttään _user_ .
+
+Jos käyttäjä ei ole kirjautunut, sivulla näytetään _pelkästään_ kirjautumislomake: 
+
+![]({{ "/assets/teht/27.png" | absolute_url }})
+
+Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä blogien lista
+
+![]({{ "/assets/teht/28.png" | absolute_url }})
+
+Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa local storagen avulla.
+
+**HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
+
+```html
+  render() {
+    if ( this.state.user===null) {
+      return (
+        <div>
+          <h2>Kirjaudu sovellukseen</h2>
+          <form>
+            //...
+          </form>
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <h2>blogs</h2>
+        {this.state.blogs.map(blog => 
+          <Blog key={blog._id} blog={blog}/>
+        )}
+      </div>
+    )
+  }
+```
+
 #### 82
+
+Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus ulkokirjautumiseen
+
+![]({{ "/assets/teht/29.png" | absolute_url }})
+
+Uloskirjautumisen jälkeen selain enää saa muitaa kirjautunutta käyttäjää reloadauksen jäleen.
+
 #### 83
+
+Laajenna sovellusta siten, että kirjautunut käyttäjä voi luoda uusia blogeja:
+
+![]({{ "/assets/teht/30.png" | absolute_url }})
+
+Bloginluomislomakkeesta kannattanee tehdä oma komponenttinsa joka hallitsee lomakkeen kenttien sisältöä tilansa avulla.
+
 #### 84
+
+Toteuta sovellukseen notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä. Esim. blogin lisäämisen yhteydessä voi antaa seuraavan notifikaation
+
+![]({{ "/assets/teht/32.png" | absolute_url }})
+
+epäonnistunut kirjautuminen taas johtaa notifikaatioon
+
+![]({{ "/assets/teht/31.png" | absolute_url }})
+
+Notifikaation tulee olla näkyvillä muutaman sekunnin ajan. Värien lisääminen ei ole pakollista.
+
+###
+
 #### 85
 #### 86
 #### 87

@@ -555,9 +555,9 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [81-](../tehtavat##)
+Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonto)
 
-## kirjautumislomakkeen näyttäminen vain tarvittaessa
+## Kirjautumislomakkeen näyttäminen vain tarvittaessa
 
 Muutetaan sovellusta siten, että kirjautumislomaketta ei oletusarvoisesti näytetä:
 
