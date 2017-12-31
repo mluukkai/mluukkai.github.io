@@ -337,9 +337,9 @@ class App extends React.Component {
 
       // ...
 
-    </di>
-  )
-}
+    </div>
+  ) 
+}    
 ```
 
 Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta Reactin yhteydessä [yleisesti käytettyä kikkaa](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator):
@@ -348,12 +348,63 @@ Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman eri
 {this.state.user === null && loginForm()}
 ```
 
+Jos ensimmäinen osa evaluoituu epätodeksi eli on [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), ei toista osaa eli lomakkeen generoivaa koodia suoriteta ollenkaan.
 
+Voimme suoraviivaistaa edellistä vielä hieman käyttämällä [kysymysmerkkioperaattoria](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator):
 
+```js
+return (
+  <div>
+    <h1>Muistiinpanot</h1>
+
+    <Notification message={this.state.error}/>
+
+    {this.state.user === null ? 
+      loginForm() : 
+      noteForm()
+    }
+
+    <h2>Muistiinpanot</h2>
+
+    // ...
+
+  </div>
+) 
+```
+
+Eli jos _this.state.user === null_ on [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), suoritetaan _loginForm_ ja muussa tapauksessa _noteForm_.
+
+Tehdään vielä sellainen muutos, että jos käyttäjä on kirjautunut, renderöidään kirjautuneet käyttäjän nimi:
+
+```js
+return (
+  <div>
+    <h1>Muistiinpanot</h1>
+
+    <Notification message={this.state.error}/>
+
+    {this.state.user === null ? 
+      {loginForm()} 
+      :
+      <div>
+        <p>{this.state.username} logged in</p>
+        {noteForm()}
+      </div>
+    }
+
+    <h2>Muistiinpanot</h2>
+
+    // ...
+
+  </div>
+) 
+```
+
+Ratkaisu näyttää hieman rumalta, mutta jätämme sen koodiin toistaiseksi.
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-2) tagissä _v5-2_.
 
-Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutos on aivan ilmeinen signaali siitä, että lomakkeet olisi syytä refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
+Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
 ## Muistiinpanojen luominen
 
