@@ -22,10 +22,11 @@ permalink: /osa5/
 - Redux
   - Flux-pattern
   - Storage, reducerit, actionit
-  - Testaus mm deepfreeze
+  - reducereiden testaus, deep-freeze
 - React+redux
-  - Storagen välittäminen propseilla ja kontekstissa
+  - Storagen välittäminen komponenteille propseilla ja kontekstissa
 - Javascript
+  - computed property name
   - Spread-operaatio
   - Reduxin edellyttämästä funktionaalisesta ohjelmoinnista
     - puhtaat funktiot
@@ -33,11 +34,11 @@ permalink: /osa5/
 
 ##  Kirjautuminen React-sovelluksesta
 
-Kaksi edellistä osaa keskittyi lähinnä backendin toiminnallisuudeen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla. 
+Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla. 
 
-Fronend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identifioima token.
+Fronend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identiteetin varmistava token.
 
-Toteutetaan nyt osa käyttäjienhallinnan edellyttämästä toiminnallisuudesta fronendiin. Aloitetaan käyttäjän kirjaantumisesta. Oletetaan toistaiseksi, että käyttäjät luodaan suoraan backendiin.
+Toteutetaan nyt osa käyttäjienhallinnan edellyttämästä toiminnallisuudesta fronendiin. Aloitetaan käyttäjän kirjaantumisesta. Oletetaan vielä tässä osassa, että käyttäjät luodaan suoraan backendiin.
 
 Sovelluksen yläosaan on nyt lisätty kirjautumislomake, myös uuden muistinpanon lisäämisestä huolehtiva lomake on siirretty sivun yläosaan:
 
@@ -162,11 +163,13 @@ class App extends React.Component {
 export default App
 ```
 
-Lomakkeen käsittely noudattaa samaa periaatetta, kun osassa 2 [osa2/#Lomakkeet]. Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePaswordChange_) joka synkronoi kenttään tehdyt muutokset ja komponentin _App_ tilan. Kirjautumislomakkeen lähettämisetä vastaava metodi _login_ ei tee vielä mitään.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-1) tagissä _v5-1_.
+
+Kirjautumislomakkeen käsittely noudattaa samaa periaatetta, kun [osassa 2](osa2/#Lomakkeet). Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePaswordChange_) joka synkronoi kenttään tehdyt muutokset komponentin _App_ tilan. Kirjautumislomakkeen lähettämisetä vastaava metodi _login_ ei tee vielä mitään.
 
 Jos lomakkeella on paljon kenttiä, voi olla työlästä totettaa jokaiselle kentälle oma muutoksenkäsittelijä. React tarjoaakin tapoja, miten yhden muutoksenkäsittelijän avulla on mahdollista huolehtia useista syötekentistä. Jaetun käsittelijän on saatava jollain tavalla tieto minkä syötekentän muutto aiheutti tapahtuman. Eräs tapa tähän on lomakkeen syötekenttien nimeäminen.
 
-Muutetaan lomaketta seuraavasti:
+Lisätään _input_ elementteihin nimet _name_-attribuutteina ja vaihdetaan molemmat käyttämään samaa muutoksenkäsittelijää:
 
 ```html
 <form onSubmit={this.login}>
@@ -205,7 +208,7 @@ handleLoginFieldChange = (e) => {
 
 Tapahtumankäsittelijän parametrina olevan tapahtumaolion _e_ kentän _target.name_ arvona on tapahtuman aiheuttaneen komponentin _name_-attribuutti, eli joko _username_ tai _password_. Koodi haarautuu nimen perusteella ja asettaa tilaan oikean kentän arvon.
 
-Javascriptissa on kuitenkin ES6:n myötä uusi syntaksi [computed property name](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer), jonka avulla olion kentän voi määritellä muuttujan avulla. Esim. seuraava koodi
+Javascriptissa on ES6:n myötä uusi syntaksi [computed property name](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer), jonka avulla olion kentän voi määritellä muuttujan avulla. Esim. seuraava koodi
 
 
 ```js
@@ -243,108 +246,106 @@ export default { login }
 Kirjautumisen käsittelystä huolehtiva metodi voidaan toteuttaa seuraavasti:
 
 ```js
-  login = async (e) => {
-    e.preventDefault()
-    try{
-      const user = await loginService.login({
-        username: this.state.username, password: this.state.password
-      })
+login = async (e) => {
+  e.preventDefault()
+  try{
+    const user = await loginService.login({
+      username: this.state.username, 
+      password: this.state.password
+    })
 
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
-      this.setState({
-        error: 'käyttäjätunnus tai salasana virheellinen',
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
-    }
+    this.setState({ username: '', password: '', user})
+  } catch(exception) {
+    this.setState({
+      error: 'käyttäjätunnus tai salasana virheellinen',
+    })
+    setTimeout(() => {
+      this.setState({ error: null })
+    }, 5000)
   }
+}
 ```
 
 Kirjautumisen onnistuessa nollataan kirjautumislomakkeen kentät _ja_ talletetaan palvelimen vastaus (joka sisältää _tokenin_ sekä kirjautuneen käyttäjän tiedot) sovelluksen tilan kenttään _user_.
 
 Jos kirjautuminen epäonnistuu, eli metodin _loginService.login_ suoritus aiheuttaa poikkeuksen, ilmoitetaan siitä käyttäjälle.
 
-Onnistunut kirjautuminen ei nyt näy sovelluksen käyttäjälle mitenkään. Muokataan sovellusta vielä siten, että kirjautumislomake näkyy vain _jos käyttäjä ei ole kirjautuneena_ eli _this.state.user === null_ ja uuden muistiinpanon luomislomake vain _jos käyttäjä on kirjaantuneena_, eli (eli this.state.user_ sisältää kirjaantuneen käyttäjän tiedot:
+Onnistunut kirjautuminen ei nyt näy sovelluksen käyttäjälle mitenkään. Muokataan sovellusta vielä siten, että kirjautumislomake näkyy vain _jos käyttäjä ei ole kirjautuneena_ eli _this.state.user === null_ ja uuden muistiinpanon luomislomake vain _jos käyttäjä on kirjaantuneena_, eli (eli _this.state.user_ sisältää kirjaantuneen käyttäjän tiedot.
 
+Määritellään ensin komponentin _App_ metodiin render apufunktiot lomakkeiden generointia varten:
 
-```js
-render() {
-  // ...
-
-  const loginForm = () => {
-    if ( this.state.user !== null) {
-      return null
-    }
-
-    return (
+```html
+const loginForm = () => (
+  <div>
+    <h2>Kirjaudu</h2>
+        
+    <form onSubmit={this.login}>
       <div>
-        <h2>Kirjaudu</h2>
-
-        <form onSubmit={this.login}>
-          <div>
-            käyttäjätunnus
+        käyttäjätunnus
             <input
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-              name='username'
-            />
-          </div>
-          <div>
-            salasana
-            <input
-              value={this.state.password}
-              type='password'
-              onChange={this.handleLoginFieldChange}
-              name='password'
-            />
-          </div>
-          <button>kirjaudu</button>
-        </form>
+          value={this.state.username}
+          onChange={this.handleLoginFieldChange}
+          name='username'
+        />
       </div>
-    )
-  }
-
-  const noteCreation = () => {
-    if (this.state.user === null) {
-      return null
-    }
-
-    return (
       <div>
-        <div><em>{this.state.user.name} logged in</em></div>
-
-        <h2>Luo uusi muistiinpano</h2>
-
-        <form onSubmit={this.addNote}>
-          <input
-            value={this.state.new_note}
-            onChange={this.handleNoteChange}
-          />
-          <button>tallenna</button>
-        </form>
+        salasana
+            <input
+          type='password'
+          value={this.state.password}
+          onChange={this.handleLoginFieldChange}
+          name='password'
+        />
       </div>
-    )
-  }
+      <button>kirjaudu</button>
+    </form> 
+  </div>
+)
 
+const noteForm = () => (
+  <div>
+    <h2>Luo uusi muistiinpano</h2>
+
+    <form onSubmit={this.addNote}>
+      <input
+        value={this.state.new_note}
+        onChange={this.handleNoteChange}
+      />
+      <button>tallenna</button>
+    </form>
+  </div>
+)
+```
+
+ja renderöidään ne ehdollisesti komponentin _App_ render-metodissa:
+
+```html
+class App extends React.Component {
+  // ..
   return (
     <div>
       <h1>Muistiinpanot</h1>
 
-      <Notification message={this.state.error} />
+      <Notification message={this.state.error}/>
 
-      {loginForm()}
+      {this.state.user === null && loginForm()}
 
-      {noteCreation()}
+      {this.state.user !== null && noteForm()}
+
 
       <h2>Muistiinpanot</h2>
-    </div>  
-  )
-}
+
+      // ...
+
+    </di>
+  ) 
+}    
 ```
 
-Lomakkeet generoiva koodi on nyt erotettu funktioihin, joissa lomakkeet generoidaan ehdollisesti, eli esim. login-lomake ainoastaan jos käyttäjä ei jo ole kirjautunut. Kirjautuneen käyttäjän nimi renderöidään hieman epätyylikkäästi muistiinpanojen luontiin tarkoitetun lomakkeen koodin generoivassa funktiossa.
+Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta [](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator)
+
+
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-2) tagissä _v5-2_.
 
 Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutos on aivan ilmeinen signaali siitä, että lomakkeet olisi syyt ärefaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
