@@ -516,16 +516,16 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
           <input
             value={username}
             onChange={handleChange}
-            name='username'
+            name="username"
           />
         </div>
         <div>
           salasana
           <input
+            type="password"
+            name="password"
             value={password}
-            type='password'
             onChange={handleChange}
-            name='password'
           />
         </div>
         <button>kirjaudu</button>
@@ -548,7 +548,7 @@ const LoginForm = (props) => {
           <input
             value={props.username}
             onChange={props.handleChange}
-            name='username'
+            name="username"
           />
         </div>
         // ...
@@ -697,7 +697,9 @@ Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemä
 
 Määrittelimme jo komponentin
 
+```react
 <div style={showWhenVisible} class='togglableContent'>
+```
 
 Eristetään ensin muistiinpanojen luominen omaksi komponentiksi
 
@@ -1152,7 +1154,7 @@ describe('<Togglable />', () => {
 
   beforeEach(() => {
     togglableComponent = shallow(
-      <Togglable buttonLabel="show..."">
+      <Togglable buttonLabel="show...">
         <div class="testDiv" />
       </Togglable>
     )
@@ -2321,8 +2323,7 @@ class NoteForm extends React.Component {
 }
 ```
 
-Näin komponentit rekisteröivät kuuntelemaan storessa tapahtuvia muutoksia ja niiden tapahtuessa
-uudelleenrenderöimään itsensä (ja lapsikomponenttinsa) metodilla [forceUpdate](https://reactjs.org/docs/react-component.html#forceupdate).
+Näin komponentit rekisteröivät kuuntelemaan storessa tapahtuvia muutoksia ja niiden tapahtuessa uudelleenrenderöimään itsensä (ja lapsikomponenttinsa) metodilla [forceUpdate](https://reactjs.org/docs/react-component.html#forceupdate).
 
 Nyt pääsemme eroon tiedostossa _index.js_ tapahtuneesta koko sovelluksen uudelleenrenderöinnistä ja koodi yksinkertaistuu muotoon.
 
