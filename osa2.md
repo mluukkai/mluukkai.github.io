@@ -476,7 +476,7 @@ class App extends React.Component {
             value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
-          <button type="submit" type="submit">tallenna</button>
+          <button type="submit">tallenna</button>
         </form>
       </div>
     )
