@@ -725,11 +725,11 @@ HTTP-pyynnöistä GET:in tulisi olla _safe_:
 
 > In particular, the convention has been established that the GET and HEAD methods SHOULD NOT have the significance of taking an action other than retrieval. These methods ought to be considered "safe".
 
-Safety siis tarkoittaa, että pyynnön suorittaminen ei saa aiheutta palvelimelle _sivuvaikutuksia_ eli esim. muuttaa palvelimen tietokannan tilaa, pyynnön tulee ainoastaan palauttaa palvelimella olevaa dataa. 
+Safety siis tarkoittaa, että pyynnön suorittaminen ei saa aiheutta palvelimelle _sivuvaikutuksia_ eli esim. muuttaa palvelimen tietokannan tilaa, pyynnön tulee ainoastaan palauttaa palvelimella olevaa dataa.
 
 Mikään ei automaattisesti takaa, että GET-pyynnöt olisivat luonteeltaan _safe_, kyseessä onkin HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET-pyyntöjä käytetäänkin aina siten, että ne ovat safe.
 
-HTTP-standardi määrittelee myös pyyntötyypin [HEAD](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4), jonka tulee olla safe. Käytännössä HEAD:in tulee toimia kuten GET, mutta se ei palauta vastauksenaan muuta kuin statuskoodin ja headerit, viestin bodyä HEAD ei palauta ollenkaan. 
+HTTP-standardi määrittelee myös pyyntötyypin [HEAD](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4), jonka tulee olla safe. Käytännössä HEAD:in tulee toimia kuten GET, mutta se ei palauta vastauksenaan muuta kuin statuskoodin ja headerit, viestin bodyä HEAD ei palauta ollenkaan.
 
 HTTP-pyynnöistä muiden paitsi POST:in tulisi olla _idemponent_:
 
@@ -1287,7 +1287,7 @@ const formatNote = (note) => {
 }
 ```
 
-ja palautetaan HTTP-pyynnön vastauksena funktion avulla mutoiltuja oliota:
+ja palautetaan HTTP-pyynnön vastauksena funktion avulla muotoiltuja oliota:
 
 ```js
 app.get('/api/notes', (request, response) => {
