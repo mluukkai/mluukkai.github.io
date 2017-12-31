@@ -342,7 +342,13 @@ class App extends React.Component {
 }    
 ```
 
-Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta [](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator)
+Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta Reactin yhteydessä [yleisesti käytettyä kikkaa](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator):
+
+```js
+{this.state.user === null && loginForm()}
+```
+
+
 
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-2) tagissä _v5-2_.
