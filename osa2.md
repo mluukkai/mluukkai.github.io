@@ -270,7 +270,7 @@ Moduulin eksporttaama komponentti on nyt käytettävissä muuttujassa _Note_ tä
 Koska myös _App_ on komponentti, eristetään sekin omaan moduuliinsa. Koska kyseessä on sovelluksen juurikomponentti, sijoitetaan se suoraan hakemistoon _src_, sisältö on seuraava:
 
 ```react
-import React from 'react';
+import React from 'react'
 import Note from './components/Note'
 
 const App = ({ notes }) => {
@@ -912,7 +912,7 @@ Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-serve
 
 Kirjaston voi ottaa käyttöön samaan tapaan kuin esim. React otetaan käyttöön, eli sopivalla _import_-lauseella.
 
-Lisätään seuraava tiedotoon _index.js_
+Lisätään seuraava tiedostoon _index.js_
 
 ```js
 import axios from 'axios'
@@ -1125,7 +1125,7 @@ addNote = (e) => {
   const noteObject = {
     content: this.state.new_note,
     date: new Date().new,
-    important: Math.random() > 0.5,
+    important: Math.random() > 0.5
   }
 
   axios.post('http://localhost:3001/notes', noteObject)

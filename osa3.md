@@ -124,7 +124,7 @@ Muutetaan sovellus web-palvelimeksi:
 ```js
 const http = require('http')
 
-const app = http.createServer( (req, res) => {
+const app = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' })
   res.end('Hello World')
 })
@@ -167,7 +167,7 @@ CommonJS-moduulit toimivat kohtuullisessa määrin samaan tapaan kuin ES6-moduul
 Koodi jatkuu seuraavasti:
 
 ```js
-const app = http.createServer( (request, response) => {
+const app = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
   response.end('Hello World')
 })
@@ -209,7 +209,7 @@ let notes = [
   }
 ]
 
-const app = http.createServer( (request, response) => {
+const app = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'application/json' })
   response.end(JSON.stringify(notes))
 })
