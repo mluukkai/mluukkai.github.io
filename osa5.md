@@ -1005,12 +1005,12 @@ Jestin lisäksi käytetään AirBnB:n kehittämää [enzyme](https://github.com/
 Asennetaan enzyme komennolla:
 
 ```bash
-npm i --save-dev enzyme enzyme-adapter-react-16
+npm install --save-dev enzyme enzyme-adapter-react-16
 ```
 
 Testataan aluksi muistiinpanon renderöivää komponenttia:
 
-```js
+```html
 const Note = ({ note, toggleImportance }) => {
   const label = note.important ? 'make not important' : 'make important'
   return (
@@ -1045,9 +1045,9 @@ Koska _Note_ on yksinkertainen komponentti, joka ei käytä yhtään monimutkais
 
 Tehdään testi tiedoston _src/components/Note.test.js_, eli samaan hakemistoon, missä komponentti itsekin sijaitsee.
 
-Ensimmäinen testi varmistaa, että
+Ensimmäinen testi varmistaa, että komponentti renderöi muistiinpanon sisällön:
 
-```js
+```html
 import React from 'react'
 import { shallow } from 'enzyme'
 import Note from './Note'
@@ -1069,13 +1069,13 @@ describe.only('<Note />', () => {
 
 Alun konfiguroinnin jälkeen testi renderöi komponentin metodin _shallow_ avulla:
 
-```js
+```html
 const noteComponent = shallow(<Note note={note} />)
 ```
 
 Normaalisti React-komponentit renderöityvät _DOM_:iin. Nyt kuitenkin renderöimme komponentteja [shallowWrapper](http://airbnb.io/enzyme/docs/api/shallow.html)-tyyppisiksi, testaukseen sopiviksi olioiksi.
 
-ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasti metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
+ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasti metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä elmentin seuraavasti:
 
 ```js
 const contentDiv = noteComponent.find('.content')
@@ -1089,7 +1089,7 @@ expect(contentDiv.text()).toContain(note.content)
 
 ### testien suorittaminen
 
-Create-react-app:issa on konfiguroitu testit oletusarvoisesti suoritettavaksi ns. watch-moodissa, eli jos suoritat testit komennolla _npm test_ jää konsoli odottamaan koodissa tapahtuvia muutoksia. Muutosten jälkeen testit suoritetaan automaattisesti ja jest alkaa taas odottaa uusia muutoksia koodiin.
+Create-react-app:issa on konfiguroitu testit oletusarvoisesti suoritettavaksi ns. watch-moodissa, eli jos suoritat testit komennolla _npm test_, jää konsoli odottamaan koodissa tapahtuvia muutoksia. Muutosten jälkeen testit suoritetaan automaattisesti ja Jest alkaa taas odottamaan uusia muutoksia koodiin.
 
 Jos haluat ajaa testit "normaalisti", se onnistuu komennolla
 
@@ -1101,13 +1101,13 @@ CI=true npm test
 
 Reactissa on (ainakin) [kaksi erilaista](https://medium.com/@JeffLombardJr/organizing-tests-in-jest-17fc431ff850) konventiota testien sijoittamiseen. Sijoitimme testit ehkä vallitsevan tavan mukaan, eli samaan hakemistoon missä testattava komponentti sijaitsee.
 
-Toinen tapa olisi sijoittaa testit "normaaliin" tapaan omaan erilliseen hakemistoon. Valitaanpa kumpi tahansa tapa, on 100% varmaa että se on jonkun mielestä täysin väärin.
+Toinen tapa olisi sijoittaa testit "normaaliin" tapaan omaan erilliseen hakemistoon. Valitaanpa kumpi tahansa tapa, on 100% varmaa että se on jonkun mielestä täysin väärä.
 
-Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. Noudatamme kuitenkin nyt tätä tapaa sillä create-react-app:illa konfiguroidut sovellukset suosivat oletusarvoisesti tätä tapaa.
+Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. Noudatamme kuitenkin nyt tätä tapaa, sillä se on oletusarvo create-react-app:illa konfiguroiduissa sovelluksissa.
 
 ### testien debuggaaminen
 
-Testejä tehdessä törmäämme tyypillisesti moniin ongelmiin. Näissä tilanteissa vanha kunnon _console.log_ on hyödyllinen. Voimme tulostaa _shallow_-metodin avulla renderöityjä komponentteja ja niiden sisällä olevia elementtejä seuraavasti:
+Testejä tehdessä törmäämme tyypillisesti erittäin moniin ongelmiin. Näissä tilanteissa vanha kunnon _console.log_ on hyödyllinen. Voimme tulostaa _shallow_-metodin avulla renderöityjä komponentteja ja niiden sisällä olevia elementtejä metodin [debug](http://airbnb.io/enzyme/docs/api/ShallowWrapper/debug.html) avulla:
 
 ```js
 describe.only('<Note />', () => {
@@ -1129,7 +1129,7 @@ describe.only('<Note />', () => {
 })
 ```
 
-Konsoliin tulostuu komponentinn generoima html:
+Konsoliin tulostuu komponentin generoima html:
 
 ```bash
 console.log src/components/Note.test.js:16
@@ -1152,7 +1152,7 @@ console.log src/components/Note.test.js:20
 
 ### nappien painelu testeissä
 
-Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva asia on huolehtia siitä, että painettaessa noten yhteydesssä olevaa nappia, tulee propsina välitetyä tapahtumankäsittelijäfunktota _toggleImportance_ kutsua.
+Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva asia on huolehtia siitä, että painettaessa noten yhteydessä olevaa nappia, tulee propsina välitetyä tapahtumankäsittelijäfunktota _toggleImportance_ kutsua.
 
 Testaus onnistuu seuraavasti:
 
@@ -1200,11 +1200,11 @@ Testin ekspektaatio varmistaa, että _mock-funktiota_ on kutsuttu täsmälleen k
 expect(mockHandler.mock.calls.length).toBe(1)
 ```
 
-[Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien tarkkailemisen testatessa.
+[Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) ovat testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien riippuvuuksia, eli niiden tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien testauksen aikaisen tarkkailun.
 
-Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla oli hyvä varmistaa, että metodia on kutsuttu täsmälleen kerran. Testiä olisi mahdollisa myös parantaa varmistamalla, että mock-olion metodikutsussa annettu parametri on odotetun kaltainen. Jätämme kuitenkin testien parantelun harjoitustehtäväksi.
+Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla on helppo varmistaa, että metodia on kutsuttu täsmälleen kerran. 
 
-### Komponentin Togglable testit
+### Komponentin _Togglable_ testit
 
 Tehdään komponentille _Togglable_ muutama testi. Lisätään komponentin lapset renderöivään div-elementtiin CSS-luokka _togglableContent_:
 
@@ -1232,7 +1232,7 @@ class Togglable extends React.Component {
 
 Testit ovat seuraavassa
 
-```js
+```react
 import React from 'react'
 import { shallow } from 'enzyme'
 import foo from 'enzyme-matchers'
@@ -1271,7 +1271,7 @@ describe('<Togglable />', () => {
 })
 ```
 
-Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow _Togglable_-komponentin muuttujaan _togglableComponent_.
+Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow-renderöimärrä _Togglable_-komponentin muuttujaan _togglableComponent_.
 
 Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class="testDiv" />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
 

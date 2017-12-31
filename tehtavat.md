@@ -1268,7 +1268,7 @@ Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erit
 
 Kun siirryt kehittämään uutta sovellusta, onkin varminta aina aluksi nollata local storage konsolista komennolla <code>window.localstorage.clear()</code>
 
-### kirjautuminen ja blogien luonto
+### kirjautuminen ja blogien luonti
 
 #### 81 blogilistan frontend, osa 1
 
@@ -1435,13 +1435,51 @@ Määrittele joillekin sovelluksesi komponenteille ProcTypet.
 
 ### komponenttien testaaminen
 
-#### 90
-#### 91
-#### 92
-#### 93
-#### 94
-#### 95
-#### 96
-#### 97
-#### 98
-#### 99
+#### 90 blogilistan testit, osa 1
+
+Lisää sovellukseesi tilapäisesti seuraava komponentti
+
+```react
+const SimpleBlog = ({blog, onClick}) => (
+  <div >
+    <div>
+      {blog.title} {blog.author}
+    </div>
+    <div>
+      blog has {blog.likes} likes 
+      <button onClick={onClick}>like</button>
+    </div>
+  </div>  
+)
+```
+
+Tee testi, joka varmistaa, että komponentti renderöi blogin titlen, authorin ja likejen määrän,
+
+Lisää komponenttiin tarvittaessa testausta helpottavia CSS-luokkia.
+
+#### 91 blogilistan testit, osa 2
+
+Tee testi, joka varmistaa, että jos komonentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
+
+#### 92 blogilistan testit, osa 3
+
+Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista. 
+
+### integraatiotestaus
+
+#### 93 blogilistan testit, osa 4
+
+oletusarvoiseti ei yhtään blogia ruudulla
+
+#### 94 blogilistan testit, osa 5
+
+kirjatumisen jlkn blogeja näkyy
+
+### hello redux
+
+#### 95 unicafe revisited, osa 1
+#### 96 unicafe revisited, osa 2
+
+#### 97 anekdootit, osa 1
+#### 98 anekdootit, osa 2
+#### 99 anekdootit, osa 3
