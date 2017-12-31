@@ -75,7 +75,7 @@ class App extends React.Component {
     const noteObject = {
       content: this.state.new_note,
       date: new Date(),
-      important: Math.random() > 0.5,
+      important: Math.random() > 0.5
     }
 
     noteService.create(noteObject).then(newNote => {
@@ -126,6 +126,7 @@ class App extends React.Component {
           <div>
             käyttäjätunnus
             <input
+              type="text"
               value={this.state.username}
               onChange={this.handleUsernameChange}
             />
@@ -133,7 +134,7 @@ class App extends React.Component {
           <div>
             salasana
             <input
-              type='password'
+              type="password"
               value={this.state.password}
               onChange={this.handlePasswordChange}
             />
@@ -176,18 +177,19 @@ Lisätään _input_ elementteihin nimet _name_-attribuutteina ja vaihdetaan mole
   <div>
     käyttäjätunnus
     <input
+      type="text"
+      name="username"
       value={this.state.username}
       onChange={this.handleLoginFieldChange}
-      name='username'
     />
   </div>
   <div>
     salasana
     <input
-      type='password'
+      type="password"
+      name="password"
       value={this.state.password}
       onChange={this.handleLoginFieldChange}
-      name='password'
     />
   </div>
   <button>kirjaudu</button>
@@ -282,19 +284,20 @@ const loginForm = () => (
     <form onSubmit={this.login}>
       <div>
         käyttäjätunnus
-            <input
+        <input
+          type="text"
+          name="username"
           value={this.state.username}
           onChange={this.handleLoginFieldChange}
-          name='username'
         />
       </div>
       <div>
         salasana
-            <input
-          type='password'
+        <input
+          type="password"
+          name="password"
           value={this.state.password}
           onChange={this.handleLoginFieldChange}
-          name='password'
         />
       </div>
       <button>kirjaudu</button>
@@ -338,8 +341,8 @@ class App extends React.Component {
       // ...
 
     </div>
-  ) 
-}    
+  )
+}
 ```
 
 Lomakkeiden ehdolliseen renderöintiin käytetään hyväkseen aluksi hieman erikoiselta näyttävää, mutta Reactin yhteydessä [yleisesti käytettyä kikkaa](https://reactjs.org/docs/conditional-rendering.html#inline-if-with-logical--operator):
@@ -359,8 +362,8 @@ return (
 
     <Notification message={this.state.error}/>
 
-    {this.state.user === null ? 
-      loginForm() : 
+    {this.state.user === null ?
+      loginForm() :
       noteForm()
     }
 
@@ -369,7 +372,7 @@ return (
     // ...
 
   </div>
-) 
+)
 ```
 
 Eli jos _this.state.user === null_ on [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), suoritetaan _loginForm_ ja muussa tapauksessa _noteForm_.
@@ -383,7 +386,7 @@ return (
 
     <Notification message={this.state.error}/>
 
-    {this.state.user === null ? 
+    {this.state.user === null ?
       loginForm() :
       <div>
         <p>{this.state.user.name} logged in</p>
@@ -396,14 +399,14 @@ return (
     // ...
 
   </div>
-) 
+)
 ```
 
 Ratkaisu näyttää hieman rumalta, mutta jätämme sen koodiin toistaiseksi.
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fontend/tree/v5-2) tagissä _v5-2_.
 
-Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
+Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
 ## Muistiinpanojen luominen
 
@@ -452,7 +455,7 @@ Kirjautumisesta huolehtivaa tapahtumankäsittelijää pitää vielä viilata sen
 ```js
 login = async (e) => {
   e.preventDefault()
-  try{
+  try {
     const user = await loginService.login({
       username: this.state.username,
       password: this.state.password
@@ -633,7 +636,7 @@ Nopea tapa toiminnallisuuden toteuttamiseen on seuraava:
 ```html
 <div>
   <div style={{ display: this.state.loginVisible ? 'none' : '' }}>
-    <button onClick={e => this.setState({ loginVisible: true })}>login in</button>
+    <button onClick={e => this.setState({ loginVisible: true })}>log in</button>
   </div>
   <div style={{ display: this.state.loginVisible ? '' : 'none' }}>
     <LoginForm
@@ -653,7 +656,7 @@ Komponentin _App_ tilaan on nyt määritelty kenttä _loginVisible_ joka määri
 Näkyvyyttä säätelevää tilaa vaihdellaan kahden napin avulla, molempiin on kirjoitettu tapahtumankäsittelijän koodi suoraan:
 
 ```html
-<button onClick={e => this.setState({ loginVisible: true })}>login in</button>
+<button onClick={e => this.setState({ loginVisible: true })}>log in</button>
 
 <button onClick={e => this.setState({ loginVisible: false })}>cancel</button>
 ```
@@ -694,7 +697,7 @@ Tavoitteena on luoda komponentti _Togglable_ jota käytetän seruaavalla tavalla
 
 Komponentin käyttö poikkeaa aiemmin näkemistämme siinä, että käytössä on nyt avaava ja sulkeva tagi, joiden sisällä määritellään toinen komponentti eli _LoginForm_. Reactin terminologiassa _LoginForm_ on nyt komponentin _Togglable_ lapsi.
 
-_Togglablen_ avaavan ja sulkevan tagin sisälle voi sijoittaa lapsiks mitä tahansa react-elementtejä, esim.:
+_Togglablen_ avaavan ja sulkevan tagin sisälle voi sijoittaa lapsiksi mitä tahansa react-elementtejä, esim.:
 
 ```html
 <Togglable buttonLabel="paljasta">
@@ -765,7 +768,7 @@ Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemä
 Määrittelimme jo komponentin
 
 ```react
-<div style={showWhenVisible} class='togglableContent'>
+<div style={showWhenVisible} class="togglableContent">
 ```
 
 Eristetään ensin muistiinpanojen luominen omaksi komponentiksi
@@ -787,7 +790,8 @@ const NoteForm = ({ onSubmit, handleChange, value}) => {
   )
 }
 ```
-ja määritellääm lomakkeen näyttävä koodi komponentin _Togglable_ sisällä
+
+ja määritellään lomakkeen näyttävä koodi komponentin _Togglable_ sisällä
 
 ```html
 <Togglable button="new note">
@@ -803,9 +807,9 @@ ja määritellääm lomakkeen näyttävä koodi komponentin _Togglable_ sisäll�
 
 Ratkaisu on melko hyvä, haluaisimme kuitenkin parantaa sitä erään seikan osalta.
 
-Kun uusi muistiinpano luodaan, olisi logista jos luomislomake menisi piiloon, nyt lomake pysyy näkyvillä. Lomakkeen piilottamiseen sisältyy kuitenkin pieni ongelma sillä näkyvyyttä kontrolloidaan _Togglable_-komponentin tilassa olevalla muuttujalla ja komponentissa määritellyllä metodilla _toggleVisibility_ miten pääsemme niihin käsiksi komponentin ulkopuolelta?
+Kun uusi muistiinpano luodaan, olisi loogista jos luomislomake menisi piiloon, nyt lomake pysyy näkyvillä. Lomakkeen piilottamiseen sisältyy kuitenkin pieni ongelma sillä näkyvyyttä kontrolloidaan _Togglable_-komponentin tilassa olevalla muuttujalla ja komponentissa määritellyllä metodilla _toggleVisibility_ miten pääsemme niihin käsiksi komponentin ulkopuolelta?
 
-Koska React-komponentit ovat Javascript-oliota, on niiden metodeja mahdollista kutsua jos komponenttia vastaavaan olioon onnistutaan saamaan viite.
+Koska React-komponentit ovat Javascript-olioita, on niiden metodeja mahdollista kutsua jos komponenttia vastaavaan olioon onnistutaan saamaan viite.
 
 Eräs keino viitteen saamiseen on React-komponenttien attribuutti [ref](https://reactjs.org/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component).
 
@@ -829,9 +833,9 @@ component => this.noteForm = component
 
 parametrin _component_ arvona on viite komponenttiin. Funktio tallettaa viitteen muuttujaan _this.noteForm_ eli _App_-komponentin kenttään _noteForm_.
 
-Nyt mistä tahansa komponentin _App_ sisältä onn mahdollista päästä käsiksi uusien muistiinpanojen luomisen sisältävään _Togglable_-komponenttiin.
+Nyt mistä tahansa komponentin _App_ sisältä on mahdollista päästä käsiksi uusien muistiinpanojen luomisen sisältävään _Togglable_-komponenttiin.
 
-Voimme nyt piilottaa lomakkeen kutsumalla _this.noteForm.toggleVisibility()_ samalla kun uuden muistiinpanon luminen tapahtuu:
+Voimme nyt piilottaa lomakkeen kutsumalla _this.noteForm.toggleVisibility()_ samalla kun uuden muistiinpanon luominen tapahtuu:
 
 
 ```js
@@ -873,11 +877,11 @@ ja otetaan se käyttöön seuraavasti
 </div>
 ```
 
-syntyy kolme erillsitä komponenttiolioa, joilla on kaikilla oma tilansa:
+syntyy kolme erillistä komponenttiolioa, joilla on kaikilla oma tilansa:
 
 ![]({{ "/assets/5/5.png" | absolute_url }})
 
-_ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin _this.t1_, _this.t2_, ja _this.t3_,
+_ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin _this.t1_, _this.t2_, ja _this.t3_.
 
 ## Tehtäviä
 
@@ -885,7 +889,7 @@ Tee nyt tehtävät [x-](../tehtavat##)
 
 ## PropTypes
 
-Komponenntti _Togglable_ olettaa, että sille määritellään propsina _buttonLabel_ napin teksti. Jos määrittely unohtuu
+Komponentti _Togglable_ olettaa, että sille määritellään propsina _buttonLabel_ napin teksti. Jos määrittely unohtuu
 
 ```html
 <Togglable>
@@ -897,8 +901,7 @@ Sovellus kyllä toimii, mutta selaimeen renderöityy hämäävästi nappi, jolla
 
 Haluaisimmekin varmistaa että jos _Togglable_-komponenttia käytetään, on propsille "pakko" antaa arvo.
 
-Kirjaston olettamat ja edellyttämät propsit ja niiden tyypit voidaan määritellä kirjaston
-[prop-types](https://github.com/facebook/prop-types) avulla. Asennetaan kirjasto
+Kirjaston olettamat ja edellyttämät propsit ja niiden tyypit voidaan määritellä kirjaston [prop-types](https://github.com/facebook/prop-types) avulla. Asennetaan kirjasto
 
 ```bash
 npm install --save prop-types
@@ -914,7 +917,7 @@ class Togglable extends React.Component {
 }
 
 Togglable.propTypes = {
-  buttonLabel: PropTypes.string.isRequired,
+  buttonLabel: PropTypes.string.isRequired
 }
 ```
 
@@ -956,22 +959,22 @@ import PropTypes from 'prop-types'
 
 class Togglable extends React.Component {
   static propTypes = {
-    buttonLabel: PropTypes.string.isRequired,
+    buttonLabel: PropTypes.string.isRequired
   }
 
   // ...
 }
 ```
 
-Muuttujamäärittelyn edessä oleva _static_ määrittelee, nyt että _propTypes_-kenttä on nimenomaan komponentin määrittelevällä luokalla _Togglable_ eikä luokan instansseilla. Oleellisesti ottaen kyseessä on ainoastaan javascriptin vielä standardoimattoman [ominaisuuden](https://github.com/tc39/proposal-class-fields) mahdollistava syntatinen oikotie määritellä seuraava:
+Muuttujamäärittelyn edessä oleva _static_ määrittelee, nyt että _propTypes_-kenttä on nimenomaan komponentin määrittelevällä luokalla _Togglable_ eikä luokan instansseilla. Oleellisesti ottaen kyseessä on ainoastaan javascriptin vielä standardoimattoman [ominaisuuden](https://github.com/tc39/proposal-class-fields) mahdollistava syntaktinen oikotie määritellä seuraava:
 
 ```js
 Togglable.propTypes = {
-  buttonLabel: PropTypes.string.isRequired,
+  buttonLabel: PropTypes.string.isRequired
 }
 ```
 
-Surfatessasi internetissä saatata vielä nähdä ennen Reactin versiota 0.16. tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
+Surfatessasi internetissä saatat vielä nähdä ennen Reactin versiota 0.16 tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
 
 ## Tehtäviä
 
@@ -1017,7 +1020,7 @@ Ennen testien tekemistä, tehdään _enzymen_ konfiguraatioita varten tiedosto _
 
 ```js
 import { configure } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 
 configure({ adapter: new Adapter() })
 ```
@@ -1058,7 +1061,7 @@ const noteComponent = shallow(<Note note={note} />)
 
 Normaalisti React-komponentit renderöityvät _DOM_:iin. Nyt kuitenkin renderöimme komponentteja [shallowWrapper](http://airbnb.io/enzyme/docs/api/shallow.html)-tyyppisiksi, testaukseen sopiviksi olioiksi.
 
-ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasta metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
+ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasti metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä edelmentin seuraavasti:
 
 ```js
 const contentDiv = noteComponent.find('.content')
@@ -1219,7 +1222,7 @@ Testit ovat seuraavassa
 import React from 'react'
 import { shallow } from 'enzyme'
 import foo from 'enzyme-matchers'
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16'
 import Note from './Note'
 import Togglable from './Togglable'
 
@@ -1235,7 +1238,7 @@ describe('<Togglable />', () => {
   })
 
   it('renders its children', () => {
-    expect(togglableComponent.contains(<div class='testDiv' />)).toEqual(true)
+    expect(togglableComponent.contains(<div class="testDiv" />)).toEqual(true)
   })
 
   it('at start the children are not displayed', () => {
@@ -1288,7 +1291,6 @@ it('shallow renders only one level', () => {
 
   console.log(togglableComponent.debug())
 })
-
 ```
 
 huomaamme, että _Togglable_ komponentti on renderöitynyt, eli "muuttunut" HTML:ksi, mutta sen sisällä olevat _Note_-komponentit eivät ole HTML:ää vaan React-komponentteja.
@@ -1334,7 +1336,8 @@ it('mount renders all components', () => {
     <Togglable buttonLabel="show...">
       <Note note={note1} />
       <Note note={note2} />
-    </Togglable>)
+    </Togglable>
+  )
 
   console.log(noteComponent.debug())
 })
@@ -1417,13 +1420,13 @@ Toinen ongelmistamme on se, että sovellus hakee näytettävät muistiinpanot pa
 
 
 ```js
-  componentWillMount() {
-    noteService.getAll().then(notes =>
-      this.setState({ notes })
-    )
+componentWillMount() {
+  noteService.getAll().then(notes =>
+    this.setState({ notes })
+  )
 
-    // ...
-  }
+  // ...
+}
 ```
 
 Jestin [manual mock](https://facebook.github.io/jest/docs/en/manual-mocks.html#content) -konsepti tarjoaa tilanteeseen hyvän ratkaisun. Manual mockien avulla voidaan kokonainen moduuli, tässä tapauksessa _noteService_ korvata testien ajaksi vaihtoehtoisella esim. kovakoodattua dataa tarjoavalla toiminnallisuudella.
@@ -1476,8 +1479,7 @@ const getAll = () => {
 export default { getAll, notes }
 ```
 
-Määritelty metodi _getAll_ palauttaa muistiinpanojen listan käärittynä promiseksi metodin[Promise.resolve](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve)
-avulla sillä käytettäessä metodia, oletetaan sen paluuarvon olevan promise:
+Määritelty metodi _getAll_ palauttaa muistiinpanojen listan käärittynä promiseksi metodin [Promise.resolve](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve) avulla sillä käytettäessä metodia, oletetaan sen paluuarvon olevan promise:
 
 ```js
 noteService.getAll().then(notes =>
@@ -1495,7 +1497,7 @@ import noteService from './services/notes'
 
 describe('<App />', () => {
   let app
-  beforeAll( () =>{
+  beforeAll(() => {
     app = mount(<App />)
   })
 
@@ -1533,12 +1535,11 @@ Tee nyt tehtävät [x-](../tehtavat##)
 
 ## snapshot-testaus
 
-Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns.
-[snapshot](https://facebook.github.io/jest/docs/en/snapshot-testing.html)-testauksen. Mielenkiintoista snapshot-testauksessa on se, että sovelluskehittäjän ei tarvitse itse määritellä ollenkaan testejä, snapshot-testauksen käyttöönotto riittää.
+Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns. [snapshot](https://facebook.github.io/jest/docs/en/snapshot-testing.html)-testauksen. Mielenkiintoista snapshot-testauksessa on se, että sovelluskehittäjän ei tarvitse itse määritellä ollenkaan testejä, snapshot-testauksen käyttöönotto riittää.
 
 Periaatteena on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta.
 
-Jos spanshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snaphshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
+Jos spanshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snapshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä jos muutos oli haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
 
 Palaamme aiheeseen myöhemmin kurssilla.
 
@@ -1546,8 +1547,7 @@ Palaamme aiheeseen myöhemmin kurssilla.
 
 Olemme nyt tehneet sekä backendille että frontendille hieman niitä kokonaisuutena testavia integraatiotestejä. Eräs tärkeä testauksen kategoria on vielä käsittelemättä, [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) testaavat "end to end" (eli E2E) -testit.
 
-Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. [headless browseria]
-(https://en.wikipedia.org/wiki/Headless_browser) eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää. Esim. Chromea on mahdollista suorittaa Headless-moodissa.
+Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. [headless browseria](https://en.wikipedia.org/wiki/Headless_browser) eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää. Esim. Chromea on mahdollista suorittaa Headless-moodissa.
 
 E2E testit ovat potentiaalisesti kaikkein hyödyllisin testikategoria, sillä ne tutkivat järjestelmää mahdollisimman samanlaisena, mikä käyttöönotettava sovellus todellisuudessa on.
 
@@ -1687,7 +1687,7 @@ Kolmas tärkeä metodi storella on [subscribe](https://redux.js.org/docs/api/Sto
 Jos esim. lisäisimme seuraavan funktion subscribellä, tulostuisi jokainen storen muutos konsoliin.
 
 ```js
-store.subscribe(()=> {
+store.subscribe(() => {
   const storeNow = store.getState()
   console.log(storeNow)
 })
@@ -1759,7 +1759,7 @@ Sovelluksen ensimmäinen versio seuraavassa
 
 ```react
 const noteReducer = (state = [], action) => {
-  if ( action.type === 'NEW_NOTE') {
+  if (action.type === 'NEW_NOTE') {
     state.push(action.data)
     return state
   }
@@ -1844,7 +1844,7 @@ Lisäsimme tilaan uuden muistiinpanon metodilla _state.push(action.data)_ joka _
 
 ```js
 const noteReducer = (state = [], action) => {
-  if ( action.type === 'NEW_NOTE') {
+  if (action.type === 'NEW_NOTE') {
     return state.concat(action.data)
   }
 
@@ -1959,7 +1959,7 @@ const noteReducer = (state = [], action) => {
 
 Luomme tärkeyttä muuttaneesta muistiinpanosta kopion osasta 2 [tutulla syntaksilla][osa2/#Muistiinpanon-tärkeyden-muutos].
 
-### array spread -syntakis
+### array spread -syntaksi
 
 Koska reducerilla on nyt suhteellisen hyvät testit, voimme refaktoroida koodia turvallisesti.
 

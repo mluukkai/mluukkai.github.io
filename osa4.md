@@ -24,7 +24,7 @@ permalink: /osa4/
 
 ## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](osa3/#tietokantamäärittelyjen -riyttäminen-omaksi-,oduuliksi).
+Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](/osa3/#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi).
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -88,7 +88,7 @@ notesRouter.post('/', (request, response) => {
   const note = new Note({
     content: body.content,
     important: body.content === undefined ? false : body.important,
-    date: new Date(),
+    date: new Date()
   })
 
   note
@@ -107,7 +107,7 @@ notesRouter.put('/:id', (request, response) => {
 
   const note = {
     content: body.content,
-    important: body.important,
+    important: body.important
   }
 
   Note
@@ -356,7 +356,7 @@ seurauksena on seuraava virheilmotus
 
 ![]({{ "/assets/4/2.png" | absolute_url }})
 
-Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään  kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
+Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
 Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
 
@@ -465,7 +465,7 @@ Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tap
 
 Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, että jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu "suhteellisen helposti" mm. [keskusmuistissa toimivan Mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontainereiden avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia Mongoa.
 
-Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tietodotoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin.
+Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tiedostoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin.
 
 Ideana on, että _index.js_ voi käyttää konfiguraatioita seuraavasti:
 
@@ -1111,7 +1111,7 @@ notesRouter.post('/', async (request, response) => {
     const note = new Note({
       content: body.content,
       important: body.content === undefined ? false : body.important,
-      date: new Date(),
+      date: new Date()
     })
 
     const savedNote = await note.save()
@@ -1228,7 +1228,7 @@ const Note = require('../models/note')
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
@@ -1483,7 +1483,7 @@ Relaatiotietokannoissa muistiinpano sisältää viiteavaimen sen tehneeseen käy
 [
   {
     username: 'mluukkai',
-    _id: 123456,
+    _id: 123456
   },
   {
     content: 'hellas',
@@ -1547,11 +1547,11 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
     notes: [
       {
         content: 'HTML on helppoa',
-        important: false,
+        important: false
       },
       {
         content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
-        important: true,
+        important: true
       }
     ]
   },
@@ -1561,7 +1561,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
     notes: [
       {
         content: 'Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu',
-        important: false,
+        important: false
       }
     ]
   }
@@ -2058,7 +2058,7 @@ const jwt = require('jsonwebtoken')
 
 // ...
 
-const getTokenFrom = (request) =>{
+const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)

@@ -151,7 +151,7 @@ const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
   const osa1 = {
     nimi: 'Reactin perusteet',
-    tehtavia: 10,
+    tehtavia: 10
   }
   const osa2 = {
     nimi: 'Tiedonvälitys propseilla',
@@ -229,7 +229,7 @@ const App = () => {
     osat: [
       {
         nimi: 'Reactin perusteet',
-        tehtavia: 10,
+        tehtavia: 10
       },
       {
         nimi: 'Tiedonvälitys propseilla',
@@ -387,17 +387,17 @@ const App = () => {
       {
         nimi: 'Reactin perusteet',
         tehtavia: 10,
-        id: 1,
+        id: 1
       },
       {
         nimi: 'Tiedonvälitys propseilla',
         tehtavia: 7,
-        id: 2,
+        id: 2
       },
       {
         nimi: 'Komponenttien tila',
         tehtavia: 14,
-        id: 3,
+        id: 3
       }
     ]
   }
@@ -454,17 +454,17 @@ const App = () => {
         {
           nimi: 'Reactin perusteet',
           tehtavia: 10,
-          id: 1,
+          id: 1
         },
         {
           nimi: 'Tiedonvälitys propseilla',
           tehtavia: 7,
-          id: 2,
+          id: 2
         },
         {
           nimi: 'Komponenttien tila',
           tehtavia: 14,
-          id: 3,
+          id: 3
         }
       ]
     },
@@ -475,13 +475,13 @@ const App = () => {
         {
           nimi: 'Routing',
           tehtavia: 3,
-          id: 1,
+          id: 1
         },
         {
           nimi: 'Middlewaret',
           tehtavia: 7,
-          id: 2,
-        },
+          id: 2
+        }
       ]
     }
   ]
@@ -1258,15 +1258,15 @@ Ota sovellukseesi käyttöön ESlint.
 
 ## Osa 5
 
-Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän fronendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-fronend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
+Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
 
 ### kirjautuminen ja blogien luonto
 
 #### 81
 
-Toteuta fronendiin kirjautumisen mahdollistava toiminnallisuus. Kirjautumisen yhteydessä backendin palauttama token tallennetaan sovelluksen tilan kenttään _user_ .
+Toteuta frontendiin kirjautumisen mahdollistava toiminnallisuus. Kirjautumisen yhteydessä backendin palauttama token tallennetaan sovelluksen tilan kenttään _user_ .
 
-Jos käyttäjä ei ole kirjautunut, sivulla näytetään _pelkästään_ kirjautumislomake: 
+Jos käyttäjä ei ole kirjautunut, sivulla näytetään _pelkästään_ kirjautumislomake:
 
 ![]({{ "/assets/teht/27.png" | absolute_url }})
 
@@ -1280,7 +1280,7 @@ Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa lo
 
 ```html
   render() {
-    if ( this.state.user===null) {
+    if (this.state.user === null) {
       return (
         <div>
           <h2>Kirjaudu sovellukseen</h2>
@@ -1294,7 +1294,7 @@ Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa lo
     return (
       <div>
         <h2>blogs</h2>
-        {this.state.blogs.map(blog => 
+        {this.state.blogs.map(blog =>
           <Blog key={blog._id} blog={blog}/>
         )}
       </div>
@@ -1308,7 +1308,7 @@ Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahd
 
 ![]({{ "/assets/teht/29.png" | absolute_url }})
 
-Uloskirjautumisen jälkeen selain enää saa muitaa kirjautunutta käyttäjää reloadauksen jäleen.
+Uloskirjautumisen jälkeen selain enää saa muistaa kirjautunutta käyttäjää reloadauksen jäleen.
 
 #### 83
 

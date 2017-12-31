@@ -895,7 +895,7 @@ Kannattaa pitää mielessä, että **React-komponenttien nimien tulee alkaa isol
 ```react
 const footer = () => {
   return (
-    <div>greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a></div>
+    <div>greeting app created by <a href="https://github.com/mluukkai">mluukkai</a></div>
   )
 }
 ```
@@ -1352,7 +1352,7 @@ Luokkakomponentissa viitataan komponentin _propseihin_ this-viitteen kautta.
 Eli koska komponenttia käytetään seuraavasti
 
 ```html
-<Hello name='Arto' age={36} />
+<Hello name="Arto" age={36} />
 ```
 
 päästään nimeen ja ikään käsiksi luokkamuotoisen komponentin sisällä viittaamalla _this.props.name_ ja _this.props.age_. Huomaa ero funktionaaliseen komponenttiin!
@@ -2078,15 +2078,15 @@ render() {
       <div>
         <Button
           handleClick={this.asetaArvoon(this.state.counter + 1)}
-          text='Plus'
+          text="Plus"
         />
         <Button
           handleClick={this.asetaArvoon(this.state.counter - 1)}
-          text='Minus'
+          text="Minus"
         />
         <Button
           handleClick={this.asetaArvoon(0)}
-          text='Zero'
+          text="Zero"
         />
       </div>
     </div>
