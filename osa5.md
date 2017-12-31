@@ -163,7 +163,7 @@ class App extends React.Component {
 export default App
 ```
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-1) tagissä _v5-1_.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fontend/tree/v5-1) tagissä _v5-1_.
 
 Kirjautumislomakkeen käsittely noudattaa samaa periaatetta, kun [osassa 2](osa2/#Lomakkeet). Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePaswordChange_) joka synkronoi kenttään tehdyt muutokset komponentin _App_ tilan. Kirjautumislomakkeen lähettämisetä vastaava metodi _login_ ei tee vielä mitään.
 
@@ -352,7 +352,7 @@ Jos ensimmäinen osa evaluoituu epätodeksi eli on [falsy](https://developer.moz
 
 Voimme suoraviivaistaa edellistä vielä hieman käyttämällä [kysymysmerkkioperaattoria](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator):
 
-```js
+```html
 return (
   <div>
     <h1>Muistiinpanot</h1>
@@ -376,7 +376,7 @@ Eli jos _this.state.user === null_ on [truthy](https://developer.mozilla.org/en-
 
 Tehdään vielä sellainen muutos, että jos käyttäjä on kirjautunut, renderöidään kirjautuneet käyttäjän nimi:
 
-```js
+```html
 return (
   <div>
     <h1>Muistiinpanot</h1>
@@ -384,10 +384,9 @@ return (
     <Notification message={this.state.error}/>
 
     {this.state.user === null ? 
-      {loginForm()} 
-      :
+      loginForm() :
       <div>
-        <p>{this.state.username} logged in</p>
+        <p>{this.state.user.name} logged in</p>
         {noteForm()}
       </div>
     }
@@ -402,7 +401,7 @@ return (
 
 Ratkaisu näyttää hieman rumalta, mutta jätämme sen koodiin toistaiseksi.
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fronend/tree/v5-2) tagissä _v5-2_.
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-fontend/tree/v5-2) tagissä _v5-2_.
 
 Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi kompotenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
@@ -412,13 +411,18 @@ Frontend on siis tallettanut onnistuneen kirjautumisen yhteydessä backendilta s
 
 Korjataan uusien muistiinpanojen luominen siihen muotoon, mitä backend edellyttää, eli lisätään kirjautuneen käyttäjän token HTTP-pyynnön Authorization-headeriin.
 
-_noteService_-moduuli muuttuu seuraavasti
+_noteService_-moduuli muuttuu seuraavasti:
 
 ```js
 import axios from 'axios'
 const baseUrl = '/api/notes'
 
 let token = null
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
+}
 
 const setToken = (newToken) => {
   token = `bearer ${newToken}`
@@ -433,10 +437,15 @@ const create = async (newObject) => {
   return response.data
 }
 
+const update = (id, newObject) => {
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
 export default { getAll, create, update, setToken }
 ```
 
-Moduulille on määritelty vain moduulin sisällä näkyvä muuttuja _token_ jolle voidaan asettaa arvo moduulin exporttaamalla funktiolla _setToken_. Async/await-syntaksiin muutettu _create_ asettaa moduulin tallessa pitämän tokenin _Authorization_-headeriin, jonka se antaa axiosille metodin _post_ kolmantena parametrina.
+Moduulille on määritelty vain moduulin sisällä näkyvä muuttuja _token_, jolle voidaan asettaa arvo moduulin exporttaamalla funktiolla _setToken_. Async/await-syntaksiin muutettu _create_ asettaa moduulin tallessa pitämän tokenin _Authorization_-headeriin, jonka se antaa axiosille metodin _post_ kolmantena parametrina.
 
 Kirjautumisesta huolehtivaa tapahtumankäsittelijää pitää vielä viilata sen verran, että kutsuu <code>noteService.setToken(user.token)</code> onnistuneen kirjautumisen yhteydessä:
 
@@ -457,15 +466,15 @@ login = async (e) => {
 }
 ```
 
-Kirjautuminen toimii taas!
+Uusien muistiinpanojen luominen onnistuu taas!
 
 ## Tokenin tallettaminen selaimen local storageen
 
 Sovelluksessamme on ikävä piirre, kun sivu uudelleenladataan, tieto käyttäjän kirjautumisesta katoaa. Tämä hidastaa melkoisesti myös sovelluskehitystä, esim. testatessamme uuden muistiinpanon luomista, joudumme joka kerta kirjautumaan järjestelmään.
 
-Ongelma korjaantuu helposti tallettamalla kirjautumistiedot [local storageen](https://developer.mozilla.org/en-US/docs/Web/API/Storage) eli selaimessa olevaan pieneen tietokantaan.
+Ongelma korjaantuu helposti tallettamalla kirjautumistiedot [local storageen](https://developer.mozilla.org/en-US/docs/Web/API/Storage) eli selaimessa olevaan avain-arvo- eli [key-value](https://en.wikipedia.org/wiki/Key-value_database)-periaatteella toimivaan tietokantaan.
 
-Local storage on erittäin helppokäyttöinen. Metodilla [setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) voidaan storageen tallentaa tiettyä _avainta_ vastaava _arvo_, esim:
+Local storage on erittäin helppokäyttöinen. Metodilla [setItem](https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem) voidaan talletetaan tiettyä _avainta_ vastaava _arvo_, esim:
 
 ```js
 window.localStorage.setItem('nimi', 'juha tauriainen')
@@ -516,7 +525,7 @@ Sovellusta on vielä laajennettava siten, että kun sivulle tullaan uudelleen, e
 
 Sopiva paikka tähän on _App_-komponentin metodi [componentwillmount](https://reactjs.org/docs/react-component.html#componentwillmount) johon tutustuimme jo [osassa 2](osa2/#Komponenttien-lifecycle-metodit).
 
-Kyseessä on siis ns. lifecycle-metodi, jota React-kutsuu juuri ennen kuin komponentti ollaan renderöimässä ensimmäistä kertaa. Metodissa on tällä hetkellä jo muistiinpanot palvelimelta lataava koodi. Muutetaan koodia seuraavasti
+Kyseessä on siis ns. lifecycle-metodi, jota React-kutsuu juuri ennen kuin komponentti ollaan renderöimässä ensimmäistä kertaa. Metodissa on tällä hetkellä jo muistiinpanot palvelimelta lataava koodi. Laajennetaan koodia seuraavasti
 
 ```js
 componentWillMount() {
@@ -540,6 +549,13 @@ Meille riittää se, että sovelluksesta on mahdollista kirjautua ulos kirjoitta
 ```js
 window.localStorage.removeItem('loggedUser')
 ```
+
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-3) tagissä _v5-3_.
+
+
+## Tehtäviä
+
+Tee nyt tehtävät [81-](../tehtavat##)
 
 ## kirjautumislomakkeen näyttäminen vain tarvittaessa
 
@@ -863,7 +879,11 @@ syntyy kolme erillsitä komponenttiolioa, joilla on kaikilla oma tilansa:
 
 _ref_-attribuutin avulla on talletettu viite jokaiseen komponenttiin muuttujiin _this.t1_, _this.t2_, ja _this.t3_,
 
-## Proptype
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
+
+## PropTypes
 
 Komponenntti _Togglable_ olettaa, että sille määritellään propsina _buttonLabel_ napin teksti. Jos määrittely unohtuu
 
@@ -952,6 +972,10 @@ Togglable.propTypes = {
 ```
 
 Surfatessasi internetissä saatata vielä nähdä ennen Reactin versiota 0.16. tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
+
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
 
 ## React-sovelluksen testaus
 
@@ -1159,7 +1183,6 @@ Testin ekspektaatio varmistaa, että _mock-funktiota_ on kutsuttu täsmälleen k
 expect(mockHandler.mock.calls.length).toBe(1)
 ```
 
-
 [Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien tarkkailemisen testatessa.
 
 Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla oli hyvä varmistaa, että metodia on kutsuttu täsmälleen kerran. Testiä olisi mahdollisa myös parantaa varmistamalla, että mock-olion metodikutsussa annettu parametri on odotetun kaltainen. Jätämme kuitenkin testien parantelun harjoitustehtäväksi.
@@ -1235,6 +1258,9 @@ Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow _Togglable_-kom
 
 Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class="testDiv" />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
 
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
 
 ### mount ja full DOM -renderöinti
 
@@ -1501,6 +1527,10 @@ Melko primitiivinen HTML-muotoinen raportti generoituu hakemistoon _coverage/lco
 
 Huomaamme, että parannettavaa jäi vielä runstaasti.
 
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
+
 ## snapshot-testaus
 
 Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testaukseen, ns.
@@ -1716,6 +1746,10 @@ store.subscribe(renderApp)
 Koodissa on pari huomionarvoista seikkaa. _App_ renderöi laskurin arvon kysymällä sitä storesta metodilla _store.getState()_. Nappien tapahtumankäsittelijät _dispatchaavat_ suoraan oikean tyyppiset actionit storelle.
 
 Kun storessa olevan tilan arvo muuttu, ei React osaa automaattisesti renderöidä sovellusta uudelleen. Olemmekin rekisteröineet koko sovelluksen renderöinnin suorittavan funktion _renderApp_ kuuntelemaan storen muutoksia metodilla _store.subscribe_. Huomaa, että joudumme kutsumaan heti alussa metodia _renderApp()_, ilman kutsua sovelluksen ensimmäistä renderöintiä ei koskaan tapahdu.
+
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
 
 ## Redux-muistiinpanot
 
@@ -2386,3 +2420,6 @@ ReactDOM.render(
   document.getElementById('root')
 )
 ```
+## Tehtäviä
+
+Tee nyt tehtävät [x-](../tehtavat##)
