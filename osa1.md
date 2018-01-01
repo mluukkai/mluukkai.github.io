@@ -473,7 +473,7 @@ Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_not
 
 <img src="/assets/1/22.png" height="150">
 
-POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
+POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen (huom: tämä koodi on siis palvelimella eikä näy selaimessasi):
 
 ```js
 app.post('/new_note', (req, res) => {
