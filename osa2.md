@@ -64,9 +64,9 @@ const App = (props) => {
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
-        <li>{note[0].content}</li>
-        <li>{note[1].content}</li>
-        <li>{note[2].content}</li>
+        <li>{notes[0].content}</li>
+        <li>{notes[1].content}</li>
+        <li>{notes[2].content}</li>
       </ul>
     </div>
   )
@@ -476,7 +476,7 @@ class App extends React.Component {
             value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
-          <button type="submit" type="submit">tallenna</button>
+          <button type="submit">tallenna</button>
         </form>
       </div>
     )
