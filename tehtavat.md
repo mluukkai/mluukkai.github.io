@@ -1518,10 +1518,86 @@ describe('<App />', () => {
 })
 ```
 
-### hello redux
+### Redux-Unicafe
+
+Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovelluks voi näyttää esim. seuraavalta:
+
+![]({{ "/assets/teht/35.png" | absolute_url }})
+
+Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
+
+Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
+ 
+```js 
+{
+  good: 5,
+  ok: 4,
+  bad: 2
+} 
+```
+
+Seuraavassa on runko reducerille:
+
+```js
+const initialState = {
+  good: 0,
+  ok: 0,
+  bad: 0
+}
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'GOOD':
+      return ...
+    case 'OK':
+      return ...
+    case 'BAD':
+      return ...    
+    case 'ZERO':
+      return ...          
+  }
+  return state
+}
+```
+
+ja sen testien runko
+
+```js
+import deepFreeze from 'deep-freeze'
+import counterReducer from './reducer'
+
+describe('unicafe reducer', () => {
+  const initialState = {
+    good: 0,
+    ok: 0,
+    bad: 0
+  }
+
+  it('should return a proper initial state when called with undefined state', () => {
+    const state = []
+    const action = {
+      type: 'DO_NOTHING'
+    }
+
+    const newState = counterReducer(undefined, action)
+    expect(newState).toEqual(initialState)
+  })
+})
+```
+
+**Toteuta reducer ja tee sille testit.** 
+
+Varmista testeissä _deep-freeze_-kirjaston avulla, että kyseessä on _puhdas funktio_. Huomaa, että valmiin ensimmäisen testin on syytä mennä läpi koska redux olettaa, että reduceri palauttaa järkevän alkutilan kun sitä kutsutaan siten että ensimmäinen parametri, eli aiempaa tilaa edustava _state_ on _undefined_.
+
+Osan 2 luvun [Muistiinpanon tärkeyden muutos](osa2/#Muistiinpanon-tärkeyden-muutos) olion kopiointiin liittyvät asiat saattavat olla hyödyksi.
+
 #### 96 unicafe revisited, osa 2
+
+Toteuta sitten sovelluksen koko sovellus.
+
+### redux-anekdootit
 
 #### 97 anekdootit, osa 1
 #### 98 anekdootit, osa 2
