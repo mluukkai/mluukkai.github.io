@@ -1599,6 +1599,22 @@ Toteuta sitten sovelluksen koko sovellus.
 
 ### redux-anekdootit
 
+Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositiossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
+
+Sovelluksen lopullisen version tulisi näyttää seuraavalta:
+
+![]({{ "/assets/teht/36.png" | absolute_url }})
+
 #### 97 anekdootit, osa 1
+
+Toteuta mahdollisuus anekdoottien äänestämiseen. Äänien määrä tulee tallettaa redux-storeen.
+
 #### 98 anekdootit, osa 2
+
+Huolehdi siitä, että anekdootit pysyvät äänten mukaisessa suuruusjärjetyksessä.
+
 #### 99 anekdootit, osa 3
+
+Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
+
+## osa 6
