@@ -1069,7 +1069,7 @@ const olio3 = {
 
 Kentät voivat olla mielivaltaista javascriptin tyyppiä.
 
-Olioiden kenttiin viitataan pistenotaatiolla, tai kulmasulkeilla:
+Olioiden kenttiin viitataan pistenotaatiolla, tai hakasulkeilla:
 
 ```js
 console.log(olio1.nimi)          // tulostuu Arto Hellas
@@ -1077,14 +1077,14 @@ const kentanNimi = 'ika'
 console.log(olio1[kentanNimi])   // tulostuu 35
 ```
 
-Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai kulmasulkeiden avulla:
+Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai hakasulkeiden avulla:
 
 ```js
 olio1.osoite = 'Tapiola'
 olio1['salainen numero'] = 12341
 ```
 
-Jälkimäinen lisäyksistä on pakko tehdä kulmasulkeiden avulla, sillä pistenotaatiota käytettäessä 'salainen numero' ei kelpaa kentän nimeksi.
+Jälkimäinen lisäyksistä on pakko tehdä hakasulkeiden avulla, sillä pistenotaatiota käytettäessä 'salainen numero' ei kelpaa kentän nimeksi.
 
 Javascriptissä olioilla voi luonnollisesti olla myös metodeja. Palaamme aiheeseen funktioiden käsittelyn jälkeen.
 

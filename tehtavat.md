@@ -681,9 +681,13 @@ Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perus
 
 <img src="/assets/teht/15.png" height="300">
 
+### palvelimella olevan datan päivitäminen
+
 #### 33 maiden tiedot klikkaamalla
 
-Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen klikkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
+Ennen puhelinluettelon jatkokehitystä harjoitellaan vielä elementtikohtaisten tapahtumakäsittelijöiden käyttöä.
+
+Paranna edellisen tehtävän maasovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen klikkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
 
 Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävään elementtiin, esim. diviin klikkaustenkuuntelijan:
 
@@ -692,7 +696,6 @@ Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävää
   {country.name}
 </div>
 ```
-### palvelimella olevan datan päivitäminen
 
 #### 34 puhelinluettelo osa 7
 
@@ -1016,6 +1019,8 @@ Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on 
 ### yksikkötestaus
 
 Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funktiot esim. tiedoston _utils/list_helper.js_. Tee testit sopivasti nimettyyn tiedostoon hakemistoon _test_.
+
+**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
 
 #### 61 apufunktioita ja yksikkötestejä, osa 1
 
@@ -1435,6 +1440,8 @@ Määrittele joillekin sovelluksesi komponenteille ProcTypet.
 
 ### komponenttien testaaminen
 
+**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+
 #### 90 blogilistan testit, osa 1
 
 Lisää sovellukseesi tilapäisesti seuraava komponentti
@@ -1469,17 +1476,145 @@ Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarv
 
 #### 93 blogilistan testit, osa 4
 
-oletusarvoiseti ei yhtään blogia ruudulla
+Tee sovelluksesi integraatiotesti, joka varmistaa, että jos käyttäjä ei ole kirjautunut järjestelmään, näyttää sovellus ainoastaan kirjautumislomakkeen, eli yhtään blogia ei vielä renderöidä.
 
 #### 94 blogilistan testit, osa 5
 
-kirjatumisen jlkn blogeja näkyy
+Tee myös testi, joka varmistaa, että kun käyttäjä on kirjautuneena, blogit renderöityvät sivulle.
 
-### hello redux
+**Vihje 1:**
+
+Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea. 
+
+**Vihje 2:**
+
+Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _decribe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
+
+```js
+describe('<App />', () => {
+  let app
+
+  describe('when user is not logged', () => {
+    beforeEach(() => {
+      // luo sovellus siten, että käyttäjä ei ole kirjautuneena
+    })
+
+    it('only login form is rendered', () => {
+      app.update()
+      // ...
+    })
+  })
+
+  describe('when user is logged', ()=>{
+    beforeEach(() => {
+      // luo sovellus siten, että käyttäjä on kirjautuneena
+    })
+    
+    it('all notes are rendered', () => {
+      app.update()
+      // ...
+    })
+  })
+})
+```
+
+### Redux-Unicafe
+
+Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovelluks voi näyttää esim. seuraavalta:
+
+![]({{ "/assets/teht/35.png" | absolute_url }})
+
+Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
+
+Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
+ 
+```js 
+{
+  good: 5,
+  ok: 4,
+  bad: 2
+} 
+```
+
+Seuraavassa on runko reducerille:
+
+```js
+const initialState = {
+  good: 0,
+  ok: 0,
+  bad: 0
+}
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'GOOD':
+      return ...
+    case 'OK':
+      return ...
+    case 'BAD':
+      return ...    
+    case 'ZERO':
+      return ...          
+  }
+  return state
+}
+```
+
+ja sen testien runko
+
+```js
+import deepFreeze from 'deep-freeze'
+import counterReducer from './reducer'
+
+describe('unicafe reducer', () => {
+  const initialState = {
+    good: 0,
+    ok: 0,
+    bad: 0
+  }
+
+  it('should return a proper initial state when called with undefined state', () => {
+    const state = []
+    const action = {
+      type: 'DO_NOTHING'
+    }
+
+    const newState = counterReducer(undefined, action)
+    expect(newState).toEqual(initialState)
+  })
+})
+```
+
+**Toteuta reducer ja tee sille testit.** 
+
+Varmista testeissä _deep-freeze_-kirjaston avulla, että kyseessä on _puhdas funktio_. Huomaa, että valmiin ensimmäisen testin on syytä mennä läpi koska redux olettaa, että reduceri palauttaa järkevän alkutilan kun sitä kutsutaan siten että ensimmäinen parametri, eli aiempaa tilaa edustava _state_ on _undefined_.
+
+Osan 2 luvun [Muistiinpanon tärkeyden muutos](osa2/#Muistiinpanon-tärkeyden-muutos) olion kopiointiin liittyvät asiat saattavat olla hyödyksi.
+
 #### 96 unicafe revisited, osa 2
 
+Toteuta sitten sovelluksen koko sovellus.
+
+### redux-anekdootit
+
+Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositiossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
+
+Sovelluksen lopullisen version tulisi näyttää seuraavalta:
+
+![]({{ "/assets/teht/36.png" | absolute_url }})
+
 #### 97 anekdootit, osa 1
+
+Toteuta mahdollisuus anekdoottien äänestämiseen. Äänien määrä tulee tallettaa redux-storeen.
+
 #### 98 anekdootit, osa 2
+
+Huolehdi siitä, että anekdootit pysyvät äänten mukaisessa suuruusjärjetyksessä.
+
 #### 99 anekdootit, osa 3
+
+Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
+
+## osa 6
