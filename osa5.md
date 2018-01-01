@@ -7,7 +7,7 @@ permalink: /osa5/
 <div class="important">
   <h1>KESKEN, ÄLÄ LUE</h1>
 
-  <p>Osan on tavoitteena valmistua tiistaina 2.1.</p>
+  <p>Osan on tavoitteena valmistua maanantaina 1.1.</p>
 </div>
 
 ## Osan 5 oppimistavoitteet
@@ -827,7 +827,7 @@ Eräs keino viitteen saamiseen on React-komponenttien attribuutti [ref](https://
 
 Muutetaan lomakkeen renderöivää koodia seuraavasti:
 
-```js
+```bash
 <div>
   <Togglable buttonLabel="new note" ref={component => this.noteForm = component}>
     <NoteForm
@@ -875,7 +875,7 @@ class Togglable extends React.Component {
 
 ja otetaan se käyttöön seuraavasti
 
-```html
+```bash
 <div>
   <Togglable buttonLabel="1" ref={component => this.t1 = component}>
     ensimmäinen
@@ -1067,6 +1067,8 @@ describe.only('<Note />', () => {
 })
 ```
 
+Edellisessä osassa määrittelimme testitapaukset metodin [test](https://facebook.github.io/jest/docs/en/api.html#testname-fn-timeout) avulla. Nyt käytössä oleva _it_ viittaa samaan olioon kuin _test_, eli on sama kumpaa käytät. It on tietyissä piireissä suositumpi ja käytössä mm. Enzymen dokumentaatiossa joten käytämme it-muotoa ainakin tässä osassa.
+
 Alun konfiguroinnin jälkeen testi renderöi komponentin metodin _shallow_ avulla:
 
 ```html
@@ -1109,7 +1111,7 @@ Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. 
 
 Testejä tehdessä törmäämme tyypillisesti erittäin moniin ongelmiin. Näissä tilanteissa vanha kunnon _console.log_ on hyödyllinen. Voimme tulostaa _shallow_-metodin avulla renderöityjä komponentteja ja niiden sisällä olevia elementtejä metodin [debug](http://airbnb.io/enzyme/docs/api/ShallowWrapper/debug.html) avulla:
 
-```js
+```bash
 describe.only('<Note />', () => {
   it('renders content', () => {
     const note = {
@@ -1277,7 +1279,7 @@ Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div
 
 ## Tehtäviä
 
-Tee nyt tehtävät [90-](../tehtavat#komponenttien testaaminen)
+Tee nyt tehtävät [90-92](../tehtavat#komponenttien testaaminen)
 
 ### mount ja full DOM -renderöinti
 
@@ -1285,7 +1287,7 @@ Käyttämämme _shallow_-renderöijä on useimmista tapauksissa riittävä. Josk
 
 Jos yritämme esim. sijoittaa kaksi _Note_-komponenttia _Togglable_-komponentin sisälle ja tulostamme syntyvän _ShallowWrapper_ olion
 
-```
+```bash
 it('shallow renders only one level', () => {
   const note1 = {
     content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
@@ -1330,7 +1332,7 @@ Jos komponentille tehdään edellisten esimerkkien tapaan yksikkötestejä, _sha
 
 Muutetaan testi käyttämään _shallowin_ sijaan _mountia_:
 
-```js
+```bash
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Note from './Note'
@@ -1359,7 +1361,7 @@ it('mount renders all components', () => {
 
 Tuloksena on kokonaisuudessaan HTML:ksi renderöitynyt _Togglable_-komponentti:
 
-```html
+```bash
 <Togglable buttonLabel="show...">
   <div>
     <div style={{...}}>
@@ -1402,28 +1404,138 @@ Tuloksena on kokonaisuudessaan HTML:ksi renderöitynyt _Togglable_-komponentti:
 
 Mountin avulla renderöitäessä testi pääsee siis käsiksi periaatteessa samaan HTML-koodiin, joka todellisuudessa renderöidään selaimeen ja tämä luonnollisesti mahdollistaa huomattavasti monipuolisemman testauksen kuin _shallow_-renderöinti. Komennolla _mount_ tapahtuva renderöinti on kuitenkin hitaampaa, joten jos _shallow_ riittää, sitä kannattaa käyttää.
 
+Huomaa, että testin käyttämä metodi [debug](http://airbnb.io/enzyme/docs/api/ReactWrapper/debug.html) ei palauta todellista HTML:ää vaan debuggaustarkoituksiin sopivan tekstuaalisen esitysmuoton komponentista. Todellisessa HTML:ssä ei mm. ole ollenaakn React-komponenttien tageja.
+
+Jos on tarvetta tietää mikä on testattaessa syntyvä todellinen HTML, sen saa selville metodilla [html](http://airbnb.io/enzyme/docs/api/ReactWrapper/html.html).
+
+Jos muutamme testin viimeisen komennon muotoon
+
+```js
+console.log(noteComponent.html())
+```
+tulostuu todellinen HTML:
+
+```html
+<div>
+  <div><button>show...</button></div>
+  <div style="display: none;">
+    <div class="wrapper">
+      <div class="content">Komponenttitestaus tapahtuu jestillä ja enzymellä</div>
+      <div><button>make not important</button></div>
+    </div>
+    <div class="wrapper">
+      <div class="content">mount renderöi myös alikomponentit</div>
+      <div><button>make not important</button></div>
+    </div>
+    <button>cancel</button></div>
+</div>
+```
+
 Komennon _mount_ palauttamaa renderöidyn "komponenttipuun" [ReactWrapper](http://airbnb.io/enzyme/docs/api/mount.htm)-tyyppisenä oliona, joka tarjoaa hyvin samantyyppisen rajapinnan komponentin sisällön tutkimiseen kuin _ShallowWrapper_.
+
+### lomakkeiden testaus
+
+Lomakkeiden testaaminen Enzymellä on jossain määrin haasteellista. Enzymen dokumentaatio ei mainitse lomakkeista sanaakaan. [Issueissa](https://github.com/airbnb/enzyme/issues/364) asiasta kuitenkin keskustellaan.
+
+Tehdään testi komponentille _NoteForm_. Lomakkeen koodi näyttää seuraavalta
+
+```react
+const NoteForm = ({ onSubmit, handleChange, value }) => {
+  return (
+    <div>
+      <h2>Luo uusi muistiinpano</h2>
+
+      <form onSubmit={onSubmit}>
+        <input
+          value={value}
+          onChange={handleChange}
+        />
+        <button>tallenna</button>
+      </form>
+    </div>
+  )
+}
+```
+
+Lomakkeen toimintaperiaatteena on synkronoida lomakkeen tila sen ulkopuolella olevan React-komponentin tilaan. Lomakettamme on jossain määrin vaikea testata yksistään.
+
+Teemmekin testejä varten apukomponentin _Wrapper_, joka renderöi _NoteForm_:in ja  hallitsee lomakkeen tilaa:
+
+```react
+class Wrapper extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      formInput: ''
+    }
+  }
+  onChange = (e) => {
+    this.setState({ formInput: e.target.value })
+  }
+  render() {
+    return (
+      <NoteForm 
+        value={this.state.value} 
+        onSubmit={this.props.onSubmit}
+        handleChange={this.onChange}
+      />
+  )}
+}
+```
+
+Testi on seuraavassa:
+
+```bash
+import React from 'react'
+import { mount } from 'enzyme'
+import NoteForm from './NoteForm'
+
+it('renders content', () => {
+  const onSubmit = jest.fn()
+
+  const wrapper = mount(
+    <Wrapper onSubmit={onSubmit} />
+  )
+
+  const input = wrapper.find('input')
+  const button = wrapper.find('button')
+
+  input.simulate('change', { target: { value: 'lomakkeiden testaus on hankalaa' } })
+  button.simulate('submit')
+
+  expect(wrapper.state().formInput).toBe('lomakkeiden testaus on hankalaa')
+  expect(onSubmit.mock.calls.length).toBe(1)
+})
+```
+
+Testi luo _Wrapper_-komponentin, jolle se välittää propseina mockatun funktion _onSubmit_. Wrapper välittää funktion edelleen _NoteFormille_ tapahtuman _onSubmit_ käsittelijäksi.
+
+Syötekenttään kirjoittamista simuloidaan tekemällä syötekenttään tapahtuma _change_ ja määrittelemällä sopiva olio, joka määrittelee syötekenttään 'kirjoitetun' sisällön.
+
+Lomakkeen nappia tulee painaa simuloimalla tapahtumaa _submit_, tapahtuma _click_ ei lähetä lomaketta.
+
+Testin ensimmäinen ekspektaatio tutkii komponentin _Wrapper_ tilaa metodilla [state](http://airbnb.io/enzyme/docs/api/ReactWrapper/state.html), ja varmistaa, että lomakkeelle kirjoitettu teksti on siirtynyt tilaan. Toinen ekspektaatio varmistaa, että lomakkeen lähetys on aikaansaanut tapahtumankäsittelijän kutsumisen.
 
 ## frontendin integraatiotestaus
 
-Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat backendin tarjoaman API:n läpi backendia ja tietokantaa. Backendin testauksessa tehtiin tietoinen päätös olla kirjoittamatta yksikkötestejä sillä backendin koodi on sinänsä erittäin suoraviivaista ja ongelmat tulevatkin esiin todennäköisemmin juuri monimutkaisemmissa skenaarioissa, joita integraatiotestit hyvin testaavat
+Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat backendin tarjoaman API:n läpi backendia ja tietokantaa. Backendin testauksessa tehtiin tietoinen päätös olla kirjoittamatta yksikkötestejä sillä backendin koodi on melko suoraviivaista ja ongelmat tulevatkin esiin todennäköisemmin juuri monimutkaisemmissa skenaarioissa, joita integraatiotestit hyvin testaavat
 
-Toistaiseksi kaikki frontendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan yksikkötestaus ei riitä koskaan antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
+Toistaiseksi kaikki frontendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan yksikkötestaus ei riitä antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
 
-Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää localstoragea kirjautuneen käyttäjän tietojen tallettamiseen.
+Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää local storagea kirjautuneen käyttäjän tietojen tallettamiseen.
 
-Localstorage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii localstoragea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests).
+Local storage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii local storagea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests).
 
-Koska testimme ei edellytä localstoragelta juuri mitään toiminnallisuutta, teemme tiedostoon [src/setupTests.js](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#initializing-test-environment) hyvin yksinkertaisen mockin
+Koska testimme ei edellytä local storagelta juuri mitään toiminnallisuutta, teemme tiedostoon [src/setupTests.js](https://github.com/facebookincubator/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#initializing-test-environment) hyvin yksinkertaisen mockin
 
 ```js
-let savedItem
+let savedItems = {}
 
 const localStorageMock = {
-  getItem: (item) => {
-    savedItem = item
+  setItem: (key, item) => {
+    savedItem[key] = item
   },
-  setItem: () => savedItem,
+  getItem: (key) => savedItems[key],
   clear: jest.fn()
 }
 
@@ -1445,7 +1557,7 @@ componentWillMount() {
 
 Jestin [manual mock](https://facebook.github.io/jest/docs/en/manual-mocks.html#content) -konsepti tarjoaa tilanteeseen hyvän ratkaisun. Manual mockien avulla voidaan kokonainen moduuli, tässä tapauksessa _noteService_ korvata testien ajaksi vaihtoehtoisella esim. kovakoodattua dataa tarjoavalla toiminnallisuudella.
 
-Luodaan Jestin ohjeiden mukaisesti hakemistoon _src/services_ alihakemisto *__mock__* ja sinne tiedosto _notes.js_ jonka määrittelemä metodi _getAll_ palauttaa kovakoodatun listan muistiinpanoja:
+Luodaan Jestin ohjeiden mukaisesti hakemistoon _src/services_ alihakemisto *\_\_mocks\_\_* (alussa ja lopussa kaksi alaviivaa) ja sinne tiedosto _notes.js_ jonka määrittelemä metodi _getAll_ palauttaa kovakoodatun listan muistiinpanoja:
 
 ```js
 let token = null
@@ -1518,7 +1630,7 @@ describe('<App />', () => {
   it('renders all notes it gets from backend', () => {
     app.update()
     const noteComponents = app.find(Note)
-    expect(noteComponents.length).toEqual(5)
+    expect(noteComponents.length).toEqual(noteService.notes.length)
   })
 })
 ```
@@ -1542,6 +1654,8 @@ Melko primitiivinen HTML-muotoinen raportti generoituu hakemistoon _coverage/lco
 ![]({{ "/assets/5/9.png" | absolute_url }})
 
 Huomaamme, että parannettavaa jäi vielä runstaasti.
+
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-5) tagissä _v5-5_.
 
 ## Tehtäviä
 

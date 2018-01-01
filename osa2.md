@@ -1093,7 +1093,7 @@ React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.
 
 ### Tehtäviä datan hakemisesta palvelimelta
 
-Tee nyt tehtävä [31-33](../tehtavat#datan-hakeminen-palvelimelta)
+Tee nyt tehtävät [31-32](../tehtavat#datan-hakeminen-palvelimelta)
 
 ## REST API:n käyttö
 
@@ -1662,7 +1662,7 @@ Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme my�
 
 ### Tehtäviä palvelimen tilan päivittämisestä
 
-Tee nyt tehtävät [34-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
+Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
 
 ## Tyylien lisääminen
 
