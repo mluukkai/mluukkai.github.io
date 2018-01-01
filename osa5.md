@@ -1659,7 +1659,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [x-](../tehtavat#integraatiotestaus)
+Tee nyt tehtävät [93 ja 94](../tehtavat#integraatiotestaus)
 
 ## snapshot-testaus
 
@@ -1877,7 +1877,7 @@ Kun storessa olevan tilan arvo muuttu, ei React osaa automaattisesti renderöid�
 
 ## Tehtäviä
 
-Tee nyt tehtävät [x-](../tehtavat##)
+Tee nyt tehtävät [95-](../tehtavat##)
 
 ## Redux-muistiinpanot
 
