@@ -474,7 +474,6 @@ Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_not
 <img src="/assets/1/22.png" height="150">
 
 POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
-[JÄIN MIETTIMÄÄN, PITIKÖ TÄMÄ KOODI NÄKYÄ SELAIMESSA. KATSOIN LÄPI MAIN.JS:N JA CONTENT.JS:N MUTTA EN LÖYTÄNYT. ELI ILMEISESTI TÄMÄ ON PUHTAASTI PALVELIMELLA OLEVAA KOODIA, JOKA EI NÄYKÄÄN SELAIMELLE. SEN VOISI EHKÄ MAINITA KUN TÄHÄN ASTI KAIKKI KOODI ON OLLUT SELAIMELLE NÄKYVÄÄ.]
 
 ```js
 app.post('/new_note', (req, res) => {
