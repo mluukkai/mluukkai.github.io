@@ -451,7 +451,7 @@ Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tä
 
 ![]({{ "/assets/1/18.png" | absolute_url }})
 
-Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimele. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
+Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimelle. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
 
 ![]({{ "/assets/1/19.png" | absolute_url }})
 
