@@ -4,12 +4,6 @@ title: osa 5
 permalink: /osa5/
 ---
 
-<div class="important">
-  <h1>KESKEN, ÄLÄ LUE</h1>
-
-  <p>Osan on tavoitteena valmistua maanantaina 1.1.</p>
-</div>
-
 ## Osan 5 oppimistavoitteet
 
 - React
