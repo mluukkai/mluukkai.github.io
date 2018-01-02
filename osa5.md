@@ -26,7 +26,7 @@ permalink: /osa5/
     - puhtaat funktiot
     - immutable
 
-##  Kirjautuminen React-sovelluksesta
+## Kirjautuminen React-sovelluksesta
 
 Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla.
 
@@ -1453,7 +1453,7 @@ const NoteForm = ({ onSubmit, handleChange, value }) => {
 
 Lomakkeen toimintaperiaatteena on synkronoida lomakkeen tila sen ulkopuolella olevan React-komponentin tilaan. Lomakettamme on jossain määrin vaikea testata yksistään.
 
-Teemmekin testejä varten apukomponentin _Wrapper_, joka renderöi _NoteForm_:in ja  hallitsee lomakkeen tilaa:
+Teemmekin testejä varten apukomponentin _Wrapper_, joka renderöi _NoteForm_:in ja hallitsee lomakkeen tilaa:
 
 ```react
 class Wrapper extends React.Component {
