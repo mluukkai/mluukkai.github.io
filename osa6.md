@@ -847,8 +847,12 @@ Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 
-## tyylit
+## Inline-tyylit
 
 ## tehtäviä
+
+Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
+
+## Material UI
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
