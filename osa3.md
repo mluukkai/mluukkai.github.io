@@ -265,7 +265,7 @@ Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_
 
 npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
 
-Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ eli keskimäinen numero voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
+Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ eli keskimmäinen numero voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
 
 
 Voimme päivittää projektin riippuvuudet komennolla
