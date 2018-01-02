@@ -829,11 +829,308 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 
 Mukana on myös edellisestä unohtunut _VisibilityFilter_-komponentin _connect_-funktiota käyttävä versio, jota on myös paranneltu siten, että nappi _kaikki_ on oletusarvoisesti valittuna. Koodissa on pieni ikävä copypaste mutta kelvatkoon.
 
-## tehtäviä
+## Tehtäviä
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
-## Asynkroniset actionit
+## Redux-sovelluksen kommunikointi palvelimen kanssa
+
+Laajennetan sovellusta siten, että muistiinpanot talletetaan backendiin. Käytetään osasta 2 tuttua [json-serveriä](osa2/#Datan-haku-palvelimelta).
+
+Tallennetaan projektin juuren tiedostoon _db.js_ tietokannan alkutila:
+
+```json
+{ 
+  "notes": [
+    { 
+      "content": "reduxin storen toiminnan määrittelee reduceri", 
+      "important": true, 
+      "id": 1
+    },
+    {
+      "content": "storen tilassa voi olla mielivaltaista dataa", 
+      "important": false, 
+      "id": 2
+    }
+  ]
+}
+```
+
+ja käynnistetään json-server porttiin 3001:
+
+```bash
+json-server --port 3001 db.js
+```
+
+Tehdään sitten tuttuun tapaan _axiosia_ hyödyntävä backendistä dataa hakeva metodi tiedostoon _services/notes.js_
+
+```js
+import axios from 'axios'
+
+const getAll = async () =>{
+  const response = await axios.get('http://localhost:3001/notes')
+  return response.data
+}
+
+export default { getAll }
+```
+
+Muutetaan _nodeReducer_:issa tapahtuva muistiinpanojen tilan alustusta, siten että oletusarvoisesti mustiinpanoja ei ole:
+
+```js
+const noteReducer = (state = [], action) => {
+  // ...
+}
+
+```
+
+Nopea tapa saada storagen tila alustettua palvelimella olevan datan perusteella on hakea muistiinpanot tiedostossa _index.js_ ja dispatchata niille yksitellen action _NEW_NOTE_:
+
+```js
+// ...
+import noteService from './services/notes'
+
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
+})
+
+const store = createStore(reducer)
+
+noteService.getAll().then(notes =>
+  notes.forEach(note => {
+    store.dispatch({ type: 'NEW_NOTE', data: note})
+  })
+)
+
+// ...
+```
+
+Lisätään reduceriin tuki actionille _INIT_NOTES_, jonka avulla alustus voidaan tehdä dispatchaamalla yksittäinen action. Luodaan myös sitä varten oma action creator -funktio _noteInitialization_:
+
+```js
+// ...
+const noteReducer = (state = [], action) => {
+  console.log('ACTION: ',action)
+  switch(action.type) {
+    case 'NEW_NOTE':
+      return [...state, action.data]
+    case 'INIT_NOTES':
+      return action.data   
+    // ...
+  }
+}   
+
+export const noteInitialization = (data) => {
+  return {
+    type: 'INIT_NOTES',
+    data
+  }
+}
+
+// ...
+```
+
+_index.js_ yksinkertaistuu:
+
+```js
+import noteReducer, { noteInitialization} from './reducers/noteReducer'
+// ...
+
+noteService.getAll().then(notes =>
+  store.dispatch(noteInitialization(notes))
+)
+```
+
+Päätetään kuitenkin siirtää muistiinpanojen alustus _App_-komponentin metodiin _componentWillMount_, se on luonteva paikka alustuksille, sillä metodi suoritetaan ennen kuin soveluksemme renderöidään ensimmäistä kertaa.
+
+Jotta saamme action creatorin _noteInitialization_ käyttöön komponetissa _App_ tarvitsemme jälleen _connect_-metodin apua:
+
+```js
+import React from 'react'
+import NoteForm from './components/NoteForm.js'
+import NoteList from './components/NoteList.js'
+import VisibilityFilter from './components/VisibilityFilter'
+import { connect } from 'react-redux'
+import { noteInitialization } from './reducers/noteReducer'
+import noteService from './services/notes'
+
+class App extends React.Component {
+  componentWillMount() {
+    noteService.getAll().then(notes =>
+      this.props.noteInitialization(notes)
+    )
+  }
+
+  render() {
+    return (
+      <div>
+        <NoteForm />
+        <VisibilityFilter />
+        <NoteList />
+      </div>
+    )
+  }
+}
+
+export default connect(
+  null, 
+  { noteInitialization }
+)(App)
+```
+
+Näin funktio _noteInitialization_ tulee komponentin _App_ propsiksi _this.props.noteInitialization_ ja sen kutsumiseen ei tarvita _dispatch_-metodia koska _connect_ hoitaa asian puolestamme. 
+
+Voisimme toimia samoin myös uuden muistiinpanon luomisen suhteen. Laajennetaan palvelimen kanssa kommunikoivaa koodia:
+
+```
+const url = 'http://localhost:3001/notes'
+
+const getAll = async () => {
+  const response = await axios.get(url)
+  return response.data
+}
+
+const createNew = async (note) => {
+  const response = await axios.post(url, note)
+  return response.data
+}
+
+export default {
+  getAll, createNew
+}
+```
+
+Komponentin _NoteForm_ metodi _addNote_ muuttu hiukan:
+
+```react
+import React from 'react'
+import { noteCreation } from './../reducers/noteReducer'
+import { connect } from 'react-redux'
+import noteService from '../services/notes'
+
+class NoteForm extends React.Component {
+
+  addNote = async (e) => {
+    e.preventDefault()
+    const content = e.target.note.value 
+    e.target.note.value = ''
+    const newNote = await noteService.createNew(content)
+    this.props.noteCreation(newNote)
+  }
+
+  render() {
+    //...
+  }
+}
+
+export default connect(
+  null,
+  {noteCreation}
+)(NoteForm)
+```
+
+Koska backend generoi muistiinpanoille id:t, muutetaan action creator _noteCreation_ muotoon
+
+```js
+export const noteCreation = (data) => {
+  return {
+    type: 'NEW_NOTE',
+    data
+  }
+}
+```
+
+Muistiinpanojen tärkeyden muuttaminen olisi mahdollista toteuttaa samalla periaatteella, eli tehdä palvelimelle ensin asynkroninen metodikutsu ja sen jälkeen dispatchata sopiva action.
+
+Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/redux-simplenotes/tree/v6-5) tagissä _v6-5_. 
+
+###  Asynkroniset actionit ja thunk
+
+**HUOM** Tämä luku lienee kurssin käsitteellisesti haastavin. Voit alustavasti hypätä suoraan luvun yli.
+
+Lähestymistapamme on ok, mutta siinä mielessä ikävä, että pavelimen kanssa kommunikointi tapahtuu komponenttien metodeissa. Olisi parempi, jos kommunikointi voitaisiin abstrahoida komponenteilta siten, että niiden ei tarvitsisi kuin kutsua sopivaa _action creatoria_, esim. _App_ alustaisi sovelluksen tilan seuraavasti:
+
+```bash
+class App extends React.Component {
+  componentWillMount() {
+    this.props.initializeNotes()
+  }
+  // ...
+}  
+```
+
+ja _NoteForm_ loisi uuden musiinpanon seuraavasti:
+
+```bash
+class NoteForm extends React.Component {
+
+  addNote = async (e) => {
+    e.preventDefault()
+    const content = e.target.note.value 
+    e.target.note.value = ''
+    this.props.createNote(newNote)
+  }
+}
+```
+
+Molemmat komponentit käyttäisivät ainoastaan propsina saamaansa funktiota, välittämättä siitä että taustalla tapahtuu todelisuudessa palvelimen kanssa tapahtuvaa kommunikoinia.
+
+Asennetaan nyt [redux-thunk]()-kirjasto, joka mahdollistaa _asynkronisten actionien_ luomisen. Asennus tapahtuu komennolla:
+
+```bash
+npm install --save redux-thunk
+```
+
+redux-thunk-kirjasto on ns. _redux-middleware_ ja tiedostossa _index.js_ olevassa storen alustuksessa on määritetävä että se otetaan käyttöön: 
+
+```bash
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk)
+)
+```
+
+Thunk-kirjaston ansiosta on mahdollista määritellä _action creatoreja_ siten, että ne palauttavat funktion. Creatorin palauttama saa parametrikseen storen _dispatch_-funktion.
+
+Voimme nyt määritellä muistiinpanojen alkutilan pavlvelimelta hakevan action creatorin  _initializeNotes_ seuraavati:
+
+```bash
+export const initializeNotes = () => {
+  return async (dispatch) => {
+    const notes = await noteService.getAll()
+    dispatch({
+      type: 'INIT_NOTES',
+      data: notes
+    })
+  }
+}
+```
+
+Sisemmässä funktiossaan, eli _asynkroonisessa actionissa_ operaatio hakee ensin palvelimelta kaikki muistiinpanot ja sen jälkeen _dispatchaa_ muistiinpanot storeen lisäävän actionin.
+
+Uuden muistiinpanon lisäävä action creator _createNew_ on seuraavassa
+
+```bash
+export const createNew = (content) => {
+  return async (dispatch) => {
+    const newNote = await noteService.createNew(content)
+    dispatch({
+      type: 'NEW_NOTE',
+      data: newNote
+    })
+  }
+}
+```
+
+Periaate on jälleen sama, ensin suoritetaan asynkroninen operaatio, ja sen valmistuttua _dispatchataan_ storen tilaa muuttava action.
+
+Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/redux-simplenotes/tree/v6-6) tagissä _v6-6_. Githubin versiosta löytyy myös muistiinpanon muutoksen tärkeyden backendiin synkronoiva operaatio.
+
+### debugger
 
 ## tehtäviä
 
