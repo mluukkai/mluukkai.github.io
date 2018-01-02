@@ -73,8 +73,7 @@ Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io
 ## Web-sovelluksen toimintaperiaatteita ##
 
 Käymme aluksi läpi web-sovellusten toimintaperiaatteita tarkastelemalla osoitteessa <https://fullstack-exampleapp.herokuapp.com/> olevaa esimerkkisovellusta. Huom.
-sovelluksen toinen versio on osoitteessa <https://exampleapp-ghqykidlgq.now.sh/>, voit käyttää kumpaa vaan. Tällä hetkellä herokussa oleva versio ei toimi, sillä ilmainen prosessointiaika on joulukuun osalta käytetty loppuun.
-
+sovelluksen toinen versio on osoitteessa <https://exampleapp-ghqykidlgq.now.sh/>, voit käyttää kumpaa vaan.
 
 Sovelluksen olemassaolon tarkoitus on ainoastaan havainnollistaa kurssin peruskäsitteistöä, sovellus ei ole missään tapauksessa esimerkki siitä _miten_ web-sovelluksia kannattaisi kehittää, päinvastoin, sovellus käyttää eräitä vanhentuneita tekniikoita sekä huonoja käytänteitä.
 
@@ -452,7 +451,7 @@ Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tä
 
 ![]({{ "/assets/1/18.png" | absolute_url }})
 
-Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimele. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
+Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimelle. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
 
 ![]({{ "/assets/1/19.png" | absolute_url }})
 
@@ -474,7 +473,7 @@ Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_not
 
 <img src="/assets/1/22.png" height="150">
 
-POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
+POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen (huom: tämä koodi on siis palvelimella eikä näy selaimessasi):
 
 ```js
 app.post('/new_note', (req, res) => {
