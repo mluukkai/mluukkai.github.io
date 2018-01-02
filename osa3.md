@@ -815,7 +815,7 @@ Voimme sallia muista _origineista_ tulevat käyttämällä noden [cors](https://
 Asennetaan _cors_ komennolla
 
 ```bash
-npm install npm install cors --save
+npm install cors --save
 ```
 
 Otetaan middleware käyttöön ja sallitaan kaikki origineista tulevat pyynnöt:
