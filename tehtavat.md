@@ -681,7 +681,7 @@ Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perus
 
 <img src="/assets/teht/15.png" height="300">
 
-### palvelimella olevan datan päivitäminen
+### palvelimella olevan datan päivittäminen
 
 #### 33 maiden tiedot klikkaamalla
 
@@ -1265,11 +1265,11 @@ Ota sovellukseesi käyttöön ESlint.
 
 Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
 
-Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti. 
+Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti.
 
 Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkailu.
 
-**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua. 
+**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua.
 
 Kun siirryt kehittämään uutta sovellusta, onkin varminta aina aluksi nollata local storage konsolista komennolla <code>window.localstorage.clear()</code>
 
@@ -1350,7 +1350,7 @@ Notifikaation tulee olla näkyvillä muutaman sekunnin ajan. Värien lisäämine
 Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näytettävä osan 4 tapaan. Voit halutessasi hyödyntää osassa 4 määriteltyä komponenttia _Togglable_.
 
 #### 86 blogilistan frontend, osa 6
- 
+
 Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
 
 ![]({{ "/assets/teht/33.png" | absolute_url }})
@@ -1370,10 +1370,10 @@ class Blog extends React.Component {
   render() {
     // ..
 
-    const blogStyle = { 
-      paddingTop: 10, 
-      paddingLeft: 2, 
-      border: 'solid', 
+    const blogStyle = {
+      paddingTop: 10,
+      paddingLeft: 2,
+      border: 'solid',
       borderWidth: 1,
       marginBottom: 5
     }
@@ -1389,7 +1389,7 @@ class Blog extends React.Component {
 
 #### 87 blogilistan frontend, osa 7
 
-Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä. 
+Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä.
 
 Koska backendin operaatio korvaa aina koko blogin, joudut lähettämään operaation mukana blogin kaikki kentät, eli jos seuraavaa blogia liketetään
 
@@ -1436,7 +1436,7 @@ Ohjelmasi voi näyttää esim. seuraavalta:
 
 #### 89 blogilistan frontend, osa 9
 
-Määrittele joillekin sovelluksesi komponenteille ProcTypet. 
+Määrittele joillekin sovelluksesi komponenteille ProcTypet.
 
 ### komponenttien testaaminen
 
@@ -1448,15 +1448,15 @@ Lisää sovellukseesi tilapäisesti seuraava komponentti
 
 ```react
 const SimpleBlog = ({blog, onClick}) => (
-  <div >
+  <div>
     <div>
       {blog.title} {blog.author}
     </div>
     <div>
-      blog has {blog.likes} likes 
+      blog has {blog.likes} likes
       <button onClick={onClick}>like</button>
     </div>
-  </div>  
+  </div>
 )
 ```
 
@@ -1466,11 +1466,11 @@ Lisää komponenttiin tarvittaessa testausta helpottavia CSS-luokkia.
 
 #### 91 blogilistan testit, osa 2
 
-Tee testi, joka varmistaa, että jos komonentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
+Tee testi, joka varmistaa, että jos komponentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
 
 #### 92 blogilistan testit, osa 3
 
-Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista. 
+Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista.
 
 ### integraatiotestaus
 
@@ -1484,11 +1484,11 @@ Tee myös testi, joka varmistaa, että kun käyttäjä on kirjautuneena, blogit 
 
 **Vihje 1:**
 
-Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea. 
+Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea.
 
 **Vihje 2:**
 
-Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _decribe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
+Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _describe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
 
 ```js
 describe('<App />', () => {
@@ -1509,7 +1509,7 @@ describe('<App />', () => {
     beforeEach(() => {
       // luo sovellus siten, että käyttäjä on kirjautuneena
     })
-    
+
     it('all notes are rendered', () => {
       app.update()
       // ...
@@ -1520,7 +1520,7 @@ describe('<App />', () => {
 
 ### Redux-Unicafe
 
-Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovelluks voi näyttää esim. seuraavalta:
+Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovellus voi näyttää esim. seuraavalta:
 
 ![]({{ "/assets/teht/35.png" | absolute_url }})
 
@@ -1529,13 +1529,13 @@ Haluttu toiminnallisuus lienee ilmeinen.
 #### 95 unicafe revisited, osa 1
 
 Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
- 
-```js 
+
+```js
 {
   good: 5,
   ok: 4,
   bad: 2
-} 
+}
 ```
 
 Seuraavassa on runko reducerille:
@@ -1554,9 +1554,9 @@ const counterReducer = (state = initialState, action) => {
     case 'OK':
       return ...
     case 'BAD':
-      return ...    
+      return ...
     case 'ZERO':
-      return ...          
+      return ...
   }
   return state
 }
@@ -1587,7 +1587,7 @@ describe('unicafe reducer', () => {
 })
 ```
 
-**Toteuta reducer ja tee sille testit.** 
+**Toteuta reducer ja tee sille testit.**
 
 Varmista testeissä _deep-freeze_-kirjaston avulla, että kyseessä on _puhdas funktio_. Huomaa, että valmiin ensimmäisen testin on syytä mennä läpi koska redux olettaa, että reduceri palauttaa järkevän alkutilan kun sitä kutsutaan siten että ensimmäinen parametri, eli aiempaa tilaa edustava _state_ on _undefined_.
 
@@ -1599,7 +1599,7 @@ Toteuta sitten sovelluksen koko sovellus.
 
 ### redux-anekdootit
 
-Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositiossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
+Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositoriossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
 
 Sovelluksen lopullisen version tulisi näyttää seuraavalta:
 
@@ -1634,3 +1634,4 @@ Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
 #### 105
 
 ### connect
+
