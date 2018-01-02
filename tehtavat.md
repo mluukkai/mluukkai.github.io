@@ -1,6 +1,6 @@
 # tehtävät
 
-Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5)
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5) [6](#osa-6)
 
 ## Osa 1
 
@@ -1618,3 +1618,19 @@ Huolehdi siitä, että anekdootit pysyvät äänten mukaisessa suuruusjärjetyks
 Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
 
 ## osa 6
+
+### yhdistetyt reducerit
+
+#### 100
+
+#### 101
+
+#### 102
+
+#### 103
+
+#### 104
+
+#### 105
+
+### connect
