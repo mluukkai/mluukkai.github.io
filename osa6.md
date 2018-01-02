@@ -46,7 +46,7 @@ const noteReducer = (state = initalState, action) => {
 export default noteReducer
 ```
 
-Siirretään [action creatiorit](osa4/#action-creatorit), eli sopivia [action](https://redux.js.org/docs/basics/Actions.html)-olioita generoivat apufunktiot reducerin kanssa samaan moduuliin:
+Siirretään [action creatiorit](https://redux.js.org/docs/basics/Actions.html#action-creators), eli sopivia [action](https://redux.js.org/docs/basics/Actions.html)-olioita generoivat apufunktiot reducerin kanssa samaan moduuliin:
 
 ```js
 const initalState = [
@@ -1137,6 +1137,86 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 ## React router
+
+Palataan jälleen Reduxittoman Reactin maailmaan. 
+
+On erittäin tyypillistä, että web-sovelluksissa on navigaatiopalkki, jonka avulla on mahdollista vaihtaa sovelluksen näkymää. Muistiinpanosovelluksemme voisi sisältää pääsivun:
+
+![]({{ "/assets/6/6.png" | absolute_url }})
+
+ja omat sivunsa muistiinpanojen ja käyttäjien tietojen näyttämiseen:
+
+![]({{ "/assets/6/7.png" | absolute_url }})
+
+Vanhanaikaisessa websovelluksessa palvelin tyypillisisesti palautti jokaisen erillisen sivun sisältämän HTML-koodin. Single page appeissa taas todellisuudessa ollaan koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista". 
+
+Navigaatiopalkki ja useita sivuja sisältävä sovellus on erittäin helppo toteuttaa Reaactilla. 
+
+Seuraavassa on eräs tapa:
+
+```react
+const Home = () => (
+  <div> <h2>TKTL notes app</h2> </div>
+)
+
+const Notes = () => (
+  <div> <h2>Notes</h2> </div>
+)
+
+const Users = () => (
+  <div> <h2>Users</h2> </div>
+)
+
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      page: 'home'
+    }
+  }
+
+  toPage = (page) => (e) => {
+    e.preventDefault()
+    this.setState({ page }) 
+  }
+
+  render() {
+    const content = () => {
+      if ( this.state.page ==='home' ) {
+        return <Home />
+      } else if (this.state.page === 'notes') {
+        return <Notes />
+      } else if (this.state.page === 'users') {
+        return <Users />
+      }
+        
+    }
+
+    return (
+      <div>
+        <div>
+          <a href='' onClick={ this.toPage('home') }>home</a> &nbsp;
+          <a href='' onClick={ this.toPage('notes') }>notes</a> &nbsp;
+          <a href='' onClick={ this.toPage('users') }>users</a>
+        </div>
+        
+        {content()}
+      </div>
+    );
+  }
+}
+```
+
+Eli jokainen "sivu" on toteutettu omana komponenttinaan ja sovelelluksen tilassa pidetään tieto siitä, mikä komponentti menupalkin alla näytetään. 
+
+Menetelmä ei kuitenkaan ole optimaalinen. Kuten kuvista näkyy, sivuston osoite pysyy samana vaikka välillä ollaankin eri sivuilla. Jokaisella sivulla tulisi kuitenkin olla oma osoitteensa, jotta esim. bookmarkien tekeminen olisi mahdollista. Näin tehdyllä sovelluksella selaimen _back_-painike ei toimi loogisesti, eli _back_ ei vie edelliseksi katsottuun sovelluksen näkymään vaan jonnekin ihan muualle. Jos sovellus kasvaisi suuremmaksi ja sinne haluttaisiin esim. jokaiselle käyttäjälle sekä muistiinpanolle oma yksittäinen sivunsa, itse koodattu "reitittys" eli sivuston navigaationhallinta menisi turhan monimutkaiseksi.
+
+Reactissa on onneksi valmis komponentti [React router](https://github.com/ReactTraining/react-router) joka tarjoaa erinomaisen ratkaisun React-sovelluksen navigaation hallintaan.
+
+Muutetaan ylläoleva sovellus käyttämään React routeria. Asennetaan router komennolla
+
+```bash
+```
 
 
 ## tehtäviä
