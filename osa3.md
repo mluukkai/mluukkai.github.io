@@ -684,7 +684,7 @@ const generateId = () => {
 app.post('/notes', (request, response) => {
   const body = request.body
 
-  if (body.content === undefined){
+  if (body.content === undefined) {
     response.status(400).json({error: 'content missing'})
   }
 
