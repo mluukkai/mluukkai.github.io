@@ -691,7 +691,7 @@ Hyödynsimme mahdollisuutta määritellä React-komponenteille koodin avulla [in
 
 ## Komponentin lapset, eli this.props.children
 
-Kirjautumislomakkeen näkyvyyttä ympäröivän koodin voi ajatella olevan oma looginen kokonaisuutensa ja se onkin hyvä eristää pois komponentista _App_ omaksi komponentikseen. 
+Kirjautumislomakkeen näkyvyyttä ympäröivän koodin voi ajatella olevan oma looginen kokonaisuutensa ja se onkin hyvä eristää pois komponentista _App_ omaksi komponentikseen.
 
 Tavoitteena on luoda komponentti _Togglable_, jota käytetän seruaavalla tavalla:
 
@@ -752,7 +752,7 @@ class Togglable extends React.Component {
 }
 ```
 
-Mielenkiintoista ja meille uutta on [this.props.children](https://reactjs.org/docs/glossary.html#propschildren), jonka avulla koodi viittaa komponentin lapsiin, eli avaavan ja sulkevan tagin sisällä määriteltyihin React-elementteihin_.
+Mielenkiintoista ja meille uutta on [this.props.children](https://reactjs.org/docs/glossary.html#propschildren), jonka avulla koodi viittaa komponentin lapsiin, eli avaavan ja sulkevan tagin sisällä määriteltyihin React-elementteihin.
 
 Tällä kertaa lapset ainoastaan renderöidään komponentin oman renderöivän koodin seassa:
 
@@ -1071,7 +1071,7 @@ const noteComponent = shallow(<Note note={note} />)
 
 Normaalisti React-komponentit renderöityvät _DOM_:iin. Nyt kuitenkin renderöimme komponentteja [shallowWrapper](http://airbnb.io/enzyme/docs/api/shallow.html)-tyyppisiksi, testaukseen sopiviksi olioiksi.
 
-ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasti metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä elmentin seuraavasti:
+ShallowWrapper-muotoon renderöidyillä React-komponenteilla on runsaasti metodeja, joiden avulla niiden sisältöä voidaan tutkia. Esimerkiksi [find](http://airbnb.io/enzyme/docs/api/ShallowWrapper/find.html) mahdollistaa komponentin sisällä olevien _elementtien_ etsimisen [enzyme-selektorien](http://airbnb.io/enzyme/docs/api/selector.html) avulla. Eräs tapa elementtien etsimiseen on [CSS-selektorien](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) käyttö. Liitimme muisiinpanon sisällön kertovaan div-elementtiin luokan _content_, joten voimme etsiä elementin seuraavasti:
 
 ```js
 const contentDiv = noteComponent.find('.content')
@@ -1148,7 +1148,7 @@ console.log src/components/Note.test.js:20
 
 ### nappien painelu testeissä
 
-Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva asia on huolehtia siitä, että painettaessa noten yhteydessä olevaa nappia, tulee propsina välitetyä tapahtumankäsittelijäfunktota _toggleImportance_ kutsua.
+Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva asia on huolehtia siitä, että painettaessa noten yhteydessä olevaa nappia, tulee propsina välitettyä tapahtumankäsittelijäfunktiota _toggleImportance_ kutsua.
 
 Testaus onnistuu seuraavasti:
 
@@ -1198,7 +1198,7 @@ expect(mockHandler.mock.calls.length).toBe(1)
 
 [Mockoliot ja -funktiot](https://en.wikipedia.org/wiki/Mock_object) ovat testauksessa yleisesti käytettyjä valekomponentteja, joiden avulla korvataan testattavien komponenttien riippuvuuksia, eli niiden tarvitsemia muita komponentteja. Mockit mahdollistavat mm. kovakoodattujen syötteiden palauttamisen sekä niiden metodikutsujen lukumäärän sekä parametrien testauksen aikaisen tarkkailun.
 
-Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla on helppo varmistaa, että metodia on kutsuttu täsmälleen kerran. 
+Esimerkissämme mock-funktio sopi tarkoitukseen erinomaisesti, sillä sen avulla on helppo varmistaa, että metodia on kutsuttu täsmälleen kerran.
 
 ### Komponentin _Togglable_ testit
 
@@ -1253,7 +1253,7 @@ describe('<Togglable />', () => {
 
   it('at start the children are not displayed', () => {
     const div = togglableComponent.find('.togglableContent')
-    expect(div.getElement().props.style).toEqual({display: 'none'})
+    expect(div.getElement().props.style).toEqual({ display: 'none' })
   })
 
   it('after clicking the button, children are displayed', () => {
@@ -1267,9 +1267,9 @@ describe('<Togglable />', () => {
 })
 ```
 
-Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow-renderöimärrä _Togglable_-komponentin muuttujaan _togglableComponent_.
+Ennen jokaista testiä suoritettava _beforeEach_ alustaa shallow-renderöimällä _Togglable_-komponentin muuttujaan _togglableComponent_.
 
-Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class="testDiv" />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{display: 'none'}_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
+Ensimmäinen testi tarkastaa, että _Togglable_ renderöi lapsikomponentin _<div class="testDiv" />_. Loput testit varmistavat, että Togglablen sisältämä lapsikomponentti on alussa näkymättömissä, eli sen sisältävään _div_-elementin liittyy tyyli _{ display: 'none' }_, ja että nappia painettaessa komponentti näkyy, eli tyyli on _{ display: '' }_. Koska Togglablessa on kaksi nappia, painallusta simuloidessa niistä pitää valita oikea, eli tällä kertaa ensimmäinen.
 
 ## Tehtäviä
 
@@ -1427,7 +1427,7 @@ tulostuu todellinen HTML:
 
 Komennon _mount_ palauttamaa renderöidyn "komponenttipuun" [ReactWrapper](http://airbnb.io/enzyme/docs/api/mount.htm)-tyyppisenä oliona, joka tarjoaa hyvin samantyyppisen rajapinnan komponentin sisällön tutkimiseen kuin _ShallowWrapper_.
 
-### lomakkeiden testaus
+### Lomakkeiden testaus
 
 Lomakkeiden testaaminen Enzymellä on jossain määrin haasteellista. Enzymen dokumentaatio ei mainitse lomakkeista sanaakaan. [Issueissa](https://github.com/airbnb/enzyme/issues/364) asiasta kuitenkin keskustellaan.
 
@@ -1468,8 +1468,8 @@ class Wrapper extends React.Component {
   }
   render() {
     return (
-      <NoteForm 
-        value={this.state.value} 
+      <NoteForm
+        value={this.state.value}
         onSubmit={this.props.onSubmit}
         handleChange={this.onChange}
       />
@@ -1510,13 +1510,13 @@ Lomakkeen nappia tulee painaa simuloimalla tapahtumaa _submit_, tapahtuma _click
 
 Testin ensimmäinen ekspektaatio tutkii komponentin _Wrapper_ tilaa metodilla [state](http://airbnb.io/enzyme/docs/api/ReactWrapper/state.html), ja varmistaa, että lomakkeelle kirjoitettu teksti on siirtynyt tilaan. Toinen ekspektaatio varmistaa, että lomakkeen lähetys on aikaansaanut tapahtumankäsittelijän kutsumisen.
 
-## frontendin integraatiotestaus
+## Frontendin integraatiotestaus
 
 Suoritimme edellisessä osassa backendille integraatiotestejä, jotka testasivat backendin tarjoaman API:n läpi backendia ja tietokantaa. Backendin testauksessa tehtiin tietoinen päätös olla kirjoittamatta yksikkötestejä sillä backendin koodi on melko suoraviivaista ja ongelmat tulevatkin esiin todennäköisemmin juuri monimutkaisemmissa skenaarioissa, joita integraatiotestit hyvin testaavat
 
-Toistaiseksi kaikki frontendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan yksikkötestaus ei riitä antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaiusuudessaan.
+Toistaiseksi kaikki frontendiin tekemämme testit ovat olleet yksittäisten komponenttien oikeellisuutta valvovia yksikkötestejä. Yksikkötestaus on toki tärkeää, muuta kattavinkaan yksikkötestaus ei riitä antamaan riittävää luotettavuutta sille, että järjestelmä toimii kokonaisuudessaan.
 
-Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muuistiinpanot palvelimelta _ja_ sovellus käyttää local storagea kirjautuneen käyttäjän tietojen tallettamiseen.
+Tehdään nyt sovellukselle yksi integraatiotesti. Integraatiotestaus on huomattavasti komponenttien yksikkötestausta hankalampaa. Erityisesti sovelluksemme kohdalla ongelmia aiheuttaa kaksi seikkaa: sovellus hakee näytettävät muistiinpanot palvelimelta _ja_ sovellus käyttää local storagea kirjautuneen käyttäjän tietojen tallettamiseen.
 
 Local storage ei ole oletusarvoiseti käytettävissä testejä suorittaessa, sillä kyseessä on selaimen tarjoama toiminnallisuus ja testit ajetaan selaimen ulkopuolella. Ongelma on helppo korjata määrittelemällä testien suorituksen ajaksi _mock_ joka matkii local storagea. Tapoja tähän on [monia](https://stackoverflow.com/questions/32911630/how-do-i-deal-with-localstorage-in-jest-tests).
 
@@ -1661,7 +1661,7 @@ Jest tarjoaa "perinteisen" testaustavan lisäksi aivan uudenlaisen tavan testauk
 
 Periaatteena on verrata komponenttien määrittelemää HTML:ää aina koodin muutoksen jälkeen siihen minkälaisen HTML:n komponentit määrittelivät ennen muutosta.
 
-Jos spanshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snapshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä oliko muutos haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
+Jos snapshot-testi huomaa muutoksen komponenttien määrittelemässä HTML:ssä kyseessä voi joko olla haluttu muutos tai vaihingossa aiheutettu "bugi". Snapshot-testi huomauttaa sovelluskehittäjälle jos komponentin määrittelemä HTML muuttuu. Sovelluskehittäjä kertoo muutosten yhteydessä oliko muutos haluttu. Jos muutos tuli yllätyksenä, eli kyseessä oli bugi, sovelluskehittäjä huomaa sen snapshot-testauksen ansiosta nopeasti.
 
 Palaamme aiheeseen myöhemmin kurssilla.
 
@@ -1968,7 +1968,7 @@ const noteReducer = (state = [], action) => {
 }
 ```
 
-Reducen tilan tulee koostua muuttumattomista eli [immutable](https://en.wikipedia.org/wiki/Immutable_object) olioista. Jos tilaan tulee muuttua, ei vanhaa oliota muuteta, vaan se _korvataan uudella muuttuneella oliolla_. Juuri näin toimimme uudistuneessa reducerissa, vanha taulukko korvaantuu uudella. 
+Reducen tilan tulee koostua muuttumattomista eli [immutable](https://en.wikipedia.org/wiki/Immutable_object) olioista. Jos tilaan tulee muuttua, ei vanhaa oliota muuteta, vaan se _korvataan uudella muuttuneella oliolla_. Juuri näin toimimme uudistuneessa reducerissa, vanha taulukko korvaantuu uudella.
 
 Tutustumme seuraavassa osassa [immutable.js](https://facebook.github.io/immutable-js/)-kirjastoon, joka helpottaa tietyissä tapauksissa muuttumattomien tietorakenteiden käyttöä. Tässä osassa käytämme kuitenkin suoraan Javascriptin tietotyyppejä.
 
@@ -2278,7 +2278,7 @@ class App extends React.Component {
 
 ### staten välittäminen propseissa ja contextissa
 
-Sovelluksemme on reduceria lukuunottamatta tehty samaan tiedostoon. Kyseessä ei tietenkään ole järkevä käytäntö, eli on syytä eriyttää _App_ omaan moduuliinsa. 
+Sovelluksemme on reduceria lukuunottamatta tehty samaan tiedostoon. Kyseessä ei tietenkään ole järkevä käytäntö, eli on syytä eriyttää _App_ omaan moduuliinsa.
 
 Herää kuitenkin kysymys miten _App_ pääsee muutoksen jälkeen käsiksi _storeen_? Ja yleisemminkin, kun komponentti koostuu suuresta määrästä komponentteja, tulee olla jokin mekanismi, minkä avulla komponentit pääsevät käsiksi storeen.
 
@@ -2419,7 +2419,7 @@ _NoteList_ taas on sellainen mitä kutsutaan [container](https://medium.com/@dan
 
 Palaamme presentational/container-jakoon tarkemin seuraavassa osassa.
 
-_storen_ välittäminen sitä tarvitseviin komponentteihin propsien avulla on melko ikävää. Vaikka _App_ ei itse tarvitse storea, sen on otettava store vastaan,  pystyäkseen välittämään sen edelleen komponenteille _NoteForm_ ja _NoteList_.
+_storen_ välittäminen sitä tarvitseviin komponentteihin propsien avulla on melko ikävää. Vaikka _App_ ei itse tarvitse storea, sen on otettava store vastaan, pystyäkseen välittämään sen edelleen komponenteille _NoteForm_ ja _NoteList_.
 
 Tutustumme vielä tämän osan lopuksi _storen_ välittämiseen Reactin [contextin](https://reactjs.org/docs/context.html) avulla.
 
@@ -2544,9 +2544,9 @@ ReactDOM.render(
 )
 ```
 
-## lisämateriaalia
+## Lisämateriaalia
 
-Egghead.io:ssa on ilmaiseksi saatavilla Reduxin kehittäjän Dan Abramovin loistava tuoriaali [Getting started with Redux](https://egghead.io/courses/getting-started-with-redux). Neljässä viimeisessä videossa käytettävää _connect_-metodia käsittelemmä vasta kurssin seuraavassa osassa.
+Egghead.io:ssa on ilmaiseksi saatavilla Reduxin kehittäjän Dan Abramovin loistava tutoriaali [Getting started with Redux](https://egghead.io/courses/getting-started-with-redux). Neljässä viimeisessä videossa käytettävää _connect_-metodia käsittelemmä vasta kurssin seuraavassa osassa.
 
 ## Tehtäviä
 
