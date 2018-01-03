@@ -1604,7 +1604,7 @@ Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän oli
   <br />
   <em>Note app, Department of Computer Science 2018</em>
 </div>  
-´´´
+```
 
 Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta määritellä.
 
@@ -1616,9 +1616,165 @@ Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja J
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
-## Valmiit käyttöliittymäkirjastot, Material UI
+## Valmiit käyttöliittymätyylikirjastot
 
-Eräs lähestymistapa sovelluksen  
+Eräs lähestymistapa sovelluksen tyylien määrittelyyn on valmiin "UI frameworkin", eli Suomeksi ehkä käyttöliittymätyylikirjaston käyttö. 
 
+Ensimmäinen tai ainakin ensimmäinen kuuluisa UI framework oli Twitterin kehittämä [Bootstrap](https://getbootstrap.com/) joka lienee edelleen UI frameworkeista suosituin. Viime aikoina UI frameworkeja on noussut kuin sieniä sateella. Valikoima on niin iso, ettei tässä kannata edes yrittää tehdä tyhjentävää listaa.
+
+Monet UI-frameworkit sisältävät web-sovellusten käyttöön valmiiksi määriteltyjä teemoja sekä "komponetteja", kuten painikkeita, menuja, taulukkoja. Termi komponentti on edellä kirjotettu hipsuissa sillä kyse ei ole samasta asiasta kuin React-komponetti. Useimmiten UI-frameworkeja käytetään sisälyttämällä sovellukseen frameworkin määrittelemät CSS-tyylitiedostot sekä Javascript-koodi.
+
+Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-frameworkin avulla määritellyistä "komponenteista" on tehty React-komponentteja. Esim. Bootstrapista on olemassa parikin React-versiota [reactstrap](http://reactstrap.github.io/) ja [react-bootstrap](https://react-bootstrap.github.io/)
+
+### reactstrap
+
+Tehdään nyt [reactstrap](http://reactstrap.github.io/)-kirjaston auvlla luvussa [React-roter](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
+
+Asennetaan kirjasto suorittamalla [manuaalin ohjeen mukaan](http://reactstrap.github.io/) komento
+
+```js
+npm install reactstrap@next bootstrap@4.0.0-beta.3 --save
+```
+
+Lisätään sitten sovelluksen _index.js_ tiedostoon seuraava import:
+
+```js
+import 'bootstrap/dist/css/bootstrap.css'
+```
+
+Sovellus pitää tässä vaiheessa (ehkä) uudelleenkäynnistää. Sovellus näyttää uudelleenkäynnistyksen heti hieman tyylikkäämmältä:
+
+![]({{ "/assets/6/10.png" | absolute_url }})
+
+Nyt olemme valmiina käyttämään Reactstrapin [komponetteja](http://reactstrap.github.io/components/). 
+
+Aloitetaan [Layoutista](https://reactstrap.github.io/components/layout/). Dokumentti ei ilmaise asiaa kovin selkeästi, mutta yleensä on järkevää sijoittaa kaikki renderöitävä sisältä komponentin _Container_ sisään. 
+
+Muutetaan komponenttia _App_ siten, että se renderöi kaiken _Container_-komponentin sisällä: 
+
+```js
+import { Container } from 'reactstrap'
+
+// ...
+
+class App extends React.Component {
+  // ...
+  render() {
+    return (
+      <Container>        
+
+      </Container>
+    )
+  }
+}
+```
+
+Huomaa, että kaikki sovelluksen käyttämät _ReactStrap_-komponentit tulee importata ennen niiden käyttöä.
+
+Sovelluksen ulkoasu muuttuu siten, että sisältö ei ole enää yhtä kiinni selaimen reunoissa:
+
+![]({{ "/assets/6/11.png" | absolute_url }})
+
+Muutetaan seuraavaksi komponettia _Notes_ siten, että se renderöi muistiinpanojen listan [taulukkona](https://reactstrap.github.io/components/tables/):
+
+```react
+const Notes = ({notes}) => (
+  <div>
+    <h2>Notes</h2>
+    <Table striped>
+      <tbody>
+        {notes.map(note=>
+          <tr key={note.id}>
+            <td>
+              <Link to={`/notes/${note.id}`}>{note.content}</Link>
+            </td>
+            <td>
+              {note.user}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </Table>
+  </div>
+)
+```
+
+Ulkoasu on varsin tyylikäs:
+
+![]({{ "/assets/6/12.png" | absolute_url }})
+
+Jotta reactstrapin taulukko-komponentti toimisi, täytyy se muistaa importata.
+
+### lomake
+
+```react
+Parannelaan seuraavaksi näkymäm _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponettien avulla:
+
+const Login = ({onLogin, history}) => {
+  const onSubmit = (e) => {
+    e.preventDefault()
+    onLogin(e.target.username.value)
+    history.push('/')
+  }
+  return (
+  <div>
+    <h2>login</h2>
+    <Form onSubmit={onSubmit}>
+      <FormGroup>
+        <Label>username</Label> 
+        <Input name='username'/>
+      </FormGroup>
+      <FormGroup>
+        <Label>password</Label> 
+        <Input type='password'/>
+      </FormGroup>     
+      <Button>login</Button>
+    </Form>
+  </div>
+)}
+```
+
+### alert
+
+Viimeistellään vielä sovellus vielä toteuttamalla kirjautumisen jälkeinen _notifikaatio_:
+
+![]({{ "/assets/6/13.png" | absolute_url }})
+
+Asetetaan notifikaatio kirjatumisen yhteydessä komponentin _App_ tilan kenttään _message_: 
+
+```js
+login = (user) => {
+  this.setState({user, message: `welcome ${user}`})
+  setTimeout(() => {
+    this.setState({message: null})
+  }, 10000);
+}
+```  
+
+ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.github.io/components/alerts/) avulla sopivassa kohta  komonentin _App_ metodia  render:
+
+```js
+{(this.state.message && 
+  <Alert color="success">
+    {this.state.message}
+  </Alert>
+)}   
+```
+
+Esimerkin sovelluksen koodi kokonaisuudessaan [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/reactstrapped).
+
+### huomio 
+
+käytä css:ää???
+
+### muita UI-frameworkeja
+
+Luetellaan tässä kaikesta huolimatta muuitakin UI-frameworkeja. Jos oma suosikkisi ei ole mukana, tee pull request
+
+- <http://www.material-ui.com/#/>
+- <https://bulma.io/>
+- <https://semantic-ui.com/>
+- <https://ant.design/>
+- <https://foundation.zurb.com/>
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
