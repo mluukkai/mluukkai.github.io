@@ -2301,11 +2301,7 @@ Olemme nyt esitelleet kaksi eri tapaa komponenttien määrittelemiseen. Kumpaa t
 
 Jos komponentti tarvitsee tilaa, on luokkasyntaksin käyttäminen välttämätöntä. Kannattaa kuitenkin muistaa, että Reactin filosofian mukaista on sijoittaa tila [mahdollisimman ylös](https://reactjs.org/docs/lifting-state-up.html) komponenttihierarkiaan, mielellään ainoastaan sovelluksen juurikomponenttiin. Näin tilallisten komponenttien potentiaalinen tarvekin on vähäisempi.
 
-<<<<<<< HEAD
-Joskus komponenttien on käytettävä osassa [2 esiteltäviä](/osa2/#komponenttien-lifecycle-metodit), myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
-=======
 Joskus komponenttien on käytettävä [osassa 2 esiteltäviä](/osa2/#komponenttien-lifecycle-metodit), myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
->>>>>>> 24b0ac9fe8956e08b45076a3718b12ffc87027aa
 
 Yleisohjeena on siis se, että käytä funktionaalisia komponentteja ellet aivan pakosti tarvitse jotain luokkasyntaksin omaavien komponenttien ominaisuuksia.
 
