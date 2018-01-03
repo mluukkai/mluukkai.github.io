@@ -606,7 +606,7 @@ class NoteForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.addNote}>
-        <input name='note' />
+        <input name="note" />
         <button>lisää</button>
       </form>
     )
@@ -634,7 +634,7 @@ Siinä vaiheessa kun videot on tehty, connectin käyttö oli asteen verran nykyi
 
 Määrittelimme siis connectin komponentille _NoteForm_ antamat actioneja dispatchaavat funktiot seuraavasti:
 
-```bash
+```js
 class NoteForm extends React.Component {
   // ...
 }
@@ -651,7 +651,7 @@ Määrittely onnistui koska _noteCreation_ palauttaa _action_-olion.
 
 Voimme määritellä saman myös "pitemmän kaavan" kautta, antamalla _connectin_ toisena parametrina seuraavanlaisen _funktion_:
 
-```bash
+```js
 class NoteForm extends React.Component {
   // ...
 }
@@ -682,7 +682,7 @@ eli action creatorilla luodun actionin dispatchaus.
 
 Komponentti siis viitata funktioon propsin _this.props.createTodo_ kautta:
 
-```bash
+```react
 class NoteForm extends React.Component {
 
   addNote = (e) => {
@@ -1051,7 +1051,7 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 
 Lähestymistapamme on ok, mutta siinä mielessä ikävä, että palvelimen kanssa kommunikointi tapahtuu komponenttien metodeissa. Olisi parempi, jos kommunikointi voitaisiin abstrahoida komponenteilta siten, että niiden ei tarvitsisi kuin kutsua sopivaa _action creatoria_, esim. _App_ alustaisi sovelluksen tilan seuraavasti:
 
-```bash
+```js
 class App extends React.Component {
   componentWillMount() {
     this.props.initializeNotes()
@@ -1062,7 +1062,7 @@ class App extends React.Component {
 
 ja _NoteForm_ loisi uuden muitsiinpanon seuraavasti:
 
-```bash
+```js
 class NoteForm extends React.Component {
 
   addNote = async (e) => {
@@ -1084,7 +1084,7 @@ npm install --save redux-thunk
 
 redux-thunk-kirjasto on ns. _redux-middleware_ ja tiedostossa _index.js_ olevassa storen alustuksessa on määriteltävä että se otetaan käyttöön:
 
-```bash
+```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
@@ -1098,7 +1098,7 @@ Thunk-kirjaston ansiosta on mahdollista määritellä _action creatoreja_ siten,
 
 Voimme nyt määritellä muistiinpanojen alkutilan palvelimelta hakevan action creatorin _initializeNotes_ seuraavati:
 
-```bash
+```js
 export const initializeNotes = () => {
   return async (dispatch) => {
     const notes = await noteService.getAll()
@@ -1114,7 +1114,7 @@ Sisemmässä funktiossaan, eli _asynkroonisessa actionissa_ operaatio hakee ensi
 
 Uuden muistiinpanon lisäävä action creator _createNew_ on seuraavassa
 
-```bash
+```js
 export const createNew = (content) => {
   return async (dispatch) => {
     const newNote = await noteService.createNew(content)

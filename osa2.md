@@ -890,7 +890,7 @@ npm install axios --save
 
 Nyt axios on mukana riippuvuuksien joukossa:
 
-```bash
+```json
 {
   "dependencies": {
     "axios": "^0.17.1",

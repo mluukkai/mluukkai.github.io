@@ -67,7 +67,7 @@ Tiedosto määrittelee mm. että ohjelmamme käynnistyspiste on tiedosto _index.
 
 Tehdään kenttään _scripts_ pieni lisäys:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -98,7 +98,7 @@ npm start
 
 npm-skripti _start_ toimii koska määrittelimme sen tiedostoon _package.json_
 
-```bash
+```json
 {
   // ...
   "scripts": {
