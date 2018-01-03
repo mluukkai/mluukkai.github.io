@@ -811,7 +811,7 @@ Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tule
 
 Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 - [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
-- [JSON.stringigy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+- [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 
 ### yhteys frontendiin ja vienti tuotantoon
 
