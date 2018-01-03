@@ -6,11 +6,8 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt [ensimmäinen](/osa1) ja [toinen](/osa2) . Materiaalin betaversion kaikkien osien on tarkoitus valmistua ennen kevään kurssin alkua. Tämän hetken tavoiteaikataulu on
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-5. Jäljellä olevien osien tämän hetken tavoiteaikataulu on
 
-- osa 3 pe 22.12
-- osa 4 to 28.12
-- osa 5 ti 2.1
 - osa 6 la 6.1
 - osa 7 ke 10.1
 
@@ -20,7 +17,7 @@ Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4h
 
 Kurssimateriaali on tarkoitettu luettavaksi "alusta loppuun". Materiaalin seassa on linkkejä tehtäviin jotka on tarkoitettu tehtäviksi suunnilleen linkitetyissä kohdassa materiaalin opiskelua.
 
-Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa.
+Betaversiota suorittaessasi kannattaa tehdä jokainen tehtävä. Jos jossain tulee vaikeuksia kysy apua. Tehtävät palautetaan githubiin ja kertomalla palautuksesta allekirjoittaneelle esim. Telegramissa. Kerro aina kun saat yhden osan valmiiksi niin saan pidettyä kirjapindon ajan tasalla.
 
 Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat kuuhunkin osaan menevän aikamäärän.
 

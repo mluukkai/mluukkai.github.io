@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "osa 3 valmis"
+date:   2017-12-22 17:31:08 +0200
+categories: jekyll 
+---
+
+Materiaali valmistuu edelleen aikataulussa [osa 3]({{ "/osa3" | absolute_url }}) on nyt valmiina testattavaksi. 
+
+Asiaa oli jälleen paljon ja valitettavasti alkuperäisetä suunnitelmasta poiketen testien tekeminen päästään aloittamaan vasta neljännessä osassa. 

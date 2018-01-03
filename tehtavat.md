@@ -1,13 +1,14 @@
 # tehtävät
 
-## osa 1
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5) [6](#osa-6)
+
+## Osa 1
 
 ### web-sovellusten perusteet ###
 
 #### 1 HTML ja CSS ####
 
-Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja
-[CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
+Kertaa HTML:n ja CSS:n perusteet lukemalla Mozillan tutoriaali [HTML:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics) ja [CSS:stä](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics)
 
 #### 2 HTML:n lomakkeet
 
@@ -16,7 +17,6 @@ Tutustu HTML:n lomakkeiden perusteisiin lukemalla Mozillan tutoriaali [Your firs
 #### 3
 
 Kun käyttäjä menee selaimella osoitteeseen <https://fullstack-exampleapp.herokuapp.com/> voidaan sen seurauksena olevaa tapahtumaketjua kuvata sekvenssikaaviona esim. seuraavasti:
-
 
 <img src="/assets/teht/1.png" height="400">
 
@@ -76,7 +76,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const App = () => {
-  const kurssi = "Half Stack -sovelluskehitys"
+  const kurssi = 'Half Stack -sovelluskehitys'
   const osa1 = 'Reactin perusteet'
   const tehtavia1 = 10
   const osa2 = 'Tiedonvälitys propseilla'
@@ -144,14 +144,14 @@ Sovelluksemme tiedonvälitys on tällä hetkellä todella alkukantaista sillä s
 
 #### 9 tieto olioissa
 
-Siirrytään käyttämään sovelluksessamme oliota. Mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat niin että se taas toimii:
+Siirrytään käyttämään sovelluksessamme oliota. Muuta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat niin että se taas toimii:
 
 ```react
 const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
   const osa1 = {
     nimi: 'Reactin perusteet',
-    tehtavia: 10,
+    tehtavia: 10
   }
   const osa2 = {
     nimi: 'Tiedonvälitys propseilla',
@@ -172,7 +172,7 @@ const App = () => {
 
 #### 10 oliot taulukkoon
 
-Ja laitetaan oliot taulukkoon, eli mutta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti:
+Ja laitetaan oliot taulukkoon, eli muuta _App_:in muuttujamäärittelyt seuraavaan muotoon ja muuta sovelluksen kaikki osat vastaavasti:
 
 ```react
 const App = () => {
@@ -229,7 +229,7 @@ const App = () => {
     osat: [
       {
         nimi: 'Reactin perusteet',
-        tehtavia: 10,
+        tehtavia: 10
       },
       {
         nimi: 'Tiedonvälitys propseilla',
@@ -290,7 +290,7 @@ Jos olet määritellyt jokaiselle napille oman tapahtumankäsittelijän, refakto
 
 #### 17 unicafe osa6
 
-Toteuta tilastojen näyttäminen HTML:n [taulukkona](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics) siten, että saat sovelluksesi näyttämään suunilleen seuraavanlaiselta
+Toteuta tilastojen näyttäminen HTML:n [taulukkona](https://developer.mozilla.org/en-US/docs/Learn/HTML/Tables/Basics) siten, että saat sovelluksesi näyttämään suunnilleen seuraavanlaiselta
 
 <img src="/assets/teht/6.png" height="250">
 
@@ -362,9 +362,16 @@ Ja sitten vielä lopullinen versio, joka näyttää eniten ääniä saaneen anek
 
 <img src="/assets/teht/3b.png" height="200">
 
-## osa 2
+Tämä saattaa olla jo hieman haastavampi. Taulukolta löytyy monia hyviä metodeja, katso lisää [Mozillan dokumentaatiosta](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
 
-### kokoelmien renderöinti
+Kurssin normaaliin versioon tullaan todennäköisesti lisäämään tehtäviä, joissa harjoitellaan taulukkojen käsittelyä. Nyt en niitä ehdi tekemään...
+
+Youtubessa on kohtuullisen hyvä [johdatus funktionaaliseen javascript-ohjelmointiin](https://www.youtube.com/watch?v=BMUiFMZr7vk&list=PL0zVEGEvSaeEd9hlmCXrk5yUyqUag-n84). Kolmen ensimmäisen osan katsominen riittää hyvin tässä vaiheessa.
+
+
+## Osa 2
+
+### Kokoelmien renderöinti
 
 #### 21 kurssien sisältö
 
@@ -380,17 +387,17 @@ const App = () => {
       {
         nimi: 'Reactin perusteet',
         tehtavia: 10,
-        id: 1,
+        id: 1
       },
       {
         nimi: 'Tiedonvälitys propseilla',
         tehtavia: 7,
-        id: 2,
+        id: 2
       },
       {
         nimi: 'Komponenttien tila',
         tehtavia: 14,
-        id: 3,
+        id: 3
       }
     ]
   }
@@ -447,17 +454,17 @@ const App = () => {
         {
           nimi: 'Reactin perusteet',
           tehtavia: 10,
-          id: 1,
+          id: 1
         },
         {
           nimi: 'Tiedonvälitys propseilla',
           tehtavia: 7,
-          id: 2,
+          id: 2
         },
         {
           nimi: 'Komponenttien tila',
           tehtavia: 14,
-          id: 3,
+          id: 3
         }
       ]
     },
@@ -468,13 +475,13 @@ const App = () => {
         {
           nimi: 'Routing',
           tehtavia: 3,
-          id: 1,
+          id: 1
         },
         {
           nimi: 'Middlewaret',
           tehtavia: 7,
-          id: 2,
-        },
+          id: 2
+        }
       ]
     }
   ]
@@ -504,7 +511,7 @@ Voit ottaa sovelluksesi pohjaksi seuraavan:
 
 ```react
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       persons: [
@@ -538,7 +545,7 @@ Tilassa oleva kenttä _newName_ on tarkoitettu lomakkeen kentän kontrollointiin
 
 Joskus tilan muuttujia ja tarvittaessa muitakin voi olla hyödyllistä renderöidä debugatessa komponenttiin, eli voi lisätä tilapäisesti lisätä komponentin metodin _render_ palauttamaan koodiin esim. seuraavan:
 
-```js
+```html
 <div>
   debug: {this.state.newName}
 </div>
@@ -548,7 +555,7 @@ Muista myös osan 1 luku [React-sovellusten debuggaus](#React-sovellusten-debugg
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta
 
-<img src="/assets/teht/10.png" height="200">
+![]({{ "/assets/teht/11.png" | absolute_url }})
 
 **Huom:**
 * voit käyttää kentän _key_ arvona henkilön nimeä
@@ -580,20 +587,20 @@ Lisää sovellukseen mahdollisuus antaa henkilöille puhelinnumero. Tarvitset si
 
 Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi):in tarjoama näkymä komponentin _App_ tilaan:
 
-<img src="/assets/teht/11.png" height="300">
+![]({{ "/assets/teht/12.png" | absolute_url }})
 
 #### 29 puhelinluettelo osa 4
 
 Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
 
-<img src="/assets/teht/12.png" height="300">
+![]({{ "/assets/teht/12b.png" | absolute_url }})
 
 Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-elementtinä. Kuvassa rajausehdosta on tehty _caseinsensitiivinen_ eli ehto _arto_ löytää isolla kirjaimella kirjoitetun Arton.
 
 **Huom:** Kun toteutat jotain uutta toiminnallisuutta, on usein hyötyä 'kovakoodata' sovellukseen jotain sisältöä, esim.
 
 ```js
-constructor(props){
+constructor(props) {
   super(props)
   this.state = {
     persons: [
@@ -674,9 +681,13 @@ Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perus
 
 <img src="/assets/teht/15.png" height="300">
 
+### palvelimella olevan datan päivittäminen
+
 #### 33 maiden tiedot klikkaamalla
 
-Paranna sovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen klikkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
+Ennen puhelinluettelon jatkokehitystä harjoitellaan vielä elementtikohtaisten tapahtumakäsittelijöiden käyttöä.
+
+Paranna edellisen tehtävän maasovellusta siten, että kun sivulla näkyy useiden maiden nimiä, riittää maan nimen klikkaaminen tarkentamaan haun siten, että klikatun maan tarkemmat tiedot saadaan näkyviin.
 
 Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävään elementtiin, esim. diviin klikkaustenkuuntelijan:
 
@@ -685,7 +696,6 @@ Huomaa, että saat "nimestä" klikattavan kiinnittämällä nimen sisältävää
   {country.name}
 </div>
 ```
-### palvelimella olevan datan päivitäminen
 
 #### 34 puhelinluettelo osa 7
 
@@ -697,13 +707,13 @@ Tällä hetkellä luetteloon lisättäviä uusia numeroita ei synkronoida palvel
 
 Siirrä palvelimen kanssa kommunikoinnista vastaava toiminnallisuus omaan monduuliin osan 2 [esimerkin](#palvelimen-kanssa-tapahtuvan-komunikoinnin-eristäminen-omaan-moduuliin) tapaan.
 
-#### 35 puhelinluettelo osa 9
+#### 36 puhelinluettelo osa 9
 
 Tee ohjelmaan mahdollisuus yhteystietojen poistamiseen. Poistaminen voi tapahtua esim. nimen yhteyteen liitetyllä napilla. Poiston suorittaminen voidaan varmistaa käyttäjältä [window.confirm](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)-metodilla:
 
 <img src="/assets/teht/16.png" height="300">
 
-Pavelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
+Palvelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
 
 [Axios](https://github.com/axios/axios)-kirjaston avulla HTTP DELETE -pyyntö tehdään samaan tapaan kuin muutkin pyynnöt.
 
@@ -727,4 +737,901 @@ Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muutt
 
 Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
-## osa 3
+## Osa 3
+
+Tämän osan tehtävissä teemme backendin edellisen osan puhelinluettelosovellukseen.
+
+### Expressin alkeet
+
+#### 40 puhelinluettelon backend osa 1
+
+**HUOM** tämän osan tehtäväsarja kannattaa tehdä omaan git-repositorioon, suoraan repositorion juureen! Jos et tee näin, joudut ongelmiin tehtävässä 49.
+
+Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taukkoon listan puhelinnumerotietoja:
+
+![]({{ "/assets/teht/19.png" | absolute_url }})
+
+Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuiten mikä tahansa muu merkki.
+
+Sovellus pitää pystyä käynnistämään komennolla _npm start_.
+
+Komennolla _npm run watch_ käynnistettäessa sovelluksen tulee käynnistyä uudelleen kun koodiin tehdään muutoksia.
+
+#### 41 puhelinluettelon backend osa 2
+
+Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunilleen seuraavanlainen sivu
+
+![]({{ "/assets/teht/20.png" | absolute_url }})
+
+eli sivu kertoo pyynön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
+
+#### 42 puhelinluettelon backend osa 3
+
+Toteuta toiminnallisuus yksittäisen puhelinnumerotiedon näyttämiseen. Esim. id:n 5 omaavan numerotiedon url on <http://localhost:3001/api/persons/5>
+
+Jos id:tä vastaavaa puhelinnumerotietoa ei ole, tulee palvelimen vastata asianmukaisella statuskoodilla.
+
+#### 43 puhelinluettelon backend osa 3
+
+Toteuta toiminnallisuus, jonka avulla puhelinnumerotieto on mahdollista poistaa numerotiedon yksilöivään URL:iin tehtävällä HTTP DELETE -pyynnöllä.
+
+Testaa toiminnallisuus postmanilla.
+
+#### 44 puhelinluettelon backend osa 4
+
+Laajenna backendia siten, että uusia puhelintietoja on mahdollista lisätä osoitteeseen <http://localhost:3001/api/persons> tapahtuvalla HTTP POST -pyynnöllä.
+
+Generoi uuden puhelintiedon tunniste funktiolla [Math.random](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random). Käytä riittävän isoa arvoväliä jotta arvottu id on riittävän suurella todennäköisyydellä sellainen, joka ei ole jo käytössä.
+
+#### 45 puhelinluettelon backend osa 5
+
+Tee uuden numeron lisäykseen virheiden käsittely, pyyntö ei saa onnistua, jos
+- jos nimi tai numero puuttu
+- lisättävälle nimelle on jo numero luettelossa
+
+Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, joka kertoo virheen syyn, esim:
+
+```js
+{ error: 'name must be unique' }
+```
+
+### lisää middlewareja
+
+#### 46 puhelinluettelon backend osa 6
+
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+
+Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
+
+#### 47 puhelinluettelon backend osa 7
+
+Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tulevan datan:
+
+![]({{ "/assets/teht/21.png" | absolute_url }})
+
+Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
+- [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
+- [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+
+### yhteys frontendiin ja vienti tuotantoon
+
+#### 48 puhelinluettelon backend osa 8
+
+Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
+
+Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
+
+#### 49 puhelinluettelon backend osa 9
+
+Vie sovelluksen backend internetiin, esim. Herokuun.
+
+Testaa selaimen ja postmanin avulla, että internetissä oleva backend toimii.
+
+Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetissä olevaan sovellukseesi.
+
+#### 50 puhelinluettelo full stack
+
+Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
+
+Huolehdi myös, frontend toimii edelleen myös paikallisesti.
+
+**PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:
+
+![]({{ "/assets/teht/22.png" | absolute_url }})
+
+### mogoosen alkeet
+
+#### 51 tietokanta komentoriviltä
+
+Luo sovellukselle pilvessä oleva mongo esim. herokun avulla.
+
+Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
+
+Ohjelma toimii siten, että jos sille annetaan käynnistäessä kaksi komentoriviparametria, esim:
+
+```bash
+node mongo.js Joulupukki 040-1234556
+```
+
+Ohjelma tulostaa
+
+```bash
+lisätään henkilö Joulupukki numero 040-1234556 luetteloon
+```
+
+ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen komentoriviparametri voi sisältää välilyöntejä jos se annetaan hipsuissa:
+
+```bash
+node mongo.js 'Arto Vihavainen' 040-1234556
+```
+
+Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js</pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
+
+<pre>
+puhelinluettelo:
+Pekka Mikkola 040-1234556
+Arto Vihavainen 045-1232456
+Tiina Niklander 040-1231236
+</pre>
+
+Saat selville ohjelman komentoriviparametrit muuttujasta [process.argv](https://nodejs.org/docs/latest-v8.x/api/process.html#process_process_argv)
+
+#### 52 tietokanta komentoriviltä, finetuning
+
+Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunilleen seuraavanlainen
+
+<pre>
+puhelinluettelo:
+Arto Vihavainen    045-1232456
+Joulupukki         09-342322
+Pekka Mikkola      040-1234556
+Tiina Niklander    040-1231236
+</pre>
+
+### backend ja tietokanta
+
+Seuraavat tehtävät saattavat olla melko suoraviivaisia, tosin jos frontend-koodissasi sattuu olemaan bugeja tai epäyhteensopivuutta backendin kanssa, voi seurauksena olla myös mielenkiintoisia bugeja.
+
+#### 53 puhelinluettelo ja tietokanta, osa 1
+
+Muuta backendin kaikkien puhelintietojen näyttämistä siten, että se hakee näytettävät puhelintiedot tietokannasta.
+
+Varmista, että frontend toimii muutosten jälkeen.
+
+Tee tässä ja seuraavissa tehtävissä mongoose-spesifinen koodi omaan moduuliin samaan tapaan kuin osan 3 luvussa [tietokantamäärittelyjen eriyttäminen omaksi moduuliksi](osa3#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi)
+
+#### 54 puhelinluettelo ja tietokanta, osa 2
+
+Mutta backendiä siten, että uudet numerot tallennetaan tietokantaan. Tässä vaiheessa voit olla välittämättä siitä, onko tietokannassa jo henkilöä jolla on sama nimi kuin lisättävällä.
+
+Varmista, että frontend toimii muutosten jälkeen.
+
+### lisää operaatiota
+
+**HUOM:** vaikka et jostain syystä käsittelisikään promiseihin liittyviä virhetilanteita, on viisasta rekisteröidä promiseille virheenkäsittelijä, joka tulostaa virheen syyn konsoliin:
+
+```js
+.catch(error => {
+  console.log(error)
+  // ...
+})
+```
+
+näin vältyt monilta ikäviltä yllätyksiltä.
+
+#### 55 puhelinluettelo ja tietokanta, osa 3
+
+Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan.
+
+Varmista, että frontend toimii muutosten jälkeen.
+
+#### 56 puhelinluettelo ja tietokanta, osa 4
+
+Jos frontendissä annetaan numero henkilölle, joka on jo olemassa, päivittää frontend tiedot uudella tekemällä HTTP PUT -pyynnön henkilön tietoja vastaavaan url:iin.
+
+Laajenna backendisi käsittelemään tämä tilanne.
+
+Varmista, että frontend toimii muutosten jälkeen.
+
+#### 57 puhelinluettelo ja tietokanta, osa 5
+
+Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista niiden toimivuus suoraan selaimella.
+
+#### 58 puhelinluettelo ja tietokanta, osa 6
+
+Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluettelossa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
+
+### loppuhuipennus
+
+#### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
+Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen vieminen tuotantoon](osa3#sovelluksen-vieminen-tuotantoon).
+
+## Osa 4
+
+Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka aulla käyttäjien on mahdollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
+
+Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehyvä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
+
+### sovelluksen alustus ja rakenne
+
+#### 60 blogilista, osa 1
+
+Saat sähköpostitse yhteen tiedostoon koodatun sovellusrungon:
+
+```js
+const http = require('http')
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const mongoose = require('mongoose')
+
+const Blog = mongoose.model('Blog', {
+  title: String,
+  author: String,
+  url: String,
+  likes: Number
+})
+
+module.exports = Blog
+
+app.use(cors())
+app.use(bodyParser.json())
+
+const mongoUrl =  'mongodb://localhost/bloglist'
+mongoose.connect(mongoUrl, { useMongoClient: true })
+mongoose.Promise = global.Promise
+
+app.get('/api/blogs', (request, response) => {
+  Blog
+    .find({})
+    .then(blogs => {
+      response.json(blogs)
+    })
+})
+
+app.post('/api/blogs', (request, response) => {
+  const blog = new Blog(request.body)
+
+  blog
+    .save()
+    .then(result => {
+      response.status(201).json(result)
+    })
+})
+
+const PORT = 3003
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+```
+
+Tee sovelluksesta toimiva _npm_-projekti. Jotta sovelluskehitys olisi sujuvaa, konfiguroi sovellus suoritettavaksi _nodemon_:illa.
+
+#### 60 blogilista, osa 2
+
+Jaa sovelluksen koodi osan 4 [alun](/osa4) tapaan useaan moduuliin.
+
+**HUOM** etene todella pienin askelin, varmistaen että kaikki toimii koko ajan. Jos yrität "oikaista" tekemällä monta asiaa kerralla, on [Murphyn lain](https://fi.wikipedia.org/wiki/Murphyn_laki) perusteella käytännössä varmaa, että jokin menee pahasti pieleen ja "oikotien" takia maaliin päästään paljon myöhemmin kuin systemaattisin pienin askelin.
+
+Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on helppo palata aina toimivaan tilanteeseen jos koodi menee liian solmuun.
+
+### yksikkötestaus
+
+Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funktiot esim. tiedoston _utils/list_helper.js_. Tee testit sopivasti nimettyyn tiedostoon hakemistoon _test_.
+
+**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+
+#### 61 apufunktioita ja yksikkötestejä, osa 1
+
+Määrittele ensin funktio _dummy_ joka saa parametrikseen taulukollisen blogeja ja palauttaa aina luvun 1. Tiedoston _list_helper.js_ sisällöksi siis tulee tässä vaiheessa
+
+```js
+const dummy = (blogs) => {
+  // ...
+}
+
+module.exports = {
+  dummy
+}
+```
+
+Varmista testikonfiguraatiosi toimivuus seuraavalla testillä:
+
+```js
+const list = require('../utils/list_helper')
+
+test('dummy is called', () => {
+  const blogs = []
+
+  const result = list.dummy(blogs)
+  expect(result).toBe(1)
+})
+```
+
+#### 62 apufunktioita ja yksikkötestejä, osa 2
+
+Määrittele funktio _totalLikes_ joka saa parametrikseen taulukollisen blogeja. Funktio palauttaa blogien yhteenlaskettujen tykkäysten eli _likejen_ määrän.
+
+Määrittele funktiolle sopivat testit. Funktion testit kannattaa laittaa _describe_-lohkoon jolloin testien tulostus ryhmittyy miellyttävästi:
+
+![]({{ "/assets/teht/23.png" | absolute_url }})
+
+Testisyötteiden määrittely onnistuu esim. seuraavaan tapaan:
+
+```js
+describe('total likes', () => {
+  const listWithOneBlog = [
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+      __v: 0
+    }
+  ]
+
+  test('when list has only one blog equals the likes of that', () => {
+    const result = listHelper.totalLikes(listWithOneBlog)
+    expect(result).toBe(5)
+  })
+})
+```
+
+Törmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [dabuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
+
+#### 63 apufunktioita ja yksikkötestejä, osa 2
+
+Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää millä blogilla on eniten likejä. Paluuarvo voi olla esim. seuraavassa muodossa:
+
+```js
+{
+  title: "Canonical string reduction",
+  author: "Edsger W. Dijkstra",
+  likes: 12
+}
+```
+
+Tee myös tämän ja seuraavien kohtien testit kukin oman _describe_-lohkon sisälle.
+
+#### 64 apufunktioita ja yksikkötestejä, osa 4
+
+Tämä ja seuraava tehtävä ovat jo hieman haastavampia.
+
+Määrittele funktio _mostBlogs_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää _kirjoittajan_, kenellä on eniten blogeja. Funktion paluuarvo kertoo myös ennätysblogaajan blogien määrän:
+
+```js
+{
+  author: "Robert C. Martin",
+  blogs: 3
+}
+```
+
+#### 65 apufunktioita ja yksikkötestejä, osa 5
+
+Määrittele funktio _mostLikes_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää kirjoittajan, kenen blogeilla on eniten likejä. Funktion paluuarvo kertoo myös suosikkiblogaajan likejen yhteenlasketun määrän:
+
+```js
+{
+  author: "Edsger W. Dijkstra",
+  votes: 17
+}
+```
+
+### API:n testaaminen
+
+**Huom** materiaalissa käytetään muutamaan kertaan ekspektaatiota [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem) tarkastettaessa että jokin arvo on taulukossa. Kannattaa huomata, että metodi käyttää samuuden vertailuun ===-operaattoria ja olioiden kohdalla tämä ei ole useinkaan se mitä halutaan ja parempi vaihtoehto onkin [toContainEqual](https://facebook.github.io/jest/docs/en/expect.html#tocontainequalitem).
+
+#### 66 blogilistan testit, osa 1
+
+Tee API-tason testit blogilistan osoitteeseen /api/blogs tapahtuvalle HTTP GET -pyynnölle.
+
+Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
+
+Huomaa, että joudut tekemään koodiin osan 4 materiaalin tyylin joukon muutoksia (mm. testausympäristön määrittely), jotta saat järkevästi määriteltyä API-tason testejä.
+
+#### 67 blogilistan testit, osa 2
+
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle.
+
+Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
+
+#### 68 blogilistan testit, osa 2
+
+Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
+
+Laajenna ohjelmaa siten, että testi menee läpi.
+
+#### 69 blogilistan testit, osa 3
+
+Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
+
+Laajenna toteutusta siten, että testit menevät läpi.
+
+### Lisää toiminnallisuutta ja testejä
+
+#### 70 blogilistan laajennus, osa 1
+
+Refaktoroi projektin testit siten, että ne eivät enää ole riippuvaisia siitä, että HTTP GET -operaatioiden testit suoritetaan ennen uusien blogien lisäämisen testaamista.
+
+#### 71 blogilistan laajennus, osa 2
+
+Toteuta sovellukseen mahdollisuus yksittäisen blogin poistoon.
+
+Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteuta toiminnallisuus. Noudata operaation HTTP-rajapinnan suhteen [RESTful](osa3/#REST)-käytänteitä.
+
+#### 72 blogilistan laajennus, osa 3
+
+Toteuta sovellukseen mahdollisuus yksittäisen blogin muokkaamiseen.
+
+Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiinn [osassa 3](osa3/#loput-operaatiot).
+
+### Blogilistan käyttäjät
+
+Seuraavien tehtävien myötä Blogilistalle luodaan käyttäjienhallinnan perusteet. Varminta on seurata melko tarkkaa osan 4 luvusta [Käyttäjien hallinta ja monimutkaisempi tietokantaskeema](osa4/#Käyttäjien-hallinta-ja-monimutkaisempi-tietokantaskeema) alkavaa tarinaa. Toki luovuus on sallittua.
+
+#### 73 blogilistan laajennus, osa 4
+
+Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö osoitteeseen _api/users_. Käyttäjillä on käyttäjätunnus, salasana ja nimi sekä totuusarvoinen kenttä, joka kertoo onko käyttäjä täysi-ikäinen.
+
+Älä talleta tietokantaan salasanoja selväkielisenä vaan käytä osan 4 luvun [Käyttäjien luominen](osa4/#Käyttäjien-luominen) tapaan _bcrypt_-kirjastoa.
+
+Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
+
+Käyttäjäien lista voi näyttää esim. seuraavalta:
+![]({{ "/assets/teht/24.png" | absolute_url }})
+
+#### 74 blogilistan laajennus, osa 5
+
+Laajenna käyttäjätunnusten luomista siten, että käyttäjätunnuksen ja salasanan tulee olla vähintään 3 merkkiä pitkiä ja käyttäjätunnus on järjestelmässä uniikki. Jos täysi-ikäisyydelle ei määritellä luotaessa arvoa, on se oletusarvoisesti true.
+
+Luomisoperaation tulee palauttaa sopiva statuskoodi ja kuvaava virheilmoitus, jos yritetään luoda epävalidi käyttäjä.
+
+Tee testit, jotka varmistavat, että viheellisiä käyttäjiä ei luoda, ja että virheellisen käyttäjän luomisoperaatioon vastaus on järkevä statuskoodin ja virheilmoituksen osalta.
+
+#### 75 blogilistan laajennus, osa 6
+
+Laajenna blogia siten, että blogiin tulee tieto sen lisänneestä käyttäjästä.
+
+Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä). Tässä vaiheessa ei ole väliä kuka käyttäjistä määritellään lisääväksi. Toiminnallisuus viimeistellään tehtävässä 77
+
+Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
+
+![]({{ "/assets/teht/25.png" | absolute_url }})
+
+ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näkyvillä
+
+![]({{ "/assets/teht/26.png" | absolute_url }})
+
+#### 76 blogilistan laajennus, osa 7
+
+Toteuta osan 4 luvun [Kirjautuminen](osa4/#kirjautuminen) tapaan järjestelmään token-perustainen autentikointi.
+
+Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP POST -pyynnössä on mukana validi token. Tokenin haltija määritellään blogin lisääjäksi.
+
+#### 77 blogilistan laajennus, osa 8
+
+Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla.
+
+Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
+
+Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
+
+```js
+app.use(middleware.tokenExtractor)
+```
+
+pääsevät routet tokeniin käsiksi suoraan viittaamalla _request.token_:
+
+```js
+blogsRouter.post('/', async (request, response) => {
+    // ..
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    // ..
+  }
+})
+```
+
+#### 78 blogilistan laajennus, osa 9
+
+Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
+
+Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaankuuluva statuskoodi.
+
+Huomaa, että jos haet blogin tietokannasta
+
+```js
+const blog = await Blog.findById(...)
+```
+
+ei kenttä _blog.user_ ole tyypiltään merkkijono vaan _object_. Eli jos haluat verrata kannasta haetun olion id:tä merkkijonomuodossa olevaan id:hen, ei normaali vertailu toimi. Kannasta haettu id tulee muuttaa vertailua varten merkkijonoksi:
+
+```js
+if ( blog.user.toString() === userid ) ...
+```
+
+#### 79 blogilistan laajennus, osa 10
+
+Tee testit tehtävän 78 toiminnallisuudelle.
+
+### ESlint
+
+#### 80 lint-konfiguraatio
+
+Ota sovellukseesi käyttöön ESlint.
+
+## Osa 5
+
+Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
+
+Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti.
+
+Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkailu.
+
+**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua.
+
+Kun siirryt kehittämään uutta sovellusta, onkin varminta aina aluksi nollata local storage konsolista komennolla <code>window.localstorage.clear()</code>
+
+### kirjautuminen ja blogien luonti
+
+#### 81 blogilistan frontend, osa 1
+
+Toteuta frontendiin kirjautumisen mahdollistava toiminnallisuus. Kirjautumisen yhteydessä backendin palauttama token tallennetaan sovelluksen tilan kenttään _user_ .
+
+Jos käyttäjä ei ole kirjautunut, sivulla näytetään _pelkästään_ kirjautumislomake:
+
+![]({{ "/assets/teht/27.png" | absolute_url }})
+
+Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä blogien lista
+
+![]({{ "/assets/teht/28.png" | absolute_url }})
+
+Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa local storagen avulla.
+
+**HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
+
+```html
+  render() {
+    if (this.state.user === null) {
+      return (
+        <div>
+          <h2>Kirjaudu sovellukseen</h2>
+          <form>
+            //...
+          </form>
+        </div>
+      )
+    }
+
+    return (
+      <div>
+        <h2>blogs</h2>
+        {this.state.blogs.map(blog =>
+          <Blog key={blog._id} blog={blog}/>
+        )}
+      </div>
+    )
+  }
+```
+
+#### 82 blogilistan frontend, osa 2
+
+Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus ulkokirjautumiseen
+
+![]({{ "/assets/teht/29.png" | absolute_url }})
+
+Uloskirjautumisen jälkeen selain enää saa muistaa kirjautunutta käyttäjää reloadauksen jäleen.
+
+#### 83 blogilistan frontend, osa 3
+
+Laajenna sovellusta siten, että kirjautunut käyttäjä voi luoda uusia blogeja:
+
+![]({{ "/assets/teht/30.png" | absolute_url }})
+
+Bloginluomislomakkeesta kannattanee tehdä oma komponenttinsa joka hallitsee lomakkeen kenttien sisältöä tilansa avulla.
+
+#### 84 blogilistan frontend, osa 4
+
+Toteuta sovellukseen notifikaatiot, jotka kertovat sovelluksen yläosassa onnistuneista ja epäonnistuneista toimenpiteistä. Esim. blogin lisäämisen yhteydessä voi antaa seuraavan notifikaation
+
+![]({{ "/assets/teht/32.png" | absolute_url }})
+
+epäonnistunut kirjautuminen taas johtaa notifikaatioon
+
+![]({{ "/assets/teht/31.png" | absolute_url }})
+
+Notifikaation tulee olla näkyvillä muutaman sekunnin ajan. Värien lisääminen ei ole pakollista.
+
+### komponenttien näyttäminen vain tarvittaessa
+
+#### 85 blogilistan frontend, osa 5
+
+Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näytettävä osan 4 tapaan. Voit halutessasi hyödyntää osassa 4 määriteltyä komponenttia _Togglable_.
+
+#### 86 blogilistan frontend, osa 6
+
+Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
+
+![]({{ "/assets/teht/33.png" | absolute_url }})
+
+Uusi klikkaus blogin nimeen pienentää näkymän.
+
+Napin _like_ ei tässä vaiheessa tarvitse tehdä mitään.
+
+Kuvassa on myös käytetty hieman CSS:ää parantamaan sovelluksen ulkoasua.
+
+Tyylejä voidaan määritellä osan 5 tapaan helposti [inline](https://react-cn.github.io/react/tips/inline-styles.html)-tyyleinä seuraavasti:
+
+```js
+class Blog extends React.Component {
+  // ...
+
+  render() {
+    // ..
+
+    const blogStyle = {
+      paddingTop: 10,
+      paddingLeft: 2,
+      border: 'solid',
+      borderWidth: 1,
+      marginBottom: 5
+    }
+
+    return (
+      <div style={blogStyle}>
+        ...
+      </div>
+    )
+  }
+}
+```
+
+#### 87 blogilistan frontend, osa 7
+
+Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä.
+
+Koska backendin operaatio korvaa aina koko blogin, joudut lähettämään operaation mukana blogin kaikki kentät, eli jos seuraavaa blogia liketetään
+
+```js
+{
+  _id: "5a43fde2cbd20b12a2c34e91",
+  user: {
+    _id: "5a43e6b6c37f3d065eaaa581",
+    username: "mluukkai",
+    name: "Matti Luukkainen"
+  },
+  likes: 0,
+  author: "Joel Spolsky",
+  title: "The Joel Test: 12 Steps to Better Code",
+  url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
+},
+```
+
+tulee palvelimelle tehdä PUT-pyyntö osoitteeseen _/api/blogs/5a43fde2cbd20b12a2c34e91_ ja sisällyttää pyynnön mukaan seuraava data:
+
+```js
+{
+  user: "5a43e6b6c37f3d065eaaa581",
+  likes: 1,
+  author: "Joel Spolsky",
+  title: "The Joel Test: 12 Steps to Better Code",
+  url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
+},
+```
+
+**Bonus:** järjestä sovellus näyttämään blogit _likejen_ mukaisessa suuruusjärjestyksessä.
+
+#### 88 blogilistan frontend, osa 8
+
+Lisää nappi blogin poistamiselle. Nappi näytetään ainoastaan jos kyseessä on kirjautuneen käyttäjän lisäämä blogi _tai_ blogi, jolle ei ole määritelty lisääjää.
+
+Toteuta myös poiston tekevä logiikka. Laajenna backendiä siten, että ne blogit joihin ei liity lisääjää ovat kaikkien kirjautuneiden käyttäjien positettavissa.
+
+Ohjelmasi voi näyttää esim. seuraavalta:
+
+![]({{ "/assets/teht/34.png" | absolute_url }})
+
+### ProcTypet
+
+#### 89 blogilistan frontend, osa 9
+
+Määrittele joillekin sovelluksesi komponenteille ProcTypet.
+
+### komponenttien testaaminen
+
+**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+
+#### 90 blogilistan testit, osa 1
+
+Lisää sovellukseesi tilapäisesti seuraava komponentti
+
+```react
+const SimpleBlog = ({blog, onClick}) => (
+  <div>
+    <div>
+      {blog.title} {blog.author}
+    </div>
+    <div>
+      blog has {blog.likes} likes
+      <button onClick={onClick}>like</button>
+    </div>
+  </div>
+)
+```
+
+Tee testi, joka varmistaa, että komponentti renderöi blogin titlen, authorin ja likejen määrän,
+
+Lisää komponenttiin tarvittaessa testausta helpottavia CSS-luokkia.
+
+#### 91 blogilistan testit, osa 2
+
+Tee testi, joka varmistaa, että jos komponentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
+
+#### 92 blogilistan testit, osa 3
+
+Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista.
+
+### integraatiotestaus
+
+#### 93 blogilistan testit, osa 4
+
+Tee sovelluksesi integraatiotesti, joka varmistaa, että jos käyttäjä ei ole kirjautunut järjestelmään, näyttää sovellus ainoastaan kirjautumislomakkeen, eli yhtään blogia ei vielä renderöidä.
+
+#### 94 blogilistan testit, osa 5
+
+Tee myös testi, joka varmistaa, että kun käyttäjä on kirjautuneena, blogit renderöityvät sivulle.
+
+**Vihje 1:**
+
+Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea.
+
+**Vihje 2:**
+
+Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _describe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
+
+```js
+describe('<App />', () => {
+  let app
+
+  describe('when user is not logged', () => {
+    beforeEach(() => {
+      // luo sovellus siten, että käyttäjä ei ole kirjautuneena
+    })
+
+    it('only login form is rendered', () => {
+      app.update()
+      // ...
+    })
+  })
+
+  describe('when user is logged', ()=>{
+    beforeEach(() => {
+      // luo sovellus siten, että käyttäjä on kirjautuneena
+    })
+
+    it('all notes are rendered', () => {
+      app.update()
+      // ...
+    })
+  })
+})
+```
+
+### Redux-Unicafe
+
+Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovellus voi näyttää esim. seuraavalta:
+
+![]({{ "/assets/teht/35.png" | absolute_url }})
+
+Haluttu toiminnallisuus lienee ilmeinen.
+
+#### 95 unicafe revisited, osa 1
+
+Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
+
+```js
+{
+  good: 5,
+  ok: 4,
+  bad: 2
+}
+```
+
+Seuraavassa on runko reducerille:
+
+```js
+const initialState = {
+  good: 0,
+  ok: 0,
+  bad: 0
+}
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'GOOD':
+      return ...
+    case 'OK':
+      return ...
+    case 'BAD':
+      return ...
+    case 'ZERO':
+      return ...
+  }
+  return state
+}
+```
+
+ja sen testien runko
+
+```js
+import deepFreeze from 'deep-freeze'
+import counterReducer from './reducer'
+
+describe('unicafe reducer', () => {
+  const initialState = {
+    good: 0,
+    ok: 0,
+    bad: 0
+  }
+
+  it('should return a proper initial state when called with undefined state', () => {
+    const state = []
+    const action = {
+      type: 'DO_NOTHING'
+    }
+
+    const newState = counterReducer(undefined, action)
+    expect(newState).toEqual(initialState)
+  })
+})
+```
+
+**Toteuta reducer ja tee sille testit.**
+
+Varmista testeissä _deep-freeze_-kirjaston avulla, että kyseessä on _puhdas funktio_. Huomaa, että valmiin ensimmäisen testin on syytä mennä läpi koska redux olettaa, että reduceri palauttaa järkevän alkutilan kun sitä kutsutaan siten että ensimmäinen parametri, eli aiempaa tilaa edustava _state_ on _undefined_.
+
+Osan 2 luvun [Muistiinpanon tärkeyden muutos](osa2/#Muistiinpanon-tärkeyden-muutos) olion kopiointiin liittyvät asiat saattavat olla hyödyksi.
+
+#### 96 unicafe revisited, osa 2
+
+Toteuta sitten sovelluksen koko sovellus.
+
+### redux-anekdootit
+
+Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositoriossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
+
+Sovelluksen lopullisen version tulisi näyttää seuraavalta:
+
+![]({{ "/assets/teht/36.png" | absolute_url }})
+
+#### 97 anekdootit, osa 1
+
+Toteuta mahdollisuus anekdoottien äänestämiseen. Äänien määrä tulee tallettaa redux-storeen.
+
+#### 98 anekdootit, osa 2
+
+Huolehdi siitä, että anekdootit pysyvät äänten mukaisessa suuruusjärjetyksessä.
+
+#### 99 anekdootit, osa 3
+
+Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
+
+## osa 6
+
+### yhdistetyt reducerit
+
+#### 100
+
+#### 101
+
+#### 102
+
+#### 103
+
+#### 104
+
+#### 105
+
+### connect
+
