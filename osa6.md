@@ -1535,7 +1535,6 @@ class App extends React.Component {
           </div>
         </Router>
         <div>
-          <br />
           <em>Note app, Department of Computer Science 2018</em>
         </div>  
       </div>
@@ -1544,6 +1543,8 @@ class App extends React.Component {
 }
 ```
 
+Render-metodissa määritellään myös kokonaan _Router_:in ulkopuolella oleva nykyisille web-sovelluksille tyypillinen _footer_-elementti, eli sivuston pohjalla oleva osa joka on näkyvillä riippumatta siitä mikä konponentti sovelluksen reititetyssä osassa näytetään.
+
 **Huom:** edellä olevassa esimerkissä käytetään React Routerin versiota 4.2.6. Jos ja kun etsit esimerkkejä internetistä, kannattaa varmistaa, että niissä käytetään Routerista vähintään versiota 4.0. Nelosversio ei ole ollenkaan alaspäinyhteensopiva kolmosen kanssa, eli vanhaa React Routeria käyttävä koodi on täysin käyttökelvotonta Routerin versiota 4 käytettäessä.
 
 ## tehtäviä
@@ -1551,6 +1552,61 @@ class App extends React.Component {
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 ## Inline-tyylit
+
+Osan 2 [lopussa](osa2/Tyylien-lisääminen) lisäsimme React-sovellukseen tyylejä vanhan koulukunnan tapaan yhden koko sovelluksen tyylit määrittelevän CSS-tiedoston avulla.
+
+Muutamaan kertaan olemme ohimennen määritelleet komponenteille [inline](https://react-cn.github.io/react/tips/inline-styles.html)-tyylejä, eli määriteleet suoraan komponentin muun koodin seassa.
+
+Edellisessä osassa piilotimme inline-tyylin avulla napin ruudusta tietyissä tapauksissa:
+
+```js
+const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
+
+<div style={hideWhenVisible}>
+  <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
+</div>
+```
+
+eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin sen näkymättömäksi asettava tyyli 
+
+```CSS
+{ display: 'none' }
+```
+
+Periaate inline-tyylien määrittelyssä on siis erittäin yksinkertainen. Mihin tahansa React-komponenttiin tai elementtiin voi liittää attribuutin _style_, jolle annetaan arvoksi Javascript-oliona määritelty joukko _CSS_-sääntöjä.
+
+CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluaisimme asettaa jollekin elementille vihreän kursivoidun 12 pikselin korkuisen fontin, eli CSS-syntaktilla 
+
+```CSS
+{
+  color: green;
+  font-style: italic;
+  font-size: 16px;
+}
+```
+
+tulisi tämä muotilla Reactin inline-tyylin määrittelevänä oliona seuraavasti
+
+```js
+const footerStyle = {
+  color: 'green',
+  fontStyle: 'italic',
+  fontSize: 16
+}
+```
+
+Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:n on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa. 
+
+Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän olion avulla seuraavasti:
+
+```react
+<div style={footerStyle}>
+  <br />
+  <em>Note app, Department of Computer Science 2018</em>
+</div>  
+´´´
+
+https://react-cn.github.io/react/tips/inline-styles.html
 
 ## tehtäviä
 

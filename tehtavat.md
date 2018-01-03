@@ -591,9 +591,9 @@ Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react deve
 
 #### 29 puhelinluettelo osa 4
 
-Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
+Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata :
 
-![]({{ "/assets/teht/12b.png" | absolute_url }})
+![]({{ "/assets/teht/12c.png" | absolute_url }})
 
 Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-elementtinä. Kuvassa rajausehdosta on tehty _caseinsensitiivinen_ eli ehto _arto_ löytää isolla kirjaimella kirjoitetun Arton.
 
@@ -671,15 +671,16 @@ Sovelluksen käyttöliittymä on yksinkertainen. Näytettävä maa haetaan kirjo
 
 Jos ehdon täyttäviä maita on liikaa (yli 10), kehoitetaan tarkentamaan hakuehtoa
 
-<img src="/assets/teht/13.png" height="300">
+![]({{ "/assets/teht/13.png" | absolute_url }})
 
 Jos maita on alle kymmenen, mutta yli 1 näytetään hakuehdon täyttävät maat
 
-<img src="/assets/teht/14.png" height="300">
+![]({{ "/assets/teht/14.png" | absolute_url }})
+
 
 Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perustiedot:
 
-<img src="/assets/teht/15.png" height="300">
+![]({{ "/assets/teht/15.png" | absolute_url }})
 
 ### palvelimella olevan datan päivittäminen
 
