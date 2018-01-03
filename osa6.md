@@ -1606,12 +1606,19 @@ Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän oli
 </div>  
 ´´´
 
-https://react-cn.github.io/react/tips/inline-styles.html
+Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta määritellä.
+
+Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tuli erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä.
+
+Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin näennäinen eroittelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu noudattaen sovelluksen loogisia toiminnallisia kokonaisuuksia. Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten ettö komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
 
 ## tehtäviä
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
-## Material UI
+## Valmiit käyttöliittymäkirjastot, Material UI
+
+Eräs lähestymistapa sovelluksen  
+
 
 Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
