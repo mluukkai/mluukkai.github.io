@@ -3,7 +3,6 @@ layout: page
 title: osa 4
 permalink: /osa4/
 ---
-
 ## Osan 4 oppimistavoitteet
 
 - Node.js / Express
@@ -25,7 +24,7 @@ permalink: /osa4/
 
 ## Sovelluksen rakenteen parantelu
 
-Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](osa3/#tietokantamäärittelyjen -riyttäminen-omaksi-,oduuliksi).
+Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](/osa3/#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi).
 
 Routejen tapahtumankäsittelijöitä kutsutaan usein _kontrollereiksi_. Luodaankin hakemisto _controllers_ ja sinne tiedosto _notes.js_ johon tulemme siirtämään kaikki muistiinpanoihin liittyvien reittien määrittelyt.
 
@@ -89,7 +88,7 @@ notesRouter.post('/', (request, response) => {
   const note = new Note({
     content: body.content,
     important: body.content === undefined ? false : body.important,
-    date: new Date(),
+    date: new Date()
   })
 
   note
@@ -108,7 +107,7 @@ notesRouter.put('/:id', (request, response) => {
 
   const note = {
     content: body.content,
-    important: body.important,
+    important: body.important
   }
 
   Note
@@ -357,7 +356,7 @@ seurauksena on seuraava virheilmotus
 
 ![]({{ "/assets/4/2.png" | absolute_url }})
 
-Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään  kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
+Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
 Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
 
@@ -460,13 +459,13 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 
 Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
-Nht sovelluksen toimintaa on mahdollista muokata sen syoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
+Nht sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
 Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
 Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, että jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu "suhteellisen helposti" mm. [keskusmuistissa toimivan Mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontainereiden avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia Mongoa.
 
-Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tietodotoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin.
+Voisimme kirjoittaa ympäristökohtaiset konfiguraatiot, esim. oikean tietokannan valinnan suoraan tiedostoon _index.js_, se kuitenkin tekisi tiedoston koodista sekavaa. Eristetään sovelluksen ympäristökohtainen konfigurointi omaan tiedostoon _utils/config.js_ sijoitettavaan moduuliin.
 
 Ideana on, että _index.js_ voi käyttää konfiguraatioita seuraavasti:
 
@@ -503,7 +502,7 @@ module.exports = {
 }
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantmoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
 
 Tiedostossa _.env_ on nyt määritelty _erikseen_ sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
@@ -742,7 +741,7 @@ test('a specific note is within the returned notes', async () => {
 })
 ```
 
-Huomaa jälkimmäisen testin ekspekaatio. Komennolla <code>response.body.map(r=>r.content)</code> muodostetaan taulukko API:n palauttamien muistiinpanojen sisällöistä. Jestin [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem)-ekspektaatiometodilla tarkistetaan että parametrina oleva muistiinpano on kaikkien API:n palauttamien muistiinpanojen joukossa.
+Huomaa jälkimmäisen testin ekspekaatio. Komennolla <code>response.body.map(r => r.content)</code> muodostetaan taulukko API:n palauttamien muistiinpanojen sisällöistä. Jestin [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem)-ekspektaatiometodilla tarkistetaan että parametrina oleva muistiinpano on kaikkien API:n palauttamien muistiinpanojen joukossa.
 
 Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä _async_ ja _await_ tarkoittavat.
 
@@ -756,7 +755,7 @@ Esim. muistiinpanojen hakeminen tietokannasta hoidetaan promisejen avulla seuraa
 Note
   .find({})
   .then(notes => {
-    console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+    console.log('operaatio palautti seuraavat muistiinpanot', notes)
   })
 ```
 
@@ -1112,7 +1111,7 @@ notesRouter.post('/', async (request, response) => {
     const note = new Note({
       content: body.content,
       important: body.content === undefined ? false : body.important,
-      date: new Date(),
+      date: new Date()
     })
 
     const savedNote = await note.save()
@@ -1229,7 +1228,7 @@ const Note = require('../models/note')
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
@@ -1404,9 +1403,9 @@ describe('when there is initially some notes saved', async () => {
 })
 ```
 
-Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi. 
+Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi.
 
-Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty. 
+Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty.
 
 Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
@@ -1468,11 +1467,11 @@ Relaatiotietokantoja käytettäessä ratkaisua ei tarvitsisi juuri miettiä. Mol
 
 Dokumenttitietokantoja käytettäessä tilanne on kuitenkin toinen, erilaisia tapoja mallintaa tilanne on useita.
 
-Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaana, esim. nimeltään _users_.
+Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _notes_-kokoelmaan eli _collectioniin_. Jos emme halua muuttaa tätä, lienee luontevinta tallettaa käyttäjät omaan kokoelmaansa, esim. nimeltään _users_.
 
 Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin dokumentteihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen ;ongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
+Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
 
 Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
@@ -1484,7 +1483,7 @@ Relaatiotietokannoissa muistiinpano sisältää viiteavaimen sen tehneeseen käy
 [
   {
     username: 'mluukkai',
-    _id: 123456,
+    _id: 123456
   },
   {
     content: 'hellas',
@@ -1548,11 +1547,11 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
     notes: [
       {
         content: 'HTML on helppoa',
-        important: false,
+        important: false
       },
       {
         content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
-        important: true,
+        important: true
       }
     ]
   },
@@ -1562,11 +1561,11 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
     notes: [
       {
         content: 'Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu',
-        important: false,
+        important: false
       }
     ]
   }
-]  
+]
 ```
 
 Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
@@ -1782,7 +1781,7 @@ usersRouter.post('/', async (request, response) => {
 })
 ```
 
-Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastaataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
+Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
@@ -2004,7 +2003,7 @@ loginRouter.post('/', async (request, response) => {
 
   const token = jwt.sign(userForToken, process.env.SECRET)
 
-  response.status(200).send({ token })
+  response.status(200).send({ token, username: user.username, name: user.name })
 })
 
 module.exports = loginRouter
@@ -2031,7 +2030,7 @@ const token = jwt.sign(userForToken, process.env.SECRET)
 
 Token on digitaalisesti allekirjoitettu käyttämällä _salaisuutena_ ympäristömuuttujassa _SECRET_ olevaa merkkijonoa. Digitaalinen allekirjoitus varmistaa sen, että ainoastaan salaisuuden tuntevilla on mahdollisuus generoida validi token. Ympäristömuuttujalle pitää muistaa asettaa arvo tiedostoon .env.
 
-Onnistuneeseen pyyntöön vastataan statuskoodilla _200 ok_ ja generoitu token lähetetään vastauksen bodyssä pyynnön tekijälle.
+Onnistuneeseen pyyntöön vastataan statuskoodilla _200 ok_ ja generoitu token sekä kirjautuneen käyttäjän käyttäjätunnus ja nimi lähetetään vastauksen bodyssä pyynnön tekijälle.
 
 Kirjautumisesta huolehtiva koodi on vielä liitettävä sovellukseen lisäämällä tiedostoon _index.js_ muiden routejen käyttöönoton yhteyteen
 
@@ -2059,7 +2058,7 @@ const jwt = require('jsonwebtoken')
 
 // ...
 
-const getTokenFrom = (request) =>{
+const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
@@ -2114,9 +2113,9 @@ Apufunktio _getTokenFrom_ eristää tokenin headerista _authorization_. Tokenin 
 const decodedToken = jwt.verify(token, process.env.SECRET)
 ```
 
-Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pynnön on tehnyt. 
+Tokenista dekoodatun olion sisällä on kentät _username_ ja _id_ eli se kertoo palvelimelle kuka pyynnön on tehnyt.
 
-Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä (eli _decodedToken.id_ ei ole määritelty), palautetaan virheenstä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä:
+Jos tokenia ei ole tai tokenista dekoodattu olio ei sisällä käyttäjän identitettiä (eli _decodedToken.id_ ei ole määritelty), palautetaan virheestä kertova statuskoodi [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä:
 
 ```js
 if (!token || !decodedToken.id) {
@@ -2138,7 +2137,7 @@ Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypill
 
 Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyödyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta suojattuna sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
 
-Toteutamme kirjautumisen fronendin puolelle kurssin [seuraavassa osassa](osa5).
+Toteutamme kirjautumisen frontendin puolelle kurssin [seuraavassa osassa](osa5).
 
 ## Tehtäviä
 
@@ -2240,10 +2239,10 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
 ```bash
-    "rules": {
-        // ...
-        "eqeqeq": "error"
-    },
+"rules": {
+  // ...
+  "eqeqeq": "error"
+},
 ```
 
 Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
@@ -2292,35 +2291,35 @@ Pluginin käyttöönotto tulee määritellä konfiguraatiotiedostossa, jonka tä
 ```js
 module.exports = {
   "env": {
-      "browser": true,
-      "commonjs": true,
-      "es6": true
+    "browser": true,
+    "commonjs": true,
+    "es6": true
   },
   "globals": {
-      "process": true,
+    "process": true,
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",
   "rules": {
-      "indent": [
-          "error",
-          2
-      ],
-      "linebreak-style": [
-          "error",
-          "unix"
-      ],
-      "quotes": [
-          "error",
-          "single"
-      ],
-      "semi": [
-          "error",
-          "never"
-      ],
-      "eqeqeq": "error",
-      "no-console": 0,
-      "no-process-env": 0
+    "indent": [
+      "error",
+      2
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "eqeqeq": "error",
+    "no-console": 0,
+    "no-process-env": 0
   }
 }
 ```
@@ -2340,7 +2339,7 @@ kayttaja -> selain: painetaan login-nappia
 
 selain -> backend: HTTP POST /api/login {username, password}
 note left of backend
-  backend generoi käyttäjän identifioivan TOKEMin
+  backend generoi käyttäjän identifioivan TOKENin
 end note
 backend -> selain: TOKEN palautetaan vastauksen bodyssä
 note left of selain

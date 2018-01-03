@@ -64,9 +64,9 @@ const App = (props) => {
     <div>
       <h1>Muistiinpanot</h1>
       <ul>
-        <li>{note[0].content}</li>
-        <li>{note[1].content}</li>
-        <li>{note[2].content}</li>
+        <li>{notes[0].content}</li>
+        <li>{notes[1].content}</li>
+        <li>{notes[2].content}</li>
       </ul>
     </div>
   )
@@ -270,7 +270,7 @@ Moduulin eksporttaama komponentti on nyt käytettävissä muuttujassa _Note_ tä
 Koska myös _App_ on komponentti, eristetään sekin omaan moduuliinsa. Koska kyseessä on sovelluksen juurikomponentti, sijoitetaan se suoraan hakemistoon _src_, sisältö on seuraava:
 
 ```react
-import React from 'react';
+import React from 'react'
 import Note from './components/Note'
 
 const App = ({ notes }) => {
@@ -476,7 +476,7 @@ class App extends React.Component {
             value={this.state.new_note}
             onChange={this.handleNoteChange}
           />
-          <button type="submit" type="submit">tallenna</button>
+          <button type="submit">tallenna</button>
         </form>
       </div>
     )
@@ -912,7 +912,7 @@ Olemme nyt valmiina käyttämään axiosia. Jatkossa oletetaan että _json-serve
 
 Kirjaston voi ottaa käyttöön samaan tapaan kuin esim. React otetaan käyttöön, eli sopivalla _import_-lauseella.
 
-Lisätään seuraava tiedotoon _index.js_
+Lisätään seuraava tiedostoon _index.js_
 
 ```js
 import axios from 'axios'
@@ -1093,7 +1093,7 @@ React-komponenteilla on myös joukko muita [lifecycle-metodeja](https://reactjs.
 
 ### Tehtäviä datan hakemisesta palvelimelta
 
-Tee nyt tehtävä [31-33](../tehtavat#datan-hakeminen-palvelimelta)
+Tee nyt tehtävät [31-32](../tehtavat#datan-hakeminen-palvelimelta)
 
 ## REST API:n käyttö
 
@@ -1125,7 +1125,7 @@ addNote = (e) => {
   const noteObject = {
     content: this.state.new_note,
     date: new Date().new,
-    important: Math.random() > 0.5,
+    important: Math.random() > 0.5
   }
 
   axios.post('http://localhost:3001/notes', noteObject)
@@ -1662,7 +1662,7 @@ Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme my�
 
 ### Tehtäviä palvelimen tilan päivittämisestä
 
-Tee nyt tehtävät [34-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
+Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
 
 ## Tyylien lisääminen
 

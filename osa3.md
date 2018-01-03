@@ -124,7 +124,7 @@ Muutetaan sovellus web-palvelimeksi:
 ```js
 const http = require('http')
 
-const app = http.createServer( (req, res) => {
+const app = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' })
   res.end('Hello World')
 })
@@ -167,7 +167,7 @@ CommonJS-moduulit toimivat kohtuullisessa määrin samaan tapaan kuin ES6-moduul
 Koodi jatkuu seuraavasti:
 
 ```js
-const app = http.createServer( (request, response) => {
+const app = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
   response.end('Hello World')
 })
@@ -209,7 +209,7 @@ let notes = [
   }
 ]
 
-const app = http.createServer( (request, response) => {
+const app = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'application/json' })
   response.end(JSON.stringify(notes))
 })
@@ -265,7 +265,7 @@ Projektiin asentui expressin versio 4.16.2. Mitä tarkoittaa _package.json:issa_
 
 npm:n yhteydessä käytetään ns. [semanttista versiointia](https://docs.npmjs.com/getting-started/semantic-versioning).
 
-Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ eli keskimäinen numero voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
+Merkintä _^4.16.2_ tarkoittaa, että jos/kun projektin riippuvuudet päivitetään, asennetaan expressistä versio, joka on vähintään _4.16.2_, mutta asennetuksi voi tulla versio, jonka _patch_ eli viimeinen numero tai _minor_ eli keskimmäinen numero voi olla suurempi. Pääversio eli _major_ täytyy kuitenkin olla edelleen sama.
 
 
 Voimme päivittää projektin riippuvuudet komennolla
@@ -684,13 +684,13 @@ const generateId = () => {
 app.post('/notes', (request, response) => {
   const body = request.body
 
-  if (body.content === undefined){
+  if (body.content === undefined) {
     response.status(400).json({error: 'content missing'})
   }
 
   const note = {
     content: body.content,
-    important: body.date || false,
+    important: body.important|| false,
     date: body.date || new Date(),
     id: generateId()
   }
@@ -725,11 +725,11 @@ HTTP-pyynnöistä GET:in tulisi olla _safe_:
 
 > In particular, the convention has been established that the GET and HEAD methods SHOULD NOT have the significance of taking an action other than retrieval. These methods ought to be considered "safe".
 
-Safety siis tarkoittaa, että pyynnön suorittaminen ei saa aiheutta palvelimelle _sivuvaikutuksia_ eli esim. muuttaa palvelimen tietokannan tilaa, pyynnön tulee ainoastaan palauttaa palvelimella olevaa dataa. 
+Safety siis tarkoittaa, että pyynnön suorittaminen ei saa aiheutta palvelimelle _sivuvaikutuksia_ eli esim. muuttaa palvelimen tietokannan tilaa, pyynnön tulee ainoastaan palauttaa palvelimella olevaa dataa.
 
 Mikään ei automaattisesti takaa, että GET-pyynnöt olisivat luonteeltaan _safe_, kyseessä onkin HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET-pyyntöjä käytetäänkin aina siten, että ne ovat safe.
 
-HTTP-standardi määrittelee myös pyyntötyypin [HEAD](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4), jonka tulee olla safe. Käytännössä HEAD:in tulee toimia kuten GET, mutta se ei palauta vastauksenaan muuta kuin statuskoodin ja headerit, viestin bodyä HEAD ei palauta ollenkaan. 
+HTTP-standardi määrittelee myös pyyntötyypin [HEAD](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.4), jonka tulee olla safe. Käytännössä HEAD:in tulee toimia kuten GET, mutta se ei palauta vastauksenaan muuta kuin statuskoodin ja headerit, viestin bodyä HEAD ei palauta ollenkaan.
 
 HTTP-pyynnöistä muiden paitsi POST:in tulisi olla _idemponent_:
 
@@ -815,7 +815,7 @@ Voimme sallia muista _origineista_ tulevat käyttämällä noden [cors](https://
 Asennetaan _cors_ komennolla
 
 ```bash
-npm install npm install cors --save
+npm install cors --save
 ```
 
 Otetaan middleware käyttöön ja sallitaan kaikki origineista tulevat pyynnöt:
@@ -1287,7 +1287,7 @@ const formatNote = (note) => {
 }
 ```
 
-ja palautetaan HTTP-pyynnön vastauksena funktion avulla mutoiltuja oliota:
+ja palautetaan HTTP-pyynnön vastauksena funktion avulla muotoiltuja oliota:
 
 ```js
 app.get('/api/notes', (request, response) => {

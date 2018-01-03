@@ -73,8 +73,7 @@ Asennusohjeita on koottu [tänne](https://github.com/mluukkai/mluukkai.github.io
 ## Web-sovelluksen toimintaperiaatteita ##
 
 Käymme aluksi läpi web-sovellusten toimintaperiaatteita tarkastelemalla osoitteessa <https://fullstack-exampleapp.herokuapp.com/> olevaa esimerkkisovellusta. Huom.
-sovelluksen toinen versio on osoitteessa <https://exampleapp-ghqykidlgq.now.sh/>, voit käyttää kumpaa vaan. Tällä hetkellä herokussa oleva versio ei toimi, sillä ilmainen prosessointiaika on joulukuun osalta käytetty loppuun.
-
+sovelluksen toinen versio on osoitteessa <https://exampleapp-ghqykidlgq.now.sh/>, voit käyttää kumpaa vaan.
 
 Sovelluksen olemassaolon tarkoitus on ainoastaan havainnollistaa kurssin peruskäsitteistöä, sovellus ei ole missään tapauksessa esimerkki siitä _miten_ web-sovelluksia kannattaisi kehittää, päinvastoin, sovellus käyttää eräitä vanhentuneita tekniikoita sekä huonoja käytänteitä.
 
@@ -82,7 +81,7 @@ Kurssin suosittelemaa tyyliä noudattavan koodin kirjoittaminen alkaa luvusta [R
 
 Käytä nyt ja _koko ajan_ tämän kurssin aikana Chrome-selainta.
 
-Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/) tai sen [varaversio](https://exampleapp-ghqykidlgq.now.sh/)
+Avataan selaimella [esimerkkisovellus](https://fullstack-exampleapp.herokuapp.com/).
 
 <div class="important">
   <h3>Web-sovelluskehityksen sääntö numero yksi</h3>
@@ -406,7 +405,7 @@ Vaikka selaimen näyttämä sivu päivittyy, ei muutos ole lopullinen. Jos sivu 
 
 ### CSS ###
 
-Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
+Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata palvelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
 
 Cascading Style Sheets eli CSS on kieli, jonka avulla web-sovellusten ulkoasu määritellään.
 
@@ -452,7 +451,7 @@ Tutkitaan seuraavaksi sitä, miten uusien muistiinpanojen luominen tapahtuu. Tä
 
 ![]({{ "/assets/1/18.png" | absolute_url }})
 
-Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimele. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
+Kun lomakkeen painiketta painetaan, lähettää selain lomakkeelle syötetyn datan palvelimelle. Avataan _Network_-tabi ja katsotaan miltä lomakkeen lähettäminen näyttää:
 
 ![]({{ "/assets/1/19.png" | absolute_url }})
 
@@ -474,7 +473,7 @@ Lomakkeen lähettäminen tapahtuu HTTP POST -pyyntönä ja osoitteeseen _new_not
 
 <img src="/assets/1/22.png" height="150">
 
-POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen:
+POST-pyynnöstä huolehtiva palvelimen koodi on yksinkertainen (huom: tämä koodi on siis palvelimella eikä näy selaimessasi):
 
 ```js
 app.post('/new_note', (req, res) => {
@@ -895,7 +894,7 @@ Kannattaa pitää mielessä, että **React-komponenttien nimien tulee alkaa isol
 ```react
 const footer = () => {
   return (
-    <div>greeting app created by <a href='https://github.com/mluukkai'>mluukkai</a></div>
+    <div>greeting app created by <a href="https://github.com/mluukkai">mluukkai</a></div>
   )
 }
 ```
@@ -1070,7 +1069,7 @@ const olio3 = {
 
 Kentät voivat olla mielivaltaista javascriptin tyyppiä.
 
-Olioiden kenttiin viitataan pistenotaatiolla, tai kulmasulkeilla:
+Olioiden kenttiin viitataan pistenotaatiolla, tai hakasulkeilla:
 
 ```js
 console.log(olio1.nimi)          // tulostuu Arto Hellas
@@ -1078,14 +1077,14 @@ const kentanNimi = 'ika'
 console.log(olio1[kentanNimi])   // tulostuu 35
 ```
 
-Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai kulmasulkeiden avulla:
+Olioille voidaan lisätä kenttiä myös lennossa joko pistenotaation tai hakasulkeiden avulla:
 
 ```js
 olio1.osoite = 'Tapiola'
 olio1['salainen numero'] = 12341
 ```
 
-Jälkimäinen lisäyksistä on pakko tehdä kulmasulkeiden avulla, sillä pistenotaatiota käytettäessä 'salainen numero' ei kelpaa kentän nimeksi.
+Jälkimäinen lisäyksistä on pakko tehdä hakasulkeiden avulla, sillä pistenotaatiota käytettäessä 'salainen numero' ei kelpaa kentän nimeksi.
 
 Javascriptissä olioilla voi luonnollisesti olla myös metodeja. Palaamme aiheeseen funktioiden käsittelyn jälkeen.
 
@@ -1352,7 +1351,7 @@ Luokkakomponentissa viitataan komponentin _propseihin_ this-viitteen kautta.
 Eli koska komponenttia käytetään seuraavasti
 
 ```html
-<Hello name='Arto' age={36} />
+<Hello name="Arto" age={36} />
 ```
 
 päästään nimeen ja ikään käsiksi luokkamuotoisen komponentin sisällä viittaamalla _this.props.name_ ja _this.props.age_. Huomaa ero funktionaaliseen komponenttiin!
@@ -2078,15 +2077,15 @@ render() {
       <div>
         <Button
           handleClick={this.asetaArvoon(this.state.counter + 1)}
-          text='Plus'
+          text="Plus"
         />
         <Button
           handleClick={this.asetaArvoon(this.state.counter - 1)}
-          text='Minus'
+          text="Minus"
         />
         <Button
           handleClick={this.asetaArvoon(0)}
-          text='Zero'
+          text="Zero"
         />
       </div>
     </div>
@@ -2302,7 +2301,7 @@ Olemme nyt esitelleet kaksi eri tapaa komponenttien määrittelemiseen. Kumpaa t
 
 Jos komponentti tarvitsee tilaa, on luokkasyntaksin käyttäminen välttämätöntä. Kannattaa kuitenkin muistaa, että Reactin filosofian mukaista on sijoittaa tila [mahdollisimman ylös](https://reactjs.org/docs/lifting-state-up.html) komponenttihierarkiaan, mielellään ainoastaan sovelluksen juurikomponenttiin. Näin tilallisten komponenttien potentiaalinen tarvekin on vähäisempi.
 
-Joskus komponenttien on käytettävä osassa 2 esiteltäviä [osa2/#komponenttien-lifecycle-metodit], myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
+Joskus komponenttien on käytettävä [osassa 2 esiteltäviä](/osa2/#komponenttien-lifecycle-metodit), myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
 
 Yleisohjeena on siis se, että käytä funktionaalisia komponentteja ellet aivan pakosti tarvitse jotain luokkasyntaksin omaavien komponenttien ominaisuuksia.
 
