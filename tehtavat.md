@@ -1620,19 +1620,131 @@ Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
 
 ## osa 6
 
+Seuraavissa tehtävissä parannellaan edellisen osan anekdoottisovellusta. Ota ratkaisusi pohjaksi repositoriossa <https://github.com/mluukkai/redux-anecdotes-v2> oleva koodi.
+
 ### yhdistetyt reducerit
 
-#### 100
+#### 100 paremmat anekdootit, osa 1
 
-#### 101
+Sovelluksen komponenteissa viitataan suoraan actioneihin:
 
-#### 102
+```react
+class AnecdoteForm extends React.Component {
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const content = e.target.anecdote.value
+    this.props.store.dispatch({ 
+      type: 'CREATE', 
+      content 
+    })
 
-#### 103
+  }
+  // ...
+}
+```
+
+Tämä ei ole hyvä tapa. Eriytä action-olioiden luominen [action creator](https://redux.js.org/docs/basics/Actions.html#action-creators) -funktioihin. Sijoita creatorit tiedostoon _src/reducers/anecdoteReducer.js_.
+
+#### 101 paremmat anekdootit, osa 2
+
+Sovelluksessa on valmiina komponentin _Notification_ runko:
+
+```react
+class Notification extends React.Component {
+  render() {
+    const style = {
+      border: 'solid',
+      padding: 10,
+      borderWidth: 1
+    }
+    return (
+      <div style={style}>
+        render here notification...
+      </div>
+    )
+  }
+}
+```
+
+Laajenna komponenttia siten, että se renderöi redux-storeen talletetun viestin, eli renderöitävä komponentti muuttuu muodoon:
+
+```react
+return (
+  <div style={style}>
+    {this.props.store.getState()...}
+  </div>
+)
+```    
+
+Joudut siis muuttamaan/laajentamaan sovelluksen olemassaoleva reduceria. Tee toiminnallisuutta varten oma reduceri ja siirry käyttämään sovelluksessa yhdistettyä reduceria osan 6 materiaalin tapaan.
+
+Tässä vaiheessa sovelluksen ei vielä tarvitse osata käyttää _Notification_ komponenttia järkevällä tavalla, riittää että sovellus toimii ja näyttää _notificationReducerin_ alkuarvoksi asettaman viestin.
+
+#### 102 paremmat anekdootit, osa 3
+
+Laajenna sovellusta siten, että se näyttää _Notification_-komponentin avulla viiden sekunnin ajan kun sovelluksessa äänestetään tai luodaan uusia anekdootteja:
+
+![]({{ "/assets/teht/37.png" | absolute_url }})
+
+Notifikaation asettamista ja poistamista varten kannattaa kannattaa toteuttaa [action creatorit](https://redux.js.org/docs/basics/Actions.html#action-creators).
+
+#### 103 paremmat anekdootit, osa 4
+
+Toteuta sovellukseen näytettävien muistiinpanojen filtteröiminen
+
+![]({{ "/assets/teht/38.png" | absolute_url }})
+
+Säilytä filtterin tila redux storessa, eli käytännössä kannattaa jälleen luoda uusi reduceri ja action creatorit.
+
+Tee filtterin ruudulla näyttämistä varten komponentti _Filter_. Voit ottaa sen pohjaksi seuraavan
+
+```js
+class Filter extends React.Component {
+  handleChange = (e) => {
+    // input-kentän arvo muuttujassa e.target.value
+  }
+  render() {
+    const style = {
+      marginBottom: 10
+    }
+
+    return (
+      <div style={style}>
+        filter <input onChange={this.handleChange}/>
+      </div>
+    )
+  }
+}
+```
+
+### connect
 
 #### 104
 
 #### 105
 
-### connect
+### backend
+
+#### 106 hae backendista
+
+#### 107 talleta
+
+### thunk
+
+#### 108 backendi
+
+#### 109 ajastus
+
+### router
+
+#### 110
+#### 111
+#### 112
+#### 113
+#### 114
+#### 115
+
+### ui-framework
+
+
 

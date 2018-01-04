@@ -103,14 +103,14 @@ export const constimportanceToggling = (id) => {
 Normaalisti exportattujen funktioiden käyttöönotto tapahtuu aaltosulkusyntaksilla:
 
 ```js
-import { noteCreation, constimportanceToggling } from './../reducers/noteReducer'
+import { noteCreation } from './../reducers/noteReducer'
 ```
 
 Sovelluksen tämänhetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/redux-simplenotes/tree/v6-1) tagissä _v6-1_.
 
 ## Monimutkaisempi tila storessa
 
-Toteutetaan sovellukseen näytettävien muistiinpanojen filtteröinti, jonka avulla näytettäviä muistiinpanoja voidaan rajata. Filtterin toteutus tapahtuu [radiobuttoneiden avulla](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+Toteutetaan sovellukseen näytettävien muistiinpanojen filtteröinti, jonka avulla näytettäviä muistiinpanoja voidaan rajata. Filtterin toteutus tapahtuu [radiobuttoneiden](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio) avulla:
 
 ![]({{ "/assets/6/1.png" | absolute_url }})
 
@@ -144,7 +144,7 @@ Koska painikkeiden attribuutin _name_ arvo on kaikilla sama, muodostavat ne _nap
 
 Napeille on määritelty muutoksenkäsittelijä, joka tällä hetkellä ainoastaan tulostaa painettua nappia vastaavan merkkijonon konsoliin.
 
-Päätämme toteuttaa filtteröinnin siten, että talletamme muistiinpanojen lisäksi sovelluksen storeen myös _filtterin arvon_. Eli muutoksen jälkeen storessa oleva tila olisi näyttäisi seuraavalta:
+Päätämme toteuttaa filtteröinnin siten, että talletamme muistiinpanojen lisäksi sovelluksen storeen myös _filtterin arvon_. Eli muutoksen jälkeen storessa oleva tilan tulisi näyttää seuraavalta:
 
 ```js
 {
@@ -156,7 +156,7 @@ Päätämme toteuttaa filtteröinnin siten, että talletamme muistiinpanojen lis
 }
 ```
 
-Tällä hetkellähän tilassa on ainoastaan muistiinpanot sisältävä taulukko. Uudessa ratkaisussa tilalla on siis kaksi avainta _notes_ jonka arvona muistiinpanot ovat sekä _filter_ jonka arvona on merkkijono joka kertoo mitkä muistiinpanoista tulisi näyttää ruudulla.
+Tällä hetkellähän tilassa on ainoastaan muistiinpanot sisältävä taulukko. Uudessa ratkaisussa tilalla on siis kaksi avainta, _notes_ jonka arvona muistiinpanot ovat sekä _filter_, jonka arvona on merkkijono joka kertoo mitkä muistiinpanoista tulisi näyttää ruudulla.
 
 ### Yhdisteyt reducerit
 
@@ -199,11 +199,11 @@ export const filterChange = (filter) => {
 export default filterReducer
 ```
 
-Saamme nyt muodostettua varsinaisen reducerin yhdistämällä kaksi olemassaolevaa funktion (combineReducers)[https://redux.js.org/docs/recipes/reducers/UsingCombineReducers.html] avulla.
+Saamme nyt muodostettua varsinaisen reducerin yhdistämällä kaksi olemassaolevaa funktion [combineReducers](https://redux.js.org/docs/recipes/reducers/UsingCombineReducers.html) avulla.
 
 Määritellään yhdistetty reduceri tiedostossa _index.js_:
 
-```js
+```react
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, combineReducers } from 'redux'
@@ -228,7 +228,7 @@ ReactDOM.render(
 document.getElementById('root'))
 ```
 
-Koska sovelluksemme hajoaa tässä vaiheessa täysin, renderöidään komponentin _App_ sijasta tyhjä _div_-elementti.
+Koska sovelluksemme hajoaa tässä vaiheessa täysin, komponentin _App_ sijasta renderöidään tyhjä _div_-elementti.
 
 Konsoliin tulostuu storen tila:
 
@@ -245,7 +245,7 @@ const reducer = combineReducers({
 })
 ```
 
-Näin tehdyn reducerin määrittelemän storen tila on olio, jossa on kaksi kenttä _notes_ ja _filter_. Tilan kentän _notes_ arvon määrittelee _noteReducer_ jonka ei tarvitse välittää mitään tilan muista kentistä.
+Näin tehdyn reducerin määrittelemän storen tila on olio, jossa on kaksi kenttä, _notes_ ja _filter_. Tilan kentän _notes_ arvon määrittelee _noteReducer_, jonka ei tarvitse välittää mitään tilan muista kentistä. Vastavasti _filter_ kentän käsittely tapahtuu _filterReducer_:in avulla.
 
 Ennen muun koodin muutoksia, kokeillaan vielä konsolista, miten actionit muuttavat yhdistetyn reducerin muodostamaa staten tilaa:
 
@@ -272,7 +272,7 @@ Konsoliin tulostuu storen tila:
 
 ![]({{ "/assets/6/3.png" | absolute_url }})
 
-Jo tässä vaiheessa kannattaa laittaa mieleen tärkeä detalji. Jos lisäämme molempien reducerien alkuun konsoliin tulostuksen:
+Jo tässä vaiheessa kannattaa laittaa mieleen eräs tärkeä detalji. Jos lisäämme _molempien reducerien alkuun_ konsoliin tulostuksen:
 
 ```js
 const filterReducer = (state = 'ALL', action) => {
@@ -285,20 +285,31 @@ Näyttää konsolin perusteella siltä, että jokainen action kahdentuu:
 
 ![]({{ "/assets/6/4.png" | absolute_url }})
 
-Onko koodissa bugi? Ei. Yhdistetty reducer toimii siten, että jokainen _action_ käsitellään _kaikissa_ yhdistetyn reducerin osissa. Usein, kuten sovelluksessamme, tietystä actionista on kiinnostunut vain yksi reduceri, on kuitenkin tilanteita, joissa useampi reduceri muuttaa hallitsemaansa staten tilaa jonkin actionin seurauksena.
+Onko koodissa bugi? Ei. Yhdistetty reducer toimii siten, että jokainen _action_ käsitellään _kaikissa_ yhdistetyn reducerin osissa. Usein tietystä actionista on kiinnostunut vain yksi reduceri, on kuitenkin tilanteita, joissa useampi reduceri muuttaa hallitsemaansa staten tilaa jonkin actionin seurauksena.
 
 ### Sovelluksen viimeistely
 
-Viimeistellään nyt sovellus käyttämään yhdistettyä raduceria. Korjataan ensin bugi, joka johtuu siitä, että koodi olettaa storen tilan olevan mustiinpanojen joukko:
+Viimeistellään nyt sovellus käyttämään yhdistettyä reduceria, eli palautetaan tiedostossa _index.js_ suoritettava renderöinti muotoon
+
+```react
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root'))
+```
+
+Korjataan sitten bugi, joka johtuu siitä, että koodi olettaa storen tilan olevan mustiinpanot tallettava taulukko:
 
 ![]({{ "/assets/6/5.png" | absolute_url }})
 
-Korjaus komponenttiin _NoteList_ on helppo. Viitteen <code>this.context.store.getState()</code> sijaan kaikki muistiinpanot sisältävään taulukkoon viitataan <code>this.context.store.getState().notes</code>.
+Korjaus on helppo. Viitteen <code>this.context.store.getState()</code> sijaan kaikki muistiinpanot sisältävään taulukkoon viitataan <code>this.context.store.getState().notes</code>.
 
-Ennakoiden tulevaa on eriytetty näytettävien muistiinpanojen selvittämisen huolehtiminen funktioon _notesToShow_ joka tässä vaiheessa palauttaa kaikki muistiinpanot:
+Ennakoiden tulevaa eriytetään näytettävien muistiinpanojen selvittämisen huolehtiminen funktioon _notesToShow_, joka vielä tässä vaiheessa palauttaa kaikki muistiinpanot:
 
-```js
+```react
 class NoteList extends React.Component {
+  // ...
 
   render() {
     const notesToShow = () => {
@@ -320,7 +331,7 @@ class NoteList extends React.Component {
 }
 ```
 
-Eriytetään näkyvyyden säätelyfiltteri omaksi komponentikseen:
+Eriytetään näkyvyyden säätelyfiltteri omaksi, tiedostoon _src/components/VisibilityFilter.js_ komponentikseen:
 
 ```react
 import React from 'react'
@@ -378,13 +389,13 @@ const notesToShow = () => {
 }
 ```
 
-Huomaa miten storen tilan kentät on otettu destrukturoimalla apumuuttujiin
+Huomaa miten storen tilan kentät on otettu tuttuun tapaan destrukturoimalla apumuuttujiin
 
 ```js
 const { notes, filter } = this.context.store.getState()
 ```
 
-siis on sama kuin kuirjoittaisimme
+siis on sama kuin kirjoittaisimme
 
 ```js
 const notes = this.context.store.getState().notes
@@ -395,14 +406,14 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 
 Sovelluksessa on vielä pieni kauneusvirhe, vaikka oletusarvosesti filtterin arvo on _ALL_, eli näytetään kaikki muistiinpanot, ei vastaava radiobutton ole valittuna. Ongelma on luonnollisestikin mahdollista korjata, mutta koska kyseessä on ikävä, mutta harmiton feature, jätämme korjauksen myöhemmäksi.
 
-## tehtäviä
+## Tehtäviä
 
-Tee nyt tehtävät [100-](../tehtavat#yhdistetyt-reducerit)
+Tee nyt tehtävät [100-103](../tehtavat#yhdistetyt-reducerit)
 
 
 ## Connect
 
-Kaikissa redux-storea käyttävissä komponenteissa on nyt runsaasti samaa koodia
+Kaikissa Redux-storea käyttävissä komponenteissa on nyt runsaasti samaa koodia
 
 ```js
 class ComponentUsingReduxStore extends React.Component {
