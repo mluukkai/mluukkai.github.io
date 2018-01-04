@@ -1366,7 +1366,7 @@ render() {
 Järjestämistä varten on nyt määritelty muuttujaan _byId_ apufunktio, jota kutsutaan ennen kuin _Note_ komponentit generoidaan _map_-metodin avulla:
 
 ```js
-notesToShow.sort(byId).map.map(note => <Note ... />)
+notesToShow.sort(byId).map.(note => <Note ... />)
 ```
 
 ## Palvelimen kanssa tapahtuvan kommunikoinnin eristäminen omaan moduuliin
@@ -1710,7 +1710,7 @@ const Note = ({ note, toggleImportance}) => {
 }
 ```
 
-lisätään tyyliedostoon seuraava (koska osaamiseni tyylikkäiden web-sivujen tekemiseen on lähellä nollaa, nyt käytettävissä tyyleissä ole sinänsä mitään järkeä):
+lisätään tyyliedostoon seuraava (koska osaamiseni tyylikkäiden web-sivujen tekemiseen on lähellä nollaa, nyt käytettävissä tyyleissä ei ole sinänsä mitään järkeä):
 
 ```css
 li {
