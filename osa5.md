@@ -2398,7 +2398,7 @@ class NoteList extends React.Component {
 }
 ```
 
-Komponettiin _App_ ei jää enää paljoa koodia:
+Komponenttiin _App_ ei jää enää paljoa koodia:
 
 ```react
 class App extends React.Component {

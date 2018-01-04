@@ -1628,11 +1628,11 @@ Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 ## Valmiit käyttöliittymätyylikirjastot
 
-Eräs lähestymistapa sovelluksen tyylien määrittelyyn on valmiin "UI frameworkin", eli Suomeksi ehkä käyttöliittymätyylikirjaston käyttö. 
+Eräs lähestymistapa sovelluksen tyylien määrittelyyn on valmiin "UI frameworkin", eli Suomeksi ehkä käyttöliittymätyylikirjaston käyttö.
 
 Ensimmäinen tai ainakin ensimmäinen kuuluisa UI framework oli Twitterin kehittämä [Bootstrap](https://getbootstrap.com/) joka lienee edelleen UI frameworkeista suosituin. Viime aikoina UI frameworkeja on noussut kuin sieniä sateella. Valikoima on niin iso, ettei tässä kannata edes yrittää tehdä tyhjentävää listaa.
 
-Monet UI-frameworkit sisältävät web-sovellusten käyttöön valmiiksi määriteltyjä teemoja sekä "komponetteja", kuten painikkeita, menuja, taulukkoja. Termi komponentti on edellä kirjotettu hipsuissa sillä kyse ei ole samasta asiasta kuin React-komponetti. Useimmiten UI-frameworkeja käytetään sisälyttämällä sovellukseen frameworkin määrittelemät CSS-tyylitiedostot sekä Javascript-koodi.
+Monet UI-frameworkit sisältävät web-sovellusten käyttöön valmiiksi määriteltyjä teemoja sekä "komponentteja", kuten painikkeita, menuja, taulukkoja. Termi komponentti on edellä kirjotettu hipsuissa sillä kyse ei ole samasta asiasta kuin React-komponentti. Useimmiten UI-frameworkeja käytetään sisällyttämällä sovellukseen frameworkin määrittelemät CSS-tyylitiedostot sekä Javascript-koodi.
 
 Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-frameworkin avulla määritellyistä "komponenteista" on tehty React-komponentteja. Esim. Bootstrapista on olemassa parikin React-versiota [reactstrap](http://reactstrap.github.io/) ja [react-bootstrap](https://react-bootstrap.github.io/)
 
@@ -1642,7 +1642,7 @@ Tehdään nyt [reactstrap](http://reactstrap.github.io/)-kirjaston auvlla luvuss
 
 Asennetaan kirjasto suorittamalla [manuaalin ohjeen mukaan](http://reactstrap.github.io/) komento
 
-```js
+```bash
 npm install reactstrap@next bootstrap@4.0.0-beta.3 --save
 ```
 
@@ -1656,11 +1656,11 @@ Sovellus pitää tässä vaiheessa (ehkä) uudelleenkäynnistää. Sovellus näy
 
 ![]({{ "/assets/6/10.png" | absolute_url }})
 
-Nyt olemme valmiina käyttämään Reactstrapin [komponetteja](http://reactstrap.github.io/components/). 
+Nyt olemme valmiina käyttämään Reactstrapin [komponentteja](http://reactstrap.github.io/components/).
 
-Aloitetaan [Layoutista](https://reactstrap.github.io/components/layout/). Dokumentti ei ilmaise asiaa kovin selkeästi, mutta yleensä on järkevää sijoittaa kaikki renderöitävä sisältä komponentin _Container_ sisään. 
+Aloitetaan [Layoutista](https://reactstrap.github.io/components/layout/). Dokumentti ei ilmaise asiaa kovin selkeästi, mutta yleensä on järkevää sijoittaa kaikki renderöitävä sisältä komponentin _Container_ sisään.
 
-Muutetaan komponenttia _App_ siten, että se renderöi kaiken _Container_-komponentin sisällä: 
+Muutetaan komponenttia _App_ siten, että se renderöi kaiken _Container_-komponentin sisällä:
 
 ```js
 import { Container } from 'reactstrap'
@@ -1671,7 +1671,7 @@ class App extends React.Component {
   // ...
   render() {
     return (
-      <Container>        
+      <Container>
 
       </Container>
     )
@@ -1685,7 +1685,7 @@ Sovelluksen ulkoasu muuttuu siten, että sisältö ei ole enää yhtä kiinni se
 
 ![]({{ "/assets/6/11.png" | absolute_url }})
 
-Muutetaan seuraavaksi komponettia _Notes_ siten, että se renderöi muistiinpanojen listan [taulukkona](https://reactstrap.github.io/components/tables/):
+Muutetaan seuraavaksi komponenttia _Notes_ siten, että se renderöi muistiinpanojen listan [taulukkona](https://reactstrap.github.io/components/tables/):
 
 ```react
 const Notes = ({notes}) => (
@@ -1718,7 +1718,7 @@ Jotta reactstrapin taulukko-komponentti toimisi, täytyy se muistaa importata.
 ### lomake
 
 ```react
-Parannelaan seuraavaksi näkymäm _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponettien avulla:
+Parannelaan seuraavaksi näkymäm _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponenttien avulla:
 
 const Login = ({onLogin, history}) => {
   const onSubmit = (e) => {
@@ -1731,13 +1731,13 @@ const Login = ({onLogin, history}) => {
     <h2>login</h2>
     <Form onSubmit={onSubmit}>
       <FormGroup>
-        <Label>username</Label> 
-        <Input name='username'/>
+        <Label>username</Label>
+        <Input name="username" />
       </FormGroup>
       <FormGroup>
-        <Label>password</Label> 
-        <Input type='password'/>
-      </FormGroup>     
+        <Label>password</Label>
+        <Input type="password" />
+      </FormGroup>
       <Button>login</Button>
     </Form>
   </div>
@@ -1750,7 +1750,7 @@ Viimeistellään vielä sovellus vielä toteuttamalla kirjautumisen jälkeinen _
 
 ![]({{ "/assets/6/13.png" | absolute_url }})
 
-Asetetaan notifikaatio kirjatumisen yhteydessä komponentin _App_ tilan kenttään _message_: 
+Asetetaan notifikaatio kirjatumisen yhteydessä komponentin _App_ tilan kenttään _message_:
 
 ```js
 login = (user) => {
@@ -1759,21 +1759,21 @@ login = (user) => {
     this.setState({message: null})
   }, 10000);
 }
-```  
+```
 
 ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.github.io/components/alerts/) avulla sopivassa kohta  komonentin _App_ metodia  render:
 
 ```js
-{(this.state.message && 
+{(this.state.message &&
   <Alert color="success">
     {this.state.message}
   </Alert>
-)}   
+)}
 ```
 
 Esimerkin sovelluksen koodi kokonaisuudessaan [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/reactstrapped).
 
-### huomio 
+### huomio
 
 käytä css:ää???
 
