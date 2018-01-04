@@ -890,7 +890,7 @@ npm install axios --save
 
 Nyt axios on mukana riippuvuuksien joukossa:
 
-```bash
+```json
 {
   "dependencies": {
     "axios": "^0.17.1",
@@ -1662,7 +1662,7 @@ Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme my�
 
 ### Tehtäviä palvelimen tilan päivittämisestä
 
-Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
+Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivittäminen)
 
 ## Tyylien lisääminen
 

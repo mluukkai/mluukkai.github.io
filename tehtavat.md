@@ -591,7 +591,7 @@ Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react deve
 
 #### 29 puhelinluettelo osa 4
 
-Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata :
+Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
 
 ![]({{ "/assets/teht/12c.png" | absolute_url }})
 

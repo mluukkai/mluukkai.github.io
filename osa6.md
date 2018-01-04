@@ -606,7 +606,7 @@ class NoteForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.addNote}>
-        <input name='note' />
+        <input name="note" />
         <button>lisää</button>
       </form>
     )
@@ -634,7 +634,7 @@ Siinä vaiheessa kun videot on tehty, connectin käyttö oli asteen verran nykyi
 
 Määrittelimme siis connectin komponentille _NoteForm_ antamat actioneja dispatchaavat funktiot seuraavasti:
 
-```bash
+```js
 class NoteForm extends React.Component {
   // ...
 }
@@ -651,7 +651,7 @@ Määrittely onnistui koska _noteCreation_ palauttaa _action_-olion.
 
 Voimme määritellä saman myös "pitemmän kaavan" kautta, antamalla _connectin_ toisena parametrina seuraavanlaisen _funktion_:
 
-```bash
+```js
 class NoteForm extends React.Component {
   // ...
 }
@@ -682,7 +682,7 @@ eli action creatorilla luodun actionin dispatchaus.
 
 Komponentti siis viitata funktioon propsin _this.props.createTodo_ kautta:
 
-```bash
+```react
 class NoteForm extends React.Component {
 
   addNote = (e) => {
@@ -837,7 +837,7 @@ Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 Laajennetan sovellusta siten, että muistiinpanot talletetaan backendiin. Käytetään osasta 2 tuttua [json-serveriä](osa2/#Datan-haku-palvelimelta).
 
-Tallennetaan projektin juuren tiedostoon _db.js_ tietokannan alkutila:
+Tallennetaan projektin juuren tiedostoon _db.json_ tietokannan alkutila:
 
 ```json
 {
@@ -859,7 +859,7 @@ Tallennetaan projektin juuren tiedostoon _db.js_ tietokannan alkutila:
 ja käynnistetään json-server porttiin 3001:
 
 ```bash
-json-server --port 3001 db.js
+json-server --port 3001 db.json
 ```
 
 Tehdään sitten tuttuun tapaan _axiosia_ hyödyntävä backendistä dataa hakeva metodi tiedostoon _services/notes.js_
@@ -911,7 +911,7 @@ Lisätään reduceriin tuki actionille _INIT_NOTES_, jonka avulla alustus voidaa
 ```js
 // ...
 const noteReducer = (state = [], action) => {
-  console.log('ACTION: ', action)
+  console.log('ACTION:', action)
   switch(action.type) {
     case 'NEW_NOTE':
       return [...state, action.data]
@@ -1051,7 +1051,7 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 
 Lähestymistapamme on ok, mutta siinä mielessä ikävä, että palvelimen kanssa kommunikointi tapahtuu komponenttien metodeissa. Olisi parempi, jos kommunikointi voitaisiin abstrahoida komponenteilta siten, että niiden ei tarvitsisi kuin kutsua sopivaa _action creatoria_, esim. _App_ alustaisi sovelluksen tilan seuraavasti:
 
-```bash
+```js
 class App extends React.Component {
   componentWillMount() {
     this.props.initializeNotes()
@@ -1062,7 +1062,7 @@ class App extends React.Component {
 
 ja _NoteForm_ loisi uuden muitsiinpanon seuraavasti:
 
-```bash
+```js
 class NoteForm extends React.Component {
 
   addNote = async (e) => {
@@ -1076,7 +1076,7 @@ class NoteForm extends React.Component {
 
 Molemmat komponentit käyttäisivät ainoastaan propsina saamaansa funktiota, välittämättä siitä että taustalla tapahtuu todellisuudessa palvelimen kanssa tapahtuvaa kommunikoinia.
 
-Asennetaan nyt [redux-thunk]()-kirjasto, joka mahdollistaa _asynkronisten actionien_ luomisen. Asennus tapahtuu komennolla:
+Asennetaan nyt [redux-thunk](https://github.com/gaearon/redux-thunk)-kirjasto, joka mahdollistaa _asynkronisten actionien_ luomisen. Asennus tapahtuu komennolla:
 
 ```bash
 npm install --save redux-thunk
@@ -1084,7 +1084,7 @@ npm install --save redux-thunk
 
 redux-thunk-kirjasto on ns. _redux-middleware_ ja tiedostossa _index.js_ olevassa storen alustuksessa on määriteltävä että se otetaan käyttöön:
 
-```bash
+```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
@@ -1098,7 +1098,7 @@ Thunk-kirjaston ansiosta on mahdollista määritellä _action creatoreja_ siten,
 
 Voimme nyt määritellä muistiinpanojen alkutilan palvelimelta hakevan action creatorin _initializeNotes_ seuraavati:
 
-```bash
+```js
 export const initializeNotes = () => {
   return async (dispatch) => {
     const notes = await noteService.getAll()
@@ -1114,7 +1114,7 @@ Sisemmässä funktiossaan, eli _asynkroonisessa actionissa_ operaatio hakee ensi
 
 Uuden muistiinpanon lisäävä action creator _createNew_ on seuraavassa
 
-```bash
+```js
 export const createNew = (content) => {
   return async (dispatch) => {
     const newNote = await noteService.createNew(content)
@@ -1138,7 +1138,7 @@ Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
 
 ## React router
 
-Palataan jälleen Reduxittoman Reactin pariin. 
+Palataan jälleen Reduxittoman Reactin pariin.
 
 On erittäin tyypillistä, että web-sovelluksissa on navigaatiopalkki, jonka avulla on mahdollista vaihtaa sovelluksen näkymää. Muistiinpanosovelluksemme voisi sisältää pääsivun:
 
@@ -1148,9 +1148,9 @@ ja omat sivunsa muistiinpanojen ja käyttäjien tietojen näyttämiseen:
 
 ![]({{ "/assets/6/7.png" | absolute_url }})
 
-Vanhanaikaisessa websovelluksessa palvelin tyypillisisesti palautti jokaisen erillisen sivun sisältämän HTML-koodin. Single page appeissa taas todellisuudessa ollaan koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista". 
+Vanhanaikaisessa websovelluksessa palvelin tyypillisesti palautti jokaisen erillisen sivun sisältämän HTML-koodin. Single page appeissa taas todellisuudessa ollaan koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista".
 
-Navigaatiopalkki ja useita sivuja sisältävä sovellus on erittäin helppo toteuttaa Reaactilla. 
+Navigaatiopalkki ja useita sivuja sisältävä sovellus on erittäin helppo toteuttaa Reactilla.
 
 Seuraavassa on eräs tapa:
 
@@ -1177,7 +1177,7 @@ class App extends React.Component {
 
   toPage = (page) => (e) => {
     e.preventDefault()
-    this.setState({ page }) 
+    this.setState({ page })
   }
 
   render() {
@@ -1189,17 +1189,17 @@ class App extends React.Component {
       } else if (this.state.page === 'users') {
         return <Users />
       }
-        
+
     }
 
     return (
       <div>
         <div>
-          <a href='' onClick={ this.toPage('home') }>home</a> &nbsp;
-          <a href='' onClick={ this.toPage('notes') }>notes</a> &nbsp;
-          <a href='' onClick={ this.toPage('users') }>users</a>
+          <a href="" onClick={ this.toPage('home') }>home</a> &nbsp;
+          <a href="" onClick={ this.toPage('notes') }>notes</a> &nbsp;
+          <a href="" onClick={ this.toPage('users') }>users</a>
         </div>
-        
+
         {content()}
       </div>
     );
@@ -1207,9 +1207,9 @@ class App extends React.Component {
 }
 ```
 
-Eli jokainen "sivu" on toteutettu omana komponenttinaan ja sovelelluksen tilassa pidetään tieto siitä, mikä komponentti menupalkin alla näytetään. **Huom:** navigointivalikossa oleva _&nbsp;_ tarkoittaa _a_-tagien väliin sjijoitettavaa välilyöntiä. CSS:n käyttö olisi luonnollisesti parempi tapa sivun ulkoasun muotoilulle mutta nyt tyydymme quick'n'dirty-ratkaisuun.
+Eli jokainen "sivu" on toteutettu omana komponenttinaan ja sovelluksen tilassa pidetään tieto siitä, mikä komponentti menupalkin alla näytetään. **Huom:** navigointivalikossa oleva _&nbsp;_ tarkoittaa _a_-tagien väliin sjijoitettavaa välilyöntiä. CSS:n käyttö olisi luonnollisesti parempi tapa sivun ulkoasun muotoilulle mutta nyt tyydymme quick'n'dirty-ratkaisuun.
 
-Menetelmä ei kuitenkaan ole optimaalinen. Kuten kuvista näkyy, sivuston osoite pysyy samana vaikka välillä ollaankin eri sivuilla. Jokaisella sivulla tulisi kuitenkin olla oma osoitteensa, jotta esim. bookmarkien tekeminen olisi mahdollista. Näin tehdyllä sovelluksella selaimen _back_-painike ei toimi loogisesti, eli _back_ ei vie edelliseksi katsottuun sovelluksen näkymään vaan jonnekin ihan muualle. Jos sovellus kasvaisi suuremmaksi ja sinne haluttaisiin esim. jokaiselle käyttäjälle sekä muistiinpanolle oma yksittäinen sivunsa, itse koodattu "reitittys" eli sivuston navigaationhallinta menisi turhan monimutkaiseksi.
+Menetelmä ei kuitenkaan ole optimaalinen. Kuten kuvista näkyy, sivuston osoite pysyy samana vaikka välillä ollaankin eri sivuilla. Jokaisella sivulla tulisi kuitenkin olla oma osoitteensa, jotta esim. bookmarkien tekeminen olisi mahdollista. Näin tehdyllä sovelluksella selaimen _back_-painike ei toimi loogisesti, eli _back_ ei vie edelliseksi katsottuun sovelluksen näkymään vaan jonnekin ihan muualle. Jos sovellus kasvaisi suuremmaksi ja sinne haluttaisiin esim. jokaiselle käyttäjälle sekä muistiinpanolle oma yksittäinen sivunsa, itse koodattu "reititys" eli sivuston navigaationhallinta menisi turhan monimutkaiseksi.
 
 Reactissa on onneksi valmis komponentti [React router](https://github.com/ReactTraining/react-router) joka tarjoaa erinomaisen ratkaisun React-sovelluksen navigaation hallintaan.
 
@@ -1228,7 +1228,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>        
+      <div>
         <Router>
           <div>
             <div>
@@ -1247,7 +1247,7 @@ class App extends React.Component {
 }
 ```
 
-Reititys, eli komponenttien ehdollinen, selaimen _urliin perustuva_ renderöinti otetaan käyttöön sijoittamalla komponentteja _Router_-komponentin lapsiksi, eli _Router_-tagien sisälle. 
+Reititys, eli komponenttien ehdollinen, selaimen _urliin perustuva_ renderöinti otetaan käyttöön sijoittamalla komponentteja _Router_-komponentin lapsiksi, eli _Router_-tagien sisälle.
 
 Huomaa, että vaikka komponenttiin viitataan nimellä _Router_ koska importaus tapahtuu seuraavasti
 
@@ -1257,16 +1257,16 @@ import { BrowserRouter as Router ... } from 'react-router-dom'
 
 kyseessä on [BrowserRouter](https://reacttraining.com/react-router/web/api/BrowserRouter).
 
-Manuaalin mukaan 
+Manuaalin mukaan
 
-> _BrowserRouter_ is a _Router_ that uses the HTML5 history API (pushState, replaceState and the popstate event) to keep your UI in sync with the URL. 
+> _BrowserRouter_ is a _Router_ that uses the HTML5 history API (pushState, replaceState and the popstate event) to keep your UI in sync with the URL.
 
 Normaalisti selain lataa uuden sivun osoiterivillä olevn urlin muuttuessa. [HTML5 history API](https://css-tricks.com/using-the-html5-history-api/):n avulla _BrowserRouter_ kuitenkin mahdollistaa sen, että selaimen osoiterivillä olevaa urlia voidaan käyttää React-sovelluksen sisäiseen "reitittämiseen", eli vaikka osoiterivillä oleva url muuttuu, sivun sisältöä manipuloidaan ainoastaan Javasctiptillä ja selain ei lataa uutta sisältöä palvelimelta. Selaimen toiminta back- ja forward-toimintojen ja bookmarkien tekemisen suhteen on kuitenkin loogista, eli toimii kuten perinteisillä web-sivuilla.
 
 Routerin sisälle määritellään selaimen osoiteriviä muokkaavia _linkkejä_ komponentin [Link](https://reacttraining.com/react-router/web/api/Link) avulla. Esim.
 
 ```js
-<Link to="/notes">notes</Link> 
+<Link to="/notes">notes</Link>
 ```
 
 luo sovellukseen linkin, jonka teksti on _notes_ ja jonka klikkaaminen vaihtaa selaimen osoiteriville urliksi _/notes_.
@@ -1291,7 +1291,7 @@ joudumme käyttämään _path_ attribuutin edessä määrettä _exact_, muuten _
 
 Tarkastellaan sitten hieman modifioitua versiota edellisestä esimerkistä. Esimerkin koodi kokonaisuudessaan on [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/routeresimerkki).
 
-Sovellus sisältää nyt viisi eri näkymää, joiten näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien  _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumissivua vastaava _Login_ ja yksittäisen muistiinpanon sivua vastaava _Note_. 
+Sovellus sisältää nyt viisi eri näkymää, joiten näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien  _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumissivua vastaava _Login_ ja yksittäisen muistiinpanon sivua vastaava _Note_.
 
 _Home_ ja _Users_ ovat kuten aiemmassa esimerkissä. _Notes_ on hieman monimutkaisempi, se renderöi propseina saamansa muistiinpanojen listan siten, että jokaisen muistiinpanon nimi on klikattava
 
@@ -1309,12 +1309,12 @@ const Notes = ({notes}) => (
           <Link to={`/notes/${note.id}`}>{note.content}</Link>
         </li>
       )}
-    </ul>  
+    </ul>
   </div>
 )
 ```
 
-Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, on tarkoituksena renderöidä 
+Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, on tarkoituksena renderöidä
 
 ```react
 const Note = ({note}) => {
@@ -1322,14 +1322,14 @@ const Note = ({note}) => {
   <div>
     <h2>{note.content}</h2>
     <div>{note.user}</div>
-    <div><strong>{note.important? 'tärkeä' : ''}</strong></div>
+    <div><strong>{note.important ? 'tärkeä' : ''}</strong></div>
   </div>
 )}
 
 Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti:
 
 ```react
-<div>        
+<div>
   <Router>
     <div>
       <div>
@@ -1339,12 +1339,12 @@ Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti
       </div>
 
       <Route exact path="/" render={() => <Home />} />
-      <Route exact path="/notes" render={() => 
-        <Notes notes={this.state.notes}/>} 
+      <Route exact path="/notes" render={() =>
+        <Notes notes={this.state.notes} />}
       />
-      <Route exact path="/notes/:id" render={({match}) => 
+      <Route exact path="/notes/:id" render={({match}) =>
         <Note note={noteById(match.params.id)} />}
-      />            
+      />
     </div>
   </Router>
 </div>
@@ -1352,7 +1352,7 @@ Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti
 
 Kaikki muistiinpanon renderöivä route on muutettu nyt muotoon _<Route exact path="/notes" />_ sillä muuten se renderöityisi myös _/notes/3_-muotoisten polkujen yhteydessä.
 
-Yksittäisen muistiinpanon näkymän renderöivä route määritellään "expressin tyyliin" merkkaamalla reitin parametrina oleva osa merkinnllä _:id_
+Yksittäisen muistiinpanon näkymän renderöivä route määritellään "expressin tyyliin" merkkaamalla reitin parametrina oleva osa merkinnällä _:id_
 
 ```react
 <Route exact path="/notes/:id" />
@@ -1368,10 +1368,10 @@ Muuttujassa _match.params.id_ olevaa id:tä vastaava muistiinpano selvitetään 
 
 ```react
 const noteById = (id) =>
-  this.state.notes.find(note => note.id === Number(id)) 
+  this.state.notes.find(note => note.id === Number(id))
 ```
 
-renderöityvä _Note_ komponentti saa siis propsina urlin yksilöivää osaa vastaavan  muistiinpanon.
+renderöityvä _Note_ komponentti saa siis propsina urlin yksilöivää osaa vastaavan muistiinpanon.
 
 ### history
 
@@ -1387,7 +1387,7 @@ Mahdollisuus _Login_-näkymään navigointiin renderöidään menuun ehdollisest
       <Link to="/notes">notes</Link> &nbsp;
       <Link to="/users">users</Link> &nbsp;
       {this.state.user
-        ? <em>{this.state.user} logged in</em> 
+        ? <em>{this.state.user} logged in</em>
         : <Link to="/login">login</Link>
       }
     </div>
@@ -1400,25 +1400,24 @@ eli jos käyttäjä on kirjaantunut, renderöidäänkin linkin _Login_ sijaan k�
 
 ![]({{ "/assets/6/9.png" | absolute_url }})
 
-Kirjautumisen toteuttamiseen liittyy eräs mielenkiintoinen seikka. Kirjaanutmislomakkeelle mennään selaimen osoitteen ollessa _/login_, määrittelevä Route on seuraavassa
+Kirjautumisen toteuttamiseen liittyy eräs mielenkiintoinen seikka. Kirjaantumislomakkeelle mennään selaimen osoitteen ollessa _/login_, määrittelevä Route on seuraavassa
 
 ```react
 <Router>
   <div>
-         
-    <Route path="/login" render={({history}) => 
-      <Login history={history} onLogin={this.login}/>} 
+    <Route path="/login" render={({history}) =>
+      <Login history={history} onLogin={this.login} />}
     />
   </div>
 </Router>
 ```
 
-Routen render-metodi ottaa nyt vastaan parametrin [history](https://reacttraining.com/react-router/web/api/history), joka tarjoaa mm. mahdollisuuden manipuloida selaimen osoiterivin arvoa ohjelmallisesti. 
+Routen render-metodi ottaa nyt vastaan parametrin [history](https://reacttraining.com/react-router/web/api/history), joka tarjoaa mm. mahdollisuuden manipuloida selaimen osoiterivin arvoa ohjelmallisesti.
 
 Renderöitävälle _Login_-näkymälle annetaan parametriksi _history_-olio ja kirjautumisen komponentin _App_ tilaan synkronoiva funktio _this.login_:
 
 ```react
-<Login history={history} onLogin={this.login}/>} 
+<Login history={history} onLogin={this.login}/>}
 ```
 
 Komponentin koodi seuraavassa
@@ -1431,19 +1430,20 @@ const Login = ({onLogin, history}) => {
     history.push('/')
   }
   return (
-  <div>
-    <h2>login</h2>
-    <form onSubmit={onSubmit}>
-      <div>
-        username: <input />
-      </div>
+    <div>
+      <h2>login</h2>
+      <form onSubmit={onSubmit}>
         <div>
-          password: <input type='password'/>
-        </div>      
-      <button>login</button>
-    </form>
-  </div>
-)}
+          username: <input />
+        </div>
+          <div>
+            password: <input type="password" />
+          </div>
+        <button>login</button>
+      </form>
+    </div>
+  )
+}
 ```
 
 Kirjautumisen yhteydessä funktiossa _onSubmit_ kutsutaan _history_-olion metodia _push_. Käytetty komento <code>history.push('/')</code> saa aikaan sen, että selaimen osoiteriville tulee osoitteeksi _/_ ja sovellus renderöi komponentin _Home_.
@@ -1456,26 +1456,25 @@ Näkymän _Users_ routeen liittyy vielä eräs mielenkiintoinen detalji:
 ```react
 <Router>
   <div>
-         
-    <Route path="/users" render={() => 
-      this.state.user 
+    <Route path="/users" render={() =>
+      this.state.user
         ? <Users />
         : <Redirect to="/login" />
       }/>
-    <Route path="/login" render={({history}) => 
-      <Login history={history} onLogin={this.login}/>} 
+    <Route path="/login" render={({history}) =>
+      <Login history={history} onLogin={this.login} />}
     />
   </div>
 </Router>
 ```
 
-Jos käyttäjä ei ole kirjautuneena, ei renderöidäkään näkymää _Users_ vaan sen sijaan uudelleenohjataan käyttäjä _Redirect_-komponentin avulla kirjautumissivulle 
+Jos käyttäjä ei ole kirjautuneena, ei renderöidäkään näkymää _Users_ vaan sen sijaan uudelleenohjataan käyttäjä _Redirect_-komponentin avulla kirjautumissivulle
 
 ```react
 <Redirect to="/login" />
 ```
 
-Todellisessa sovelluksessa olisi kentie parempi olla kokonaan näyttämättä navigaatiovalikossa kirjautumista edellyttäviä näkymiä jos käyttäjä ei ole kirjautunut sovellukseen.
+Todellisessa sovelluksessa olisi kenties parempi olla kokonaan näyttämättä navigaatiovalikossa kirjautumista edellyttäviä näkymiä jos käyttäjä ei ole kirjautunut sovellukseen.
 
 Seuraavassa vielä komponentin _App_ koodi kokonaisuudessaan:
 
@@ -1503,10 +1502,10 @@ class App extends React.Component {
 
   render() {
     const noteById = (id) =>
-      this.state.notes.find(note => note.id === Number(id)) 
+      this.state.notes.find(note => note.id === Number(id))
 
     return (
-      <div>        
+      <div>
         <Router>
           <div>
             <div>
@@ -1514,29 +1513,29 @@ class App extends React.Component {
               <Link to="/notes">notes</Link> &nbsp;
               <Link to="/users">users</Link> &nbsp;
               {this.state.user
-                ? <em>{this.state.user} logged in</em> 
+                ? <em>{this.state.user} logged in</em>
                 : <Link to="/login">login</Link>
               }
             </div>
 
             <Route exact path="/" render={() => <Home />} />
             <Route exact path="/notes" render={() => <Notes notes={this.state.notes}/>} />
-            <Route exact path="/notes/:id" render={({match}) => 
+            <Route exact path="/notes/:id" render={({match}) =>
               <Note note={noteById(match.params.id)} />}
-            />            
-            <Route path="/users" render={() => 
-              this.state.user 
+            />
+            <Route path="/users" render={() =>
+              this.state.user
                 ? <Users />
                 : <Redirect to="/login" />
               }/>
-            <Route path="/login" render={({history}) => 
-              <Login history={history} onLogin={this.login}/>} 
+            <Route path="/login" render={({history}) =>
+              <Login history={history} onLogin={this.login} />}
             />
           </div>
         </Router>
         <div>
           <em>Note app, Department of Computer Science 2018</em>
-        </div>  
+        </div>
       </div>
     )
   }
@@ -1567,7 +1566,7 @@ const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
 </div>
 ```
 
-eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin sen näkymättömäksi asettava tyyli 
+eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin sen näkymättömäksi asettava tyyli
 
 ```CSS
 { display: 'none' }
@@ -1575,7 +1574,7 @@ eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin s
 
 Periaate inline-tyylien määrittelyssä on siis erittäin yksinkertainen. Mihin tahansa React-komponenttiin tai elementtiin voi liittää attribuutin _style_, jolle annetaan arvoksi Javascript-oliona määritelty joukko _CSS_-sääntöjä.
 
-CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluaisimme asettaa jollekin elementille vihreän kursivoidun 12 pikselin korkuisen fontin, eli CSS-syntaktilla 
+CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluaisimme asettaa jollekin elementille vihreän kursivoidun 12 pikselin korkuisen fontin, eli CSS-syntaktilla
 
 ```CSS
 {
@@ -1595,7 +1594,7 @@ const footerStyle = {
 }
 ```
 
-Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:n on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa. 
+Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:n on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa.
 
 Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän olion avulla seuraavasti:
 
@@ -1603,14 +1602,14 @@ Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän oli
 <div style={footerStyle}>
   <br />
   <em>Note app, Department of Computer Science 2018</em>
-</div>  
-```
+</div>
+´´´
 
 Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta määritellä.
 
 Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tuli erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä.
 
-Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin näennäinen eroittelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu noudattaen sovelluksen loogisia toiminnallisia kokonaisuuksia. Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten ettö komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
+Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin näennäinen erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu noudattaen sovelluksen loogisia toiminnallisia kokonaisuuksia. Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten että komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
 
 ## tehtäviä
 
