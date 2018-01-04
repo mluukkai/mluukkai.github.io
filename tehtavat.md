@@ -1719,32 +1719,127 @@ class Filter extends React.Component {
 
 ### connect
 
-#### 104
+#### 104 paremmat anekdootit, osa 5
 
-#### 105
+Sovelluksessa välitetään _redux store_ tällä hetkellä kaikille komponenteille propseina. 
 
-### backend
+Ota käyttöön kirjasto [react-redux](https://github.com/reactjs/react-redux) ja muuta komonenttia _Notification_, se pääsee käsiksi tilaan _connect_-funktion välityksellä.
 
-#### 106 hae backendista
+Huomaa, että toimiakseen _context_ edellyttää että sovelukselle on määriteltävä  [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
 
-#### 107 talleta
+
+#### 105 paremmat anekdootit, osa 6
+
+Tee sama komponentille _Filter_ ja _AnecdoteForm_.
+
+#### 106 paremmat anekdootit, osa 7
+
+Muuta myös _AnecdoteList_ käyttämään connectia.
+
+Poista turhaksi staten propseina tapahtuva välittäminen, eli pelkistä _App_ muotoon:
+
+```js
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Programming anecdotes</h1>
+        <Notification />
+        <AnecdoteForm />
+        <AnecdoteList />
+      </div>
+    )
+  }
+}
+```
+
+#### 107 paremmat anekdootit, osa 8
+
+Välitä komponentille _AnecdoteList_ connectin avulla ainoastaan yksi stateen liittyvä propsi, filtterin tilan perusteella näytetävät anekdootit samaan tapaan kuin materiaalin luvussa [Presentational/Container revisited](osa6/#Presentational/Container-revisited).
+
+Komponentin _AnecdoteList_ metodi _render_ siis typistyy suunilleen seuraavaan muotoon
+
+```react
+class AnecdoteList extends React.Component {
+  // ...
+  render() {  
+    return (
+      <div>
+        <h2>Anecdotes</h2>
+        <Filter />
+        {this.props.anecdotesToShow.map(anecdote =>
+          <div key={anecdote.id}>
+            ...
+          </div>
+        )}
+      </div>
+    )
+  )
+}
+```
+
+### redux ja backend
+
+#### 108 anekdootit ja backend, osa 1
+
+Hae sovelluksen käynnistyessä anekdootit json-serverillä toteutetusta backendistä. 
+
+Backendin alustavan sisällön saat esim. [täältä](https://github.com/mluukkai/redux-anecdotes-v2/wiki).
+
+#### 109 anekdootit ja backend, osa 2
+
+Muuta uusien anekdoottien luomista siten, että anekdootit talletetaan backendiin. 
+
+#### 110 anekdootit ja backend, osa 3
+
+Muuta myös äänestäminen siten, että anekdootit talletetaan backendiin. Jos teet talletuksen HTTP PUT -operaatiolla, niin muista että joudut korvaamaan tallettaessa koko olion.
 
 ### thunk
 
-#### 108 backendi
+#### 111 anekdootit ja backend, osa 4
 
-#### 109 ajastus
+Muuta redux-storen alustus tapahtumaan _redux-thunk_-kirjaston avulla toteutettuun asynkroiseen actioniin.
+
+#### 112 anekdootit ja backend, osa 5
+
+Muuta myös uuden anekdootin luominen ja äänestäminen tapahtumaan _redux-thunk_-kirjaston avulla toteutettuihin asynkronisiin actioneihin.
+
+#### 113 anekdootit ja backend, osa 6
+
+Notifikaatioiden tekeminen on nyt hieman ikävää, sillä se edellyttää kahden actionin tekemistä ja _setTimeout_-funktion käyttöä:
+
+```js
+this.props.notifyWith(`you voted '${anecdote.content}'`)
+setTimeout(() => {
+  this.props.clearNotification()
+}, 10000)
+}
+```
+
+Tee asynkrooninen action creator, joka mahdollistaa notifikaation antamisen seuraavasti:
+
+```js
+this.props.notify(`you voted '${anecdote.content}'`, 10)
+}
+```
+
+eli ensimmäisenä parametrina on renderöitävä teksti ja toisena notifikaation näyttöaika sekunneissa. 
+
+Ota paranneltu notifikaatiotapa käyttöön sovelluksessasi.
 
 ### router
 
-#### 110
-#### 111
-#### 112
-#### 113
 #### 114
 #### 115
+#### 116
+
+### inline- tyylit
+
+#### 117
+#### 118
 
 ### ui-framework
 
+#### 119
 
 
