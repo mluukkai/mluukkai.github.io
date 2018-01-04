@@ -413,7 +413,7 @@ Tee nyt tehtävät [100-103](../tehtavat#yhdistetyt-reducerit)
 
 ## Connect
 
-Kaikissa Redux-storea käyttävissä komponenteissa on nyt runsaasti samaa koodia
+Kaikissa Redux-storea käyttävissä komponenteissa on runsaasti samaa koodia
 
 ```js
 class ComponentUsingReduxStore extends React.Component {
