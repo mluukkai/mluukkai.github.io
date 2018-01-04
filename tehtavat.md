@@ -832,7 +832,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 #### 50 puhelinluettelo full stack
 
-Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
+Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#staattisten-tiedostojen-tarjoaminen-backendistä)
 
 Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
