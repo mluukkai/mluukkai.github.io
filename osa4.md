@@ -288,7 +288,7 @@ npm install --save-dev jest
 
 määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```bash
+```json
 {
   //...
   "scripts": {
@@ -445,7 +445,7 @@ Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovellusk
 
 Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovelluksen _NODE_ENV_ saa arvokseen _test_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2217,7 +2217,7 @@ node_modules/.bin/eslint index.js
 
 Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2238,7 +2238,7 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error"
@@ -2256,7 +2256,7 @@ Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyj
 Mukana on myös _console.log_-komennoista varoittava sääntö-
 Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/docs/user-guide/configuring#configuring-rules) määrittelemällä sen "arvoksi" konfiguraatiossa 0. Tehdään toistaiseksi näin säännölle _no-console_.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error",
@@ -2269,7 +2269,7 @@ ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa
 Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
 (https://eslint.org/docs/rules/no-process-env), omalla koneellani täm ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
 
-```bash
+```js
 module.exports = {
   // ...
   "globals": {

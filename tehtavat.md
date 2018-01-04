@@ -591,7 +591,7 @@ Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react deve
 
 #### 29 puhelinluettelo osa 4
 
-Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata :
+Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
 
 ![]({{ "/assets/teht/12c.png" | absolute_url }})
 
@@ -726,7 +726,7 @@ Muuta toiminnallisuutta siten, että jos jo olemassaolevalle henkilölle lisät�
 
 #### 38 puhelinluettelo osa 11
 
-Toteuta osan 2 esimerkin [parempi virheilmoitus](osa#parempi-virheilmoitus) tyyliin ruudulla muutaman sekunnin näkyvä ilmoitus, joka kertoo onnistuneista operaatioista (henkilön lisäys ja poisto, sekä numeron muutos):
+Toteuta osan 2 esimerkin [parempi virheilmoitus](osa2/#parempi-virheilmoitus) tyyliin ruudulla muutaman sekunnin näkyvä ilmoitus, joka kertoo onnistuneista operaatioista (henkilön lisäys ja poisto, sekä numeron muutos):
 
 <img src="/assets/teht/17.png" height="300">
 
@@ -832,7 +832,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 #### 50 puhelinluettelo full stack
 
-Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
+Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#staattisten-tiedostojen-tarjoaminen-backendistä)
 
 Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
