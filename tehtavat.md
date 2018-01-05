@@ -776,7 +776,7 @@ Jos id:tä vastaavaa puhelinnumerotietoa ei ole, tulee palvelimen vastata asianm
 
 Toteuta toiminnallisuus, jonka avulla puhelinnumerotieto on mahdollista poistaa numerotiedon yksilöivään URL:iin tehtävällä HTTP DELETE -pyynnöllä.
 
-Testaa toiminnallisuus postmanilla.
+Testaa toiminnallisuus Postmanilla.
 
 #### 44 puhelinluettelon backend osa 4
 
@@ -820,7 +820,7 @@ Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 
 Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
 
-Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
+Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki. Jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
 
 #### 49 puhelinluettelon backend osa 9
 
@@ -840,11 +840,11 @@ Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
 ![]({{ "/assets/teht/22.png" | absolute_url }})
 
-### mogoosen alkeet
+### mongoosen alkeet
 
 #### 51 tietokanta komentoriviltä
 
-Luo sovellukselle pilvessä oleva mongo esim. herokun avulla.
+Luo sovellukselle pilvessä oleva mongo esim. Herokun avulla.
 
 Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
 
@@ -860,13 +860,19 @@ Ohjelma tulostaa
 lisätään henkilö Joulupukki numero 040-1234556 luetteloon
 ```
 
-ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen komentoriviparametri voi sisältää välilyöntejä jos se annetaan hipsuissa:
+ja lisää uuden yhteystiedon tietokantaan. Huomaa, että jos nimi sisältää välilyöntejä, on se annettava hipsuissa:
 
 ```bash
 node mongo.js 'Arto Vihavainen' 040-1234556
 ```
 
-Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js</pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
+Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla
+
+```bash
+node mongo.js
+```
+
+tulostaa ohjelma tietokannassa olevat numerotiedot:
 
 <pre>
 puhelinluettelo:
@@ -922,7 +928,7 @@ näin vältyt monilta ikäviltä yllätyksiltä.
 
 #### 55 puhelinluettelo ja tietokanta, osa 3
 
-Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan.
+Mutta backendiä siten, että numerotietojen poistaminen päivittyy tietokantaan.
 
 Varmista, että frontend toimii muutosten jälkeen.
 

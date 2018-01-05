@@ -1080,7 +1080,7 @@ Mongon käyttäminen javascript-koodista suoraan [MongoDB Node.js driver](https:
 
 Mongoosesta voisi käyttää luonnehdintaa _object document mapper_ (ODM), ja sen avulla javascript-olioiden tallettaminen mongon dokumenteiksi on suoraviivaista.
 
-Asennetaan mogoose:
+Asennetaan mongoose:
 
 ```bash
 npm install mongoose --save
@@ -1135,7 +1135,7 @@ mongoose.connect(url, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 ```
 
-Valitettavasti mongosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
+Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
 ### skeema
 
@@ -1512,7 +1512,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 Jos kannasta ei löydy haettua olioa, muuttujan _note_ arvo on _undefined_ ja koodi ajautuu _else_-haaraan. Siellä vastataan kyselyyn _404 not found_.
 
-Jos id ei ole hyväksyttävässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
+Jos id ei ole hyväksyttävässä muodossa, ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
 
 > The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
 
@@ -1520,7 +1520,7 @@ Vastaukseen on lisätty myös hieman dataa kertomaan virheen syystä.
 
 Promisejen yhteydessä kannattaa melkeinpä aina lisätä koodiin myös virhetilainteiden käsittely, muuten seurauksena on usein hämmentäviä vikoja.
 
-Ei ole koskaan huno idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virheenkäsittelijässä:
+Ei ole koskaan huono idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virheenkäsittelijässä:
 
 ```js
 .catch(error => {
@@ -1724,7 +1724,7 @@ Sovelluksen juurihakemistoon tehdään sitten tiedosto nimeltään _.env_, minne
 MONGODB_URI=mongodb://....
 ```
 
-Tiedosto **tulee heti gitignorata** sillä emme halua dotenvin tietoja verkkoon.
+Tiedosto .env **tulee heti gitignorata** sillä emme halua julkaista .env -tiedoston sisältöä verkkoon.
 
 dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön komennolla
 
