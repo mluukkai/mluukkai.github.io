@@ -1795,11 +1795,11 @@ Tee nyt tehtävät [114-116](../tehtavat#router)
 
 Osan 2 [lopussa](osa2/Tyylien-lisääminen) lisäsimme React-sovellukseen tyylejä vanhan koulukunnan tapaan yhden koko sovelluksen tyylit määrittelevän CSS-tiedoston avulla.
 
-Muutamaan kertaan olemme ohimennen määritelleet komponenteille [inline](https://react-cn.github.io/react/tips/inline-styles.html)-tyylejä, eli määriteleet suoraan komponentin muun koodin seassa.
+Olemme jo muutamaan kertaan määritelleet komponenteille [inline](https://react-cn.github.io/react/tips/inline-styles.html)-tyylejä, eli määritelleet CSS:ää suoraan komponentin muun koodin seassa.
 
 Edellisessä osassa piilotimme inline-tyylin avulla napin ruudusta tietyissä tapauksissa:
 
-```js
+```bash
 const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
 
 <div style={hideWhenVisible}>
@@ -1807,7 +1807,7 @@ const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
 </div>
 ```
 
-eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin sen näkymättömäksi asettava tyyli
+eli jos _this.state.visible_ oli arvoltaan tosi, liitetään _div_-komponenttiin sen näkymättömäksi asettava tyyli
 
 ```CSS
 { display: 'none' }
@@ -1815,7 +1815,7 @@ eli jos _this.state.visible_ oli arvoltaan tosi, liitetiin _div_-komponenttiin s
 
 Periaate inline-tyylien määrittelyssä on siis erittäin yksinkertainen. Mihin tahansa React-komponenttiin tai elementtiin voi liittää attribuutin _style_, jolle annetaan arvoksi Javascript-oliona määritelty joukko _CSS_-sääntöjä.
 
-CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluaisimme asettaa jollekin elementille vihreän kursivoidun 12 pikselin korkuisen fontin, eli CSS-syntaktilla
+CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluamme asettaa jollekin elementille vihreän, kursivoidun ja 16 pikselin korkuisen fontin, eli CSS-syntaktilla ilmaistuna
 
 ```CSS
 {
@@ -1825,7 +1825,7 @@ CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedost
 }
 ```
 
-tulisi tämä muotilla Reactin inline-tyylin määrittelevänä oliona seuraavasti
+tulee tämä muotilla Reactin inline-tyylin määrittelevänä oliona seuraavasti
 
 ```js
 const footerStyle = {
@@ -1837,20 +1837,22 @@ const footerStyle = {
 
 Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:n on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa.
 
-Voisimme muotoilla edellisen lukumme footer-elementin tyylit määrittävän olion avulla seuraavasti:
+Voimme muotoilla edellisen luvun footer-elementin olion _footerStyle_ avulla seuraavasti:
 
-```react
+```bash
 <div style={footerStyle}>
   <br />
   <em>Note app, Department of Computer Science 2018</em>
 </div>
-´´´
+```
 
-Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta määritellä.
+Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta käyttää (ainakaan helposti).
 
-Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tuli erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä.
+Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tulee erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä. Vanha koulukunta pyrkiikin siihen että sovelluksen CSS, HTML ja Javascript on kaikki kirjoitettu omiin tiedostoihinsa.
 
-Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin näennäinen erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu noudattaen sovelluksen loogisia toiminnallisia kokonaisuuksia. Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten että komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
+Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu (eli jakaa sovelluksen koodi eri tiedostoihin) noudattaen _sovelluksen loogisia toiminnallisia kokonaisuuksia_. 
+
+Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten että komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
 
 ## tehtäviä
 

@@ -1884,16 +1884,29 @@ Paranna toiminnallisuutta siten, että luomisen jälkeen siirrytään automaatti
 
 ![]({{ "/assets/teht/44.png" | absolute_url }})
 
-
 ### inline-tyylit
+
+Parannellaan edellisen tehtäväsarjan ulkoasua inlinetyylien avulla.
 
 #### 117 styled anecdotes, osa 1
 
-parempi notifikaatio
+Tee notifikaatioista tyylikkäämpi, esim. seuraavaan tyyliin:
+
+![]({{ "/assets/teht/45.png" | absolute_url }})
+
+Notifikaatiosi ei tarvitse näyttää samanlaisela, tyyli on vapaa. 
+
+Googlaile tarvittaessa apua. Hyödyllisiä avainsanoja ovat ainakin _border_, _margin_ ja _padding_. [w3schoolsin](https://www.w3schools.com/css/default.asp) sivulta löytyy paljon esimerkkejä tyyleihin liittyen.
 
 #### 118 styled anecdotes, osa 2
 
-tyylikäs navigaatiopalkki
+Paranna sovelluksen menun ulkoasua esim. seuraavasti
+
+![]({{ "/assets/teht/46.png" | absolute_url }})
+
+Jos haluat erotella aktiivisena olevan sivun linkin tyylin menussa, kannattaa vaihtaa käytössä oleva komponentti [Link](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/Link.md) sen edistyksellisempään versioon, eli komponenttiin [NavLink](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md).
+
+NavLink toimii Link-komponentin tavoin, mutamia käteviä lisäominaisuuksia kuten attribuutin [activeStyle](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#activestyle-object) onka kanssa useimmiten käytetään attribuuttia [exact](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#exact-bool).
 
 ### ui-framework
 
