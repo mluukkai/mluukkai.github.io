@@ -1862,62 +1862,58 @@ Tee nyt tehtävät [117 ja 118](../tehtavat#inline-tyylit)
 
 Eräs lähestymistapa sovelluksen tyylien määrittelyyn on valmiin "UI frameworkin", eli Suomeksi ehkä käyttöliittymätyylikirjaston käyttö.
 
-Ensimmäinen tai ainakin ensimmäinen kuuluisa UI framework oli Twitterin kehittämä [Bootstrap](https://getbootstrap.com/) joka lienee edelleen UI frameworkeista suosituin. Viime aikoina UI frameworkeja on noussut kuin sieniä sateella. Valikoima on niin iso, ettei tässä kannata edes yrittää tehdä tyhjentävää listaa.
+Ensimmäinen laajaa kuuluisuutta saanut UI framework oli Twitterin kehittämä [Bootstrap](https://getbootstrap.com/), joka lienee edelleen UI frameworkeista eniten käytetty. Viime aikoina UI frameworkeja on noussut kuin sieniä sateella. Valikoima on niin iso, ettei tässä kannata edes yrittää tehdä tyhjentävää listaa.
 
 Monet UI-frameworkit sisältävät web-sovellusten käyttöön valmiiksi määriteltyjä teemoja sekä "komponentteja", kuten painikkeita, menuja, taulukkoja. Termi komponentti on edellä kirjotettu hipsuissa sillä kyse ei ole samasta asiasta kuin React-komponentti. Useimmiten UI-frameworkeja käytetään sisällyttämällä sovellukseen frameworkin määrittelemät CSS-tyylitiedostot sekä Javascript-koodi.
 
-Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-frameworkin avulla määritellyistä "komponenteista" on tehty React-komponentteja. Esim. Bootstrapista on olemassa parikin React-versiota [reactstrap](http://reactstrap.github.io/) ja [react-bootstrap](https://react-bootstrap.github.io/)
+Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-frameworkin avulla määritellyistä "komponenteista" on tehty React-komponentteja. Esim. Bootstrapista on olemassa parikin React-versiota [reactstrap](http://reactstrap.github.io/) ja [react-bootstrap](https://react-bootstrap.github.io/).
 
-### reactstrap
+### react bootstrap
 
-Tehdään nyt [reactstrap](http://reactstrap.github.io/)-kirjaston auvlla luvussa [React-roter](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
+Tehdään nyt [react-bootstrap](https://react-bootstrap.github.io/)-kirjaston avulla luvussa [React-roter](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
 
-Asennetaan kirjasto suorittamalla [manuaalin ohjeen mukaan](http://reactstrap.github.io/) komento
+Asennetaan kirjasto suorittamalla  komento
 
 ```bash
-npm install reactstrap@next bootstrap@4.0.0-beta.3 --save
+npm install --save react-bootstrap
 ```
 
-Lisätään sitten sovelluksen _index.js_ tiedostoon seuraava import:
+Lisätään sitten sovelluksen _index.html_ tiedoston _head_-tagin sisään bootstrapin css-määrittelyt lataava rivi:
 
-```js
-import 'bootstrap/dist/css/bootstrap.css'
+```bash
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+  // ...
+</head>    
 ```
 
-Sovellus pitää tässä vaiheessa (ehkä) uudelleenkäynnistää. Sovellus näyttää uudelleenkäynnistyksen heti hieman tyylikkäämmältä:
+Kun sovellus ladataan uudelleen, näyttää se jo aavistuksen tyylikkäämmältä:
 
 ![]({{ "/assets/6/10.png" | absolute_url }})
 
-Nyt olemme valmiina käyttämään Reactstrapin [komponentteja](http://reactstrap.github.io/components/).
 
-Aloitetaan [Layoutista](https://reactstrap.github.io/components/layout/). Dokumentti ei ilmaise asiaa kovin selkeästi, mutta yleensä on järkevää sijoittaa kaikki renderöitävä sisältä komponentin _Container_ sisään.
+Bootstrapissa koko sivun sisältö renderöidään yleensä [container](https://getbootstrap.com/docs/4.0/layout/overview/#containers):ina, eli käytännössä koko sovelluksen ympärivä _div_-elementti merkitään luokalla _container_:
 
-Muutetaan komponenttia _App_ siten, että se renderöi kaiken _Container_-komponentin sisällä:
-
-```js
-import { Container } from 'reactstrap'
-
+```bash
 // ...
 
 class App extends React.Component {
   // ...
   render() {
     return (
-      <Container>
-
-      </Container>
+      <div className='container'>  
+        // ...
+      </div>
     )
   }
 }
 ```
 
-Huomaa, että kaikki sovelluksen käyttämät _ReactStrap_-komponentit tulee importata ennen niiden käyttöä.
-
 Sovelluksen ulkoasu muuttuu siten, että sisältö ei ole enää yhtä kiinni selaimen reunoissa:
 
 ![]({{ "/assets/6/11.png" | absolute_url }})
 
-Muutetaan seuraavaksi komponenttia _Notes_ siten, että se renderöi muistiinpanojen listan [taulukkona](https://reactstrap.github.io/components/tables/):
+Muutetaan seuraavaksi komponenttia _Notes_ siten, että se renderöi muistiinpanojen listan [taulukkona](https://getbootstrap.com/docs/4.0/content/tables/). React bootstrap tarjoaa valmiin komponentin [Table](https://reactstrap.github.io/components/tables/), joten CSS-luokan käyttöön ei ole tarvetta.
 
 ```react
 const Notes = ({notes}) => (
@@ -1945,40 +1941,62 @@ Ulkoasu on varsin tyylikäs:
 
 ![]({{ "/assets/6/12.png" | absolute_url }})
 
-Jotta reactstrapin taulukko-komponentti toimisi, täytyy se muistaa importata.
+Huomaa, että koodissa käytettävät React bootstrapin komponenit täytyy importataotta, eli koodiin on lisättävä:
+
+```bash
+import { Table } from 'react-bootstrap'
+```
 
 ### lomake
 
-Parannellaan seuraavaksi näkymän _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponenttien avulla:
+Parannelaan seuraavaksi näkymän _Login_ kirjautumislomaketta Bootstrapin [lomakkeiden](https://getbootstrap.com/docs/4.0/components/forms/) avulla. 
 
-```react
+
+React bootstrap  tarjoaa valmiit  [komponentit](https://react-bootstrap.github.io/components/forms/) myös lomakkeiden muodostamiseen (dokumentaatio tosin ei ole paras mahdollinen):
+
+```bash
 const Login = ({onLogin, history}) => {
-  const onSubmit = (e) => {
-    e.preventDefault()
-    onLogin(e.target.username.value)
-    history.push('/')
-  }
+  // ...
   return (
-  <div>
-    <h2>login</h2>
-    <Form onSubmit={onSubmit}>
-      <FormGroup>
-        <Label>username</Label>
-        <Input name="username" />
-      </FormGroup>
-      <FormGroup>
-        <Label>password</Label>
-        <Input type="password" />
-      </FormGroup>
-      <Button>login</Button>
-    </Form>
-  </div>
+    <div>
+      <h2>login</h2>
+      <form onSubmit={onSubmit}>
+        <FormGroup>
+          <ControlLabel>username:</ControlLabel>
+          <FormControl 
+            type='text'
+            name='username'
+          />  
+          <ControlLabel>password:</ControlLabel>
+          <FormControl
+            type='password'
+          />             
+          <Button bsStyle="success" type='submit'>login</Button>
+        </FormGroup>
+      </form>
+    </div>
 )}
 ```
 
+**Huom**: jotta kirjautumisnappi saisi aikaan lomakkeen lähettämisen, eli _submit_-tapahtuman, on napille lisätty tyyppi-attribuutti:
+
+```bash
+<Button bsStyle="success" type='submit'>login</Button>
+```
+
+Importoitavien komponenttien määrä kasvaa:
+
+```bash
+import { Table, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
+```
+
+Lomake näyttää parantelun jälkeen seuraavalta:
+
+![]({{ "/assets/6/12b.png" | absolute_url }})
+
 ### alert
 
-Viimeistellään vielä sovellus vielä toteuttamalla kirjautumisen jälkeinen _notifikaatio_:
+Toteutetaan sovellukseen kirjautumisen jälkeinen _notifikaatio_:
 
 ![]({{ "/assets/6/13.png" | absolute_url }})
 
@@ -1993,9 +2011,9 @@ login = (user) => {
 }
 ```
 
-ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.github.io/components/alerts/) avulla sopivassa kohta komponentin _App_ metodia render:
+ja renderöidään viesti Bootstrapin [Alert](https://getbootstrap.com/docs/4.0/components/alerts/)-komponentin avulla. React bootstrap tarjoaa tähän jälleen valmiin [React-komponentin](https://react-bootstrap.github.io/components/alerts/):
 
-```js
+```bash
 {(this.state.message &&
   <Alert color="success">
     {this.state.message}
@@ -2003,20 +2021,107 @@ ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.gi
 )}
 ```
 
-Esimerkin sovelluksen koodi kokonaisuudessaan [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/reactstrapped).
+Muutetaan vielä lopuksi sovelluksen navigaatiomenu käyttämään Bootstrapin [Navbaria](https://getbootstrap.com/docs/4.0/components/navbar/). Tähänkin React bootstrap tarjoaa [valmiit komponentit](https://react-bootstrap.github.io/components/navbar/#navbars-mobile-friendly), dokumentaati on hieman kryptistä, mutta trial and error johtaa lopulta toimivaan ratkaisuun:
 
-### huomio
+```bash
+<Navbar inverse collapseOnSelect>
+  <Navbar.Header>
+    <Navbar.Brand>
+      Anecdote app                
+    </Navbar.Brand>
+    <Navbar.Toggle />
+  </Navbar.Header>
+  <Navbar.Collapse>
+    <Nav>
+      <NavItem href="#">
+        <Link to="/">home</Link>
+      </NavItem>
+      <NavItem  href="#">
+        <Link to="/notes">notes</Link>
+      </NavItem>
+      <NavItem  href="#">
+        <Link to="/users">users</Link>
+      </NavItem>         
+      <NavItem>
+        {this.state.user
+          ? <em>{this.state.user} logged in</em>
+          : <Link to="/login">login</Link>
+        }
+      </NavItem>                          
+    </Nav>  
+  </Navbar.Collapse>
+</Navbar>
+```
 
-käytä css:ää???
+Ulkoasu on varsin tyylikäs
+
+![]({{ "/assets/6/14.png" | absolute_url }})
+
+Jos selaimen kokoa kaventaa, huomaamme että menu "kollapsoituu" ja sen saa näkyville vain klikkaamalla:
+
+![]({{ "/assets/6/15.png" | absolute_url }})
+
+Bootstrap ja valtaosa tarjolla olevista UI-frameworkeista tuottavat [responsiivisia](https://en.wikipedia.org/wiki/Responsive_web_design) näkymiä, eli sellaisia jotka renderöityvät vähintään kohtuullisesti monen kokoisilla näytöillä.
+
+Chromen konsolin avulla on mahdollista simuloida sovelluksen käyttöä erilaisilla mobiilipäätteillä
+
+![]({{ "/assets/6/16.png" | absolute_url }})
+
+Sovellus toimii hyvin, mutta konsoiin vilkaisu paljastaa erään ikävän detaljin:
+
+![]({{ "/assets/6/17.png" | absolute_url }})
+
+Syy valituksiin on navigaatiorakenteessa
+
+```bash
+<NavItem href="#">
+  <Link to="/">home</Link>
+</NavItem>
+```
+
+Nämä sisäkkäiset komponentit sisältävät molemmat _a_-tagin ja React hermostuu tästä.
+
+Ongelma on ikävä ja sen kiertäminen on toki mahdollista, katso esim.
+<https://serverless-stack.com/chapters/adding-links-in-the-navbar.html>
+
+Esimerkin sovelluksen koodi kokonaisuudessaan [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/bootstrapped).
 
 ### muita UI-frameworkeja
 
 Luetellaan tässä kaikesta huolimatta muuitakin UI-frameworkeja. Jos oma suosikkisi ei ole mukana, tee pull request
 
-- <http://www.material-ui.com/#/>
-- <https://bulma.io/>
 - <https://semantic-ui.com/>
+- <http://www.material-ui.com/>
+- <https://bulma.io/>
 - <https://ant.design/>
 - <https://foundation.zurb.com/>
+
+Alun perin tässä osassa oli tarkoitus käyttää [Material UI](http://www.material-ui.com/):ta, mutta kirjasto on juuri nyt kiivaan kehityksen alla ennen version 1.0 julkaisemista ja osa dokumentaation esimerkeistä ei toiminut uusimmalla versiolla. Voikin olla viisainta odotella Materialin kanssa verisiota 1.0.
+
+### Loppuhuomioita
+
+Esimerkissä käytettiin bootstrapia React-komponentit tarjoavan kirjaston [React bootstrap](https://react-bootstrap.github.io/) kautta. Olisimme voineet aivan yhtä hyvin käyttää Bootstrapia suoraan, liittämällä HTML-elementteihin CSS-luokkia, eli sen sijaan että määrittelimme esim. taulukon komponentin _Table_ avulla
+
+```bash
+<Table striped>
+  // ...
+</Table>
+```
+
+olisimme voineet käyttää normaalia HTML:n taulukkoa _table_ ja CSS-luokkaa
+
+```bash
+<table className='table' striped>
+  // ...
+</table>
+```
+
+Taulukon määrittelyssä React bootstrapin tuoma etu ei ole suuri. Tiiviimmän ja ehkä paremmin luettavissa olevan kirjoitusasun lisäksi toinen etu React-kirjastoina olevissa UI-frameworkeissa on se, että kirjastojen mahdollisesti käyttämä Javascript-koodi on sisällytetty React-komponentteihin. Esim. osa Bootstrapin komponenteista edellyttää toimiakseen muutamaakin ikävää [javascript-riippuvuutta](https://getbootstrap.com/docs/4.0/getting-started/introduction/#js) joita emme mielellään halua React-sovelluksiin sisällyttää.
+
+React-kirjastoina tarjottavien UI-frameworkkien ikävä puoli verrattuna frameworkin "suoraan käyttöön" on React-kirjastojen API:n mahdollinen epästabiilius ja osittain huono dokumentaatio.
+
+Kokonaan toinen kysymys on se kannattaako UI-frameworkkeja ylipäätän käyttää. Kukin määritelköön oman mielipiteensä, mutta CSS:ää taitamattomalle ja puutteellisilla design-taidoilla varustetulle ne ovat käyttökelpoisia työkaluja.
+
+## Tehtäviä
 
 Tee nyt tehtävät [119-121](../tehtavat#ui-framework)
