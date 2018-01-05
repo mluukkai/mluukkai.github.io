@@ -24,7 +24,7 @@ permalink: /osa6/
   - React router
   - Inline styles
 
-## Muistiinpano-svelluksen refaktorointia
+## Muistiinpano-sovelluksen refaktorointia
 
 Jatketaan osan 5 loppupuolella tehdyn muistiinpanosovelluksen yksinkertaistetun [redux-version](osa5/#Redux-muistiinpanot) laajentamista.
 
@@ -437,7 +437,7 @@ ComponentUsingReduxStore.contextTypes = {
 
 Vaikka rivit on helppo copy-pasteta aina uusiin komponentteihin, ei tämä ole tarkoituksenmukaista. Osan 5 luvussa [staten välittäminen propseissa ja contextissa](osa5/#staten-välittäminen-propseissa-ja-contextissa) myös varoiteltiin luottamasta liikaa Reactin Context APIin, se on kokeellinen ja saattaa poistua tulevissa versioissa. Contextia on siis ainakin tässä vaiheessa käytettävä varovasti.
 
-[React Redux](https://github.com/reactjs/react-redux) -kirjaston määrittelemä funktio [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) on paras ratkaisu siihen, miten Redux-store saadaan välitettyä React-componenteille. 
+[React Redux](https://github.com/reactjs/react-redux) -kirjaston määrittelemä funktio [connect](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) on paras ratkaisu siihen, miten Redux-store saadaan välitettyä React-componenteille.
 
 Connect voi olla aluksi haastava sisäistää, mutta hieman vaivaa kannattaa ehdottomasti nähdä. Tutustutaan nyt connectin käyttöön.
 
@@ -554,7 +554,7 @@ class NoteList extends React.Component {
 
 Storen _dispatch_-funktiota ei enää tarvitse kutsua, sillä _connect_ on muokannut action creatorin _importanceToggling_ sellainen, muotoon, joka sisältää  dispatchauksen.
 
-_mapDispatchToProps_ lienee aluksi hieman haastava ymmärtää, etenkin sen kohta käsiteltävä [vaihtoehtoinen käyttötapa](osa6/mapDispatchToPropsin-toinen-muoto). 
+_mapDispatchToProps_ lienee aluksi hieman haastava ymmärtää, etenkin sen kohta käsiteltävä [vaihtoehtoinen käyttötapa](osa6/mapDispatchToPropsin-toinen-muoto).
 
 Connectin aikaansaamaa tilannetta voidaan havainnollistaa seuraavasti:
 
@@ -680,9 +680,9 @@ ReactDOM.render(
 
 Lisäsimme jo edellisen osan lopussa sovellukseen _Providerin_, joten _connect_ oli tällä kertaa suoraan käytettävissä.
 
-### Huomio propsina välitetyn action creatoriin viittaamisesta 
+### Huomio propsina välitetyn action creatoriin viittaamisesta
 
-Tarkastellaan vielä erästä mielenkiintoista seikkaa komponentista _NoteForm_: 
+Tarkastellaan vielä erästä mielenkiintoista seikkaa komponentista _NoteForm_:
 
 ```react
 import React from 'react'
@@ -697,7 +697,7 @@ class NoteForm extends React.Component {
     e.target.note.value = ''
   }
 
-  render() {  
+  render() {
     // ...
   }
 }
@@ -735,7 +735,7 @@ render() {
 }
 ```
 
-näemme eron:     
+näemme eron:
 
 ![]({{ "/assets/6/5d.png" | absolute_url }})
 
@@ -927,7 +927,7 @@ connect(
 )(NoteList)
 ```
 
-taas on selkeästi _container_-komponentti, joita Dan Abramov 
+taas on selkeästi _container_-komponentti, joita Dan Abramov
 [luonnehtii](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) seuraavasti:
 
 - Are concerned with how things work.
@@ -1073,7 +1073,7 @@ noteService.getAll().then(notes =>
 )
 ```
 
-> **HUOM:** miksi emme käyttäneet koodissa promisejen ja _then_-metodilla rekisteröidyn tapahtumankäsittelijän sijaan awaitia? 
+> **HUOM:** miksi emme käyttäneet koodissa promisejen ja _then_-metodilla rekisteröidyn tapahtumankäsittelijän sijaan awaitia?
 >
 > await toimii ainoastaan _async_-funktioiden sisällä, ja _index.js_:ssä oleva koodi ei ole funktiossa, joten päädyimme tilanteen yksinkertaisuuden takia tällä kertaa jättämään _async_:in käyttämättä.
 
@@ -1332,7 +1332,7 @@ Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://git
 
 ### Redux DevTools
 
-Chromeen on asennettavissa [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), jonka avulla Redux-storen tilaa ja sitä muuttavia actioneja on mahdollisuus seurata selaimen konsolista. 
+Chromeen on asennettavissa [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), jonka avulla Redux-storen tilaa ja sitä muuttavia actioneja on mahdollisuus seurata selaimen konsolista.
 
 Selaimen lisäosan lisäksi debugatessa tarvitaan kirjastoa [redux-devtools-extension](https://www.npmjs.com/package/redux-devtools-extension). Asennetaan se komennolla
 
@@ -1398,7 +1398,7 @@ ja omat sivunsa muistiinpanojen ja käyttäjien tietojen näyttämiseen:
 
 [Vanhan koulukunnan websovelluksessa](osa1/#Perinteinen-web-sovellus) sovelluksen näyttämän sivun vaihto tapahtui siten että selain teki palvelimelle uuden HTTP GET -pyynnön ja renderöi sitten palvelimen palauttaman näkymää vastaavan HTML-koodin.
 
-Single page appeissa taas ollaan todellisuudessa koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista". Jos näkymää vaihdettaessa tehdään HTTP-kutsuja, niiden avulla haetaan ainoastaan JSON-muotoista dataa jota uuden näkymän näyttäminen ehkä edellyttää. 
+Single page appeissa taas ollaan todellisuudessa koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista". Jos näkymää vaihdettaessa tehdään HTTP-kutsuja, niiden avulla haetaan ainoastaan JSON-muotoista dataa jota uuden näkymän näyttäminen ehkä edellyttää.
 
 
 Navigaatiopalkki ja useita näkymiä sisältävä sovellus on erittäin helppo toteuttaa Reactilla.
@@ -1457,7 +1457,7 @@ class App extends React.Component {
 }
 ```
 
-Eli jokainen näkymä on toteutettu omana komponenttinaan ja sovelluksen tilassa pidetään tieto siitä, minkä näkymää vastaava komponentti menupalkin alla näytetään. 
+Eli jokainen näkymä on toteutettu omana komponenttinaan ja sovelluksen tilassa pidetään tieto siitä, minkä näkymää vastaava komponentti menupalkin alla näytetään.
 
 **Huom:** navigointivalikossa oleva _&amp;nbsp;_ tarkoittaa _a_-tagien väliin sjijoitettavaa välilyöntiä. CSS:n käyttö olisi luonnollisesti parempi tapa sivun ulkoasun muotoilulle mutta nyt tyydymme quick'n'dirty-ratkaisuun.
 
@@ -1815,7 +1815,7 @@ eli jos _this.state.visible_ oli arvoltaan tosi, liitetään _div_-komponenttiin
 
 Periaate inline-tyylien määrittelyssä on siis erittäin yksinkertainen. Mihin tahansa React-komponenttiin tai elementtiin voi liittää attribuutin _style_, jolle annetaan arvoksi Javascript-oliona määritelty joukko _CSS_-sääntöjä.
 
-CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluamme asettaa jollekin elementille vihreän, kursivoidun ja 16 pikselin korkuisen fontin, eli CSS-syntaktilla ilmaistuna
+CSS-säännöt määritellään hieman eri tavalla kuin normaaleissa CSS-tiedostoissa. Jos haluamme asettaa jollekin elementille vihreän, kursivoidun ja 16 pikselin korkuisen fontin, eli CSS-syntaksilla ilmaistuna
 
 ```CSS
 {
@@ -1850,7 +1850,7 @@ Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https
 
 Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tulee erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä. Vanha koulukunta pyrkiikin siihen että sovelluksen CSS, HTML ja Javascript on kaikki kirjoitettu omiin tiedostoihinsa.
 
-Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja Javascriptin erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu (eli jakaa sovelluksen koodi eri tiedostoihin) noudattaen _sovelluksen loogisia toiminnallisia kokonaisuuksia_. 
+Itseasiassa Reactin filosofia on täysin päinvastainen. Koska CSS:n, HTML:n ja Javascriptin erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu (eli jakaa sovelluksen koodi eri tiedostoihin) noudattaen _sovelluksen loogisia toiminnallisia kokonaisuuksia_.
 
 Toiminnallisen kokonaisuuden strukturointiyksikkö on React-komponentti, joka määrittelee niin sisällön rakenteen kuvaavan HTML:n, toiminnan määrittelevät Javascript-funktiot kuin komponentin tyylinkin yhdessä paikassa, siten että komponenteista tulee mahdollisimman riippumattomia ja yleiskäyttöisiä.
 
@@ -1949,9 +1949,9 @@ Jotta reactstrapin taulukko-komponentti toimisi, täytyy se muistaa importata.
 
 ### lomake
 
-```react
-Parannelaan seuraavaksi näkymäm _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponenttien avulla:
+Parannellaan seuraavaksi näkymän _Login_ kirjautumislomaketta ReactStrapin [lomake](https://reactstrap.github.io/components/form/)-komponenttien avulla:
 
+```react
 const Login = ({onLogin, history}) => {
   const onSubmit = (e) => {
     e.preventDefault()
@@ -1982,7 +1982,7 @@ Viimeistellään vielä sovellus vielä toteuttamalla kirjautumisen jälkeinen _
 
 ![]({{ "/assets/6/13.png" | absolute_url }})
 
-Asetetaan notifikaatio kirjatumisen yhteydessä komponentin _App_ tilan kenttään _message_:
+Asetetaan notifikaatio kirjautumisen yhteydessä komponentin _App_ tilan kenttään _message_:
 
 ```js
 login = (user) => {
@@ -1993,7 +1993,7 @@ login = (user) => {
 }
 ```
 
-ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.github.io/components/alerts/) avulla sopivassa kohta  komonentin _App_ metodia  render:
+ja renderöidään viesti ReactStrapin komponentin [Alert](https://reactstrap.github.io/components/alerts/) avulla sopivassa kohta komponentin _App_ metodia render:
 
 ```js
 {(this.state.message &&

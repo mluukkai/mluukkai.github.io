@@ -985,7 +985,7 @@ module.exports = Blog
 app.use(cors())
 app.use(bodyParser.json())
 
-const mongoUrl =  'mongodb://localhost/bloglist'
+const mongoUrl = 'mongodb://localhost/bloglist'
 mongoose.connect(mongoUrl, { useMongoClient: true })
 mongoose.Promise = global.Promise
 
@@ -1424,7 +1424,7 @@ tulee palvelimelle tehdä PUT-pyyntö osoitteeseen _/api/blogs/5a43fde2cbd20b12a
   author: "Joel Spolsky",
   title: "The Joel Test: 12 Steps to Better Code",
   url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
-},
+}
 ```
 
 **Bonus:** järjestä sovellus näyttämään blogit _likejen_ mukaisessa suuruusjärjestyksessä.
@@ -1639,9 +1639,9 @@ class AnecdoteForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
-    this.props.store.dispatch({ 
-      type: 'CREATE', 
-      content 
+    this.props.store.dispatch({
+      type: 'CREATE',
+      content
     })
 
   }
@@ -1680,7 +1680,7 @@ return (
     {this.props.store.getState()...}
   </div>
 )
-```    
+```
 
 Joudut siis muuttamaan/laajentamaan sovelluksen olemassaoleva reduceria. Tee toiminnallisuutta varten oma reduceri ja siirry käyttämään sovelluksessa yhdistettyä reduceria osan 6 materiaalin tapaan.
 
@@ -1727,11 +1727,11 @@ class Filter extends React.Component {
 
 #### 104 paremmat anekdootit, osa 5
 
-Sovelluksessa välitetään _redux store_ tällä hetkellä kaikille komponenteille propseina. 
+Sovelluksessa välitetään _redux store_ tällä hetkellä kaikille komponenteille propseina.
 
-Ota käyttöön kirjasto [react-redux](https://github.com/reactjs/react-redux) ja muuta komonenttia _Notification_, se pääsee käsiksi tilaan _connect_-funktion välityksellä.
+Ota käyttöön kirjasto [react-redux](https://github.com/reactjs/react-redux) ja muuta komponenttia _Notification_, se pääsee käsiksi tilaan _connect_-funktion välityksellä.
 
-Huomaa, että toimiakseen _context_ edellyttää että sovelukselle on määriteltävä  [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
+Huomaa, että toimiakseen _context_ edellyttää että sovelukselle on määriteltävä [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
 
 
 #### 105 paremmat anekdootit, osa 6
@@ -1763,12 +1763,12 @@ class App extends React.Component {
 
 Välitä komponentille _AnecdoteList_ connectin avulla ainoastaan yksi stateen liittyvä propsi, filtterin tilan perusteella näytetävät anekdootit samaan tapaan kuin materiaalin luvussa [Presentational/Container revisited](osa6/#Presentational/Container-revisited).
 
-Komponentin _AnecdoteList_ metodi _render_ siis typistyy suunilleen seuraavaan muotoon
+Komponentin _AnecdoteList_ metodi _render_ siis typistyy suunnilleen seuraavaan muotoon
 
 ```react
 class AnecdoteList extends React.Component {
   // ...
-  render() {  
+  render() {
     return (
       <div>
         <h2>Anecdotes</h2>
@@ -1788,13 +1788,13 @@ class AnecdoteList extends React.Component {
 
 #### 108 anekdootit ja backend, osa 1
 
-Hae sovelluksen käynnistyessä anekdootit json-serverillä toteutetusta backendistä. 
+Hae sovelluksen käynnistyessä anekdootit json-serverillä toteutetusta backendistä.
 
 Backendin alustavan sisällön saat esim. [täältä](https://github.com/mluukkai/redux-anecdotes-v2/wiki).
 
 #### 109 anekdootit ja backend, osa 2
 
-Muuta uusien anekdoottien luomista siten, että anekdootit talletetaan backendiin. 
+Muuta uusien anekdoottien luomista siten, että anekdootit talletetaan backendiin.
 
 #### 110 anekdootit ja backend, osa 3
 
@@ -1826,17 +1826,15 @@ Tee asynkrooninen action creator, joka mahdollistaa notifikaation antamisen seur
 
 ```js
 this.props.notify(`you voted '${anecdote.content}'`, 10)
-}
 ```
 
-eli ensimmäisenä parametrina on renderöitävä teksti ja toisena notifikaation näyttöaika sekunneissa. 
+eli ensimmäisenä parametrina on renderöitävä teksti ja toisena notifikaation näyttöaika sekunneissa.
 
 Ota paranneltu notifikaatiotapa käyttöön sovelluksessasi.
 
 ### router
 
-Jatketaan anekdoottien parissa. Ota seuraaviin tehtäviin pohjaksi repositoriossa
-<https://github.com/mluukkai/routed-anecdotes> oleva reduxiton anekdoottisovellus.
+Jatketaan anekdoottien parissa. Ota seuraaviin tehtäviin pohjaksi repositoriossa <https://github.com/mluukkai/routed-anecdotes> oleva reduxiton anekdoottisovellus.
 
 #### 114 routed anecdotes, osa 1
 
@@ -1894,7 +1892,7 @@ Tee notifikaatioista tyylikkäämpi:
 
 ![]({{ "/assets/teht/45.png" | absolute_url }})
 
-Notifikaatiosi ei tarvitse näyttää samanlaisela, tyyli on vapaa. 
+Notifikaatiosi ei tarvitse näyttää samanlaiselta, tyyli on vapaa.
 
 Googlaile tarvittaessa apua. Hyödyllisiä avainsanoja ovat ainakin _border_, _margin_ ja _padding_. [w3schoolsin](https://www.w3schools.com/css/default.asp) sivulta löytyy paljon esimerkkejä tyyleihin liittyen.
 
