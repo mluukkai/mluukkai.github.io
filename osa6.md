@@ -1330,7 +1330,55 @@ export default connect(
 
 Sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/redux-simplenotes/tree/v6-6) tagissä _v6-6_. Githubin versiosta löytyy myös muistiinpanon muutoksen tärkeyden backendiin synkronoiva operaatio.
 
-### debugger
+### Redux DevTools
+
+Chromeen on asennettavissa [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), jonka avulla Redux-storen tilaa ja sitä muuttavia actioneja on mahdollisuus seurata selaimen konsolista. 
+
+Selaimen lisäosan lisäksi debugatessa tarvitaan kirjastoa [redux-devtools-extension](https://www.npmjs.com/package/redux-devtools-extension). Asennetaan se komennolla
+
+
+```js
+npm install --save redux-devtools-extension
+```
+
+Storen luomistapaa täytyy hieman muttaa, että kirjasto saadaan käyttöön
+
+```js
+// ...
+import { composeWithDevTools } from 'redux-devtools-extension'
+
+const reducer = combineReducers({
+  notes: noteReducer,
+  filter: filterReducer
+})
+
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(
+    applyMiddleware(thunk)
+  )
+)
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
+
+Kun nyt avaat konsolin, välilehti _redux_ näyttää seuraavalta:
+
+![]({{ "/assets/6/5e.png" | absolute_url }})
+
+Konsolin avulla on myös mahdollista dispatchata actioneja storeen
+
+![]({{ "/assets/6/5f.png" | absolute_url }})
+
+Storen tietyn hetkisen tilan lisäksi on myös mahdollista tarkastella, mikä on kunkin actionin tilalle aiheuttama muutos:
+
+![]({{ "/assets/6/5g.png" | absolute_url }})
 
 ## tehtäviä
 
