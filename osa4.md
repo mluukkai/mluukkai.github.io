@@ -342,7 +342,66 @@ Kuten odotettua, testit menevät läpi:
 
 ![]({{ "/assets/4/1.png" | absolute_url }})
 
-Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
+**HUOM!** Jest ei välttämättä toimi Windowsilla. Windowsia käytettäessä testien ajosta on tapahtunut mm. seuraava tilanne:
+
+![]({{ "/assets/4/16.png" | absolute_url }})
+
+Eli jest löytää testitiedoston, mutta ei tunnista funktiota _test_. Halutessasi voit ottaa käyttöön [Mochan](https://mochajs.org/) ja [Chai:n](http://chaijs.com/), joilla saadaan kirjoitettua lähes identtisiä testejä kuin jestillä. Asenna Mocha ja Chai kehitysaikaisiksi riippuvuuksiksi komennoilla
+
+```bash
+npm install --save-dev mocha
+npm install --save-dev chai
+```
+
+Muokkaa _package.json_ tiedostossa npm skripti _test_ seuraavanlaiseksi:
+
+```json
+{
+  //...
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "node_modules/.bin/mocha --reporter spec"
+  },
+  //...
+}
+```
+
+Nyt tiedoston _palindrom.test.js_ sisältö näyttäisi Mocha + Chai -kombinaatiolla kirjoitettuna seuraavalta:
+
+
+```js
+const palindrom = require('../utils/for_testing').palindrom
+const expect = require('chai').expect
+
+describe('palindrom', () => {
+    it('of a', () => {
+      const result = palindrom('a')
+
+      expect(result).to.equal('a')
+    })
+
+    it('of react', () => {
+      const result = palindrom('react')
+
+      expect(result).to.equal('tcaer')
+    })
+
+    it('of saippuakauppias', () => {
+      const result = palindrom('saippuakauppias')
+
+      expect(result).to.equal('saippuakauppias')
+    })
+})
+```
+
+Kuten huomata saattaa, testit näyttävät hyvin samankaltaisilta kuin jestillä kirjoitetut testitapaukset. Testit menevät läpi, joskin testien ajosta luotu raportti on suppeampi kuin jestillä:
+
+![]({{ "/assets/4/16-2.png" | absolute_url }})
+
+Palaamme testeissä kirjoitettuun _describe_-lohkon merkitykseen myöhemmin jestiä käyttäessämme. Jos käytät Mochaa ja Chai:ta, materiaalien esimerkit eivät suoraan kopioimalla toimi (suosittelen muutenkin kirjoittamaan esimerkit itse copypasten sijaan), vaan kirjoita ne Mochan ja Chain ominaisuuksia käyttäen. Tämän pitäisi onnistua melko pienin muutoksin, tarvittaessa lue [Mochan](https://mochajs.org/) ja [Chain](http://chaijs.com/api/bdd/) dokumentaatiota.
+
+Palataan takaisin jestiin. Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
 
 ```js
 test('palindrom of react', () => {
