@@ -1343,7 +1343,7 @@ npm install --save redux-devtools-extension
 
 Storen luomistapaa täytyy hieman muttaa, että kirjasto saadaan käyttöön
 
-```js
+```react
 // ...
 import { composeWithDevTools } from 'redux-devtools-extension'
 
