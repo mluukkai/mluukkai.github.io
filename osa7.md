@@ -22,16 +22,16 @@ permalink: /osa7/
   - Virtual DOM
 - react+redux+node
   - Reactin roolista sovelluksissa
-  - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
+  - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa
 - react/node-sovellusten tietoturva
   - Helmet.js
 - Testaus
   - Headless browser testing
   - Snapshot testing
 - Tyypitys
-  - ProcTypes revisited
+  - PropTypes revisited
   - Flow
-  - typescrit
+  - typescript
 - Librarydropping
   - immutable.js
   - websocket.js
