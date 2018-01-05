@@ -1093,7 +1093,11 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true });
+// jos käytössäsi on mongoosen versio 4.x seuraava rivi tulee antaa muodossa
+// version voit tarkistaa tiedostosta package.js
+// mongoose.connect(url, { useMongoClient: true })
+
+mongoose.connect(url)
 mongoose.Promise = global.Promise;
 
 const Note = mongoose.model('Note', {
@@ -1131,8 +1135,8 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true });
-mongoose.Promise = global.Promise;
+mongoose.connect(url)
+mongoose.Promise = global.Promise
 ```
 
 Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
@@ -1248,7 +1252,7 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true })
+mongoose.connect(url)
 mongoose.Promise = global.Promise
 
 const Note = mongoose.model('Note', {
@@ -1348,7 +1352,7 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true })
+mongoose.connect(url)
 mongoose.Promise = global.Promise
 
 const Note = mongoose.model('Note', {

@@ -1,6 +1,6 @@
 # tehtävät
 
-Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5) [6](#osa-6)
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5) [6](#osa-6) [7](#osa-7)
 
 ## Osa 1
 
@@ -1912,14 +1912,24 @@ NavLink toimii Link-komponentin tavoin mutta sisältää muutamia käteviä lis�
 
 ### ui-framework
 
+Viimeistele anekdoottisovellus lisäämällä siihen tyylejä Bootstrapin tai jonkun muun UI-frameworkin avulla.
+
 #### 119 styled anecdotes, osa 3
 
-anekdootit taulukoksi
+Ota käyttöön bootstrap (tai valitsemasi framework) ja renderöi anekdoottien lista [ListGroup](https://react-bootstrap.github.io/components/list-group/)-komponentin avulla:
+
+![]({{ "/assets/teht/47.png" | absolute_url }})
 
 #### 120 styled anecdotes, osa 4
 
-lomake siistiksi
+Tutustu [grideihin](https://react-bootstrap.github.io/layout/grid/) ja muuta niiden avulla sovelluksen _about_-sivua siten, että oikeassa reunassa näytetään jonkun kuuluisan tietojenkäsittelijän kuva:
+
+![]({{ "/assets/teht/48.png" | absolute_url }})
 
 #### 121 styled anecdotes, osa 5
 
-loppufiilistely, toteuta äänestäminen tyylikkäästi
+Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aikaa ja intoa riittää, lisää vielä vapaavalintaisia tyylejä.
+
+## osa 7
+
+### webpack
