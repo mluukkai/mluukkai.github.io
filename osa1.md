@@ -1988,7 +1988,7 @@ Usein tälläisissä tilanteissa kaikki kirjoitetaan samalle riville, jolloin tu
 asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 ```
 
-Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy voi kutsua kaksi kertaa.
+Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy kutsua kaksi kertaa.
 
 Ensimmäisellä kutsulla "konfiguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
 
