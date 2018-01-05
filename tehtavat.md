@@ -1890,7 +1890,7 @@ Parannellaan edellisen tehtäväsarjan ulkoasua inlinetyylien avulla.
 
 #### 117 styled anecdotes, osa 1
 
-Tee notifikaatioista tyylikkäämpi, esim. seuraavaan tyyliin:
+Tee notifikaatioista tyylikkäämpi:
 
 ![]({{ "/assets/teht/45.png" | absolute_url }})
 
@@ -1900,13 +1900,15 @@ Googlaile tarvittaessa apua. Hyödyllisiä avainsanoja ovat ainakin _border_, _m
 
 #### 118 styled anecdotes, osa 2
 
-Paranna sovelluksen menun ulkoasua esim. seuraavasti
+Paranna menun ulkoasua esim. seuraavasti
 
 ![]({{ "/assets/teht/46.png" | absolute_url }})
 
+Kuten edellisessä tehtävässä, nytkin tyyli on vapaa.
+
 Jos haluat erotella aktiivisena olevan sivun linkin tyylin menussa, kannattaa vaihtaa käytössä oleva komponentti [Link](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/Link.md) sen edistyksellisempään versioon, eli komponenttiin [NavLink](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md).
 
-NavLink toimii Link-komponentin tavoin, mutamia käteviä lisäominaisuuksia kuten attribuutin [activeStyle](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#activestyle-object) onka kanssa useimmiten käytetään attribuuttia [exact](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#exact-bool).
+NavLink toimii Link-komponentin tavoin mutta sisältää muutamia käteviä lisäominaisuuksia kuten attribuutin [activeStyle](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#activestyle-object), jonka kanssa useimmiten käytetään attribuuttia [exact](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#exact-bool).
 
 ### ui-framework
 
