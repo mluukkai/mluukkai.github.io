@@ -7,7 +7,7 @@ permalink: /osa7/
 <div class="important">
   <h1>KESKEN, ÄLÄ LUE</h1>
 
-  <p>Osan on tavoitteena valmistua tiistaina 9.1.</p>
+  <p>Osan on tavoitteena valmistua keskiviikkona 10.1.</p>
 </div>
 
 
@@ -24,7 +24,7 @@ permalink: /osa7/
   - Reactin roolista sovelluksissa
   - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
 - react/node-sovellusten tietoturva
-  - Helmet.js 
+  - Helmet.js
 - Testaus
   - Headless browser testing
   - Snapshot testing
