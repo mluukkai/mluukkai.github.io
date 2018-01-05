@@ -1835,19 +1835,76 @@ Ota paranneltu notifikaatiotapa käyttöön sovelluksessasi.
 
 ### router
 
-anekdootit vol 3
+Jatketaan anekdoottien parissa. Ota seuraaviin tehtäviin pohjaksi repositoriossa
+<https://github.com/mluukkai/routed-anecdotes> oleva reduxiton anekdoottisovellus.
 
-#### 114 
-#### 115
-#### 116
+#### 114 routed anecdotes, osa 1
+
+Lisää sovellukseen React Router siten, että _Menu_-komponentissa olevia linkkejä klikkailemalla saadaan säädeltyä näytettävää näkymää.
+
+Sovelluksen juuressa, eli polulla _/_ näytetään anekdoottien lista:
+
+![]({{ "/assets/teht/40.png" | absolute_url }})
+
+Pohjala oleva _Footer_-komponentti tulee näyttää aina.
+
+Uuden anekdootin luominen tapahtuu esim. polulla _create_:
+
+![]({{ "/assets/teht/41.png" | absolute_url }})
+
+Huom: jos saat seuraavan virheilmoituksen
+
+![]({{ "/assets/teht/39.png" | absolute_url }})
+
+pääset siitä eroon sisällyttämällä kaiken Router-elementin sisälle tulevan _div_-elementtiin:
+
+```bash
+<Router>
+  <div>
+    ...
+  </div>
+</Router>
+```
+
+#### 115 routed anecdotes, osa 2
+
+Toteuta sovellukseen yksittäisen anekdootin tiedot näyttävä näkymä:
+
+![]({{ "/assets/teht/42.png" | absolute_url }})
+
+Yksittäisen anekdootin sivulle navigoidaan klikkaamalla anekdootin nimeä
+
+![]({{ "/assets/teht/43.png" | absolute_url }})
+
+#### 116 routed anecdotes, osa 3
+
+Luomislomakkeen oletusarvoinen toiminnallisuus on melko hämmentävä, sillä kun lomakkeen avulla luodaan uusi muistiinpano, mitään ei näytä tapahtuvan.
+
+Paranna toiminnallisuutta siten, että luomisen jälkeen siirrytään automaattisesti kaikkien anekdoottien näkymään _ja_ käyttäjälle näytetään 10 sekunnin ajan onnistuneesta lisäyksestä kertova notifikaatio:
+
+![]({{ "/assets/teht/44.png" | absolute_url }})
+
 
 ### inline-tyylit
 
-#### 117
-#### 118
+#### 117 styled anecdotes, osa 1
+
+parempi notifikaatio
+
+#### 118 styled anecdotes, osa 2
+
+tyylikäs navigaatiopalkki
 
 ### ui-framework
 
-#### 119
+#### 119 styled anecdotes, osa 3
 
+anekdootit taulukoksi
 
+#### 120 styled anecdotes, osa 4
+
+lomake siistiksi
+
+#### 121 styled anecdotes, osa 5
+
+loppufiilistely, toteuta äänestäminen tyylikkäästi

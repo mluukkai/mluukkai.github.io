@@ -1382,7 +1382,7 @@ Storen tietyn hetkisen tilan lisäksi on myös mahdollista tarkastella, mikä on
 
 ## tehtäviä
 
-Tee nyt tehtävät [111-114](../tehtavat#thunk)
+Tee nyt tehtävät [111-113](../tehtavat#thunk)
 
 ## React router
 
@@ -1396,9 +1396,12 @@ ja omat sivunsa muistiinpanojen ja käyttäjien tietojen näyttämiseen:
 
 ![]({{ "/assets/6/7.png" | absolute_url }})
 
-Vanhanaikaisessa websovelluksessa palvelin tyypillisesti palautti jokaisen erillisen sivun sisältämän HTML-koodin. Single page appeissa taas todellisuudessa ollaan koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista".
+[Vanhan koulukunnan websovelluksessa](osa1/#Perinteinen-web-sovellus) sovelluksen näyttämän sivun vaihto tapahtui siten että selain teki palvelimelle uuden HTTP GET -pyynnön ja renderöi sitten palvelimen palauttaman näkymää vastaavan HTML-koodin.
 
-Navigaatiopalkki ja useita sivuja sisältävä sovellus on erittäin helppo toteuttaa Reactilla.
+Single page appeissa taas ollaan todellisuudessa koko ajan samalla sivulla, ja selaimessa suoritettava Javascript-koodi luo illuusion eri "sivuista". Jos näkymää vaihdettaessa tehdään HTTP-kutsuja, niiden avulla haetaan ainoastaan JSON-muotoista dataa jota uuden näkymän näyttäminen ehkä edellyttää. 
+
+
+Navigaatiopalkki ja useita näkymiä sisältävä sovellus on erittäin helppo toteuttaa Reactilla.
 
 Seuraavassa on eräs tapa:
 
@@ -1437,7 +1440,6 @@ class App extends React.Component {
       } else if (this.state.page === 'users') {
         return <Users />
       }
-
     }
 
     return (
@@ -1455,9 +1457,11 @@ class App extends React.Component {
 }
 ```
 
-Eli jokainen "sivu" on toteutettu omana komponenttinaan ja sovelluksen tilassa pidetään tieto siitä, mikä komponentti menupalkin alla näytetään. **Huom:** navigointivalikossa oleva _&nbsp;_ tarkoittaa _a_-tagien väliin sjijoitettavaa välilyöntiä. CSS:n käyttö olisi luonnollisesti parempi tapa sivun ulkoasun muotoilulle mutta nyt tyydymme quick'n'dirty-ratkaisuun.
+Eli jokainen näkymä on toteutettu omana komponenttinaan ja sovelluksen tilassa pidetään tieto siitä, minkä näkymää vastaava komponentti menupalkin alla näytetään. 
 
-Menetelmä ei kuitenkaan ole optimaalinen. Kuten kuvista näkyy, sivuston osoite pysyy samana vaikka välillä ollaankin eri sivuilla. Jokaisella sivulla tulisi kuitenkin olla oma osoitteensa, jotta esim. bookmarkien tekeminen olisi mahdollista. Näin tehdyllä sovelluksella selaimen _back_-painike ei toimi loogisesti, eli _back_ ei vie edelliseksi katsottuun sovelluksen näkymään vaan jonnekin ihan muualle. Jos sovellus kasvaisi suuremmaksi ja sinne haluttaisiin esim. jokaiselle käyttäjälle sekä muistiinpanolle oma yksittäinen sivunsa, itse koodattu "reititys" eli sivuston navigaationhallinta menisi turhan monimutkaiseksi.
+**Huom:** navigointivalikossa oleva _&amp;nbsp;_ tarkoittaa _a_-tagien väliin sjijoitettavaa välilyöntiä. CSS:n käyttö olisi luonnollisesti parempi tapa sivun ulkoasun muotoilulle mutta nyt tyydymme quick'n'dirty-ratkaisuun.
+
+Menetelmä ei kuitenkaan ole optimaalinen. Kuten kuvista näkyy, sivuston osoite pysyy samana vaikka välillä ollaankin eri näkymässä. Jokaisella näkymällä tulisi kuitenkin olla oma osoitteensa, jotta esim. bookmarkien tekeminen olisi mahdollista. Sovelluksessamme ei myöskään selaimen _back_-painike toimi loogisesti, eli _back_ ei vie edelliseksi katsottuun sovelluksen näkymään vaan jonnekin ihan muualle. Jos sovellus kasvaisi suuremmaksi ja sinne haluttaisiin esim. jokaiselle käyttäjälle sekä muistiinpanolle oma yksittäinen näkymänsä, itse koodattu _reititys_ eli sivuston navigaationhallinta menisi turhan monimutkaiseksi.
 
 Reactissa on onneksi valmis komponentti [React router](https://github.com/ReactTraining/react-router) joka tarjoaa erinomaisen ratkaisun React-sovelluksen navigaation hallintaan.
 
@@ -1484,7 +1488,7 @@ class App extends React.Component {
               <Link to="/notes">notes</Link>  &nbsp;
               <Link to="/users">users</Link>
             </div>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => <Home />} />
             <Route path="/notes" render={() => <Notes />} />
             <Route path="/users" render={() => <Users />} />
           </div>
@@ -1497,13 +1501,12 @@ class App extends React.Component {
 
 Reititys, eli komponenttien ehdollinen, selaimen _urliin perustuva_ renderöinti otetaan käyttöön sijoittamalla komponentteja _Router_-komponentin lapsiksi, eli _Router_-tagien sisälle.
 
-Huomaa, että vaikka komponenttiin viitataan nimellä _Router_ koska importaus tapahtuu seuraavasti
+Huomaa, että vaikka komponenttiin viitataan nimellä _Router_ kyseessä on [BrowserRouter](https://reacttraining.com/react-router/web/api/BrowserRouter), sillä
+importaus tapahtuu siten, että importattava olio uudelleennimetään:
 
 ```js
 import { BrowserRouter as Router ... } from 'react-router-dom'
 ```
-
-kyseessä on [BrowserRouter](https://reacttraining.com/react-router/web/api/BrowserRouter).
 
 Manuaalin mukaan
 
@@ -1513,7 +1516,7 @@ Normaalisti selain lataa uuden sivun osoiterivillä olevn urlin muuttuessa. [HTM
 
 Routerin sisälle määritellään selaimen osoiteriviä muokkaavia _linkkejä_ komponentin [Link](https://reacttraining.com/react-router/web/api/Link) avulla. Esim.
 
-```js
+```bash
 <Link to="/notes">notes</Link>
 ```
 
@@ -1521,31 +1524,31 @@ luo sovellukseen linkin, jonka teksti on _notes_ ja jonka klikkaaminen vaihtaa s
 
 Selaimen urliin perustuen renderöitävät komponentit määritellään komponentin [Route](https://reacttraining.com/react-router/web/api/Route) avulla. Esim.
 
-```js
+```bash
 <Route path="/notes" render={() => <Notes />} />
 ```
 
-määrittelee, että jos selaimen osoiteena on _/notes, renderöidään komponentti _Notes_.
+määrittelee, että jos selaimen osoiteena on _/notes_, renderöidään komponentti _Notes_.
 
 Sovelluksen juuren, eli osoitteen _/_ määritellään renderöivän komponentti _Home_:
 
-```js
+```bash
 <Route exact path="/" render={() => <Home />} />
 ```
 
-joudumme käyttämään _path_ attribuutin edessä määrettä _exact_, muuten _Home_ renderöityy kaikilla muillakin poluilla, sillä juuri _/_ on kaikkien muiten polkujen _alkuosa_.
+joudumme käyttämään routen _path_ attribuutin edessä määrettä _exact_, muuten _Home_ renderöityy kaikilla muillakin poluilla, sillä juuri _/_ on kaikkien muiten polkujen _alkuosa_.
 
 ### parametroitu route
 
 Tarkastellaan sitten hieman modifioitua versiota edellisestä esimerkistä. Esimerkin koodi kokonaisuudessaan on [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/routeresimerkki).
 
-Sovellus sisältää nyt viisi eri näkymää, joiten näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien  _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumissivua vastaava _Login_ ja yksittäisen muistiinpanon sivua vastaava _Note_.
+Sovellus sisältää nyt viisi eri näkymää, joiden näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien  _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumisnäkymää vastaava _Login_ ja yksittäisen muistiinpanon näkymää vastaava _Note_.
 
-_Home_ ja _Users_ ovat kuten aiemmassa esimerkissä. _Notes_ on hieman monimutkaisempi, se renderöi propseina saamansa muistiinpanojen listan siten, että jokaisen muistiinpanon nimi on klikattava
+_Home_ ja _Users_ ovat kuten aiemmassa esimerkissä. _Notes_ on hieman monimutkaisempi, se renderöi propseina saamansa muistiinpanojen listan siten, että jokaisen muistiinpanon nimi on klikattavissa
 
 ![]({{ "/assets/6/8.png" | absolute_url }})
 
-Nimen klikattavuus on toteutettu komponentilla _Link_ ja esim muistiinpanon, jonka id on 3 nimen klikkaaminen aiheuttaa selaimen osoitteen arvon päivittyvän muotoon _notes/3_:
+Nimen klikattavuus on toteutettu komponentilla _Link_ ja esim. muistiinpanon, jonka id on 3 nimen klikkaaminen aiheuttaa selaimen osoitteen arvon päivittyvän muotoon _notes/3_:
 
 ```react
 const Notes = ({notes}) => (
@@ -1562,9 +1565,9 @@ const Notes = ({notes}) => (
 )
 ```
 
-Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, on tarkoituksena renderöidä
+Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, renderöidään komponentti _Note_:
 
-```react
+```bash
 const Note = ({note}) => {
   return(
   <div>
@@ -1573,10 +1576,11 @@ const Note = ({note}) => {
     <div><strong>{note.important ? 'tärkeä' : ''}</strong></div>
   </div>
 )}
+```
 
 Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti:
 
-```react
+```bash
 <div>
   <Router>
     <div>
@@ -1598,7 +1602,7 @@ Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti
 </div>
 ```
 
-Kaikki muistiinpanon renderöivä route on muutettu nyt muotoon _<Route exact path="/notes" />_ sillä muuten se renderöityisi myös _/notes/3_-muotoisten polkujen yhteydessä.
+Kaikki muistiinpanon renderöivään routeen on lisätty määre _exact path="/notes"_ sillä muuten se renderöityisi myös _/notes/3_-muotoisten polkujen yhteydessä.
 
 Yksittäisen muistiinpanon näkymän renderöivä route määritellään "expressin tyyliin" merkkaamalla reitin parametrina oleva osa merkinnällä _:id_
 
@@ -1606,7 +1610,7 @@ Yksittäisen muistiinpanon näkymän renderöivä route määritellään "expres
 <Route exact path="/notes/:id" />
 ```
 
-Renderöityvän komponentin määrittyvä osa pääsee käsiksi id:hen parametrinsa [match](https://reacttraining.com/react-router/web/api/match) avulla seuraavasti:
+Renderöityvän komponentin määrittävä _render_-attribuutti pääsee käsiksi id:hen parametrinsa [match](https://reacttraining.com/react-router/web/api/match) avulla seuraavasti:
 
 ```react
 render={({match}) => <Note note={noteById(match.params.id)} />}
@@ -1627,7 +1631,7 @@ Sovellukseen on myös toteutettu erittäin yksinkertainen kirjautumistoiminto. J
 
 Mahdollisuus _Login_-näkymään navigointiin renderöidään menuun ehdollisesti
 
-```react
+```bash
 <Router>
   <div>
     <div>
@@ -1644,27 +1648,23 @@ Mahdollisuus _Login_-näkymään navigointiin renderöidään menuun ehdollisest
 </Router>
 ```
 
-eli jos käyttäjä on kirjaantunut, renderöidäänkin linkin _Login_ sijaan käyttäjän nimi:
+eli jos käyttäjä on kirjaantunut, renderöidäänkin linkin _Login_ sijaan kirjautuneen käyttäjän käyttäjätunnus:
 
 ![]({{ "/assets/6/9.png" | absolute_url }})
 
 Kirjautumisen toteuttamiseen liittyy eräs mielenkiintoinen seikka. Kirjaantumislomakkeelle mennään selaimen osoitteen ollessa _/login_, määrittelevä Route on seuraavassa
 
-```react
-<Router>
-  <div>
-    <Route path="/login" render={({history}) =>
-      <Login history={history} onLogin={this.login} />}
-    />
-  </div>
-</Router>
+```bash
+<Route path="/login" render={({history}) =>
+  <Login history={history} onLogin={this.login} />}
+/>
 ```
 
-Routen render-metodi ottaa nyt vastaan parametrin [history](https://reacttraining.com/react-router/web/api/history), joka tarjoaa mm. mahdollisuuden manipuloida selaimen osoiterivin arvoa ohjelmallisesti.
+Routen render-attribuutissa määritelty metodi ottaa nyt vastaan olion [history](https://reacttraining.com/react-router/web/api/history), joka tarjoaa mm. mahdollisuuden manipuloida selaimen osoiterivin arvoa ohjelmallisesti.
 
 Renderöitävälle _Login_-näkymälle annetaan parametriksi _history_-olio ja kirjautumisen komponentin _App_ tilaan synkronoiva funktio _this.login_:
 
-```react
+```bash
 <Login history={history} onLogin={this.login}/>}
 ```
 
@@ -1694,29 +1694,22 @@ const Login = ({onLogin, history}) => {
 }
 ```
 
-Kirjautumisen yhteydessä funktiossa _onSubmit_ kutsutaan _history_-olion metodia _push_. Käytetty komento <code>history.push('/')</code> saa aikaan sen, että selaimen osoiteriville tulee osoitteeksi _/_ ja sovellus renderöi komponentin _Home_.
+Kirjautumisen yhteydessä funktiossa _onSubmit_ kutsutaan [history](https://reacttraining.com/react-router/web/api/history)-olion metodia _push_. Käytetty komento <code>history.push('/')</code> saa aikaan sen, että selaimen osoiteriville tulee osoitteeksi _/_ ja sovellus renderöi osoitetta vastaavan komponentin _Home_.
 
 
 ### redirect
 
 Näkymän _Users_ routeen liittyy vielä eräs mielenkiintoinen detalji:
 
-```react
-<Router>
-  <div>
-    <Route path="/users" render={() =>
-      this.state.user
-        ? <Users />
-        : <Redirect to="/login" />
-      }/>
-    <Route path="/login" render={({history}) =>
-      <Login history={history} onLogin={this.login} />}
-    />
-  </div>
-</Router>
+```bash
+<Route path="/users" render={() =>
+  this.state.user
+    ? <Users />
+    : <Redirect to="/login" />
+  }/>
 ```
 
-Jos käyttäjä ei ole kirjautuneena, ei renderöidäkään näkymää _Users_ vaan sen sijaan uudelleenohjataan käyttäjä _Redirect_-komponentin avulla kirjautumissivulle
+Jos käyttäjä ei ole kirjautuneena, ei renderöidäkään näkymää _Users_ vaan sen sijaan _uudelleenohjataan_ käyttäjä _Redirect_-komponentin avulla kirjautumisnäkymään
 
 ```react
 <Redirect to="/login" />
@@ -1790,13 +1783,13 @@ class App extends React.Component {
 }
 ```
 
-Render-metodissa määritellään myös kokonaan _Router_:in ulkopuolella oleva nykyisille web-sovelluksille tyypillinen _footer_-elementti, eli sivuston pohjalla oleva osa joka on näkyvillä riippumatta siitä mikä konponentti sovelluksen reititetyssä osassa näytetään.
+Render-metodissa määritellään myös kokonaan _Router_:in ulkopuolella oleva nykyisille web-sovelluksille tyypillinen _footer_-elementti, eli sivuston pohjalla oleva osa, joka on näkyvillä riippumatta siitä mikä konponentti sovelluksen reititetyssä osassa näytetään.
 
 **Huom:** edellä olevassa esimerkissä käytetään React Routerin versiota 4.2.6. Jos ja kun etsit esimerkkejä internetistä, kannattaa varmistaa, että niissä käytetään Routerista vähintään versiota 4.0. Nelosversio ei ole ollenkaan alaspäinyhteensopiva kolmosen kanssa, eli vanhaa React Routeria käyttävä koodi on täysin käyttökelvotonta Routerin versiota 4 käytettäessä.
 
 ## tehtäviä
 
-Tee nyt tehtävät [115-](../tehtavat#redux-anekdootit)
+Tee nyt tehtävät [114-116](../tehtavat#router)
 
 ## Inline-tyylit
 
@@ -1861,7 +1854,7 @@ Itseasiassa Reactin filosofia on täysin päivastainen. Koska CSS:n, HTML:n ja J
 
 ## tehtäviä
 
-Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
+Tee nyt tehtävät [117 ja 118](../tehtavat#inline-tyylit)
 
 ## Valmiit käyttöliittymätyylikirjastot
 
@@ -2024,4 +2017,4 @@ Luetellaan tässä kaikesta huolimatta muuitakin UI-frameworkeja. Jos oma suosik
 - <https://ant.design/>
 - <https://foundation.zurb.com/>
 
-Tee nyt tehtävät [97-99](../tehtavat#redux-anekdootit)
+Tee nyt tehtävät [119-121](../tehtavat#ui-framework)
