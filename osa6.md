@@ -1071,7 +1071,7 @@ noteService.getAll().then(notes =>
 > await toimii ainoastaan _async_-funktioiden sisällä, ja _index.js_:ssä oleva koodi ei ole funktiossa, joten päädyimme tilanteen yksinkertaisuuden takia tällä kertaa jättämään _async_:in käyttämättä.
 
 
-Päätetään kuitenkin siirtää muistiinpanojen alustus _App_-komponentin metodiin _[componentWillMount](https://reactjs.org/docs/react-component.html#componentwillmount), se on luonteva paikka alustuksille, sillä metodi suoritetaan ennen kuin soveluksemme renderöidään ensimmäistä kertaa.
+Päätetään kuitenkin siirtää muistiinpanojen alustus _App_-komponentin metodiin _[componentWillMount](https://reactjs.org/docs/react-component.html#componentwillmount)_, se on luonteva paikka alustuksille, sillä metodi suoritetaan ennen kuin sovelluksemme renderöidään ensimmäistä kertaa.
 
 Jotta saamme action creatorin _noteInitialization_ käyttöön komponentissa _App_ tarvitsemme jälleen _connect_-metodin apua:
 
@@ -1445,7 +1445,7 @@ class App extends React.Component {
 
         {content()}
       </div>
-    );
+    )
   }
 }
 ```
@@ -1478,7 +1478,7 @@ class App extends React.Component {
           <div>
             <div>
               <Link to="/">home</Link> &nbsp;
-              <Link to="/notes">notes</Link>  &nbsp;
+              <Link to="/notes">notes</Link> &nbsp;
               <Link to="/users">users</Link>
             </div>
             <Route exact path="/" render={() => <Home />} />
@@ -1509,7 +1509,7 @@ Normaalisti selain lataa uuden sivun osoiterivillä olevn urlin muuttuessa. [HTM
 
 Routerin sisälle määritellään selaimen osoiteriviä muokkaavia _linkkejä_ komponentin [Link](https://reacttraining.com/react-router/web/api/Link) avulla. Esim.
 
-```bash
+```react
 <Link to="/notes">notes</Link>
 ```
 
@@ -1517,7 +1517,7 @@ luo sovellukseen linkin, jonka teksti on _notes_ ja jonka klikkaaminen vaihtaa s
 
 Selaimen urliin perustuen renderöitävät komponentit määritellään komponentin [Route](https://reacttraining.com/react-router/web/api/Route) avulla. Esim.
 
-```bash
+```react
 <Route path="/notes" render={() => <Notes />} />
 ```
 
@@ -1525,7 +1525,7 @@ määrittelee, että jos selaimen osoiteena on _/notes_, renderöidään kompone
 
 Sovelluksen juuren, eli osoitteen _/_ määritellään renderöivän komponentti _Home_:
 
-```bash
+```react
 <Route exact path="/" render={() => <Home />} />
 ```
 
@@ -1535,7 +1535,7 @@ joudumme käyttämään routen _path_ attribuutin edessä määrettä _exact_, m
 
 Tarkastellaan sitten hieman modifioitua versiota edellisestä esimerkistä. Esimerkin koodi kokonaisuudessaan on [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/routeresimerkki).
 
-Sovellus sisältää nyt viisi eri näkymää, joiden näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien  _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumisnäkymää vastaava _Login_ ja yksittäisen muistiinpanon näkymää vastaava _Note_.
+Sovellus sisältää nyt viisi eri näkymää, joiden näkyvyyttä kontrolloidaan routerin avulla. Edellisestä esimerkistä tuttujen komponenttien _Home_, _Notes_ ja _Users_ lisäksi mukana on kirjautumisnäkymää vastaava _Login_ ja yksittäisen muistiinpanon näkymää vastaava _Note_.
 
 _Home_ ja _Users_ ovat kuten aiemmassa esimerkissä. _Notes_ on hieman monimutkaisempi, se renderöi propseina saamansa muistiinpanojen listan siten, että jokaisen muistiinpanon nimi on klikattavissa
 
@@ -1560,7 +1560,7 @@ const Notes = ({notes}) => (
 
 Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, renderöidään komponentti _Note_:
 
-```bash
+```react
 const Note = ({note}) => {
   return(
   <div>
@@ -1573,7 +1573,7 @@ const Note = ({note}) => {
 
 Tämä tapahtuu laajentamalla komponentissa _App_ olevaa reititystä seuraavasti:
 
-```bash
+```react
 <div>
   <Router>
     <div>
@@ -1624,7 +1624,7 @@ Sovellukseen on myös toteutettu erittäin yksinkertainen kirjautumistoiminto. J
 
 Mahdollisuus _Login_-näkymään navigointiin renderöidään menuun ehdollisesti
 
-```bash
+```react
 <Router>
   <div>
     <div>
@@ -1647,7 +1647,7 @@ eli jos käyttäjä on kirjaantunut, renderöidäänkin linkin _Login_ sijaan ki
 
 Kirjautumisen toteuttamiseen liittyy eräs mielenkiintoinen seikka. Kirjaantumislomakkeelle mennään selaimen osoitteen ollessa _/login_, määrittelevä Route on seuraavassa
 
-```bash
+```react
 <Route path="/login" render={({history}) =>
   <Login history={history} onLogin={this.login} />}
 />
@@ -1657,7 +1657,7 @@ Routen render-attribuutissa määritelty metodi ottaa nyt vastaan olion [history
 
 Renderöitävälle _Login_-näkymälle annetaan parametriksi _history_-olio ja kirjautumisen komponentin _App_ tilaan synkronoiva funktio _this.login_:
 
-```bash
+```react
 <Login history={history} onLogin={this.login}/>}
 ```
 
@@ -1694,7 +1694,7 @@ Kirjautumisen yhteydessä funktiossa _onSubmit_ kutsutaan [history](https://reac
 
 Näkymän _Users_ routeen liittyy vielä eräs mielenkiintoinen detalji:
 
-```bash
+```react
 <Route path="/users" render={() =>
   this.state.user
     ? <Users />
@@ -1792,7 +1792,7 @@ Olemme jo muutamaan kertaan määritelleet komponenteille [inline](https://react
 
 Edellisessä osassa piilotimme inline-tyylin avulla napin ruudusta tietyissä tapauksissa:
 
-```bash
+```react
 const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
 
 <div style={hideWhenVisible}>
@@ -1832,7 +1832,7 @@ Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin
 
 Voimme muotoilla edellisen luvun footer-elementin olion _footerStyle_ avulla seuraavasti:
 
-```bash
+```react
 <div style={footerStyle}>
   <br />
   <em>Note app, Department of Computer Science 2018</em>
@@ -1865,7 +1865,7 @@ Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-fram
 
 Tehdään nyt [react-bootstrap](https://react-bootstrap.github.io/)-kirjaston avulla luvussa [React-roter](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
 
-Asennetaan kirjasto suorittamalla  komento
+Asennetaan kirjasto suorittamalla komento
 
 ```bash
 npm install --save react-bootstrap
@@ -1873,11 +1873,11 @@ npm install --save react-bootstrap
 
 Lisätään sitten sovelluksen _index.html_ tiedoston _head_-tagin sisään bootstrapin css-määrittelyt lataava rivi:
 
-```bash
+```html
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
   // ...
-</head>    
+</head>
 ```
 
 Kun sovellus ladataan uudelleen, näyttää se jo aavistuksen tyylikkäämmältä:
@@ -1887,14 +1887,14 @@ Kun sovellus ladataan uudelleen, näyttää se jo aavistuksen tyylikkäämmält�
 
 Bootstrapissa koko sivun sisältö renderöidään yleensä [container](https://getbootstrap.com/docs/4.0/layout/overview/#containers):ina, eli käytännössä koko sovelluksen ympärivä _div_-elementti merkitään luokalla _container_:
 
-```bash
+```react
 // ...
 
 class App extends React.Component {
   // ...
   render() {
     return (
-      <div className='container'>  
+      <div className="container">
         // ...
       </div>
     )
@@ -1934,20 +1934,20 @@ Ulkoasu on varsin tyylikäs:
 
 ![]({{ "/assets/6/12.png" | absolute_url }})
 
-Huomaa, että koodissa käytettävät React bootstrapin komponenit täytyy importataotta, eli koodiin on lisättävä:
+Huomaa, että koodissa käytettävät React bootstrapin komponentit täytyy importata, eli koodiin on lisättävä:
 
-```bash
+```js
 import { Table } from 'react-bootstrap'
 ```
 
 ### lomake
 
-Parannelaan seuraavaksi näkymän _Login_ kirjautumislomaketta Bootstrapin [lomakkeiden](https://getbootstrap.com/docs/4.0/components/forms/) avulla. 
+Parannellaan seuraavaksi näkymän _Login_ kirjautumislomaketta Bootstrapin [lomakkeiden](https://getbootstrap.com/docs/4.0/components/forms/) avulla.
 
 
-React bootstrap  tarjoaa valmiit  [komponentit](https://react-bootstrap.github.io/components/forms/) myös lomakkeiden muodostamiseen (dokumentaatio tosin ei ole paras mahdollinen):
+React bootstrap tarjoaa valmiit [komponentit](https://react-bootstrap.github.io/components/forms/) myös lomakkeiden muodostamiseen (dokumentaatio tosin ei ole paras mahdollinen):
 
-```bash
+```react
 const Login = ({onLogin, history}) => {
   // ...
   return (
@@ -1956,15 +1956,15 @@ const Login = ({onLogin, history}) => {
       <form onSubmit={onSubmit}>
         <FormGroup>
           <ControlLabel>username:</ControlLabel>
-          <FormControl 
-            type='text'
-            name='username'
-          />  
+          <FormControl
+            type="text"
+            name="username"
+          />
           <ControlLabel>password:</ControlLabel>
           <FormControl
-            type='password'
-          />             
-          <Button bsStyle="success" type='submit'>login</Button>
+            type="password"
+          />
+          <Button bsStyle="success" type="submit">login</Button>
         </FormGroup>
       </form>
     </div>
@@ -1973,13 +1973,13 @@ const Login = ({onLogin, history}) => {
 
 **Huom**: jotta kirjautumisnappi saisi aikaan lomakkeen lähettämisen, eli _submit_-tapahtuman, on napille lisätty tyyppi-attribuutti:
 
-```bash
-<Button bsStyle="success" type='submit'>login</Button>
+```react
+<Button bsStyle="success" type="submit">login</Button>
 ```
 
 Importoitavien komponenttien määrä kasvaa:
 
-```bash
+```js
 import { Table, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap'
 ```
 
@@ -2000,13 +2000,13 @@ login = (user) => {
   this.setState({user, message: `welcome ${user}`})
   setTimeout(() => {
     this.setState({message: null})
-  }, 10000);
+  }, 10000)
 }
 ```
 
 ja renderöidään viesti Bootstrapin [Alert](https://getbootstrap.com/docs/4.0/components/alerts/)-komponentin avulla. React bootstrap tarjoaa tähän jälleen valmiin [React-komponentin](https://react-bootstrap.github.io/components/alerts/):
 
-```bash
+```react
 {(this.state.message &&
   <Alert color="success">
     {this.state.message}
@@ -2016,11 +2016,11 @@ ja renderöidään viesti Bootstrapin [Alert](https://getbootstrap.com/docs/4.0/
 
 Muutetaan vielä lopuksi sovelluksen navigaatiomenu käyttämään Bootstrapin [Navbaria](https://getbootstrap.com/docs/4.0/components/navbar/). Tähänkin React bootstrap tarjoaa [valmiit komponentit](https://react-bootstrap.github.io/components/navbar/#navbars-mobile-friendly), dokumentaati on hieman kryptistä, mutta trial and error johtaa lopulta toimivaan ratkaisuun:
 
-```bash
+```react
 <Navbar inverse collapseOnSelect>
   <Navbar.Header>
     <Navbar.Brand>
-      Anecdote app                
+      Anecdote app
     </Navbar.Brand>
     <Navbar.Toggle />
   </Navbar.Header>
@@ -2029,19 +2029,19 @@ Muutetaan vielä lopuksi sovelluksen navigaatiomenu käyttämään Bootstrapin [
       <NavItem href="#">
         <Link to="/">home</Link>
       </NavItem>
-      <NavItem  href="#">
+      <NavItem href="#">
         <Link to="/notes">notes</Link>
       </NavItem>
-      <NavItem  href="#">
+      <NavItem href="#">
         <Link to="/users">users</Link>
-      </NavItem>         
+      </NavItem>
       <NavItem>
         {this.state.user
           ? <em>{this.state.user} logged in</em>
           : <Link to="/login">login</Link>
         }
-      </NavItem>                          
-    </Nav>  
+      </NavItem>
+    </Nav>
   </Navbar.Collapse>
 </Navbar>
 ```
@@ -2060,13 +2060,13 @@ Chromen konsolin avulla on mahdollista simuloida sovelluksen käyttöä erilaisi
 
 ![]({{ "/assets/6/16.png" | absolute_url }})
 
-Sovellus toimii hyvin, mutta konsoiin vilkaisu paljastaa erään ikävän detaljin:
+Sovellus toimii hyvin, mutta konsoliin vilkaisu paljastaa erään ikävän detaljin:
 
 ![]({{ "/assets/6/17.png" | absolute_url }})
 
 Syy valituksiin on navigaatiorakenteessa
 
-```bash
+```react
 <NavItem href="#">
   <Link to="/">home</Link>
 </NavItem>
@@ -2079,9 +2079,9 @@ Ongelma on ikävä ja sen kiertäminen on toki mahdollista, katso esim.
 
 Esimerkin sovelluksen koodi kokonaisuudessaan [täällä](https://github.com/mluukkai/mluukkai.github.io/wiki/bootstrapped).
 
-### muita UI-frameworkeja
+### Muita UI-frameworkeja
 
-Luetellaan tässä kaikesta huolimatta muuitakin UI-frameworkeja. Jos oma suosikkisi ei ole mukana, tee pull request
+Luetellaan tässä kaikesta huolimatta muitakin UI-frameworkeja. Jos oma suosikkisi ei ole mukana, tee pull request
 
 - <https://semantic-ui.com/>
 - <http://www.material-ui.com/>
@@ -2095,7 +2095,7 @@ Alun perin tässä osassa oli tarkoitus käyttää [Material UI](http://www.mate
 
 Esimerkissä käytettiin bootstrapia React-komponentit tarjoavan kirjaston [React bootstrap](https://react-bootstrap.github.io/) kautta. Olisimme voineet aivan yhtä hyvin käyttää Bootstrapia suoraan, liittämällä HTML-elementteihin CSS-luokkia, eli sen sijaan että määrittelimme esim. taulukon komponentin _Table_ avulla
 
-```bash
+```react
 <Table striped>
   // ...
 </Table>
@@ -2103,8 +2103,8 @@ Esimerkissä käytettiin bootstrapia React-komponentit tarjoavan kirjaston [Reac
 
 olisimme voineet käyttää normaalia HTML:n taulukkoa _table_ ja CSS-luokkaa
 
-```bash
-<table className='table' striped>
+```react
+<table className="table striped">
   // ...
 </table>
 ```
