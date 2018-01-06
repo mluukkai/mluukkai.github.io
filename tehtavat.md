@@ -1998,4 +1998,12 @@ Toteuta Travisin avulla automaattinen deployment
 
 ### 138
 
+Tee headles-browsertestausta
+
+### 139
+
+Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+
+### 140
+
 Koodaa parempi versio facebookista
