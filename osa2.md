@@ -890,7 +890,7 @@ npm install axios --save
 
 Nyt axios on mukana riippuvuuksien joukossa:
 
-```bash
+```json
 {
   "dependencies": {
     "axios": "^0.17.1",
@@ -1366,7 +1366,7 @@ render() {
 Järjestämistä varten on nyt määritelty muuttujaan _byId_ apufunktio, jota kutsutaan ennen kuin _Note_ komponentit generoidaan _map_-metodin avulla:
 
 ```js
-notesToShow.sort(byId).map.map(note => <Note ... />)
+notesToShow.sort(byId).map(note => <Note ... />)
 ```
 
 ## Palvelimen kanssa tapahtuvan kommunikoinnin eristäminen omaan moduuliin
@@ -1662,7 +1662,7 @@ Alertia tuskin kannattaa käyttää todellisissa React-sovelluksissa. Opimme my�
 
 ### Tehtäviä palvelimen tilan päivittämisestä
 
-Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivitäminen)
+Tee nyt tehtävät [33-37](../tehtavat#palvelimella-olevan-datan-päivittäminen)
 
 ## Tyylien lisääminen
 
@@ -1710,7 +1710,7 @@ const Note = ({ note, toggleImportance}) => {
 }
 ```
 
-lisätään tyyliedostoon seuraava (koska osaamiseni tyylikkäiden web-sivujen tekemiseen on lähellä nollaa, nyt käytettävissä tyyleissä ole sinänsä mitään järkeä):
+lisätään tyyliedostoon seuraava (koska osaamiseni tyylikkäiden web-sivujen tekemiseen on lähellä nollaa, nyt käytettävissä tyyleissä ei ole sinänsä mitään järkeä):
 
 ```css
 li {

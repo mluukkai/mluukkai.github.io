@@ -288,7 +288,7 @@ npm install --save-dev jest
 
 määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```bash
+```json
 {
   //...
   "scripts": {
@@ -342,7 +342,66 @@ Kuten odotettua, testit menevät läpi:
 
 ![]({{ "/assets/4/1.png" | absolute_url }})
 
-Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
+**HUOM!** Jest ei välttämättä toimi Windowsilla. Windowsia käytettäessä testien ajosta on tapahtunut mm. seuraava tilanne:
+
+![]({{ "/assets/4/16.png" | absolute_url }})
+
+Eli jest löytää testitiedoston, mutta ei tunnista funktiota _test_. Halutessasi voit ottaa käyttöön [Mochan](https://mochajs.org/) ja [Chai:n](http://chaijs.com/), joilla saadaan kirjoitettua lähes identtisiä testejä kuin jestillä. Asenna Mocha ja Chai kehitysaikaisiksi riippuvuuksiksi komennoilla
+
+```bash
+npm install --save-dev mocha
+npm install --save-dev chai
+```
+
+Muokkaa _package.json_ tiedostossa npm skripti _test_ seuraavanlaiseksi:
+
+```json
+{
+  //...
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "node_modules/.bin/mocha --reporter spec"
+  },
+  //...
+}
+```
+
+Nyt tiedoston _palindrom.test.js_ sisältö näyttäisi Mocha + Chai -kombinaatiolla kirjoitettuna seuraavalta:
+
+
+```js
+const palindrom = require('../utils/for_testing').palindrom
+const expect = require('chai').expect
+
+describe('palindrom', () => {
+    it('of a', () => {
+      const result = palindrom('a')
+
+      expect(result).to.equal('a')
+    })
+
+    it('of react', () => {
+      const result = palindrom('react')
+
+      expect(result).to.equal('tcaer')
+    })
+
+    it('of saippuakauppias', () => {
+      const result = palindrom('saippuakauppias')
+
+      expect(result).to.equal('saippuakauppias')
+    })
+})
+```
+
+Kuten huomata saattaa, testit näyttävät hyvin samankaltaisilta kuin jestillä kirjoitetut testitapaukset. Testit menevät läpi, joskin testien ajosta luotu raportti on suppeampi kuin jestillä:
+
+![]({{ "/assets/4/16-2.png" | absolute_url }})
+
+Palaamme testeissä kirjoitettuun _describe_-lohkon merkitykseen myöhemmin jestiä käyttäessämme. Jos käytät Mochaa ja Chai:ta, materiaalien esimerkit eivät suoraan kopioimalla toimi (suosittelen muutenkin kirjoittamaan esimerkit itse copypasten sijaan), vaan kirjoita ne Mochan ja Chain ominaisuuksia käyttäen. Tämän pitäisi onnistua melko pienin muutoksin, tarvittaessa lue [Mochan](https://mochajs.org/) ja [Chain](http://chaijs.com/api/bdd/) dokumentaatiota.
+
+Palataan takaisin jestiin. Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
 
 ```js
 test('palindrom of react', () => {
@@ -445,7 +504,7 @@ Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovellusk
 
 Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovelluksen _NODE_ENV_ saa arvokseen _test_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -459,7 +518,7 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 
 Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
-Nht sovelluksen toimintaa on mahdollista muokata sen syoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
+Nht sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
 Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
@@ -502,7 +561,7 @@ module.exports = {
 }
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantmoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
 
 Tiedostossa _.env_ on nyt määritelty _erikseen_ sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
@@ -741,7 +800,7 @@ test('a specific note is within the returned notes', async () => {
 })
 ```
 
-Huomaa jälkimmäisen testin ekspekaatio. Komennolla <code>response.body.map(r=>r.content)</code> muodostetaan taulukko API:n palauttamien muistiinpanojen sisällöistä. Jestin [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem)-ekspektaatiometodilla tarkistetaan että parametrina oleva muistiinpano on kaikkien API:n palauttamien muistiinpanojen joukossa.
+Huomaa jälkimmäisen testin ekspekaatio. Komennolla <code>response.body.map(r => r.content)</code> muodostetaan taulukko API:n palauttamien muistiinpanojen sisällöistä. Jestin [toContain](https://facebook.github.io/jest/docs/en/expect.html#tocontainitem)-ekspektaatiometodilla tarkistetaan että parametrina oleva muistiinpano on kaikkien API:n palauttamien muistiinpanojen joukossa.
 
 Ennen kun teemme lisää testejä, tarkastellaan tarkemmin mitä _async_ ja _await_ tarkoittavat.
 
@@ -755,7 +814,7 @@ Esim. muistiinpanojen hakeminen tietokannasta hoidetaan promisejen avulla seuraa
 Note
   .find({})
   .then(notes => {
-    console.log('operaatio palautti seuraavat muistiinpanot ', notes)
+    console.log('operaatio palautti seuraavat muistiinpanot', notes)
   })
 ```
 
@@ -2217,7 +2276,7 @@ node_modules/.bin/eslint index.js
 
 Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2238,7 +2297,7 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error"
@@ -2256,7 +2315,7 @@ Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyj
 Mukana on myös _console.log_-komennoista varoittava sääntö-
 Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/docs/user-guide/configuring#configuring-rules) määrittelemällä sen "arvoksi" konfiguraatiossa 0. Tehdään toistaiseksi näin säännölle _no-console_.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error",
@@ -2269,7 +2328,7 @@ ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa
 Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
 (https://eslint.org/docs/rules/no-process-env), omalla koneellani täm ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
 
-```bash
+```js
 module.exports = {
   // ...
   "globals": {

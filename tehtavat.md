@@ -1,6 +1,6 @@
 # tehtävät
 
-Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5)
+Muut osat: [2](#osa-2) [3](#osa-3) [4](#osa-4) [5](#osa-5) [6](#osa-6) [7](#osa-7)
 
 ## Osa 1
 
@@ -511,7 +511,7 @@ Voit ottaa sovelluksesi pohjaksi seuraavan:
 
 ```react
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       persons: [
@@ -593,14 +593,14 @@ Sovellus voi näyttää tässä vaiheessa seuraavalta. Kuvassa myös [react deve
 
 Tee lomakkeeseen hakukenttä, jonka avulla näytettävien nimien listaa voidaan rajata:
 
-![]({{ "/assets/teht/12b.png" | absolute_url }})
+![]({{ "/assets/teht/12c.png" | absolute_url }})
 
 Rajausehdon syöttämisen voi hoitaa omana lomakkeeseen kuulumattomana _input_-elementtinä. Kuvassa rajausehdosta on tehty _caseinsensitiivinen_ eli ehto _arto_ löytää isolla kirjaimella kirjoitetun Arton.
 
 **Huom:** Kun toteutat jotain uutta toiminnallisuutta, on usein hyötyä 'kovakoodata' sovellukseen jotain sisältöä, esim.
 
 ```js
-constructor(props){
+constructor(props) {
   super(props)
   this.state = {
     persons: [
@@ -671,17 +671,18 @@ Sovelluksen käyttöliittymä on yksinkertainen. Näytettävä maa haetaan kirjo
 
 Jos ehdon täyttäviä maita on liikaa (yli 10), kehoitetaan tarkentamaan hakuehtoa
 
-<img src="/assets/teht/13.png" height="300">
+![]({{ "/assets/teht/13.png" | absolute_url }})
 
 Jos maita on alle kymmenen, mutta yli 1 näytetään hakuehdon täyttävät maat
 
-<img src="/assets/teht/14.png" height="300">
+![]({{ "/assets/teht/14.png" | absolute_url }})
+
 
 Kun ehdon täyttäviä maita on enää yksi, näytetään maan lippu sekä perustiedot:
 
-<img src="/assets/teht/15.png" height="300">
+![]({{ "/assets/teht/15.png" | absolute_url }})
 
-### palvelimella olevan datan päivitäminen
+### palvelimella olevan datan päivittäminen
 
 #### 33 maiden tiedot klikkaamalla
 
@@ -713,7 +714,7 @@ Tee ohjelmaan mahdollisuus yhteystietojen poistamiseen. Poistaminen voi tapahtua
 
 <img src="/assets/teht/16.png" height="300">
 
-Pavelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
+Palvelimelta tiettyä henkilöä vastaava resurssi tuhotaan tekemällä HTTP DELETE -pyyntö resurssia vastaavaan _URL_:iin, eli jos poistaisimme esim. käyttäjän, jonka _id_ on 2, tulisi tapauksessamme tehdä HTTP DELETE osoitteeseen _localhost:3001:persons/2_. Pyynnön mukana ei lähetetä mitään dataa.
 
 [Axios](https://github.com/axios/axios)-kirjaston avulla HTTP DELETE -pyyntö tehdään samaan tapaan kuin muutkin pyynnöt.
 
@@ -725,7 +726,7 @@ Muuta toiminnallisuutta siten, että jos jo olemassaolevalle henkilölle lisät�
 
 #### 38 puhelinluettelo osa 11
 
-Toteuta osan 2 esimerkin [parempi virheilmoitus](osa#parempi-virheilmoitus) tyyliin ruudulla muutaman sekunnin näkyvä ilmoitus, joka kertoo onnistuneista operaatioista (henkilön lisäys ja poisto, sekä numeron muutos):
+Toteuta osan 2 esimerkin [parempi virheilmoitus](osa2/#parempi-virheilmoitus) tyyliin ruudulla muutaman sekunnin näkyvä ilmoitus, joka kertoo onnistuneista operaatioista (henkilön lisäys ja poisto, sekä numeron muutos):
 
 <img src="/assets/teht/17.png" height="300">
 
@@ -775,7 +776,7 @@ Jos id:tä vastaavaa puhelinnumerotietoa ei ole, tulee palvelimen vastata asianm
 
 Toteuta toiminnallisuus, jonka avulla puhelinnumerotieto on mahdollista poistaa numerotiedon yksilöivään URL:iin tehtävällä HTTP DELETE -pyynnöllä.
 
-Testaa toiminnallisuus postmanilla.
+Testaa toiminnallisuus Postmanilla.
 
 #### 44 puhelinluettelon backend osa 4
 
@@ -811,7 +812,7 @@ Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tule
 
 Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 - [creating new tokens](https://github.com/expressjs/morgan#creating-new-tokens)
-- [JSON.stringigy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+- [JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 
 ### yhteys frontendiin ja vienti tuotantoon
 
@@ -819,7 +820,7 @@ Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 
 Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
 
-Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki, jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
+Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki. Jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
 
 #### 49 puhelinluettelon backend osa 9
 
@@ -831,7 +832,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 #### 50 puhelinluettelo full stack
 
-Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#Statattisten-tiedostojen tarjoaminen-backendistä)
+Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#staattisten-tiedostojen-tarjoaminen-backendistä)
 
 Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
@@ -839,11 +840,11 @@ Huolehdi myös, frontend toimii edelleen myös paikallisesti.
 
 ![]({{ "/assets/teht/22.png" | absolute_url }})
 
-### mogoosen alkeet
+### mongoosen alkeet
 
 #### 51 tietokanta komentoriviltä
 
-Luo sovellukselle pilvessä oleva mongo esim. herokun avulla.
+Luo sovellukselle pilvessä oleva mongo esim. Herokun avulla.
 
 Tee projektihakemistoon tiedosto _mongo.js_, jonka avulla voit lisätä tietokantaan puhelinnumeroja sekä listata kaikki kannassa olevat numerot.
 
@@ -859,13 +860,19 @@ Ohjelma tulostaa
 lisätään henkilö Joulupukki numero 040-1234556 luetteloon
 ```
 
-ja lisää uuden yhteystiedon tietokantaan. Huomaa, että nimi yksittäinen komentoriviparametri voi sisältää välilyöntejä jos se annetaan hipsuissa:
+ja lisää uuden yhteystiedon tietokantaan. Huomaa, että jos nimi sisältää välilyöntejä, on se annettava hipsuissa:
 
 ```bash
 node mongo.js 'Arto Vihavainen' 040-1234556
 ```
 
-Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla <pre>node mongo.js</pre>, tulostaa ohjelma tietokannassa olevat numerotiedot:
+Jos komentoriviparametreja ei anneta, eli ohjelma suoritetaan komennolla
+
+```bash
+node mongo.js
+```
+
+tulostaa ohjelma tietokannassa olevat numerotiedot:
 
 <pre>
 puhelinluettelo:
@@ -921,7 +928,7 @@ näin vältyt monilta ikäviltä yllätyksiltä.
 
 #### 55 puhelinluettelo ja tietokanta, osa 3
 
-Mutta backendiä siten, numerotietojen poistaminen päivittyy tietokantaan.
+Mutta backendiä siten, että numerotietojen poistaminen päivittyy tietokantaan.
 
 Varmista, että frontend toimii muutosten jälkeen.
 
@@ -978,7 +985,7 @@ module.exports = Blog
 app.use(cors())
 app.use(bodyParser.json())
 
-const mongoUrl =  'mongodb://localhost/bloglist'
+const mongoUrl = 'mongodb://localhost/bloglist'
 mongoose.connect(mongoUrl, { useMongoClient: true })
 mongoose.Promise = global.Promise
 
@@ -1265,11 +1272,11 @@ Ota sovellukseesi käyttöön ESlint.
 
 Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
 
-Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti. 
+Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti.
 
 Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkailu.
 
-**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua. 
+**HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua.
 
 Kun siirryt kehittämään uutta sovellusta, onkin varminta aina aluksi nollata local storage konsolista komennolla <code>window.localstorage.clear()</code>
 
@@ -1350,7 +1357,7 @@ Notifikaation tulee olla näkyvillä muutaman sekunnin ajan. Värien lisäämine
 Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näytettävä osan 4 tapaan. Voit halutessasi hyödyntää osassa 4 määriteltyä komponenttia _Togglable_.
 
 #### 86 blogilistan frontend, osa 6
- 
+
 Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
 
 ![]({{ "/assets/teht/33.png" | absolute_url }})
@@ -1370,10 +1377,10 @@ class Blog extends React.Component {
   render() {
     // ..
 
-    const blogStyle = { 
-      paddingTop: 10, 
-      paddingLeft: 2, 
-      border: 'solid', 
+    const blogStyle = {
+      paddingTop: 10,
+      paddingLeft: 2,
+      border: 'solid',
       borderWidth: 1,
       marginBottom: 5
     }
@@ -1389,7 +1396,7 @@ class Blog extends React.Component {
 
 #### 87 blogilistan frontend, osa 7
 
-Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä. 
+Toteuta like-painikkeen toiminnallisuus. Like lisätään backendiin blogin yksilöivään urliin tapahtuvalla _PUT_-pyynnöllä.
 
 Koska backendin operaatio korvaa aina koko blogin, joudut lähettämään operaation mukana blogin kaikki kentät, eli jos seuraavaa blogia liketetään
 
@@ -1417,7 +1424,7 @@ tulee palvelimelle tehdä PUT-pyyntö osoitteeseen _/api/blogs/5a43fde2cbd20b12a
   author: "Joel Spolsky",
   title: "The Joel Test: 12 Steps to Better Code",
   url: "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/"
-},
+}
 ```
 
 **Bonus:** järjestä sovellus näyttämään blogit _likejen_ mukaisessa suuruusjärjestyksessä.
@@ -1436,7 +1443,7 @@ Ohjelmasi voi näyttää esim. seuraavalta:
 
 #### 89 blogilistan frontend, osa 9
 
-Määrittele joillekin sovelluksesi komponenteille ProcTypet. 
+Määrittele joillekin sovelluksesi komponenteille ProcTypet.
 
 ### komponenttien testaaminen
 
@@ -1448,15 +1455,15 @@ Lisää sovellukseesi tilapäisesti seuraava komponentti
 
 ```react
 const SimpleBlog = ({blog, onClick}) => (
-  <div >
+  <div>
     <div>
       {blog.title} {blog.author}
     </div>
     <div>
-      blog has {blog.likes} likes 
+      blog has {blog.likes} likes
       <button onClick={onClick}>like</button>
     </div>
-  </div>  
+  </div>
 )
 ```
 
@@ -1466,11 +1473,11 @@ Lisää komponenttiin tarvittaessa testausta helpottavia CSS-luokkia.
 
 #### 91 blogilistan testit, osa 2
 
-Tee testi, joka varmistaa, että jos komonentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
+Tee testi, joka varmistaa, että jos komponentin _like_-nappia painetaan kahdesti, komponentin propsina saamaa tapahtumankäsittelijäfunktiota kutsutaan kaksi kertaa.
 
 #### 92 blogilistan testit, osa 3
 
-Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista. 
+Tee sovelluksesi komponentille _Blog_ testit, jotka varmistavat, että oletusarvoisesti blogista on näkyvissä ainoastaan nimi ja kirjoittaja, ja että klikkaamalla niitä saadaan näkyviin myös muut osat blogin tiedoista.
 
 ### integraatiotestaus
 
@@ -1484,11 +1491,11 @@ Tee myös testi, joka varmistaa, että kun käyttäjä on kirjautuneena, blogit 
 
 **Vihje 1:**
 
-Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea. 
+Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea.
 
 **Vihje 2:**
 
-Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _decribe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
+Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _describe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
 
 ```js
 describe('<App />', () => {
@@ -1509,7 +1516,7 @@ describe('<App />', () => {
     beforeEach(() => {
       // luo sovellus siten, että käyttäjä on kirjautuneena
     })
-    
+
     it('all notes are rendered', () => {
       app.update()
       // ...
@@ -1520,7 +1527,7 @@ describe('<App />', () => {
 
 ### Redux-Unicafe
 
-Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovelluks voi näyttää esim. seuraavalta:
+Tehdään seuraavissa tehtävissä hieman muokattu redux-versio osan 1 tehtävien Unicafe-sovelluksesta. Sovellus voi näyttää esim. seuraavalta:
 
 ![]({{ "/assets/teht/35.png" | absolute_url }})
 
@@ -1529,13 +1536,13 @@ Haluttu toiminnallisuus lienee ilmeinen.
 #### 95 unicafe revisited, osa 1
 
 Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
- 
-```js 
+
+```js
 {
   good: 5,
   ok: 4,
   bad: 2
-} 
+}
 ```
 
 Seuraavassa on runko reducerille:
@@ -1554,9 +1561,9 @@ const counterReducer = (state = initialState, action) => {
     case 'OK':
       return ...
     case 'BAD':
-      return ...    
+      return ...
     case 'ZERO':
-      return ...          
+      return ...
   }
   return state
 }
@@ -1587,7 +1594,7 @@ describe('unicafe reducer', () => {
 })
 ```
 
-**Toteuta reducer ja tee sille testit.** 
+**Toteuta reducer ja tee sille testit.**
 
 Varmista testeissä _deep-freeze_-kirjaston avulla, että kyseessä on _puhdas funktio_. Huomaa, että valmiin ensimmäisen testin on syytä mennä läpi koska redux olettaa, että reduceri palauttaa järkevän alkutilan kun sitä kutsutaan siten että ensimmäinen parametri, eli aiempaa tilaa edustava _state_ on _undefined_.
 
@@ -1599,7 +1606,7 @@ Toteuta sitten sovelluksen koko sovellus.
 
 ### redux-anekdootit
 
-Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositiossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
+Toteutetaan osan lopuksi versio toisesta ensimmäisen osan tehtävästä, anekdoottien äänestyssovelluksesta. Voit ottaa ratkaisusi pohjaksi repositoriossa <https://github.com/mluukkai/redux-anecdotes> olevan projektin.
 
 Sovelluksen lopullisen version tulisi näyttää seuraavalta:
 
@@ -1618,3 +1625,309 @@ Huolehdi siitä, että anekdootit pysyvät äänten mukaisessa suuruusjärjetyks
 Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
 
 ## osa 6
+
+Seuraavissa tehtävissä parannellaan edellisen osan anekdoottisovellusta. Ota ratkaisusi pohjaksi repositoriossa <https://github.com/mluukkai/redux-anecdotes-v2> oleva koodi.
+
+### yhdistetyt reducerit
+
+#### 100 paremmat anekdootit, osa 1
+
+Sovelluksen komponenteissa viitataan suoraan actioneihin:
+
+```react
+class AnecdoteForm extends React.Component {
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const content = e.target.anecdote.value
+    this.props.store.dispatch({
+      type: 'CREATE',
+      content
+    })
+
+  }
+  // ...
+}
+```
+
+Tämä ei ole hyvä tapa. Eriytä action-olioiden luominen [action creator](https://redux.js.org/docs/basics/Actions.html#action-creators) -funktioihin. Sijoita creatorit tiedostoon _src/reducers/anecdoteReducer.js_.
+
+#### 101 paremmat anekdootit, osa 2
+
+Sovelluksessa on valmiina komponentin _Notification_ runko:
+
+```react
+class Notification extends React.Component {
+  render() {
+    const style = {
+      border: 'solid',
+      padding: 10,
+      borderWidth: 1
+    }
+    return (
+      <div style={style}>
+        render here notification...
+      </div>
+    )
+  }
+}
+```
+
+Laajenna komponenttia siten, että se renderöi redux-storeen talletetun viestin, eli renderöitävä komponentti muuttuu muodoon:
+
+```react
+return (
+  <div style={style}>
+    {this.props.store.getState()...}
+  </div>
+)
+```
+
+Joudut siis muuttamaan/laajentamaan sovelluksen olemassaoleva reduceria. Tee toiminnallisuutta varten oma reduceri ja siirry käyttämään sovelluksessa yhdistettyä reduceria osan 6 materiaalin tapaan.
+
+Tässä vaiheessa sovelluksen ei vielä tarvitse osata käyttää _Notification_ komponenttia järkevällä tavalla, riittää että sovellus toimii ja näyttää _notificationReducerin_ alkuarvoksi asettaman viestin.
+
+#### 102 paremmat anekdootit, osa 3
+
+Laajenna sovellusta siten, että se näyttää _Notification_-komponentin avulla viiden sekunnin ajan kun sovelluksessa äänestetään tai luodaan uusia anekdootteja:
+
+![]({{ "/assets/teht/37.png" | absolute_url }})
+
+Notifikaation asettamista ja poistamista varten kannattaa kannattaa toteuttaa [action creatorit](https://redux.js.org/docs/basics/Actions.html#action-creators).
+
+#### 103 paremmat anekdootit, osa 4
+
+Toteuta sovellukseen näytettävien muistiinpanojen filtteröiminen
+
+![]({{ "/assets/teht/38.png" | absolute_url }})
+
+Säilytä filtterin tila redux storessa, eli käytännössä kannattaa jälleen luoda uusi reduceri ja action creatorit.
+
+Tee filtterin ruudulla näyttämistä varten komponentti _Filter_. Voit ottaa sen pohjaksi seuraavan
+
+```js
+class Filter extends React.Component {
+  handleChange = (e) => {
+    // input-kentän arvo muuttujassa e.target.value
+  }
+  render() {
+    const style = {
+      marginBottom: 10
+    }
+
+    return (
+      <div style={style}>
+        filter <input onChange={this.handleChange}/>
+      </div>
+    )
+  }
+}
+```
+
+### connect
+
+#### 104 paremmat anekdootit, osa 5
+
+Sovelluksessa välitetään _redux store_ tällä hetkellä kaikille komponenteille propseina.
+
+Ota käyttöön kirjasto [react-redux](https://github.com/reactjs/react-redux) ja muuta komponenttia _Notification_, se pääsee käsiksi tilaan _connect_-funktion välityksellä.
+
+Huomaa, että toimiakseen _context_ edellyttää että sovelukselle on määriteltävä [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
+
+
+#### 105 paremmat anekdootit, osa 6
+
+Tee sama komponentille _Filter_ ja _AnecdoteForm_.
+
+#### 106 paremmat anekdootit, osa 7
+
+Muuta myös _AnecdoteList_ käyttämään connectia.
+
+Poista turhaksi staten propseina tapahtuva välittäminen, eli pelkistä _App_ muotoon:
+
+```js
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Programming anecdotes</h1>
+        <Notification />
+        <AnecdoteForm />
+        <AnecdoteList />
+      </div>
+    )
+  }
+}
+```
+
+#### 107 paremmat anekdootit, osa 8
+
+Välitä komponentille _AnecdoteList_ connectin avulla ainoastaan yksi stateen liittyvä propsi, filtterin tilan perusteella näytetävät anekdootit samaan tapaan kuin materiaalin luvussa [Presentational/Container revisited](osa6/#Presentational/Container-revisited).
+
+Komponentin _AnecdoteList_ metodi _render_ siis typistyy suunnilleen seuraavaan muotoon
+
+```react
+class AnecdoteList extends React.Component {
+  // ...
+  render() {
+    return (
+      <div>
+        <h2>Anecdotes</h2>
+        <Filter />
+        {this.props.anecdotesToShow.map(anecdote =>
+          <div key={anecdote.id}>
+            ...
+          </div>
+        )}
+      </div>
+    )
+  )
+}
+```
+
+### redux ja backend
+
+#### 108 anekdootit ja backend, osa 1
+
+Hae sovelluksen käynnistyessä anekdootit json-serverillä toteutetusta backendistä.
+
+Backendin alustavan sisällön saat esim. [täältä](https://github.com/mluukkai/redux-anecdotes-v2/wiki).
+
+#### 109 anekdootit ja backend, osa 2
+
+Muuta uusien anekdoottien luomista siten, että anekdootit talletetaan backendiin.
+
+#### 110 anekdootit ja backend, osa 3
+
+Muuta myös äänestäminen siten, että anekdootit talletetaan backendiin. Jos teet talletuksen HTTP PUT -operaatiolla, niin muista että joudut korvaamaan tallettaessa koko olion.
+
+### thunk
+
+#### 111 anekdootit ja backend, osa 4
+
+Muuta redux-storen alustus tapahtumaan _redux-thunk_-kirjaston avulla toteutettuun asynkroiseen actioniin.
+
+#### 112 anekdootit ja backend, osa 5
+
+Muuta myös uuden anekdootin luominen ja äänestäminen tapahtumaan _redux-thunk_-kirjaston avulla toteutettuihin asynkronisiin actioneihin.
+
+#### 113 anekdootit ja backend, osa 6
+
+Notifikaatioiden tekeminen on nyt hieman ikävää, sillä se edellyttää kahden actionin tekemistä ja _setTimeout_-funktion käyttöä:
+
+```js
+this.props.notifyWith(`you voted '${anecdote.content}'`)
+setTimeout(() => {
+  this.props.clearNotification()
+}, 10000)
+}
+```
+
+Tee asynkrooninen action creator, joka mahdollistaa notifikaation antamisen seuraavasti:
+
+```js
+this.props.notify(`you voted '${anecdote.content}'`, 10)
+```
+
+eli ensimmäisenä parametrina on renderöitävä teksti ja toisena notifikaation näyttöaika sekunneissa.
+
+Ota paranneltu notifikaatiotapa käyttöön sovelluksessasi.
+
+### router
+
+Jatketaan anekdoottien parissa. Ota seuraaviin tehtäviin pohjaksi repositoriossa <https://github.com/mluukkai/routed-anecdotes> oleva reduxiton anekdoottisovellus.
+
+#### 114 routed anecdotes, osa 1
+
+Lisää sovellukseen React Router siten, että _Menu_-komponentissa olevia linkkejä klikkailemalla saadaan säädeltyä näytettävää näkymää.
+
+Sovelluksen juuressa, eli polulla _/_ näytetään anekdoottien lista:
+
+![]({{ "/assets/teht/40.png" | absolute_url }})
+
+Pohjala oleva _Footer_-komponentti tulee näyttää aina.
+
+Uuden anekdootin luominen tapahtuu esim. polulla _create_:
+
+![]({{ "/assets/teht/41.png" | absolute_url }})
+
+Huom: jos saat seuraavan virheilmoituksen
+
+![]({{ "/assets/teht/39.png" | absolute_url }})
+
+pääset siitä eroon sisällyttämällä kaiken Router-elementin sisälle tulevan _div_-elementtiin:
+
+```bash
+<Router>
+  <div>
+    ...
+  </div>
+</Router>
+```
+
+#### 115 routed anecdotes, osa 2
+
+Toteuta sovellukseen yksittäisen anekdootin tiedot näyttävä näkymä:
+
+![]({{ "/assets/teht/42.png" | absolute_url }})
+
+Yksittäisen anekdootin sivulle navigoidaan klikkaamalla anekdootin nimeä
+
+![]({{ "/assets/teht/43.png" | absolute_url }})
+
+#### 116 routed anecdotes, osa 3
+
+Luomislomakkeen oletusarvoinen toiminnallisuus on melko hämmentävä, sillä kun lomakkeen avulla luodaan uusi muistiinpano, mitään ei näytä tapahtuvan.
+
+Paranna toiminnallisuutta siten, että luomisen jälkeen siirrytään automaattisesti kaikkien anekdoottien näkymään _ja_ käyttäjälle näytetään 10 sekunnin ajan onnistuneesta lisäyksestä kertova notifikaatio:
+
+![]({{ "/assets/teht/44.png" | absolute_url }})
+
+### inline-tyylit
+
+Parannellaan edellisen tehtäväsarjan ulkoasua inlinetyylien avulla.
+
+#### 117 styled anecdotes, osa 1
+
+Tee notifikaatioista tyylikkäämpi:
+
+![]({{ "/assets/teht/45.png" | absolute_url }})
+
+Notifikaatiosi ei tarvitse näyttää samanlaiselta, tyyli on vapaa.
+
+Googlaile tarvittaessa apua. Hyödyllisiä avainsanoja ovat ainakin _border_, _margin_ ja _padding_. [w3schoolsin](https://www.w3schools.com/css/default.asp) sivulta löytyy paljon esimerkkejä tyyleihin liittyen.
+
+#### 118 styled anecdotes, osa 2
+
+Paranna menun ulkoasua esim. seuraavasti
+
+![]({{ "/assets/teht/46.png" | absolute_url }})
+
+Kuten edellisessä tehtävässä, nytkin tyyli on vapaa.
+
+Jos haluat erotella aktiivisena olevan sivun linkin tyylin menussa, kannattaa vaihtaa käytössä oleva komponentti [Link](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/Link.md) sen edistyksellisempään versioon, eli komponenttiin [NavLink](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md).
+
+NavLink toimii Link-komponentin tavoin mutta sisältää muutamia käteviä lisäominaisuuksia kuten attribuutin [activeStyle](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#activestyle-object), jonka kanssa useimmiten käytetään attribuuttia [exact](https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/NavLink.md#exact-bool).
+
+### ui-framework
+
+Viimeistele anekdoottisovellus lisäämällä siihen tyylejä Bootstrapin tai jonkun muun UI-frameworkin avulla.
+
+#### 119 styled anecdotes, osa 3
+
+Ota käyttöön bootstrap (tai valitsemasi framework) ja renderöi anekdoottien lista [ListGroup](https://react-bootstrap.github.io/components/list-group/)-komponentin avulla:
+
+![]({{ "/assets/teht/47.png" | absolute_url }})
+
+#### 120 styled anecdotes, osa 4
+
+Tutustu [grideihin](https://react-bootstrap.github.io/layout/grid/) ja muuta niiden avulla sovelluksen _about_-sivua siten, että oikeassa reunassa näytetään jonkun kuuluisan tietojenkäsittelijän kuva:
+
+![]({{ "/assets/teht/48.png" | absolute_url }})
+
+#### 121 styled anecdotes, osa 5
+
+Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aikaa ja intoa riittää, lisää vielä vapaavalintaisia tyylejä.
+
+## osa 7
+
+### webpack

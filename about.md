@@ -6,10 +6,7 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-5. Jäljellä olevien osien tämän hetken tavoiteaikataulu on
-
-- osa 6 la 6.1
-- osa 7 ke 10.1
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-6. Viimeisen eli seitsemännen osan on tarkoitus olla valmiina keskiviikkona 10.1.
 
 Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 
@@ -38,10 +35,6 @@ Kerro ilmoittautumisen yhteydessä kuinka paljon omaat kokemusta Web-sovellusten
 Jos huomaat suoraviivaisen typon, korjaa pull requestina repositorioon
 https://github.com/mluukkai/mluukkai.github.io
 
-Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina
-
-Kurssin suunniteltu sisältö löytyy [täältä](https://docs.google.com/document/d/1FXO9wIcn4-7x8V0uuCVvi2hywmtKUhT0tSM5QC8tJlI/edit)
-
-Myös docsiin voi lisätä huomioita, mutta parempi on käyttää issueita, docsiin tehdyt kommentit jäävät helposti huomaamatta.
+Fundamentaalimmat asiat kannattaa dokumentoida esim. issueina tai emailitse.
 
 Kannattaa huomata, että asioiden käsittelyjärjestykselle ja esitystavoille on usein pedagogisia perusteita. Esim. kun jokin konsepti esitellään ensimmäistä kertaa, jätetään tyypillisesti aluksi tarkoituksella kertomatta monia konseptiin liittyviä detaljeja. Niihin palataan yleensä kurssin myöhemmissä osissa. Kaikki huomiot kannattaa kuitenkin ehdottomasti tuoda esille.

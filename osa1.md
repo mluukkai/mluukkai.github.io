@@ -405,7 +405,7 @@ Vaikka selaimen näyttämä sivu päivittyy, ei muutos ole lopullinen. Jos sivu 
 
 ### CSS ###
 
-Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata pavelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
+Muistiinpanojen sivun HTML-koodin _head_-osio sisältää _link_-tagin, joka määrittelee, että selaimen tulee ladata palvelimelta osoitteesta [main.css](https://fullstack-exampleapp.herokuapp.com/main.css) sivulla käytettävä [css](https://developer.mozilla.org/en-US/docs/Web/CSS)-tyylitiedosto
 
 Cascading Style Sheets eli CSS on kieli, jonka avulla web-sovellusten ulkoasu määritellään.
 
@@ -2301,7 +2301,7 @@ Olemme nyt esitelleet kaksi eri tapaa komponenttien määrittelemiseen. Kumpaa t
 
 Jos komponentti tarvitsee tilaa, on luokkasyntaksin käyttäminen välttämätöntä. Kannattaa kuitenkin muistaa, että Reactin filosofian mukaista on sijoittaa tila [mahdollisimman ylös](https://reactjs.org/docs/lifting-state-up.html) komponenttihierarkiaan, mielellään ainoastaan sovelluksen juurikomponenttiin. Näin tilallisten komponenttien potentiaalinen tarvekin on vähäisempi.
 
-Joskus komponenttien on käytettävä osassa 2 esiteltäviä [osa2/#komponenttien-lifecycle-metodit] lifecycle-metodeja, myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
+Joskus komponenttien on käytettävä [osassa 2 esiteltäviä](osa2/#komponenttien-lifecycle-metodit) lifecycle-metodeja, myös niissä tapauksissa on pakko käyttää luokkiin perustuvia komponentteja.
 
 Yleisohjeena on siis se, että käytä funktionaalisia komponentteja ellet aivan pakosti tarvitse jotain luokkasyntaksin omaavien komponenttien ominaisuuksia.
 
