@@ -1048,6 +1048,95 @@ Jos olet aikeissa käyttää CSS-moduuleja, kannattaa vilkaista mitä kirjasto [
 
 ### Styled components
 
+Mielenkiintoisen näkökulman tyylien määrittelyyn tarjoaa Javascriptin ES6 syntaksin [tagged template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)-syntaksia hyödyntävä [styled components](https://www.styled-components.com/)-kirjasto.
+
+
+Tehdään styled-componentsin avulla esimerkkisovellukseemme muutama tyylillinen muutos:
+
+```bash
+import styled from 'styled-components'
+
+const Button = styled.button`
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid black;
+  border-radius: 3px;
+`
+
+const Hello = ({ className, counter }) => (
+  <p className={className}>
+    hello webpack {counter} clicks
+  </p>
+)
+
+const StyledHello = styled(Hello) `
+  color: blue;
+  font-weight: bold;
+`
+
+class App extends React.Component {
+  //...
+
+  render() {
+    return (
+      <div>   
+        <StyledHello counter={this.state.counter} />
+        <Button onClick={this.onClick}>click</Button>
+      </div>
+    )
+  }
+} 
+```
+
+Heti alussa luodaan HTML:n _button_-elementistä jalostettu versio ja sijoitetaan se muuttujaan _Button_:
+
+```js
+const Button = styled.button`
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid black;
+  border-radius: 3px;
+`
+```
+
+Tyylien määrittelyn syntaksi on varsin mielenkiintoinen.
+
+Määritelty komponentti toimii kuten normaali _button_ ja sovellus renderöi sen normaaliin tapaan:
+
+```html
+<Button onClick={this.onClick}>click</Button>
+```
+
+Seuraavaksi koodi määrittelee normaalin React-komponentin
+
+```react
+const Hello = ({ className, counter }) => (
+  <p className={className}>
+    hello webpack {counter} clicks
+  </p>
+)
+```
+
+ja lisää tälle tyylit metodin _styled_ avulla:
+
+const StyledHello = styled(Hello) `
+  color: blue;
+  font-weight: bold;
+`
+
+Muuttujaan _StyledHello_ sijoitettua tyyleillä jalostettua komponenttia käytetään kuten alkuperäistä:
+
+```react
+<StyledHello counter={this.state.counter} />
+```
+
+Sovelluksen ulkoasu seuraavassa:
+
+![]({{ "/assets/7/18.png" | absolute_url }})
+
+
 ## Testauksesta
 
 - snapshot
