@@ -918,7 +918,15 @@ Kattavahko lista olemassaolevista polyfilleistä löytyy [täältä](https://git
 
 Selaimien yhteensopivuus käytettävien API:en suhteen kannattaakin tarkistaa esim.  [https://caniuse.com](https://caniuse.com)-sivustolta tai  [Mozzillan sivuilta](https://developer.mozilla.org/en-US/).
 
-## Tyyleistä
+### eject
+
+Create-react-app käyttää taustalla webpackia. Jos peruskonfiguraatio ei riitä, on projektit mahdollista [ejektoida](https://github.com/facebookincubator/create-react-app#converting-to-a-custom-setup), jolloin kaikki konepellin alla oleva magia häviää, ja konfiguraatiot tallettuvat hakemistoon _config_ ja muokattuun _package.json_-tiedostoon.
+
+Jos create-react-app:illa tehdyn sovelluksen ejektoi, paluuta ei ole, sen jälkeen kaikesta konfiguroinnista on huolehdittava itse. Konfiguraatiot eivät ole triaaleimmasta päästä ja create-react-appin ja ejektoinnin sijaan parempi vaihtoehto saattaa joskus olla tehdä itse koko webpack-konfiguraatio.
+
+Ejektoidun sovelluksen konfiguraatioiden lukeminen on suositeltavaa ja sangen opettavaista!
+
+## Lisää tyyleistä
 
 ### css-moduulit
 
