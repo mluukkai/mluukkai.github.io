@@ -928,7 +928,21 @@ Ejektoidun sovelluksen konfiguraatioiden lukeminen on suositeltavaa ja sangen op
 
 ## Lisää tyyleistä
 
+Osissa 2 ja 6 on jo katsottu muutamaa tapaa tyylien lisäämiseen eli vanhan koulukunnan [yksittäistä CSS](osa2/#Tyylien-lisääminen)-tiedostoa, [inline-tyylejä](osa6/#Inline-tyylit) ja [UI-frameworkien](osa6/#Valmiit-käyttöliittymätyylikirjastot) kuten Bootstrapin käyttöä. 
+
+Tapoja on [monia muitakin](https://survivejs.com/react/advanced-techniques/styling-react/), katsotaan vielä lyhyestä kahta tapaa.
+
 ### css-moduulit
+
+Yksi CSS:n keskeisistä ongelmista on se, että CSS-määrittelyt ovat _globaaleja_. Suurissa tai jo keskikokoisissakin sovelluksissa tämä aiheuttaa ongelmia, sillä tiettyihin komponentteihin vaikuttavat monissa paikoissa määritellyt tyylit ja lopputulos voi olla vaikeasti ennakoitavissa.
+
+Laitoksen [kurssilistasivun](https://www.cs.helsinki.fi/courses) alaosassa on itseasiassa eräs ilmentymä tälläisestä ikävästä bugista
+
+![]({{ "/assets/7/15.png" | absolute_url }})
+
+Sivulla on monessa paikassa määriteltyjä tyylejä, osa määrittelyistä tulee Drupal-sisällönhallintajärjestelmästä, osa on laitoskohtaisia, osa taas tulee sivun yläosan olemassaolevaa opetustarjontaa näyttävistä komponenteista. Vika on niin hankala korjata, ettei kukaan ole viitsinyt sitä tehdä.
+
+[CSS-moduulit](https://github.com/css-modules/css-modules) tarjoaa tähän erään ratkaisun
 
 ### Styled components
 

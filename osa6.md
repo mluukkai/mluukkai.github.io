@@ -15,7 +15,8 @@ permalink: /osa6/
   - presenter/container-patterni
   - High order -komponentit
   - React router
-  - Inline styles
+  - Inline-tyylit
+  - UI-frameworkien käyttö 
 
 ## Muistiinpano-sovelluksen refaktorointia
 
