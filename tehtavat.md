@@ -1982,28 +1982,32 @@ Tee fronendille testit joiden rivikattavuus on vähintään 80%
 
 ### 134
 
-Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
+Ota sovellukseessasi käyttöön snapshot testing
 
 ### 135
 
-Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtävä tehdyksi.
+Tee headles-browsertestausta
 
 ### 136
 
-Siirrä frontend ja backend samaan repositorioon
+Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
 
 ### 137
 
-Toteuta Travisin avulla automaattinen deployment
+Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtävä tehdyksi.
 
 ### 138
 
-Tee headles-browsertestausta
+Siirrä frontend ja backend samaan repositorioon
 
 ### 139
 
-Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+Toteuta Travisin avulla automaattinen deployment
 
 ### 140
+
+Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+
+### 141
 
 Koodaa parempi versio facebookista

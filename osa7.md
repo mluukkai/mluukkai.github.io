@@ -16,18 +16,16 @@ permalink: /osa7/
 - Webpack
   - Babel: transpailaus, polyfillit
   - Suoritusympäristöt (test/dev/prod)
-- React
-  - Reactin roolista sovelluksissa
-  - Isompien sovellusten komponenttien organisointi
-  - Virtual DOM
-- react+redux+node
-  - Reactin roolista sovelluksissa
-  - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa
-- react/node-sovellusten tietoturva
-  - Helmet.js
+- Tyylien lisääminen sovellukseen
+  - CSS-moduulit
+  - Styled components
 - Testaus
   - Headless browser testing
-  - Snapshot testing
+- React
+  - Isompien sovellusten komponenttien organisointi
+  - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa
+  - Virtual DOM
+- react/node-sovellusten tietoturva
 - Tyypitys
   - PropTypes revisited
   - Flow
@@ -35,6 +33,7 @@ permalink: /osa7/
 - Librarydropping
   - immutable.js
   - websocket.js
+  - Helmet.js
 - Tulevaisuuden trendit
   - Isomorfinen koodi: react backendissa
   - Progessive web aps
@@ -1142,14 +1141,13 @@ Sovelluksen ulkoasu seuraavassa:
 
 ## Testauksesta
 
-- snapshot
 - Headles
 
 ## React
 
+- Virtual DOM
 - Reactin roolista sovelluksissa
 - Isompien sovellusten komponenttien organisointi
-- Virtual DOM
 
 ## react+redux+node
 
@@ -1157,7 +1155,11 @@ Sovelluksen ulkoasu seuraavassa:
 - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
 
 ## react/node-sovellusten tietoturva
+
+## Librarydropping
   
+- immutable.js
+- websocket.js
 - Helmet.js
 
 ## Tyypitys
@@ -1165,11 +1167,6 @@ Sovelluksen ulkoasu seuraavassa:
 - ProcTypes revisited
 - Flow
 - typescrit
-
-## Librarydropping
-  
-- immutable.js
-- websocket.js
 
 ## Tulevaisuuden trendit
   
