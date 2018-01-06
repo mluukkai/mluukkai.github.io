@@ -942,7 +942,109 @@ Laitoksen [kurssilistasivun](https://www.cs.helsinki.fi/courses) alaosassa on it
 
 Sivulla on monessa paikassa määriteltyjä tyylejä, osa määrittelyistä tulee Drupal-sisällönhallintajärjestelmästä, osa on laitoskohtaisia, osa taas tulee sivun yläosan olemassaolevaa opetustarjontaa näyttävistä komponenteista. Vika on niin hankala korjata, ettei kukaan ole viitsinyt sitä tehdä.
 
-[CSS-moduulit](https://github.com/css-modules/css-modules) tarjoaa tähän erään ratkaisun
+Demonstroidaan vastaavankaltaista ongelmatilannetta esimerkkisovelluksessamme.
+
+Muutetan esimerkkitietostoamme siten, että komponentista _App_ irrotetaan osa toiminnallisuudesta komponentteihin _Hello_ ja _NoteCount_:
+
+```react
+import './Hello.css'
+
+const Hello = ({ counter }) => <p className='content'>hello webpack {counter} clicks!</p> 
+
+export default Hello
+```
+
+```react
+import './NoteCount.css'
+
+const NoteCount = ({ noteCount }) => <p className='content'> {noteCount} notes in server</p>
+
+export default NoteCount
+```
+
+Molemmat näistä määrittelevät oman tyylistiedostonsa.
+
+_Hello.css_
+
+```CSS
+.content {
+  background-color: yellow
+}
+```
+
+_NoteCount.css_:
+
+```CSS
+.content {
+  background-color: blue
+}
+```
+
+
+Koska molemmat komponentit käyttävät samaa CSS-luokan nimeä _content_, käykin niin että myöhemmin määritelty ylikirjoittaa aiemmin määritellyn, ja molempien tyyli on sama:
+
+![]({{ "/assets/7/16.png" | absolute_url }})
+
+Perinteinen tapa kierää ongelma on ollut käyttää monimutkaisempia CSS-luokan nimiä, esim. _Hello_container_ ja _NoteCount_container_, tämä muuttuu kuitenkin jossain vaiheessa varsin hankalaksi.
+
+[CSS-moduulit](https://github.com/css-modules/css-modules) tarjoaa tähän erään ratkaisun. 
+
+Lyhyesti ilmaisten periaatteena on tehdä CSS-määrittelyistä lähtökohtaisesti lokaaleja, vain yhden komponentin kontekstissa voimassa olevia, joka taas mahdollistaa luontevien CSS-luokkanimien käytön. Käytännössä tämä lokaalius toteutetaan generoimalla konepellin alla CSS-luokille uniikit luokkanimet.
+
+
+CSS-moduulit voidaan toteuttaa suoraan Webpackin css-loaderin avulla seuraten [sivun](https://www.triplet.fi/blog/practical-guide-to-react-and-css-modules/) ohjetta.
+
+Muutetaan tyylejä käyttäviä komponentteja hiukan:
+
+```react
+import styles from './Hello.css'
+
+const Hello = ({ counter }) => (
+  <p className={styles.content}>
+    hello webpack {counter} clicks!
+  </p> 
+)
+
+export default Hello
+```
+
+Erona siis edelliseen on se, että tyyliit "sijoitetaan muuttujaan" _styles_
+
+```js
+import styles from './Hello.css'
+```
+
+Nyt tyylitiedoston määrittelelyihin voi viitata muuttujan _styles_ kautta, ja CSS-luokan liittäminen tapahtuu seuraavasti
+
+```react
+<p className={styles.content}>
+```
+
+Vastaava muutos tehdään komponentille _NoteCount_.
+
+Muutetaan sitten Webpackin konfiguraatiossa olevaa _css-loaderin_ määrittelyä siten että se enabloi [CSS-modulit](https://github.com/webpack-contrib/css-loader#modules):
+
+```js
+{
+  test: /\.css$/,
+  loaders: [
+    'style-loader',
+    'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]&sourceMap&-minimize'
+  ]
+}
+```
+
+Nyt molemmat komponentit saavat omat tyylinsä. Konsolista tarkastelemalla huomaamme, että komponenttien luokille on generoitunut webpackin css-loaderin generoimat uniikit nimet:
+
+![]({{ "/assets/7/17.png" | absolute_url }})
+
+CSS-luokan nimen muotoieva osa on _css-loaderin_ yhteydessä oleva
+
+<pre>
+localIdentName=[name]__[local]___[hash:base64:5]
+</pre>
+
+Jos olet aikeissa käyttää CSS-moduuleja, kannattaa vilkaista mitä kirjasto [react-css-modules](https://github.com/gajus/react-css-modules) tarjoaa .
 
 ### Styled components
 
