@@ -362,7 +362,7 @@ Eli JSX-syntaksin sijaan komponentit luodaan pelkällä Javascritpilla käyttäe
 
 Sovellusta voi nyt kokeilla avaamalla tiedoston _build/index.html_ selaimen _open file_ -toiminnolla:
 
-![]({{ "/assets/7/1.png" | absolute_url }})
+![]({{ "/assets/7/4.png" | absolute_url }})
 
 Tässä on jo melkein kaikki mitä tarvitsisimme React-sovelluskehitykseen.
 
@@ -506,12 +506,214 @@ Vielä paremman ratkaisun tarjoaa [webpack-dev-server](https://webpack.js.org/gu
 npm install --save-dev webpack-dev-server
 ```
 
-### hot reload
+
+Määritellään dev-serverin käynnistävä npm-skripti:
+
+```bash
+{
+  // ...
+  "scripts": {
+    "build": "node_modules/.bin/webpack",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server"
+  },
+  // ...
+}
+```
+
+Lisätään tiedostoon _webpack.config.js_ kenttä _devServer_
+
+```bash
+let config = {
+  entry: './src/index.js',               
+  output: {                     
+    path: path.resolve(__dirname, 'build'),        
+    filename: 'bundle.js'    
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, "build"),
+    compress: true,
+    port: 3000
+  },
+  // ...
+}
+```
+
+Komento _npm server_ käynnistää nyt dev-serverin porttiin, eli sovelluskehitys tapahtuu avaamalla tuttuun tapaan selain osoitteeseen <http://localhos:3000>. Kun teemme koodiin muutoksia, reloadaa selain automaattisesti itsensä.
+
+Päivitysprosessi on nopea, dev-serveriä käytettäessä webpack ei bundlaa koodia normaaliin tapaan tiedostoksi _bundle.js_, bundlauksen tuotos on olemassa ainoastaan keskusmuistissa.
+
+Laajennetaan koodia muuttamalla komponentin _App_ määrittelyä seuraavasti: 
+
+```react
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 0
+    }
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <p>hello webpack {this.state.counter} clicks</p>
+        <button onClick={()=>this.setState({counter: this.state.counter+1})}>click</button>
+      </div>
+    )
+  }
+} 
+```
+
+Kannattaa huomata, että virheviestit eivät renderöidy selaimeen kuten create-react-app:illa tehdyissä sovelluksissa, eli on seurattava tarkasti konsolia:
+
+![]({{ "/assets/7/5.png" | absolute_url }})
+
+Sovellus toimii hyvin ja kehitys on melko sujuvaa. 
 
 ### sourcemappaus
 
-### uglify
+Erotetaan napin klikkauksenkäsittelijä omaksi funktioksi:
+
+```react
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 0
+    }
+  }
+
+  onClick() {
+    this.setState({ counter: this.state.counter + 1 })
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <p>hello webpack {this.state.counter} clicks</p>
+        <button onClick={this.onClick}>click</button>
+      </div>
+    )
+  }
+} 
+```
+
+Sovellus ei enää toimi, ja konsoli kertoo virheen
+
+![]({{ "/assets/7/6.png" | absolute_url }})
+
+Tiedämme tietenkin nyt että virhe on metodissa onClick, mutta jos olisi kyse suuremmasta sovelluksesta, on virheilmoitus sikäli hyvin ikävä, että se kertoo virheen sijainnin bundlatussa koodissa:
+
+<pre>
+bundle.js:16732 Uncaught TypeError: Cannot read property 'setState' of undefined
+</pre>
+
+mutta ei sitä missä kohtaa alkuperäistä koodia virhe sijaitsee.
+
+Korjaus on onneksi hyvin helppo, pyydetään webpackia generoimaan bundlelle ns.  [source map](https://webpack.js.org/configuration/devtool/), jonka avulla bundlea suoritettaessa tapahtuva virhe on mahdollista _mäpätä_ alkuperäisen koodin vastaavaan kohtaan.
+
+Source map saadaan generoitua lisäämällä konfiguraatioon avain _devtool_ aja sen arvoksi 'source-map':
+
+```bash
+let config = {
+  entry: './src/index.js',               
+  output: {                     
+    // ...
+  },
+  devServer: {
+    // ...
+  },
+  devtool: 'source-map',
+  // ..
+}
+```
+
+Nyt virheilmoitus on hyvä
+
+![]({{ "/assets/7/7.png" | absolute_url }})
+
+Source mapin käyttö mahdollistaa myös chromen debuggerin luontevan käytön
+
+![]({{ "/assets/7/8.png" | absolute_url }})
+
+Kyseinen virhe on siis jo [osasta 1](osa1/#Metodien-käyttö-ja-this) tuttu this:in kadottaminen. Korjataan ongelma määrittelemällä metodi uudelleen meille jo kovin tutulla syntaksilla:
+
+```js
+onClick = () => {
+  this.setState({ counter: this.state.counter + 1 })
+}
+```  
+
+Tästä aiheutuu kuitenkin virheilmoitus
+
+![]({{ "/assets/7/9.png" | absolute_url }})
+
+Virhe johtuu siitä, että käyttämämme syntaksi ei ole vielä mukana Javascriptin uusimmassa standardissa ES7. Saamme syntaksin käyttöön asentamalla [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/)-pluginin komennolla
+
+```bash
+npm install --save-dev 
+```
+
+ja kehottamalla _babel-loader_ käyttämään pluginia:
+
+```bash
+{
+  test: /\.js$/,
+  loader: 'babel-loader',
+  query: {
+    presets: ['env', 'react'],
+    plugins: [require('babel-plugin-transform-class-properties')]
+  }
+}
+```
+
+### Koodin minifiointi
 
 ### envs
 
 ### polyfill
+
+## Tyyleistä
+
+### css-moduulit
+
+### Styled components
+
+## Testauksesta
+
+- snapshot
+- Headles
+
+## React
+
+- Reactin roolista sovelluksissa
+- Isompien sovellusten komponenttien organisointi
+- Virtual DOM
+
+## react+redux+node
+
+- Reactin roolista sovelluksissa
+- sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
+
+## react/node-sovellusten tietoturva
+  
+- Helmet.js
+
+## Tyypitys
+
+- ProcTypes revisited
+- Flow
+- typescrit
+
+## Librarydropping
+  
+- immutable.js
+- websocket.js
+
+## Tulevaisuuden trendit
+  
+- Isomorfinen koodi: react backendissa
+- Progessive web aps
+- Cloud native apps
+
