@@ -40,6 +40,10 @@ permalink: /osa7/
   - Progessive web aps
   - Cloud native apps
 
+## Tehtävät
+
+Osan 7 [tehtävistä](../tehtavat#osa7) suurin osa on koko kurssin sisältöä kertaavia, voit aloittaa tehtävien tekemisen vaikka heti, vain muutama tehtävistä edellyttää tämän osan teorian läpikäyntiä.
+
 ## Webpack
 
 React on ollut jossainmäärin kuuluisa siitä, että sovelluskehityksen edellyttämien työkalujen konfigurointi on ollut hyvin hankalaa. Kiitos [create-react-app](https://github.com/facebookincubator/create-react-app):in, sovelluskehitys Reactilla on kuitenkin nykyään tuskatonta, parempaa työskentelyflowta on tuskin ollut koskaan Javascriptillä tehtävässä selainpuolen sovelluskehityksessä.
@@ -1136,7 +1140,6 @@ Sovelluksen ulkoasu seuraavassa:
 
 ![]({{ "/assets/7/18.png" | absolute_url }})
 
-
 ## Testauksesta
 
 - snapshot
@@ -1173,4 +1176,3 @@ Sovelluksen ulkoasu seuraavassa:
 - Isomorfinen koodi: react backendissa
 - Progessive web aps
 - Cloud native apps
-

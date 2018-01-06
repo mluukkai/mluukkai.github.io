@@ -2390,4 +2390,4 @@ Internetissä on todella paljon Reactiin liittyvää materiaalia, tässä muutam
 
 ### React-tehtävät, osa 2
 
-Tee nyt [tehtävät 12-](../tehtavat#lisää-reactia)
+Tee nyt [tehtävät 12-20](../tehtavat#lisää-reactia)
