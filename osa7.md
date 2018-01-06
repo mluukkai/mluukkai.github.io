@@ -128,9 +128,9 @@ npm install --save webpack
 Webpackin toiminta konfiguroidaan tiedostoon _webpack.config.js_, laitetaan sen sisällöksi seuraava
 
 ```bash
-let path = require('path')
+const path = require('path')
 
-let config = {
+const config = {
   entry: './src/index.js',               
   output: {                     
     path: path.resolve(__dirname, 'build'),        
@@ -216,9 +216,9 @@ const App = () => {
 Katsotaan nyt tarkemmin konfiguraation tämänhetkistä sisältöä:
 
 ```bash
-let path = require('path')
+const path = require('path')
 
-let config = {
+const config = {
   entry: './src/index.js',               
   output: {                     
     path: path.resolve(__dirname, 'build'),        
@@ -304,7 +304,7 @@ ei ole "normalia" Javascriptia, vaan JSX:n tarjoama syntaktinen oikotie määrit
 Määritellään projektiimme Reactin käyttämän JSX:n normaaliksi Javascriptiksi muuntava loaderi:
 
 ```js
-let config = {
+const config = {
   entry: './src/index.js',               
   output: {                     
     path: path.resolve(__dirname, 'build'),        
@@ -418,7 +418,7 @@ var App = function App() {
 };
 ```
 
-Muuttujan määrittely tapahtuu avainsanan _var_ avulla, sillä ES5 ei tunne avainsanaa _let_. Myöskään nuolifunktiot eivät ole käytössä, joten funktiomäärittely käyttää avainsanaa _function_.
+Muuttujan määrittely tapahtuu avainsanan _var_ avulla, sillä ES5 ei tunne avainsanaa _const_. Myöskään nuolifunktiot eivät ole käytössä, joten funktiomäärittely käyttää avainsanaa _function_.
 
 ### CSS
 
@@ -524,7 +524,7 @@ Määritellään dev-serverin käynnistävä npm-skripti:
 Lisätään tiedostoon _webpack.config.js_ kenttä _devServer_
 
 ```bash
-let config = {
+const config = {
   entry: './src/index.js',               
   output: {                     
     path: path.resolve(__dirname, 'build'),        
@@ -616,7 +616,7 @@ Korjaus on onneksi hyvin helppo, pyydetään webpackia generoimaan bundlelle ns.
 Source map saadaan generoitua lisäämällä konfiguraatioon avain _devtool_ aja sen arvoksi 'source-map':
 
 ```bash
-let config = {
+const config = {
   entry: './src/index.js',               
   output: {                     
     // ...
@@ -670,9 +670,253 @@ ja kehottamalla _babel-loader_ käyttämään pluginia:
 
 ### Koodin minifiointi
 
+Kun sovellus viedään tuotantoon, on siis käytössä tiedostoon _bundle.js_ bundlattu koodi. Vaikka sovelluksemme sisältää omaa koodia vain muutaman rivin, on tiedoston _bundle.js_ koko 702917 tavua sillä se sisältää myös kaiken React-kirjaston koodin.  Tiedoston koollahan on sikäli väliä, että selain joutuu lataamaan tiedoston kun sovellusta aletaan käyttämään. Nopeilla internetyhteyksillä 702917 tavua ei sinänsä ole ongelma, mutta jos mukaan sisällytetään enemmän kirjastoja, alkaa sovelluksen lataaminen ikkuhiljaa hidastua etenkin mobiilikäytössä.
+
+Jos tiedoston sisältöä tarkastelee, huomaa että sitä voisi optimoida huomattavasti koon suhteen esim. poistamalla kommentit. Tiedostoa ei kuitenkaan kannata lähteä optimoimaan käsin, sillä tarkoitusta varten on olemassa monia työkaluja. 
+
+Javascript-tiedostojen optimonintiprosessista käytetään nimitystä _minifiointi_. Alan johtava työkalu tällä hetkellä lienee [UglifyJS](http://lisperator.net/uglifyjs/).
+
+Otetaan Uglify käyttöön asentamalla Webpackin [uglifyjs-webpack-plugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/) komennolla:
+
+```bash
+npm install --save-dev uglifyjs-webpack-plugin
+```
+
+[Pluginin](https://webpack.js.org/concepts/#plugins) konfigurointi tapahtuu seuraavasti:
+
+```bash
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
+const config = {
+  // ...
+  module: {
+    // ...
+  },
+  plugins: [
+    new UglifyJsPlugin()
+  ]  
+}
+```
+
+Kun sovellus bundlataan uudelleen, pienenee tuloksena oleva _bundle.js_ mukavasti
+
+```bash
+-rw-r--r--  1 mluukkai  984178727   288651 Jan  6 15:46 bundle.js
+```
+
+Minifioinnin lopputulos on kuin vanhan liiton c-koodia, kommentit ja jopa turhat välilyönnit ja rivinvaihtot on poistettu ja muuttujanimet ovat yksikirjaimisia:
+
+```js
+function h(){if(!d){var e=u(p);d=!0;for(var t=c.length;t;){for(s=c,c=[];++f<t;)s&&s[f].run();f=-1,t=c.length}s=null,d=!1,function(e){if(o===clearTimeout)return clearTimeout(e);if((o===l||!o)&&clearTimeout)return o=clearTimeout,clearTimeout(e);try{o(e)}catch(t){try{return o.call(null,e)}catch(t){return o.call(this,e)}}}(e)}}a.nextTick=function(e){var t=new Array(arguments.length-1);if(arguments.length>1)
+```
+
 ### envs
 
+Lisätään sovellukselle backend. Käytetän jo tutuksi käynyttä muistiinpanoja tarjoavaa palvelua. Talletetaan seuraava sisältö tiedostoon _db.json_
+
+```json
+{
+  "notes":[
+    {
+      "important": true,
+      "content": "HTML on helppoa",
+      "id": "5a3b8481bb01f9cb00ccb4a9"
+    },
+    {
+      "important": false,
+      "content": "Mongo osaa tallettaa oliot",
+      "id": "5a3b920a61e8c8d3f484bdd0"
+    }
+  ]
+}
+```
+
+Tarkoituksena on konfiguroida sovellus webpackin avulla siten, että paikallisesti sovellusta kehitettäessä käytetään backendina portissa 3001 toimivaa json-serveriä. 
+
+Bundlattu tiedosto laitetaan sitten käyttämään todellista, osoitteessa <https://radiant-plateau-25399.herokuapp.com/api/notes> olevaa backendia.
+
+Asennetaan _axios_, käynnistetään json-server ja muokataan komponenttia _App_ seuraavasti:
+
+```react
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      counter: 0,
+      noteCount: 0
+    }
+  }
+
+  componentWillMount() {
+    axios.get('http://localhost:3001/notes').then(result=>{
+      this.setState({noteCount: result.data.length})
+    })
+  }
+
+  onClick = () => {
+    this.setState({ counter: this.state.counter + 1 })
+  }
+
+  render() {
+    return (
+      <div className='container'>
+        <p>hello webpack {this.state.counter} clicks</p>
+        <button onClick={this.onClick}>click</button>
+        <p>{this.state.noteCount} notes in server </p>
+      </div>
+    )
+  }
+} 
+```
+
+Koodissa on nyt kovakoodattuna sovelluskehityksessä käytettävän palvelimen osoite. Miten saamme osoitteen hallitusti muutettua internetissä olevan backendin bundlatessamme koodin?
+
+Lisätään webpackia käyttäviin npm-skripteihin [ympäristömuuttujien](https://webpack.js.org/guides/environment-variables/) avulla tapahtuva määrittely siitä onko kyse sovelluskehitysmoodista _development_ vai tuotantomodista _production_:
+
+```bash
+{
+  // ...
+  "scripts": {
+    "build": "node_modules/.bin/webpack --env production",
+    "start": "webpack-dev-server --env development"
+  },
+  // ...
+}
+```
+
+Muutetaan sitten _webpack.config.js_ oliosta [funktioksi](https://webpack.js.org/configuration/configuration-types/#exporting-a-function):
+
+```bash
+const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
+const config = (env) => {
+  
+  return {
+    entry: './src/index.js',               
+    output: {       
+      // ...                       
+    },
+    devServer: {
+      // ...      
+    },
+    devtool: 'source-map',
+    module: {
+      // ...      
+    },
+    plugins: [
+      // ...
+    ]  
+  }
+}
+
+module.exports = config
+```
+
+Määrittely on muuten täysin sama, mutta aiemmin exportattu olio on nyt määritellyn funktion paluuarvo. Funktio saa parametrin _env_ joka saa npm-skriptissä aseteutn arvon. Tämän ansiosta on mahdollista muodostaa erilainen konfiguraatio development- ja production-moodeisssa.
+
+Webpackin [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) voimme määritellä globaaleja _vakioarvoja_, joita on mahdollista käyttää bundlattavassa koodissa. Määritellän nyt vakio _BACKEND_URL_, joka saa eri arvon riippuen siitä ollaanko kehitysympärisössä vai tehdäänkö tuotantoon sopivaa bundlea:
+
+```bash
+const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
+
+const config = (env) => {
+  const backend_url = env==='production'  
+    ? 'https://radiant-plateau-25399.herokuapp.com/api/notes'
+    : 'http://localhost:3001/notes'
+
+  return {
+    // ...
+    plugins: [
+      new UglifyJsPlugin(),
+      new webpack.DefinePlugin({
+        BACKEND_URL: JSON.stringify(backend_url)
+      })
+    ]  
+  }
+}
+```
+
+Määriteltyä vakioa käytetään koodissa seuraavasti:
+
+```js
+componentWillMount() {
+  axios.get(BACKEND_URL).then(result=>{
+    this.setState({noteCount: result.data.length})
+  })
+}
+```
+
+Jos kehiytys- ja tuotantokonfiguraatio eriytyvät paljon, saattaa olla hyvä idea [eriyttää konfiguraatiot](https://webpack.js.org/guides/production/) omiin tiedostoihinsa.
+
+### production build
+
+[React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) huomauttaa että sovelluksen bundlessa on vielä pieni ongelma
+
+![]({{ "/assets/7/10.png" | absolute_url }})
+
+Ongelma on helppo korjata [tätä](https://reactjs.org/docs/optimizing-performance.html) ohjetta soveltaen:
+
+```bash
+const config = (env) => {
+  const backend_url = env==='production'  
+    ? 'https://radiant-plateau-25399.herokuapp.com/api/notes'
+    : 'http://localhost:3001/notes'
+
+  return {
+    // ...
+    plugins: [
+      new UglifyJsPlugin(),
+      new webpack.DefinePlugin({
+        BACKEND_URL: JSON.stringify(backend_url),
+        'process.env.NODE_ENV': JSON.stringify(env)
+      })
+    ]  
+  }
+}
+```
+
+Konsoli varmistaa että bundle on nyt oiken muodostettu
+
+![]({{ "/assets/7/11.png" | absolute_url }})
+
+Konfiguraatio on edellen oikea myös sovelluskehitysmoodissa:
+
+![]({{ "/assets/7/12.png" | absolute_url }})
+
 ### polyfill
+
+Sovelluksemme on valmis ja toimii muiden selaimien kohtuullisen uusilla versiolla,mutta Internet Explorerilla sovellus ei toimi. Syynä tähän on se, että _axiosin_ ansiosta koodissa käytetään [Promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), mikään IE:n versio ei kuitenkaan niitä tue:
+
+![]({{ "/assets/7/13.png" | absolute_url }})
+
+On paljon muutakin standardissa määriteltuä koodia, mitä IE ei tue, esim. niinkin harmiton komento kuin taulukoiden [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) ylittää ie:n kyvyt:
+
+![]({{ "/assets/7/14.png" | absolute_url }})
+
+Tälläisessä tilanteessa normaali koodin transpilointi ei auta, sillä tanspiloinnissa koodia käännetään uudemmasta javascriptsyntaksista vanhempaan, selaimien paremin tukemaan syntaksiin. Promiset ovat syntaktillisesti täysin IE:n ymmärrettäsissä, IE:ltä vaan puuttuu toteutus promisesta, samoin on tilanne taulukoiden suhteen, IE:llä taulukoiden _find_ on arvoltaan _undefined_.
+
+Jos haluamme sovelluksen IE-yhteensopivaksi, tarvitsemme [polyfilliä](https://remysharp.com/2010/10/08/what-is-a-polyfill), eli koodia, joka lisää puuttuvan toiminnallisuuden vanhempiin selaimiin.
+
+Polyfillaus on mahdollista hoitaa [Webpackin ja Babelin avulla](https://babeljs.io/docs/usage/polyfill/) tai asentamalla yksi monista tarjolla olevista polyfill-kirjastoista.
+
+Esim .kirjaston [promse-polyfill](https://www.npmjs.com/package/promise-polyfill) tajoaman polyfillin käyttö on todella helppoa, koodiin lisätään seuraava:
+
+```js
+import PromisePolyfill from 'promise-polyfill'
+ 
+if (!window.Promise) {
+  window.Promise = PromisePolyfill
+}
+```
+
+Jos globaalia _Promise_ ei ole olemassa, eli selain ei tue promiseja, sijoittaan polyfillattu promise globaaliin muuttujaan. Jos polyfillattu promise on hyvin toteutettu, muun koodin pitäisi toimia ilman ongelmia.
+
+Kattavahko lista olemassaolevista polyfilleistä löytyy [täältä](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills).
+
+Selaimien yhteensopivuus käytettävien API:en suhteen kannattaakin tarkistaa esim.  [https://caniuse.com](https://caniuse.com)-sivustolta tai  [Mozzillan sivuilta](https://developer.mozilla.org/en-US/).
 
 ## Tyyleistä
 
