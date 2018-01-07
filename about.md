@@ -6,7 +6,7 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-6. Viimeisen eli seitsemännen osan on tarkoitus olla valmiina keskiviikkona 10.1.
+Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-6. Viimeisen eli seitsemännen osan on tarkoitus olla valmiina tiistaina 9.1.
 
 Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 

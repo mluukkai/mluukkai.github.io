@@ -7,7 +7,7 @@ permalink: /osa7/
 <div class="important">
   <h1>KESKEN, ÄLÄ LUE</h1>
 
-  <p>Osan on tavoitteena valmistua keskiviikkona 10.1.</p>
+  <p>Osan on tavoitteena valmistua tiistaina 9.1.</p>
 </div>
 
 
