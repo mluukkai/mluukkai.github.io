@@ -629,7 +629,7 @@ Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kaut
 
 Sekä sovellus _app_ että sitä suorittava _server_-olio määritellään eksportattavaksi tiedostosta. Tämä mahdollistaa sen, että testit voivat käynnistää ja sammuttaa backendin.
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_integraatiotesteja) tagissä _ennen_integraatiotesteja_
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-backend/tree/ennen_integraatiotesteja) tagissä _ennen_integraatiotesteja_
 
 ### supertest
 
@@ -1265,7 +1265,7 @@ Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöt
 
 Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
 
 ## Tehtäviä
 
@@ -1753,7 +1753,7 @@ describe.only('when there is initially one user at db', async () => {
     await user.save()
   })
 
-  test('POST /api/notes succeeds with a fresh username', async () => {
+  test('POST /api/users succeeds with a fresh username', async () => {
     const usersBeforeOperation = await usersInDb()
 
     const newUser = {
@@ -1798,7 +1798,7 @@ module.exports = {
 Lohkon _beforeAll_ lisää kantaan käyttäjän, jonka username on _root_. Voimmekin tehdä uuden testi, jolla varmistetaan, että samalla käyttäjätunnuksella ei voi luoda uutta käyttäjää:
 
 ```js
-  test('POST /api/notes fails with proper statuscode and message if username already taken', async () => {
+  test('POST /api/users fails with proper statuscode and message if username already taken', async () => {
     const usersBeforeOperation = await usersInDb()
 
     const newUser = {
@@ -2038,7 +2038,7 @@ npm install jsonwebtoken --save
 Tehdään kirjautumisesta vastaava koodi tiedostoon _controllers/login.js_
 
 ```js
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
@@ -2325,8 +2325,7 @@ Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/doc
 
 ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa ympäristömuuttujiin _globaalin_ muuttujan _process_ kautta. ESlintin silmissä on tämä kuitenkin näyttää määrittelemättömän muuttujan käytöltä.
 
-Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
-(https://eslint.org/docs/rules/no-process-env), omalla koneellani täm ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
+Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env](https://eslint.org/docs/rules/no-process-env), omalla koneellani tämä ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
 
 ```js
 module.exports = {
@@ -2336,6 +2335,7 @@ module.exports = {
   },
   // ...
 }
+```
 
 Ympäristömuuttujien käyttö suoraan globaalin muuttujan _process_ kautta ei välttämättä ole paras mahdollinen idea. Tutustumme seuraavissa osissa vaihtoehtoisiin tapoihin.
 
