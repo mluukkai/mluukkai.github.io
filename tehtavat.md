@@ -1930,4 +1930,84 @@ Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aika
 
 ## osa 7
 
-### webpack
+Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia  "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
+
+### 122
+
+Toteuta sovellukseen oma näkymä yksittäislle blogeille
+
+### 123
+
+Tee sovellukseen mahdollisuus blogien kommentointiin
+
+### 124
+
+Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot 
+
+### 125
+
+Tee sovellukseen navigaatiopalkki
+
+### 126
+
+Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
+
+### 127
+
+Siirry käyttämään Reactin komponenttien tilan sijaan Reduxia
+
+### 128
+
+Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tpahtumaan Redux-thunkia hyväksikäyttäen
+
+### 129
+
+Konfiguroi fronend käyttämään Lintiä
+
+### 130
+
+Deployaa sovellus internetiin
+
+### 131
+
+Tee sovellukselle sopiva webpack-konfiguraatio
+
+### 132
+
+Tee backendille testit joiden rivikattavuus on vähintään 80%
+
+### 133
+
+Tee fronendille testit joiden rivikattavuus on vähintään 80%
+
+### 134
+
+Ota sovellukseessasi käyttöön snapshot testing
+
+### 135
+
+Tee headles-browsertestausta
+
+### 136
+
+Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
+
+### 137
+
+Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtävä tehdyksi.
+
+### 138
+
+Siirrä frontend ja backend samaan repositorioon
+
+### 139
+
+Toteuta Travisin avulla automaattinen deployment
+
+### 140
+
+Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+
+### 141
+
+Koodaa parempi versio facebookista
