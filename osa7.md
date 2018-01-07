@@ -1139,9 +1139,73 @@ Sovelluksen ulkoasu seuraavassa:
 
 ![]({{ "/assets/7/18.png" | absolute_url }})
 
-## Testauksesta
+## Sovelluksen end to end -testaus
 
-- Headles
+Palataan vielä hetkeksi testauksen pariin. Aiemmissa osissa teimme sovelluksille yksikkötestejä sekä integraatiotestejä. Katsotaa nyt erästä tapaa tehdä [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) tutkivia _End to End (E2E) -testejä_.
+
+Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org/)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. headless browseria eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää. 
+
+Chrome-selain on jo hetken sisältänyt [headless](https://developers.google.com/web/updates/2017/04/headless-chrome)-moodin. Käytetään nyt headless chromea sille Node API:n tarjoavan [Puppeteer](https://github.com/GoogleChrome/puppeteer)-kirjaston avulla.
+
+Tehdään muutama testi osan 3 muistiinpanosovelluksen ["Full stack"-versiolle](osa3/#Sovellus-internettiin), joka sisältää sekä backendin että frontin samassa projektissa.
+
+Asennetan puppeteer komennolla
+
+```js
+npm install puppeteer --save
+```
+
+Ennen testejä, tehdään kokeilija varten tiedosto _puppeteer.js_ ja sille sisältö
+
+```js
+const puppeteer = require('puppeteer')
+
+const main = async () => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto('http://localhost:3000')
+  await page.screenshot({ path: 'kuva.png' })
+
+  await browser.close()
+}
+
+main()
+```
+
+Kun koodi suoritetaan komennolla _node puppeteer.js_ menee _headless chrome_ osoitteeseen http://localhost:3000 ja tallettaa sivulta ottamansa screenshotin tiedostoon _kuva.png_  
+
+![]({{ "/assets/7/19.png" | absolute_url }})
+
+Muutetaan koodia vielä siten, että se kirjottaa sivulla olevaan _input_-elementtiin
+
+```js
+const main = async () => {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.goto('http://localhost:3000')
+  await page.type('input', 'Headless Chrome')
+  await page.screenshot({ path: 'kuva.png' })
+  await browser.close()
+}
+```
+
+Screenshot todistaa että näin on todellakin tapahtunut:
+
+![]({{ "/assets/7/20.png" | absolute_url }})
+
+Debugatessa voi olla joskus avuksi myös käynnistää selain normaalimoodissa, ja hidastaa testien suoritusta:
+
+```js
+const main = async () => {
+  const browser = await puppeteer.launch({
+    headless: false,
+    slowMo: 250       // jokainen operaatio kestää nyt 0.25 sekuntia
+  })
+  // ...
+}
+```
+
+Tehdään sitten muutama testi
 
 ## React
 
@@ -1155,6 +1219,16 @@ Sovelluksen ulkoasu seuraavassa:
 - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
 
 ## react/node-sovellusten tietoturva
+
+https://developer.mozilla.org/en-US/docs/Web/Security
+
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security
+
+https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
+
+https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-applications-2bdffbcc1fa0
+
+https://expressjs.com/en/advanced/best-practice-security.html
 
 ## Librarydropping
   
