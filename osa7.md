@@ -1316,16 +1316,89 @@ Testausasetelmamme kaipaisi vielä paljon hiomista. Testejä vartan olisi mm. ol
 
 Lisää aiheesta [Puppeteerin Github-sivujen](https://github.com/GoogleChrome/puppeteer) lisäksi esimerkiksi seuraavassa <https://www.valentinog.com/blog/ui-testing-jest-puppetteer/>
 
-## React
+## Tyypitys
+
+Javascripin muuttujien [dynaaminen tyypitys](https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing) aiheuttaa välillä ikäviä bugeja. Osassa 5 käsittelimme [PropTypejä](osa5/#PropTypes), eli mekanismia, jonka avulla React-komponenteille välitettävile propseille on mahdollista tehdä tyyppitarkastus
+
+Viime aikoina on ollut havaittavistta nousevaa kiinnostusta [staattiseen tyypitykseen](https://en.wikipedia.org/wiki/Type_system#Static_type_checking). 
+
+Javasctipistä on olemassa useita tyypitettyjä versioita, suosituimmat näistä ovat 
+Facebookin kehittämä [flow](https://flow.org/) ja Microsofin [typescript](https://www.typescriptlang.org/).
+
+Flow on ratkaisuista konservtiivisempi, sillä se mahdollistaa tyyppien lisäämisen vain johonkin osaan koodista. 
+
+Flown asentaminen create-react-app:illa toteutetuun sovellukseen on [helppoa](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-flow). Tiedostossa _.flowconfig_ kannattaa ignoroida hakemistoissa _node_modules_ ja _build_ olevat tiedostot
+
+```bash
+[ignore]
+.*/node_modules/.*
+.*/build/.*
+```
+
+Flow tarkastaa ainoastaan ne tiedostot, joiden alussa on kommentissa oleva merkintä _@flow_:
+
+```js
+// @flow
+
+function sum(n: number, m: number): number {
+  return n + m
+}
+
+sum('1', 2)
+```
+
+Tyyppitarkastus tapahtuu komennolla _npm flow_. Flow huomauttaa virheestä:
+
+![]({{ "/assets/7/21.png" | absolute_url }})
+
+Koodi kuitenkin yllättäen toimii, jos koodiin lisätään konsoliin tehtävä tulostus
+
+```js
+const summa = sum('1', 2)
+console.log(summa)
+```
+
+tulostuu luku 12.
+
+Flow suorittaa koodille ainoastaan tyyppitarkastuksen, [babel](https://babeljs.io/docs/plugins/preset-flow/) kääntää flow-tyyppejä sisältävän koodin normaaliksi javascriptiksi ja tyypien tarjoma suoja onkin voimassa ainoastaan jos ohjelmoija suorittaa tyyppitarkastuksia. 
+
+Kaikissa tapauksissa tyyppejä ei edes ole tarvetta määritellä, joissain tapauksissa flow osaa päätellä itse mikä muuttujien tyypin tulee olla, seuraavassa tapauksessa
+
+```js
+function square(n) {
+  return n * n
+}
+
+square('5')
+```
+
+Flow osaa varoittaa asiasta ilman tyyppien määrittelyä
+
+![]({{ "/assets/7/22.png" | absolute_url }})
+
+Flown hyvä puoli on keveys, vanhoihinkin projekteihin on helppo ruveta vähitellen lisäämään tyyppejä Flowlla
+
+Typescript on hieman raskaampi ja sen käyttö vaatii  Flowia enemmän konfigurointia. Typesctrip-koodi kirjoitetaan _.ts_-päätteisiin tiedostoihin ja se tulee kääntää javascriptiksi. Käännös pystytään toki hoitamaan helposti [Webpackilla](https://github.com/s-panferov/awesome-typescript-loader). Toisin kun flown yhteydessä, Typescriptillä tehdyssä koodissa oleva virheellinen tyyppien käyttö jothtaa siihe, että koodi ei käänny.
+
+Internetistä löytyy runsaasti Flowta ja Typescriptiä vertailevia artikkeleja, ks esim.:
+- <https://blog.mariusschulz.com/2017/01/13/typescript-vs-flow>
+- <https://michalzalecki.com/typescript-vs-flow/>
+- <https://github.com/niieani/typescript-vs-flowtype>
+
+## Muutamia huomioita liityen Reactiin, Reduxiin ja Nodeen,
 
 - Virtual DOM
 - Reactin roolista sovelluksissa
 - Isompien sovellusten komponenttien organisointi
-
-## react+redux+node
-
 - Reactin roolista sovelluksissa
 - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
+
+
+## Librarydropping
+  
+- immutable.js
+- websocket.js
+- Helmet.js
 
 ## react/node-sovellusten tietoturva
 
@@ -1339,17 +1412,6 @@ https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-a
 
 https://expressjs.com/en/advanced/best-practice-security.html
 
-## Librarydropping
-  
-- immutable.js
-- websocket.js
-- Helmet.js
-
-## Tyypitys
-
-- ProcTypes revisited
-- Flow
-- typescrit
 
 ## Tulevaisuuden trendit
   
