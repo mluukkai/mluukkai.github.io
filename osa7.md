@@ -1385,13 +1385,49 @@ Internetistä löytyy runsaasti Flowta ja Typescriptiä vertailevia artikkeleja,
 - <https://michalzalecki.com/typescript-vs-flow/>
 - <https://github.com/niieani/typescript-vs-flowtype>
 
-## Muutamia huomioita liityen Reactiin, Reduxiin ja Nodeen,
+## Muutamia huomioita liityen Reactiin, Reduxiin ja Nodeen
 
-- Virtual DOM
-- Reactin roolista sovelluksissa
-- Isompien sovellusten komponenttien organisointi
-- Reactin roolista sovelluksissa
-- sovelluksen rakenne jos frontti ja backend kaikki samassa repossa  
+### React-sovelluksen koodin organisointi
+
+Nodatimme useimmissa sovelluksissa pereiaatetta, missä komponentit sijoitettiin hakemistoon _components_, reducerit hakemistoon _reducers_ ja palvelimen kanssa kommunikoida koodi hakemistoon _services_. Tälläinen organisoimistapa riittää pienehköihin sovelluksiin, mutta komponenttien määrän kasvaessa tarvitaan muunlaisia ratkaisuja. Yhtä oikeaa tapaa ei ole, artikkeli [The 100% correct way to structure a React app (or why there’s no such thing)](https://hackernoon.com/the-100-correct-way-to-structure-a-react-app-or-why-theres-no-such-thing-3ede534ef1ed)
+tarjoaa näkökulmia aiheeseen.
+
+### Frontti ja backend samassa repositoriossa
+
+Olemme kurssilla tehneet fronendin ja backendin omiin repositorioihinsa. Kyseessä on varsin tyypillinen ratkaisu. Teimme tosin deploymentin kopioimalla frontin bundlatun koodin backendin repositorion sisälle. Toinen, ehkä järkevämpi tilanne olisi ollut deployata frontin koodi erikseen, cereate-react-appilla tehtyjen sovellusten osalta se on todella helppoa oman [buildpackin](https://github.com/mars/create-react-app-buildpack) ansiosta.
+
+Joskus voi kuitenkin olla tilanteita, missä koko sovellus halutaan samaan repositorioon. Tällöin yleinen raatkaisu on sijoittaa _package.json_ ja _webpack.config.js_ hakemiston juureen ja frontin sekä backendin koodi omiin hakemistoihinsa, esin _client_ ja _server_. 
+
+Erään hyvän lähtökohdan yksirepositorioiden koodin organisoinnille antaa [Mern](http://mern.io/)-projektin ylläpitämä 
+[Mern-starter](https://github.com/Hashnode/mern-starter).
+
+### Virtual DOM
+
+Reactin yhteydessä mainitan uusein käsite Virtual DOM. Mistä oikein on kyseä? Kuten [osassa 1](osa1/#Document-Object-Model-eli-DOM) mainittiin, selaimet tarjoavat [DOM API](https://developer.mozilla.org/fi/docs/DOM):n, jota hyväksikäyttäen selaimessa toimiva Javascript voi muokata sivun ulkoasun määritteleviä elementtejä.
+
+Reactissa ohjelmoija ei koskaan manipuloi DOM:ia suoraan. React-komponenttien ulkoasun määrittelevä _render_-metodi palauttaa joukon [React](https://reactjs.org/docs/glossary.html#elements)-elementtejä. Vaikka osa elementeistä näyttä normaaleilta HTML-elementeiltä
+
+```react
+const element = <h1>Hello, world</h1>
+```
+
+eivät nekään ole HTML:ää vaan pohjimmiltaan javascriptiä olevia React-elementtejä.
+
+Sovelluksen komponenttien ulkoasun määrittelevät React-elementit muodostavat [Virtual DOM:in](https://reactjs.org/docs/faq-internals.html#what-is-the-virtual-dom) joka pidetään suorituksen aikana keskusmuistissa. 
+
+[ReactDOM](https://reactjs.org/docs/react-dom.html)-kirjaston avulla komponenttien määrittelevä virtuaalinen DOM renderöidään oikeaksi DOM:iksi eli DOM-API:n avulla selaimen näytettäbäksi:
+
+```react
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+)
+```
+
+Kun sovelluksen tila muuttuu, määrittyy komponenttien render-metodien ansiosta _uusi virtuaalinen DOM_. Reactilla on edellinen versio virtual DOM:ista muistissa ja sensijaan että uusi virtuaalinen DOM renderöitäisiin suoraviivaisesti DOM API:n avulla, React laskee mikä on optimaalisin tapa tehdä DOM:iin muutoksia (eli poistaa, lisätä ja muokata DOM:issa olevia elementtejä) siten, että DOM saadaan vastaamaan uutta Virtual DOM:ia.
+
+### Reactin roolista sovelluksissa
+
 
 
 ## Librarydropping
