@@ -364,7 +364,7 @@ this.state = {
 }
 ```
 
-Lisätään sitten lomake uusen muistiinpanon lisäämistä varten:
+Lisätään sitten lomake uusien muistiinpanon lisäämistä varten:
 
 ```react
 class App extends React.Component {
