@@ -1442,33 +1442,107 @@ Emme ole vielä maininneet kurssilla sanaakaan tietoturvaan liittyen. Kovin palj
 
 Katsotaan kuitenkin muutamaa kurssispesifistä seikkaa.
 
-https://developer.mozilla.org/en-US/docs/Web/Security
+The Open Web Application Security Project eli [OWASP](https://www.owasp.org) julkaisee vuosittain listan  Websovellusten yleisimmistä turvallisuusuhista. Tuorein lista on [täällä](https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf). Samat uhat ovat listalla vuodesta toiseen.
 
-https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security
+Listaykkösenä on _injection_ joka tarkoittaa sitä, että sovellukseen esim, lomakkeen avulla lähetettävä teksti tulkitaankin aivan eri eri tavalla kun sovelluskehittäjä on tarkoittanut. Kuuluisin injektioiden muoto lienevät [SQL-injektiot](https://stackoverflow.com/questions/332365/how-does-the-sql-injection-from-the-bobby-tables-xkcd-comic-work).
 
-https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
+Esim. jos koodissa tehtäisiin seuravasti muotoiltu SQL-kysely: 
 
-https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-applications-2bdffbcc1fa0
+```js
+let query = "SELECT * FROM Users WHERE name = '" + userName + "';"
+```
 
-https://expressjs.com/en/advanced/best-practice-security.html
+Jos käyttäjä nyt määrittelisi nimekseen
+
+<pre>
+John Doe'; DROP TABLE Users; --
+</pre>
+
+tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan
+
+```sql
+SELECT * FROM Users WHERE name = 'John Doe'; DROP TABLE Users; --'
+```
+
+SQL-injektiot estetään _sanitoimalla_ syötteem eli tarkastamalla, että kyselyjen parametrit evät sisällä kiellettyhä merkkejä, kuten täässä tapauksessa merkin _'_. Jos kiellettyjä merkkejä löytyy, ne poistetaan korvataan turvallisilla vastineilla [escapettamalla](https://en.wikipedia.org/wiki/Escape_character#JavaScript).
+
+Myös NoSQL-hyökkäykset ovat mahdollisia. Mongoose kuitenkin estää ne [sanitoimalla](https://zanon.io/posts/nosql-injection-in-mongodb) kyselyt. Lisää aiheeta esim. [täällä](https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html).
+
+_Cross-site scripting eli XSS_ on hyökkäys, missä sovellukseen om mahdollista injektoida suoritettavaksi vihollismielistä Javascript-koodia. Jos kokeilemme injektoida esim. muistiinpanosovellukseen seuraavan
+
+```js
+<script>alert('Evil XSS attack');</script>
+```
+
+koodia ei suoriteta, vaan koodi renderöityy sivulle 'tekstinä':
+
+![]({{ "/assets/7/23.png" | absolute_url }})
+
+sillä react [huolehtii muuttujissa olevan datan sanitoinnista](https://reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks). React
+[on mahdollistanut](https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1) XSS-hyökkäyksiä ja mikään ei takaa etteikö niitä voisi vielä löytyä. 
+
+Käytettyjen kirjastojen suhteen tuleekin olla tarkkana, jos niihin tulee tietoturvapäivityksiä, on kirjastot syytä päivittää omissa sovelluksissa. Expressin tietoturvapäitykset löytyvät [kirjaston dokumentaatiosta](https://expressjs.com/en/advanced/security-updates.html) ja Nodeen liittyvät [blogista](https://nodejs.org/en/blog/).
+
+Riippuvuuksien ajantasaisuuden voi testata komennolla
+
+```bash
+npm outdated --depth 0
+```
+
+![]({{ "/assets/7/24.png" | absolute_url }})
+
+Riippuvuudet saa ajantasaistettua päivittämällätiedostoa  _package.json_ ja suorittamalla komennon _npm install_. Riippuvuuden vanha versio ei tietenkään välttämättä ole tietoturvariski.
+
+[Node Security Platform](https://nodesecurity.io/) valvoo npm:ssä olevien riippuvuuksien turvallisuutta ja tallettaa tietokantaansa kaikki riippuvuuksissa havaitut tietoturvaongelmat. Oman projektin käyttämien riippuvuuksien turvallisuustilanne on helppo tarkistaa komentoriviltä toimivan [nsp](https://www.npmjs.com/package/nsp)-työkalun avulla.
+
+Vaikka työkalumme sisältää muutaman ei-ajantasaisen riippuvuuden, ei tietoturvaongelmia ole.
+
+![]({{ "/assets/7/25.png" | absolute_url }})
+
+Eräs OWASP:in listan mainitsemista uhista on _Broken Authentication_ ja siihen liittyvä _Broken Access Control_. Käyttämämme token-perustainen autentikointi on kohtuullisen robusti jos sovellusta käytetään  HTTPS-protokollalla. Access Controlin eli pääsynhallinnan toteuttamisessa on aina syytä muistaa tehdä esim. käyttäjän identiteetin tarkastus selaimen lisäksi myös palvelimella. Huonoa tietoturvaa olisi estää jotkut toimenpiteet ainoastaan piilottamalla niiden suoritusmahdollisuus selaimessa olevasta koodista.
+
+Expressin dokumentaatio sisältää tietoturvaa käsittelvän osan
+[Production Best Practices: Security](https://expressjs.com/en/advanced/best-practice-security.html) joka kannattaa lukea läpi. Erittäin suositeltavaa on ottaa backendissa käyttöön [Helmet](https://helmetjs.github.io/)-kirjasto, joka sisältää joukon Express-sovelluksista tunnettuja turvallisuusriskejä eliminoivia middlewareja.
+
+Myös ESlintin [security-plugininen]
+(https://github.com/nodesecurity/eslint-plugin-security) käyttöönotto kannattaa.
 
 ## Tulevaisuuden trendit
   
-### server side rendering ja isomorfinen koodi
+Katsotaan vielä lopuksi muutamaa huomisen tai oikeastaan jo tämän päivän tekniikoita tai suuntia mitä kohti Web-sovelluskehitys on kulkemalla
 
-Isomorfinen koodi: react backendissa
+### Server side rendering, isomorfiset sovellukset ja universaali koodi
 
-# Progessive web aps
+Selain ei ole ainoa paikka missä Reactilla määriteltyjä komponentteja voidaan renderöidä. renderöinti mahdollista tehdä myös [palvelimella](https://reactjs.org/docs/react-dom-server.html):in avulla. Tätä hyödynnetäänkin nykyään enenevissä määrin siten, että kun sovellukseen tullaan ensimmäistä kertaa, lähettää palvelin selaimeen jo valmiiksi renderöimänsä Reactilla muodostetun sivun. Tämän jälkeen sovelluksen toiminta jatkuu normaaliin tapaan, eli selain suorittaa Reactia, joka manipuloi selaimen näyttämää domia. Palvelimella tapahtuvasta renderöinnistä käytetään englanninkielessä nimitystä _server side rendering_.
+
+Eräs motivaatio server side renderingille on Searc Engine Optimization eli SEO. Hakukoneet ovat ainakin perinteisesti olleet huonoja tunnistamaan selainpuolella renderöityä sisältöä, ajat saattavat tosin olla muuttumassa, ks, esim. [tämä](https://www.andrewhfarmer.com/react-seo/) ja [tämä](https://medium.freecodecamp.org/seo-vs-react-is-it-neccessary-to-render-react-pages-in-the-backend-74ce5015c0c9).
+
+Server side rendering ei tietenkään ole mikään React tai edes Javascript-spesifi asia, saman ohjelmointikielen käyttö kaikkialla koodissa tekee konseptista teoriassa helpommin toteutettavan sillä samaa koodia voidaan suorittaa sekä backendissä että frontendissä.
+
+Palvelimella tapahtuvaan renderöintiin liittyen on  alettu puhua isomorfisista sovelluksista ja universaalista koodista, termien määritelmistä on kiistelty. Joidenkin [määritelmien](https://medium.com/@ghengeveld/isomorphism-vs-universal-javascript-4b47fb481beb) mukaan isomorfinen web-sovellus on sellainen, joka suorittaa renderöintiä sekä selaimessa että backendissa. Universaalinen koodi taas on koodia, joka voidaan suorittaa useimmissa  ympärisöissä eli sekä selaimessa että backendissä. 
+
+React ja Node tarjavatkin varteenotettavan vaihtoehdon isomorfisten sovellusten toteuttamiseen universaalina koodina. Universaalin koodin kirjoittaminen Reactin avulla on vielä toistaiseksi aika työlästä. 
+
+Viime aikoina paljon huomiota saanut Reactin päälle toteutettu [Next.js](https://github.com/zeit/next.js/)-kirjasto on hyvä vaihtoehto universaalien sovellusten tekemiseen. 
+
+# Progessive web apps
+
+Viime aikona on myös ruvettu käyttämään Googlen lanseeraamaa termiä [progressive web app](https://developers.google.com/web/progressive-web-apps/) (PWA). Goolen sivuilla oleva määritelmä on kuulostaa markkinapuheelta ja sen perusteella on hankala saada selkeää käsitystä mistä on kyse. [Checklista](https://developers.google.com/web/progressive-web-apps/checklist) tuo mukaan konkretiaa. 
+
+Tiiviistäen kyse on web-sovelluksista, jotka toimivat mahdollisimman hyvin kaikilla alustoilla ottaen jokaisesta alustasta irti sen parhaat puolet. Mobiililaitteiden pienten näyttö ei saa heikentää sovellusten käytettävyyttä. PWA-sovellusten tulee myös toimia offline-tilassa tai hitaalla verkkoyhteydellä moitteettomasti. Mobiililaitteilla ne tulee pystyä asetamaan normaalien sovellusten tavoin. Kaiken PWA-sovellusten käyttämän verkkoliikenteen tulee olla salattua.
+
+reate-react-app:illa luodut sovellukset ovat oletusarvoisesti [progressiivisia](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app). Jos sovellus käyttää palvelimella olevaa dataa, edellyttää sovelluksen progressiiviseksi tekeminen vaivan näkemistä. Offline-toiminnallisuus toteutetaan yleensä
+[service workerien](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) avulla.
 
 # Cloud native apps
 
-## Librarydropping
-  
+tekstiä
+
+## Librarydropping ja linkkejä
+
+Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
+
 - immutable.js
 - websocket.js
-- Helmet.js
-- next.js
 - redux saga
 - https://github.com/vasanthk/react-bits
-
-
