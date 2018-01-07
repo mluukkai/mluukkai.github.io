@@ -1428,15 +1428,17 @@ Kun sovelluksen tila muuttuu, määrittyy komponenttien render-metodien ansiosta
 
 ### Reactin roolista sovelluksissa
 
+Materiaalissa ei ole tuotu kovin selkeästi esille sitä, että React on näkymäkirjasto. Jos ajatellaan perinteistä [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) -jaoittelua, on Reactin toimialaa juurikin _View_. React on siis sovellusalueeltaan suppeampi kuin esim [Angular](https://angular.io/), joka on kaiken tarjoava Fronendin MVC-sovelluskehys.
 
+Reactia ei kutsutakaan sovelluksehykseksi framework() vaan kirjastoksi (library). Pienissä sovelluksissa React-komponenttien tilan avulla hoidetaan MVC:n _Model_-osuutta. 
 
-## Librarydropping
-  
-- immutable.js
-- websocket.js
-- Helmet.js
+React-sovellusten yheydessä ei kuitenkaan yleensä puhuta MVC-arkkitehtuurista ja jos käytössä on Redux niin silloin sovellukset noudattavat [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content)-arkkitehtuuria ja Reactin rooliksi jää entistä enemmän näkymien muodostaminen. Varsinainen sovelluslogiikka hallitaan Reduxin tilan ja action creatorien avulla. Jos käytössä on osasta 6 tuttu [redux thunk](osa6/#Asynkroniset-actionit-ja-redux-thunk), on sovelluslogiikka mahdollista eristää lähes täysin React-koodista.
 
-## react/node-sovellusten tietoturva
+Koska sekä React että [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content) ovat Facebookilla syntyneinä, voi ajatella, että Reactin pitäminen ainoastaan käyttöliittymästä huolehtivana kirjastona on sen oikeaoppista käyttöä. Flux-arkkitehtuurin noudattaminen tuo sovelluksiin tietyn overheadin ja jos on kyse pienestä sovelluksesta tai prototyypistä, saattaa Reatcin "väärinkäyttäminen" olla järkevää sillä myöskään [Overengineering](https://en.wikipedia.org/wiki/Overengineering) ei yleensä johda optimaalisiin seurauksiin.
+
+## React/node-sovellusten tietoturva
+
+Emme ole vielä maininneet kurssilla sanaakaan tietoturvaan liittyen.
 
 https://developer.mozilla.org/en-US/docs/Web/Security
 
@@ -1447,6 +1449,15 @@ https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe
 https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-applications-2bdffbcc1fa0
 
 https://expressjs.com/en/advanced/best-practice-security.html
+
+
+## Librarydropping
+  
+- immutable.js
+- websocket.js
+- Helmet.js
+- next.js
+- redux sage
 
 
 ## Tulevaisuuden trendit

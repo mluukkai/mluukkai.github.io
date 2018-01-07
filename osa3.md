@@ -1068,6 +1068,8 @@ Käyttöönotto tapahtuu sovelluksen repositorissa komennolla
 heroku addons:create mongolab:sandbox
 ```
 
+** HUOM** vaikka Heroku tarjoaa ilmaisen Mongon, joudut ehkä antamaan Herokulle luottokorttinumerosi, että saat Mongon asennettua. Voit kiertää tämän tarpeen stackoverflow:sta löytyvää [ohjetta](https://stackoverflow.com/questions/36321385/deploy-nodejs-mongodb-on-heroku-but-need-verify-credit-card-when-install-add-o) seuraten.
+
 Kuten komennon tuloste kertoo, kysessä on [mlab](https://mlab.com/):n tarjoama Mongo:
 
 ![]({{ "/assets/3/12.png" | absolute_url }})
