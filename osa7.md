@@ -1438,7 +1438,9 @@ Koska sekä React että [Flux](https://facebook.github.io/flux/docs/in-depth-ove
 
 ## React/node-sovellusten tietoturva
 
-Emme ole vielä maininneet kurssilla sanaakaan tietoturvaan liittyen.
+Emme ole vielä maininneet kurssilla sanaakaan tietoturvaan liittyen. Kovin paljoon ei nytkään ole aikaa, ja onneksi laitoksella on MOOC-kurssi [Securing Software](https://cybersecuritybase.github.io/securing/) tähän tärkeään aihepiiriin.
+
+Katsotaan kuitenkin muutamaa kurssispesifistä seikkaa.
 
 https://developer.mozilla.org/en-US/docs/Web/Security
 
@@ -1450,6 +1452,15 @@ https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-a
 
 https://expressjs.com/en/advanced/best-practice-security.html
 
+## Tulevaisuuden trendit
+  
+### server side rendering ja isomorfinen koodi
+
+Isomorfinen koodi: react backendissa
+
+# Progessive web aps
+
+# Cloud native apps
 
 ## Librarydropping
   
@@ -1457,11 +1468,7 @@ https://expressjs.com/en/advanced/best-practice-security.html
 - websocket.js
 - Helmet.js
 - next.js
-- redux sage
+- redux saga
+- https://github.com/vasanthk/react-bits
 
 
-## Tulevaisuuden trendit
-  
-- Isomorfinen koodi: react backendissa
-- Progessive web aps
-- Cloud native apps
