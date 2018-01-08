@@ -455,7 +455,7 @@ Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://sh
 
 ### Yksittäisen resurssin haku
 
-Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensi [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
+Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensin [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
 
 Yksittäisen muistiinpanon identifioi url, joka on muotoa _notes/10_, missä lopussa oleva numero vastaa resurssin muistiinpanon id:tä.
 
@@ -657,7 +657,7 @@ Nyt kaikki toimii! Ilman oikeaa headerin arvoa palvelin ei osaa parsia dataa oik
 
 > **sivuhuomio**
 >
-> Välillä debugatessa tulee vastaan tilanteita, joissa backendissä on tarve selvittää mitä headereja HTTP-pyynnöille on asetettu. Eräs menetelmä tähän on _request_-olion melko kehonosti nimetty metodin [get](http://expressjs.com/en/4x/api.html#req.get), jonka avulla voi selvittää yksittäisen headerin arvon. _request_-oliolla on myös kenttä _headers_, jonka arvona ovat kaikki pyyntöön liittyvät headerit.
+> Välillä debugatessa tulee vastaan tilanteita, joissa backendissä on tarve selvittää mitä headereja HTTP-pyynnöille on asetettu. Eräs menetelmä tähän on _request_-olion melko kehnosti nimetty metodi [get](http://expressjs.com/en/4x/api.html#req.get), jonka avulla voi selvittää yksittäisen headerin arvon. _request_-oliolla on myös kenttä _headers_, jonka arvona ovat kaikki pyyntöön liittyvät headerit.
 
 Palataan taas sovelluksen pariin. Kun tiedämme, että sovellus vastaanottaa tiedon oikein, voimme viimeistellä sovelluslogiikan:
 
@@ -743,11 +743,11 @@ Esim. jos tehdään HTTP POST pyyntö osoitteeseen _/notes/10_ ja pyynnön mukan
 
 Kuten metodin GET _safety_ myös _idempotence_ on HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET, HEAD, PUT ja DELETE-pyyntöjä käytetäänkin aina siten, että ne ovat idemponent.
 
-HTTP pyyntötyypeistä POST on ainoa joka ei ole safe eikä idemponent. Jos tehdään 5 kertaa HTTP POST -pyyntö osoitteeseen _/notes_ siten että pyynnön mukana on <code>{ content: "monta samaa", important: true }</code>, tulee palvelimelle 5 saman siältöistä muistiinpanoa.
+HTTP pyyntötyypeistä POST on ainoa joka ei ole safe eikä idemponent. Jos tehdään 5 kertaa HTTP POST -pyyntö osoitteeseen _/notes_ siten että pyynnön mukana on <code>{ content: "monta samaa", important: true }</code>, tulee palvelimelle 5 saman sisältöistä muistiinpanoa.
 
 ## Middlewaret
 
-Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on sanottu terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
+Äsken käyttöönottamamme [body-parser](https://github.com/expressjs/body-parser) on terminologiassa niin sanottu [middleware](http://expressjs.com/en/guide/using-middleware.html).
 
 Middlewaret ovat funktioita, joiden avulla voidaan käsitellä _request_- ja _response_-olioita.
 
@@ -777,7 +777,7 @@ Middleware otetaan käyttöön seuraavasti:
 app.use(logger)
 ```
 
-Middlewaret suoritetaan siinä järjestyksessä, jossa ne on otettu käyttään metodilla sovellusolion _use_. Middlewaret tulee myös määritellä ennen routeja jos ne halutaan suorittaa ennen niitä. On myös eräitä tapauksia, joissa middleware tulee määritellä vasta routejen jälkeen, käytännössä tällöin on kyse middlewareista, joita suoritataan vain, jos mikään route ei käsittele HTTP-pyyntöä.
+Middlewaret suoritetaan siinä järjestyksessä, jossa ne on otettu käyttään metodilla sovellusolion _use_. Middlewaret tulee myös määritellä ennen routeja jos ne halutaan suorittaa ennen niitä. On myös eräitä tapauksia, joissa middleware tulee määritellä vasta routejen jälkeen, käytännössä tällöin on kyse middlewareista, joita suoritetaan vain, jos mikään route ei käsittele HTTP-pyyntöä.
 
 Lisätään routejen jälkeen seuraava middleware, jonka ansiosta saadaan routejen käsittelemättömistä virhetilanteista JSON-muotoinen virheilmoitus:
 
@@ -1249,7 +1249,7 @@ Tee nyt tehtävät [51 ja 52](../tehtavat#mongoosen-alkeet)
 
 Nyt meillä on periaatteessa hallussamme riittävä tietämys ottaa mongo käyttöön sovelluksessamme.
 
-Aloitetaan nopean kaavan mukaan, copypastetaan tiedostoon _inded.js_ mongoosen määrittelyt, eli
+Aloitetaan nopean kaavan mukaan, copypastetaan tiedostoon _index.js_ mongoosen määrittelyt, eli
 
 ```js
 const mongoose = require('mongoose')
@@ -1307,7 +1307,7 @@ app.get('/api/notes', (request, response) => {
 })
 ```
 
-Nyt siis muuttujassa _notes_ on taulukollinen mongon palauttamia olioita. Kun suoritamme operaation <code>notes.map(format)</code> seurauksena on uusi taulukko, missä on jokaista alkuperäisen taulukon alkiota vastaava funktion _formatNote_ avulla muodostettu alkio.
+Nyt siis muuttujassa _notes_ on taulukollinen mongon palauttamia olioita. Kun suoritamme operaation <code>notes.map(formatNote)</code> seurauksena on uusi taulukko, missä on jokaista alkuperäisen taulukon alkiota vastaava funktion _formatNote_ avulla muodostettu alkio.
 
 Jos kannasta haettavilla olioilla olisi suuri määrä kenttiä, apufunktio _formatNote_ kannattaisi muotoilla hieman geneerisemmässä muodossa, esim:
 
@@ -1370,7 +1370,7 @@ module.exports = Note
 
 Noden [moduulien](https://nodejs.org/docs/latest-v8.x/api/modules.html) määrittely poikkeaa hiukan osassa 2 määrittelemistämme frontendin käyttämistä [ES6-moduuleista](osa3/#refaktorointia---moduulit)
 
-Mouduulin ulos näkyvä osa määritellään asettamalla arvo muuttujalle _module.exports_. Asetamme arvoksi määritellyn modelin _Note_. Muut moduulin sisällä määritellyt asiat, esim. muuttujat _mongoose_ ja _url_ eivät näy moduulin käyttäjälle.
+Moduulin ulos näkyvä osa määritellään asettamalla arvo muuttujalle _module.exports_. Asetamme arvoksi määritellyn modelin _Note_. Muut moduulin sisällä määritellyt asiat, esim. muuttujat _mongoose_ ja _url_ eivät näy moduulin käyttäjälle.
 
 Moduulin käyttöönotto tapahtuu lisäämällä tiedostoon _index.js_ seuraava rivi
 
@@ -1740,7 +1740,7 @@ dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön kome
 require('dotenv').config()
 ```
 
-ja niihin viitataan Nodessa kuiten "normaaleihin" ympäristömuututjiin syntaksilla _process.env.MONGODB_URI_
+ja niihin viitataan Nodessa kuten "normaaleihin" ympäristömuuttujiin syntaksilla _process.env.MONGODB_URI_
 
 Otetaan dotenv käyttöön seuraavasti:
 
