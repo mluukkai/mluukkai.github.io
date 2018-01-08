@@ -748,7 +748,7 @@ Tämän osan tehtävissä teemme backendin edellisen osan puhelinluettelosovellu
 
 **HUOM** tämän osan tehtäväsarja kannattaa tehdä omaan git-repositorioon, suoraan repositorion juureen! Jos et tee näin, joudut ongelmiin tehtävässä 49.
 
-Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taukkoon listan puhelinnumerotietoja:
+Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taulukon puhelinnumerotietoja:
 
 ![]({{ "/assets/teht/19.png" | absolute_url }})
 
@@ -760,11 +760,11 @@ Komennolla _npm run watch_ käynnistettäessa sovelluksen tulee käynnistyä uud
 
 #### 41 puhelinluettelon backend osa 2
 
-Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunilleen seuraavanlainen sivu
+Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunnilleen seuraavanlainen sivu
 
 ![]({{ "/assets/teht/20.png" | absolute_url }})
 
-eli sivu kertoo pyynön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
+eli sivu kertoo pyynnön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
 
 #### 42 puhelinluettelon backend osa 3
 
@@ -800,7 +800,7 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 #### 46 puhelinluettelon backend osa 6
 
-Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan / logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
 Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
@@ -834,7 +834,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#staattisten-tiedostojen-tarjoaminen-backendistä)
 
-Huolehdi myös, frontend toimii edelleen myös paikallisesti.
+Huolehdi myös, että frontend toimii edelleen myös paikallisesti.
 
 **PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:
 
@@ -885,7 +885,7 @@ Saat selville ohjelman komentoriviparametrit muuttujasta [process.argv](https://
 
 #### 52 tietokanta komentoriviltä, finetuning
 
-Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunilleen seuraavanlainen
+Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunnilleen seuraavanlainen
 
 <pre>
 puhelinluettelo:
