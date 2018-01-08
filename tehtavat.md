@@ -948,6 +948,8 @@ Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista nii
 
 Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluettelossa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
 
+Tämä tehtävä saattaa olla jossain määrin hankala. Osassa 4 esitettävä async/await-syntaksi helpottaa tehtävän tekemistä, eli jos joudut ongelmiin, älä juutu tehtävään liian pitkäksi aikaa.
+
 ### loppuhuipennus
 
 #### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
