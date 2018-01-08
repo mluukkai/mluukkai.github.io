@@ -1366,7 +1366,7 @@ render() {
 Järjestämistä varten on nyt määritelty muuttujaan _byId_ apufunktio, jota kutsutaan ennen kuin _Note_ komponentit generoidaan _map_-metodin avulla:
 
 ```js
-notesToShow.sort(byId).map.(note => <Note ... />)
+notesToShow.sort(byId).map(note => <Note ... />)
 ```
 
 ## Palvelimen kanssa tapahtuvan kommunikoinnin eristäminen omaan moduuliin

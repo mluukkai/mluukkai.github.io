@@ -751,7 +751,7 @@ Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> 
 
 ![]({{ "/assets/teht/19.png" | absolute_url }})
 
-Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuiten mikä tahansa muu merkki.
+Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuten mikä tahansa muu merkki.
 
 Sovellus pitää pystyä käynnistämään komennolla _npm start_.
 
@@ -799,7 +799,7 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 #### 46 puhelinluettelon backend osa 6
 
-Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
 Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
@@ -1634,4 +1634,3 @@ Tee sovellukseen mahdollisuus uusien anekdoottien lisäämiselle.
 #### 105
 
 ### connect
-
