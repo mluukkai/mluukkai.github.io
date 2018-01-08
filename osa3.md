@@ -185,7 +185,7 @@ app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
 ```
 
-Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frondille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun listallisen JSON-muotoisia muistiinpanoja:
+Koska tällä kurssilla palvelimen rooli on pääasiassa tarjota frontille JSON-muotoista "raakadataa", muutetaan heti palvelinta siten, että se palauttaa kovakoodatun listallisen JSON-muotoisia muistiinpanoja:
 
 ```js
 let notes = [
@@ -215,7 +215,7 @@ const app = http.createServer((request, response) => {
 })
 ```
 
-Headerin _Content-Typ'_ arvolla _application/json_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
+Headerin _Content-Type_ arvolla _application/json_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
 
 
 Kun avaamme selaimen, on tulostusasu sama kuin [osassa 2](osa2/#datan-haku-palvelimelta) käytetyn [json-serverin](https://github.com/typicode/json-server) tarjoamalla muistiinpanojen listalla:
@@ -354,7 +354,7 @@ Saat käynnistettyä interaktiivisen node-repl:in kirjoittamalla komentoriville 
 
 ## nodemon
 
-Jos muutamme sovelluksen koodia uudelleenkäynnistämään sovelluksen (eli ensin sammuttamaan konsolista _ctrl_ ja _c_ ja käynnistämään uudelleen), jotta muutokset tulisivat voimaan. Verrattuna Reactin mukavaan workflowhun missä selain päivittyi automaattisesti koodin muuttuessa tuntuu uudelleenkäynnistely kömpelöltä.
+Jos muutamme sovelluksen koodia joudumme uudelleenkäynnistämään sovelluksen (eli ensin sammuttamaan konsolista _ctrl_ ja _c_ ja sitten käynnistämään uudelleen), jotta muutokset tulisivat voimaan. Verrattuna Reactin mukavaan workflowhun missä selain päivittyi automaattisesti koodin muuttuessa tuntuu uudelleenkäynnistely kömpelöltä.
 
 Ongelmaan ratkaisu on [nodemon](https://github.com/remy/nodemon):
 
@@ -517,7 +517,7 @@ app.get('/notes/:id', (request, response) => {
 })
 ```
 
-Jokaisesta vertailufunktion kutsusta tulostetaan nyt monta asiaa. Konsoliin tulostus on seuraava:
+Jokaisesta vertailufunktion kutsusta tulostetaan nyt monta asiaa. Konsolin tulostus on seuraava:
 
 <pre>
 1 'number' '1' 'string' false
@@ -755,9 +755,9 @@ Esim. body-parser ottaa pyynnön mukana tulevan raakadatan _request_-oliosta, pa
 
 Middlewareja voi olla käytössä useita jolloin ne suoritetaan peräkkäin siinä järjestyksessä kun ne on määritelty.
 
-Toteutetaan itse yksinkertainen middleware, tulostaa konsoliin palvelimelle tulevien pyyntöjen perustietoja.
+Toteutetaan itse yksinkertainen middleware, joka tulostaa konsoliin palvelimelle tulevien pyyntöjen perustietoja.
 
-Middleware on funktota, joka saa kolme parametria:
+Middleware on funktio, joka saa kolme parametria:
 
 ```js
 const logger = (request, response, next) => {
@@ -812,7 +812,7 @@ Lyhyesti sanottuna meidän kontekstissa kyse on seuraavasta: sivulla oleva javas
 
 Korostetaan vielä, että [same origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) ja CORS eivät ole mitenkään React- tai node-spesifisiä asioita, vaan yleismaailmallisia periaatteita Web-sovellusten toiminnasta.
 
-Voimme sallia muista _origineista_ tulevat käyttämällä noden [cors](https://github.com/expressjs/cors)-middlewarea.
+Voimme sallia muista _origineista_ tulevat pyynnöt käyttämällä noden [cors](https://github.com/expressjs/cors)-middlewarea.
 
 Asennetaan _cors_ komennolla
 
@@ -1049,7 +1049,7 @@ Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun
 
 Kun sovellus "ei toimi", onkin selvitettävä missä vika on. On erittäin yleistä, että vika on sellaisessa paikassa, mitä ei osaa ollenkaan epäillä, ja menee minuutti-, tunti- tai jopa päiväkausia ennen kuin oikea ongelmien lähde löytyy.
 
-Avainasemassa onkin systemaattisuus. Koska virhe voi olla melkein missä vaan, kaikkea pitää epäillä, ja tulee pyrkiä poissulkemaan ne osat tarkastelusta, missä virhe ei ainakaan ole. Konsoliin kirjoitus, Postman, debuggeri ja kokemus auttavan.
+Avainasemassa onkin systemaattisuus. Koska virhe voi olla melkein missä vaan, kaikkea pitää epäillä, ja tulee pyrkiä poissulkemaan ne osat tarkastelusta, missä virhe ei ainakaan ole. Konsoliin kirjoitus, Postman, debuggeri ja kokemus auttavat.
 
 Virheiden ilmaantuessa huonoin strategia on jatkaa koodin kirjoittamista. Se on tae siitä, että koodissa on pian kymmenen ongelmaa lisää ja niiden syyn selvittäminen on entistäkin vaikeampaa. Toyota Production Systemin periaate [Stop and fix](http://gettingtolean.com/toyota-principle-5-build-culture-stopping-fix/#.Wjv9axP1WCQ) toimii tässäkin yhteydessä paremmin kuin hyvin.
 
@@ -1057,14 +1057,14 @@ Virheiden ilmaantuessa huonoin strategia on jatkaa koodin kirjoittamista. Se on 
 
 Jotta saisimme talletettua muistiinpanot pysyvästi, tarvitsemme tietokannan. Useimmilla laitoksen kursseilla on käytetty relaatiotietokantoja. Tällä kurssilla käytämme [MongoDB](https://www.mongodb.com/):tä, joka on ns. [dokumenttitietokanta](https://en.wikipedia.org/wiki/Document-oriented_database).
 
-Dokumenttitietokannat poikkeavat jossain määrin relaatiotietokannoista niin datan organisointitapansa kuin kyselykielensäkin suhteen. Dokumenttitietokantojen ajatellaan kuuluvan sateenvarjotermin [NoSQL](https://en.wikipedia.org/wiki/NoSQL) alle. Lisää dokumenttititokannoista ja NoSQL:stä Tietokantojen perusteiden [viikon 7 materiaalista](https://materiaalit.github.io/tikape-s17/part7/).
+Dokumenttitietokannat poikkeavat jossain määrin relaatiotietokannoista niin datan organisointitapansa kuin kyselykielensäkin suhteen. Dokumenttitietokantojen ajatellaan kuuluvan sateenvarjotermin [NoSQL](https://en.wikipedia.org/wiki/NoSQL) alle. Lisää dokumenttitietokannoista ja NoSQL:stä Tietokantojen perusteiden [viikon 7 materiaalista](https://materiaalit.github.io/tikape-s17/part7/).
 
 **Lue nyt Tietokantojen perusteiden dokumenttitietokantoja kuvaava osuus.** Jatkossa oletetaan, että hallitset käsitteet _dokumentti_ ja _kokoelma_ (collection).
 
 
 MongoDB:n voi luonnollisesti asentaa omalle koneelle. Internetistä löytyy kuitenin myös palveluna toimivia Mongoja (esim [mlab](https://mlab.com/) ja [MongoDbCloud](https://www.mongodb.com/cloud/atlas)), ja koska Herokussa oleville sovelluksille on suhteellisen suoraviivaista konfiguroida Mongo-tietokanta, seuraavissa esimerkeissä käytetään Herokun kautta käyttöönotettavaa Mongoa.
 
-Käyttöönotto tapahtuu sovelluksen repositorissa komennolla
+Käyttöönotto tapahtuu sovelluksen repositoriossa komennolla
 
 ```bash
 heroku addons:create mongolab:sandbox
@@ -1097,8 +1097,8 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
+// voit tarkistaa mongoosen version tiedostosta package-lock.json
 // jos käytössäsi on mongoosen versio 4.x seuraava rivi tulee antaa muodossa
-// version voit tarkistaa tiedostosta package.js
 // mongoose.connect(url, { useMongoClient: true })
 
 mongoose.connect(url)
@@ -1157,7 +1157,7 @@ const Note = mongoose.model('Note', {
 })
 ```
 
-Modelin parametrina määritellään _muistiinpanon_ [skeema](http://mongoosejs.com/docs/guide.html), joka kertoo mongooselle, miten muitiinpano-oliot tulee tallettaa tietokantaan.
+Modelin parametrina määritellään _muistiinpanon_ [skeema](http://mongoosejs.com/docs/guide.html), joka kertoo mongooselle, miten muistiinpano-oliot tulee tallettaa tietokantaan.
 
 Ensimmäisenä parametrina oleva _Note_ määrittelee, että mongoose tallettaa muistiinpanoa vastaavat oliot kokoelmaan nimeltään _notes_.
 
