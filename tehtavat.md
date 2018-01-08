@@ -1942,7 +1942,7 @@ Tee sovellukseen mahdollisuus blogien kommentointiin
 
 ### 124
 
-Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot
+Tee sovellukseen näkymä, joka näyttää kaikkiin käyttäjiin liittyvät perustiedot
 
 ### 125
 
