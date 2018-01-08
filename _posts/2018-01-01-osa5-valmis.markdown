@@ -1,0 +1,10 @@
+---
+layout: post
+title:  "osa 5 valmis"
+date:   2018-01-01 19:42:59 +0200
+categories: jekyll 
+---
+
+[osa 5]({{ "/osa5 | absolute_url }}) valmistui vuorokautta ennen suunniteltua deadlinea.
+
+Osassa palataan Reactin pariin, kertaillaan vanhaa ja opetellaan testaamaan frontendin koodia. Osan lopussa päästään mielenkiintoiseen asiaan, eli tilanhallintaan Redux-kirjaston avulla.
