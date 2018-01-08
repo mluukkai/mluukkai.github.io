@@ -1746,7 +1746,7 @@ Muuta myös _AnecdoteList_ käyttämään connectia.
 
 Poista turhaksi staten propseina tapahtuva välittäminen, eli pelkistä _App_ muotoon:
 
-```js
+```react
 class App extends React.Component {
   render() {
     return (
@@ -1974,7 +1974,7 @@ Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tpa
 
 ### 129
 
-Konfiguroi fronend käyttämään Lintiä
+Konfiguroi frontend käyttämään Lintiä
 
 ### 130
 
@@ -1990,11 +1990,11 @@ Tee backendille testit joiden rivikattavuus on vähintään 80%
 
 ### 133
 
-Tee fronendille testit joiden rivikattavuus on vähintään 80%
+Tee frontendille testit joiden rivikattavuus on vähintään 80%
 
 ### 134
 
-Ota sovellukseessasi käyttöön snapshot testing
+Ota sovelluksessasi käyttöön snapshot testing
 
 ### 135
 
