@@ -14,8 +14,9 @@ permalink: /osa7/
 ## Osan 7 oppimistavoitteet
 
 - Webpack
-  - Babel: transpailaus, polyfillit
-  - Suoritusympäristöt (test/dev/prod)
+  - Babel: transpilaus, polyfillit
+  - Minifiointi
+  - Suoritusympäristöt (development/production)
 - Tyylien lisääminen sovellukseen
   - CSS-moduulit
   - Styled components
@@ -30,18 +31,15 @@ permalink: /osa7/
   - PropTypes revisited
   - Flow
   - typescript
-- Librarydropping
-  - immutable.js
-  - websocket.js
-  - Helmet.js
-- Tulevaisuuden trendit
-  - Isomorfinen koodi: react backendissa
+- Tulevaisuuden trendejä
+  - Server side rendering
   - Progessive web aps
-  - Cloud native apps
+  - Microservice-arkkitehtuuri
+  - Serverless
 
 ## Tehtävät
 
-Osan 7 [tehtävistä](../tehtavat#osa7) suurin osa on koko kurssin sisältöä kertaavia, voit aloittaa tehtävien tekemisen vaikka heti, vain muutama tehtävistä edellyttää tämän osan teorian läpikäyntiä.
+Melkein kaikki osan 7 [tehtävistä](tehtavat#osa7) ovat koko kurssin sisältöä kertaavia, voit aloittaa tehtävien tekemisen vaikka heti, vain muutama tehtävistä edellyttää tämän osan teorian läpikäyntiä.
 
 ## Webpack
 
@@ -51,9 +49,9 @@ Emme voi kuitenkaan turvautua ikuisesti create-react-app:in magiaan ja nyt onkin
 
 ### bundlaus
 
-Olemme toteuttaneet sovelluksia jakamalla koodin moduuleihin joita koodia tarvitsevat moduulit ovat _importanneet_. Vaikka ES6-moduulit ovatkin Javascript-standardissa märiteltyjä, ei mikään selain vielä osaa käsitellä moduuleihin jaettua koodia. 
+Olemme toteuttaneet sovelluksia jakamalla koodin moduuleihin, joita on _importattu_ niitä tarvitseviin paikkoihin. Vaikka ES6-moduulit ovatkin Javascript-standardissa märiteltyjä, ei mikään selain vielä osaa käsitellä moduuleihin jaettua koodia. 
 
-Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yksittäinen, kaiken koodin sisältävä tiedosto. Kun veimme Reactilla toeutetun frontendin tuotantoon osan 3 luvussa [Frontendin tuotantoversio](osa3/#Frontendin-tuotantoversio) suoritimme bundlauksen komennolla _npm run build_. Kyseinen npm-skripti suorittaa bundlauksen Webpackia hyväksikäyttäen. Tuloksena on joukko hakemistoon _build_ sijoitettavia _staattisia tiedostoja_:  
+Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yksittäinen, kaiken koodin sisältävä tiedosto. Kun veimme Reactilla toeutetun frontendin tuotantoon osan 3 luvussa [Frontendin tuotantoversio](/osa3/#Frontendin-tuotantoversio), suoritimme bundlauksen komennolla _npm run build_. Konepellin alla kyseinen npm-skripti suorittaa bundlauksen webpackia hyväksikäyttäen. Tuloksena on joukko hakemistoon _build_ sijoitettavia tiedostoja:  
 
 <pre>
 ├── asset-manifest.json
@@ -70,36 +68,34 @@ Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yk
         └── main.54f11b10.js.map
 </pre>
 
-Hakemiston juuressa oleva sovelluksen "päätiedosto" _index.html_ lataa mm. bundlatun Javascript-tiedoston:
+Hakemiston juuressa oleva sovelluksen "päätiedosto" _index.html_ lataa _script_-tagin avulla bundlatun Javascript-tiedoston:
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="shortcut icon" href="/favicon.ico">
   <title>React App</title>
   <link href="/static/css/main.1b1453df.css"rel="stylesheet">
 </head>
-<body><noscript>You need to enable JavaScript to run this app.</noscript>
+<body>
   <div id="root"></div>
   <script type="text/javascript" src="/static/js/main.54f11b10.js"></script>
   </body>
 </html>
 ```
 
-Kuten esimerkistä näemme, create-react-app:illa tehdyssä sovelluksessa bundlataan Javascriptin lisäksi sovellusen CSS-märittelyt.
+Kuten esimerkistä näemme, create-react-app:illa tehdyssä sovelluksessa bundlataan Javascriptin lisäksi sovellusen CSS-märittelyt tiedostoon _static/css/main.1b1453df.css_
 
-Käytännössä bundlaus tapahtuu siten, että sovelluksen Javascriptille määritellään alkupiste, usein tiedosto _index.js_, ja bundlauksen yhteydessä Webpack ottaa mukaan kaiken koodin mitä alkupiste importtaa, sekä importattujen koodien importtaamat koodit.
+Käytännössä bundlaus tapahtuu siten, että sovelluksen Javascriptille määritellään alkupiste, usein tiedosto _index.js_, ja bundlauksen yhteydessä webpack ottaa mukaan kaiken koodin mitä alkupiste importtaa, sekä importattujen koodien importtaamat koodit, jne.
 
-Koska osa importeista on kirjastoja, kuten React, Redux ja Axios, bundlattuun javascripttiedostoon tulee kaikkien näiden sisältö.
+Koska osa importeista on kirjastoja, kuten React, Redux ja Axios, bundlattuun javascript-tiedostoon tulee myös kaikkien näiden sisältö.
 
-> Vanha tapa jakaa sovelluksen koodi moneen tiedostoon perustui siihen, että _index.html_ latasi kaikki sovelluksen tarvitsemat erilliset Javascript-tiedostot script-tagien avulla. Tämä on kuitenkin tehotonta, sillä jokaisen tiedoston lataaminen aiheuttaa pienen overheadin ja nykyään pääosin suositaankin koodin bundlaamista.  
+> Vanha tapa jakaa sovelluksen koodi moneen tiedostoon perustui siihen, että _index.html_ latasi kaikki sovelluksen tarvitsemat erilliset Javascript-tiedostot script-tagien avulla. Tämä on kuitenkin tehotonta, sillä jokaisen tiedoston lataaminen aiheuttaa pienen overheadin ja nykyään pääosin suositaankin koodin bundlaamista yksittäiseksi tiedostoksi.
 
-Tehdään nyt React-projektille sopiva Webpack-konfiguraatio kokonaan käsin.
+Tehdään nyt React-projektille sopiva webpack-konfiguraatio kokonaan käsin.
 
-Luodaan sopivaan hakemistoon seuraavat hakemistot (build ja src) sekä tiedostot:
+Luodaan projektia varten hakemisto ja sen sisälle seuraavat hakemistot (build ja src) sekä tiedostot:
 
 <pre>
 ├── build
@@ -128,7 +124,7 @@ Asennetaan webpack komennolla
 npm install --save webpack
 ```
 
-Webpackin toiminta konfiguroidaan tiedostoon _webpack.config.js_, laitetaan sen sisällöksi seuraava
+Webpackin toiminta konfiguroidaan tiedostoon _webpack.config.js_, laitetaan sen alustavaksi sisällöksi seuraava
 
 ```bash
 const path = require('path')
@@ -143,7 +139,7 @@ const config = {
 module.exports = config
 ```
 
-Määritellään sitten _npm skripti_ jonka avulla bundlaus suoritetaan
+Määritellään sitten npm-skripti _build_ jonka avulla bundlaus suoritetaan
 
 ```bash
   // ...
@@ -161,7 +157,7 @@ const hello = (name) => {
 }
 ```
 
-Kun nyt suoritamme komennon _npm run build_ suorittaa webpack bundlauksen. Tuloksena on tiedosto _bundle.js_ hakemistossa build:
+Kun nyt suoritamme komennon _npm run build_ webpack bundlaa koodin. Tuloksena on hakemistoon _build_ sijoitettava tiedosto _bundle.js_:
 
 ![]({{ "/assets/7/1.png" | absolute_url }})
 
@@ -177,7 +173,7 @@ const App = () => {
 export default App
 ```
 
-Importataan ja käytetään _App:_ia tiedostossa _index.js_
+Importataan ja käytetään modulia _App_ tiedostossa _index.js_
 
 ```js
 import App from './App'
@@ -216,7 +212,7 @@ const App = () => {
 
 ### Konfiguraatiotiedosto
 
-Katsotaan nyt tarkemmin konfiguraation tämänhetkistä sisältöä:
+Katsotaan nyt tarkemmin konfiguraation _webpack.config.js_ tämänhetkistä sisältöä:
 
 ```bash
 const path = require('path')
@@ -231,11 +227,11 @@ const config = {
 module.exports = config
 ```
 
-Konfiguraatio on Javascriptia ja tapahtuu exporttaamalla määrittelyt sisältävä olion Noden monduulisyntakissa.
+Konfiguraatio on Javascriptia ja tapahtuu eksorttaamalla määrittelyt sisältävä olio Noden monduulisyntakilla.
 
-Tämän hetkinen, minimaalinen määrittely on aika ilmeninen, avain [entry](https://webpack.js.org/concepts/#entry) kertoo sen tiedoston, mistä bundlaus aloitetaan.
+Tämän hetkinen minimaalinen määrittely on aika ilmeninen, kenttä [entry](https://webpack.js.org/concepts/#entry) kertoo sen tiedoston, mistä bundlaus aloitetaan.
 
-Kenttä [output](https://webpack.js.org/concepts/#output) taas kertoo minne muodostettu bundle sijoitetaan. Kohdehakemisto täytyy määritellä absoluuttisena polkuna, se taas onnistuu helposti [path.resolve](https://nodejs.org/docs/latest-v8.x/api/path.html#path_path_resolve_paths)-metodilla. [__dirname](https://nodejs.org/docs/latest/api/globals.html#globals_dirname) on Noden globaali muuttuja, joka viittaa nykyiseen hakemistoon
+Kenttä [output](https://webpack.js.org/concepts/#output) taas kertoo minne muodostettu bundle sijoitetaan. Kohdehakemisto täytyy määritellä absoluuttisena polkuna, se taas onnistuu helposti [path.resolve](https://nodejs.org/docs/latest-v8.x/api/path.html#path_path_resolve_paths)-metodilla. [__dirname](https://nodejs.org/docs/latest/api/globals.html#globals_dirname) on Noden globaali muuttuja, joka viittaa nykyiseen hakemistoon.
 
 ### Reactin bundlaaminen
 
@@ -270,7 +266,7 @@ const App = () => (
 export default App
 ```
 
-Tarvitsemme sovellukselle myös "pääsivuna" toimivan tiedoston _build/index.html_
+Tarvitsemme sovellukselle myös "pääsivuna" toimivan tiedoston _build/index.html_ joka lataa _script_-tagin avulla bundlatun Javascriptin:
 
 ```html
 <!DOCTYPE html>
@@ -300,9 +296,9 @@ const App = () => (
 )
 ```
 
-ei ole "normalia" Javascriptia, vaan JSX:n tarjoama syntaktinen oikotie määritellä _div_-tagi.
+ei ole "normalia" Javascriptia, vaan JSX:n tarjoama syntaktinen oikotie määritellä _div_-tagiä vastaava React-elementti.
 
-[Loaderien](https://webpack.js.org/concepts/loaders/) avulla on mahdollista kertoa Webpackille miten tiedostot tulee käsitellä ennen niiden bundlausta. 
+[Loaderien](https://webpack.js.org/concepts/loaders/) avulla on mahdollista kertoa webpackille miten tiedostot tulee käsitellä ennen niiden bundlausta. 
 
 Määritellään projektiimme Reactin käyttämän JSX:n normaaliksi Javascriptiksi muuntava loaderi:
 
@@ -341,7 +337,7 @@ Yksittäisen loaderin määrittely on kolmioisainen:
 }
 ```
 
-Kenttä _test_ määrittelee että käsitellään _.js_-päätteisiä tiedostoja, _loader_ kertoo että käsittelu tapahtuu [babel-loader](https://github.com/babel/babel-loader):illa. Kenttä _query_ taas antaa loaderille sen toimintaa ohjaavia parametreja.
+Kenttä _test_ määrittelee että käsitellään _.js_-päätteisiä tiedostoja, _loader_ kertoo että käsittely tapahtuu [babel-loader](https://github.com/babel/babel-loader):illa. Kenttä _query_ taas antaa loaderille sen toimintaa ohjaavia parametreja.
 
 Asennetaan loader ja sen tarvitsemat kirjastot _kehitysaikaiseksi riippuvuudeksi_:
 
@@ -351,7 +347,7 @@ npm install --save-dev babel-core babel-loader babel-preset-react
 
 Nyt bundlaus onnistuu. 
 
-Huomaamme, että Reactin bundlaaminen koodin mukaan on kasvattanut tiedostoa _build/bundle.js_ melkoisesti, kokoa on noin 7500 rivia. Lopussa on sovelluksemme  loaderin käsittelyn jälkeinen koodi. Komponentin _App_ määrittely on muuttunut muotoon
+Huomaamme, että Reactin bundlaaminen koodin mukaan on kasvattanut tiedostoa _build/bundle.js_ melkoisesti, rivejä tiedostossa on noin 7500. Lopussa on sovelluksemme  loaderin käsittelyn jälkeinen koodi. Komponentin _App_ määrittely on muuttunut muotoon
 
 ```js
 const App = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -375,11 +371,11 @@ Prosessista, joka muuttaa Javascriptia muodosta toiseen käytetään englanninki
 
 Edellisen luvun konfiguraation avulla siis _transpailaamme_ JSX:ää sisältävän Javascriptin normaaliksi Javascripiksi tämän hetken johtavan työkalun [babelin](https://babeljs.io/) aulla.
 
-Kuten osassa 1 jo mainittiin läheskään kaikki selaimet eivät vielä osaa Javascriptin uusimpien versioiden ES6:n ja ES7:n ominaisuuksia ja tämän takia koodi yleensä transpiloidaan käyttämään vanhempaa Javascript-syntaksia ES5:ttä.
+Kuten osassa 1 jo mainittiin, läheskään kaikki selaimet eivät vielä osaa Javascriptin uusimpien versioiden ES6:n ja ES7:n ominaisuuksia ja tämän takia koodi yleensä transpiloidaan käyttämään vanhempaa Javascript-syntaksia ES5:ttä.
 
 Babelin suorittama transpilointiprosessi määritellään _pluginien_ avulla. Käytännössä useimmiten käytetään valmiita [presetejä](https://babeljs.io/docs/plugins/), eli useamman sopivan pluginin joukkoa. 
 
-Tällä hetkellä sovelluksemme tarnspiloinnissa käytetään presetiä [react](https://babeljs.io/docs/plugins/preset-react/):
+Tällä hetkellä sovelluksemme transpiloinnissa käytetään presetiä [react](https://babeljs.io/docs/plugins/preset-react/):
 
 ```js
 {
@@ -391,7 +387,7 @@ Tällä hetkellä sovelluksemme tarnspiloinnissa käytetään presetiä [react](
 }
 ```
 
-Otetaan käyttään preset [env](https://babeljs.io/docs/plugins/preset-env/), joka sisältää kaiken hyödyllisen, minkä avulla uudsimman standardin mukainen koodi saadaan transpiloitua ES5-standardin mukaiseksi koodiksi:
+Otetaan käyttään preset [env](https://babeljs.io/docs/plugins/preset-env/), joka sisältää kaiken hyödyllisen, minkä avulla uusimman standardin mukainen koodi saadaan transpiloitua ES5-standardin mukaiseksi koodiksi:
 
 ```js
 {
@@ -436,7 +432,7 @@ Lisätään sovellukseemme hieman CSS:ää. Tehdään tiedosto _src/index.css_
 
 Määritellään tyyli käytettäväksi komponentissa _App_
 
-```js
+```react
 const App = () => (
   <div className='container'>
     hello webpack
@@ -470,11 +466,11 @@ Transpilointi hajoaa, ja CSS:ää varten onkin otettava käyttöön [css](https:
 }
 ```
 
-css](https://webpack.js.org/loaders/css-loader/)-loaderin tehtävänä on ladata _CSS_-tiedostot, ja [style](https://webpack.js.org/loaders/style-loader/)-loader generoi koodiin CSS:t sisältävän _style_-elementin.
+[css-loaderin](https://webpack.js.org/loaders/css-loader/) tehtävänä on ladata _CSS_-tiedostot, ja [style-loader](https://webpack.js.org/loaders/style-loader/) generoi koodiin CSS:t sisältävän _style_-elementin.
 
-Näin määriteltynä CSS-määrittelyt sisällytetään sovelluksen Javascriptin sisältävään tiedostoon _bundle.js_. Sovelluksen päätiedostossa _index.html_ ei siis ole tarvetta erikseen ladata CSS:ää. 
+Näin konfiguroituna CSS-määrittelyt sisällytetään sovelluksen Javascriptin sisältävään tiedostoon _bundle.js_. Sovelluksen päätiedostossa _index.html_ ei siis ole tarvetta erikseen ladata CSS:ää. 
 
-CSS voidaan myös generoida omaan tiedostoonsa esim. [extract-text](https://github.com/webpack-contrib/extract-text-webpack-plugin)-pluginin avulla.
+CSS voidaan tarpeen vaatiessa myös generoida omaan tiedostoonsa esim. [extract-text](https://github.com/webpack-contrib/extract-text-webpack-plugin)-pluginin avulla.
 
 Kun loaderit asennetaan
 
@@ -510,14 +506,13 @@ npm install --save-dev webpack-dev-server
 ```
 
 
-Määritellään dev-serverin käynnistävä npm-skripti:
+Määritellään dev-serverin käynnistävä npm-skripti (äsken lisätty skripti _watch_ on poistettu koska sille ei ole käyttöä):
 
 ```bash
 {
   // ...
   "scripts": {
     "build": "node_modules/.bin/webpack",
-    "watch": "webpack --watch",
     "start": "webpack-dev-server"
   },
   // ...
@@ -602,11 +597,11 @@ class App extends React.Component {
 } 
 ```
 
-Sovellus ei enää toimi, ja konsoli kertoo virheen
+Sovellus ei enää toimi, ja konsoli kertoo virheestä
 
 ![]({{ "/assets/7/6.png" | absolute_url }})
 
-Tiedämme tietenkin nyt että virhe on metodissa onClick, mutta jos olisi kyse suuremmasta sovelluksesta, on virheilmoitus sikäli hyvin ikävä, että se kertoo virheen sijainnin bundlatussa koodissa:
+Tiedämme tietenkin nyt että virhe on metodissa onClick, mutta jos olisi kyse suuremmasta sovelluksesta, on virheilmoitus sikäli hyvin ikävä, että se kertoo virheen sijainnin _bundlatussa koodissa_:
 
 <pre>
 bundle.js:16732 Uncaught TypeError: Cannot read property 'setState' of undefined
@@ -616,7 +611,7 @@ mutta ei sitä missä kohtaa alkuperäistä koodia virhe sijaitsee.
 
 Korjaus on onneksi hyvin helppo, pyydetään webpackia generoimaan bundlelle ns.  [source map](https://webpack.js.org/configuration/devtool/), jonka avulla bundlea suoritettaessa tapahtuva virhe on mahdollista _mäpätä_ alkuperäisen koodin vastaavaan kohtaan.
 
-Source map saadaan generoitua lisäämällä konfiguraatioon avain _devtool_ aja sen arvoksi 'source-map':
+Source map saadaan generoitua lisäämällä konfiguraatioon kenttä _devtool_ ja sen arvoksi 'source-map':
 
 ```bash
 const config = {
@@ -655,10 +650,10 @@ Tästä aiheutuu kuitenkin virheilmoitus
 Virhe johtuu siitä, että käyttämämme syntaksi ei ole vielä mukana Javascriptin uusimmassa standardissa ES7. Saamme syntaksin käyttöön asentamalla [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/)-pluginin komennolla
 
 ```bash
-npm install --save-dev 
+npm install transform-class-properties- --save-dev 
 ```
 
-ja kehottamalla _babel-loader_ käyttämään pluginia:
+ja kehottamalla _babel-loader_:ia käyttämään pluginia:
 
 ```bash
 {

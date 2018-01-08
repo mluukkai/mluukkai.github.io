@@ -1946,7 +1946,7 @@ Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perus
 
 ![]({{ "/assets/teht/53.png" | absolute_url }})
 
-### 123 käyttäjän näkymä, osa 1
+### 123 yksittäisen käyttäjän näkymä, osa 1
 
 Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
 
@@ -1956,25 +1956,25 @@ Näkymään päästään klikkaamalla nimeä kaikkien käyttäjien näkymästä
 
 ![]({{ "/assets/teht/55.png" | absolute_url }})
 
-### 124 käyttäjän näkymä osa, 2
+### 124 yksittäisen käyttäjän näkymä osa, 2
 
-Merkkaa tämä tehtävä tehdyksi jos yksittäisen käyttäjän näkymä toimii oikein myös siinä tilanteessa että menet urliin suoraan tai refreshaat selaimen ollessasi käyttäjän näkymässä.
+Merkkaa tämä tehtävä tehdyksi jos toteuttamasi yksittäisen käyttäjän näkymä toimii oikein myös siinä tilanteessa että menet urliin suoraan tai refreshaat selaimen ollessasi käyttäjän näkymässä.
 
 ### 125 blogin näkymä
 
-Toteuta sovellukseen oma näkymä yksittäislle blogeille. Näkymä voi näyttää seuraavalta
+Toteuta sovellukseen oma näkymä yksittäisille blogeille. Näkymä voi näyttää seuraavalta
 
 ![]({{ "/assets/teht/49.png" | absolute_url }})
 
 Näkymään päästään klikkaamalla blogin nimeä kaikkien blogien näkymästä
 
-![]({{ "/assets/teht/56.png" | absolute_url }})
+![]({{ "/assets/teht/50.png" | absolute_url }})
 
 ### 126 navigointi
 
 Tee sovellukseen navigaatiomenu
 
-![]({{ "/assets/teht/52.png" | absolute_url }})
+![]({{ "/assets/teht/56.png" | absolute_url }})
 
 ### 127 kommentit, osa 1
 
@@ -1982,7 +1982,7 @@ Tee sovellukseen mahdollisuus blogien kommentointiin:
 
 ![]({{ "/assets/teht/51.png" | absolute_url }})
 
-Kommentit ovat anonyymejä, eli ne eivät liity kirjautuneeseen käyttäjään.
+Kommentit ovat anonyymejä, eli ne eivät liity järjestelmän käyttäjiin.
 
 Tässä tehtävässä riittää, että fronend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
 
@@ -2004,11 +2004,11 @@ Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtä
 
 ### 131 redux, osa 1
 
-Siirry käyttämään Reactin komponenttien tilan sijaan Reduxia. Koska refaktorointi saattaa olla aika työläs, voit merkitä tämän rastin kun "puolet" ohjelman tilasta hallitaan reduxilla
+Siirry käyttämään React-komponenttien tilan eli _staten_ sijaan Reduxia. Koska refaktorointi saattaa olla aika työläs, voit merkitä tehtävän tehdyksi, kun "puolet" ohjelman tilasta hallitaan reduxilla.
 
 ### 132 redux, osa 2
 
-Korvaa kaikki turha staten käyttö reduxin storella
+Korvaa kaikki turha React-komponenttien staten käyttö reduxin storella
 
 ### 133 redux, osa 3
 
@@ -2036,11 +2036,11 @@ Ota sovellukseessasi käyttöön [snapshot testing](https://facebook.github.io/j
 
 ### 139 headless-testaus
 
-Tee Puppetia tai haluamaasi kirjastoa käyttäviä headless-testejä, testaa ainakin paria toiminnallisuutta
+Tee Puppeteeria tai haluamaasi kirjastoa käyttäviä headless-testejä, testaa ainakin paria toiminnallisuutta
 
 ### 140 Tyypitarkastuksia
 
-Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Flown avulla tai Typescriptillä
+Lisää sovellukseen tyyppitarkastuksia Proptypeinä, Flown avulla tai Typescriptillä
 
 ### 141 Internet
 
@@ -2050,6 +2050,6 @@ Deployaa sovellus internetiin
 
 Toteuta sovelluksellesi esim. [Travis CI](https://travis-ci.org/):n avulla jatkuva tuotantoonvienti, eli mekanismi, missä koodin pushaaminen githubiin aiheuttaa testien läpimennessä uuden version käynnistämisen internettiin.
 
-### 143
+### 143 Facebook
 
 Koodaa parempi versio facebookista
