@@ -1726,8 +1726,6 @@ class Filter extends React.Component {
 ```
 
 ### connect
-<<<<<<< HEAD
-=======
 
 #### 104 paremmat anekdootit, osa 5
 
@@ -2025,4 +2023,3 @@ Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai type
 ### 141
 
 Koodaa parempi versio facebookista
->>>>>>> 03fe86d5205470738e430262ab05104f899649f3
