@@ -1932,9 +1932,19 @@ Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aika
 
 Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia  "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
 
+Useimmat tämän osan tehtävistä vaativat koodisi refaktoroimista. Tämä on tilanne käytännössä aina sovelluksia laajennettaessa, eli vaikka refaktorointi voi olla hankalaa ja ikävääkin, on kyseessä oleellinen taito.
+
+Hyvä neuvo refaktorintiin niinkuin uudenkin koodin kirjoittamiseen on _pienissä askelissa eteneminen_, koodia ei kannata hajottaa totaalisesti refaktorointia tehdessä pitkäkti aikaa, se on käytännössä varma resepti hermojen menettämiseen.
+
 ### 122
 
-Toteuta sovellukseen oma näkymä yksittäislle blogeille
+Toteuta sovellukseen oma näkymä yksittäislle blogeille. Näkymä voi näyttää seuraavalta
+
+![]({{ "/assets/teht/49.png" | absolute_url }})
+
+Näkymään päästään klikkaamalla blogin nimeä kaikkien blogien näkymästä
+
+![]({{ "/assets/teht/50.png" | absolute_url }})
 
 ### 123
 
