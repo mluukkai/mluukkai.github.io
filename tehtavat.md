@@ -438,7 +438,7 @@ Ilmoita myös kurssin yhteenlaskettu tehtävien lukumäärä
 
 #### 23 reduce
 
-Jos et jo niin tehnyt, laske koodissasi tehtävien määrä taulkon metodilla [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
+Jos et jo niin tehnyt, laske koodissasi tehtävien määrä taulukon metodilla [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 
 #### 24 monta kurssia
 
@@ -736,7 +736,7 @@ Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muutt
 
 <img src="/assets/teht/18.png" height="300">
 
-Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
+Korjaa ongelma osan 2 esimerkin [promise ja virheet](osa2/#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
 ## Osa 3
 
@@ -1272,11 +1272,11 @@ Ota sovellukseesi käyttöön ESlint.
 
 ## Osa 5
 
-Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Gihubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungin. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
+Teemme nyt edellisen osan tehtävissä tehtyä bloglist-backendia käyttävän frontendin. Voit ottaa tehtävien pohjaksi [Githubista](https://github.com/mluukkai/bloglist-frontend) olevan sovellusrungon. Sovellus olettaa, että backend on käynnissä koneesi portissa 3003.
 
 Tämän kerran alkupään tehtävät käytännössä kertaavat kaiken oleellisen tämän kurssin puitteissa Reactista läpikäydyn asian ja voivat siinä mielessä olla kohtuullisen haastavia, erityisesti jos edellisen osan tehtävissä toteuttamasi backend toimii puutteellisesti.
 
-Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkailu.
+Muista tehtäviä tehdessäsi kaikki debuggaukseen liittyvät käytänteet, erityisesti konsolin tarkkailu.
 
 **HUOM** koska create-react-app:illa kehitettävät sovellukset toimivat oletusarvoisesti _localhostin_ portissa 3000 kannattaa huomata, että _localStorage_ säilyttää arvonsa vaikka käyttäisit eri sovellusta. Tämä voi aiheuttaa mielenkiintoisa ongelmia jos asiaan ei osaa varautua.
 
@@ -2026,7 +2026,7 @@ Tee sovellukselle sopiva webpack-konfiguraatio
 
 Tee backendille testit joiden rivikattavuus on vähintään 50%
 
-### 137 frontendin testaut
+### 137 frontendin testaus
 
 Tee fronendille testit joiden rivikattavuus on vähintään 50%
 
