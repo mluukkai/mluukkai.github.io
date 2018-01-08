@@ -552,7 +552,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonto)
+Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonti)
 
 ## Kirjautumislomakkeen näyttäminen vain tarvittaessa
 

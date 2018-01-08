@@ -7,7 +7,7 @@ permalink: /osa7/
 <div class="important">
   <h1>KESKEN, ÄLÄ LUE</h1>
 
-  <p>Osan on tavoitteena valmistua keskiviikkona 10.1.</p>
+  <p>Osan on tavoitteena valmistua tiistaina 9.1.</p>
 </div>
 
 
@@ -1401,6 +1401,20 @@ Joskus voi kuitenkin olla tilanteita, missä koko sovellus halutaan samaan repos
 Erään hyvän lähtökohdan yksirepositorioiden koodin organisoinnille antaa [Mern](http://mern.io/)-projektin ylläpitämä 
 [Mern-starter](https://github.com/Hashnode/mern-starter).
 
+### Pavelimella tapahtuvat muutokset
+
+Jos palvelimella olevassa tilassa tapahtuu muutoksia, esim. blogilistapalveluumme lisätään uusia blogeja, tällä kurssilla tekemämme React-fronendit eivät huomaa muutoksia ennen sivujen uudelleenlatausta. Vastaava tilanne tulee eteen, jos fronendistä käynnistetään jotain kauemmin kestävää laskentaa backendiin, miten laskennan tulokset saadaan heijastettua fronediin?
+
+Eräs tapa on suorittaa fronendissa pollausta, eli toistuvia kyselyitä backendin apiin esim. [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)-komennon avulla. 
+
+Edistyneempi tapa on käyttää [WebSocketeja](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), joiden avulla on mahdollista muodostaa kaksisuuntainen kommunikaatiokanava selaimen ja palvelimen välille. Tällöin fronendin ei tarvitse pollata backendia. Riittää märitellä takaisinkutsufunktiot tilanteisiin, joissa pavelin lähettää WebSocketin avulla tietoja tilan päivittämisestä.
+
+WebSocketit ovat selaimen tarjoama palvelu, jolla ei kuitenkaan ole kaikille selaimille vielä täyttä tukea
+
+![]({{ "/assets/7/22a.png" | absolute_url }})
+
+WebSocket API:n suoran käyttämisen sijaan onkin suositeltavaa käyttää [Socket.io](https://socket.io/)-kirjastoa, joka tarjoaa erilaisia automaattisia _fallback_-mahdollisuuksia jos käytettävässä selaimessa ei ole täyttä WebSocket-tukea.
+
 ### Virtual DOM
 
 Reactin yhteydessä mainitan uusein käsite Virtual DOM. Mistä oikein on kyseä? Kuten [osassa 1](osa1/#Document-Object-Model-eli-DOM) mainittiin, selaimet tarjoavat [DOM API](https://developer.mozilla.org/fi/docs/DOM):n, jota hyväksikäyttäen selaimessa toimiva Javascript voi muokata sivun ulkoasun määritteleviä elementtejä.
@@ -1442,33 +1456,164 @@ Emme ole vielä maininneet kurssilla sanaakaan tietoturvaan liittyen. Kovin palj
 
 Katsotaan kuitenkin muutamaa kurssispesifistä seikkaa.
 
-https://developer.mozilla.org/en-US/docs/Web/Security
+The Open Web Application Security Project eli [OWASP](https://www.owasp.org) julkaisee vuosittain listan  Websovellusten yleisimmistä turvallisuusuhista. Tuorein lista on [täällä](https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf). Samat uhat ovat listalla vuodesta toiseen.
 
-https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security
+Listaykkösenä on _injection_ joka tarkoittaa sitä, että sovellukseen esim, lomakkeen avulla lähetettävä teksti tulkitaankin aivan eri eri tavalla kun sovelluskehittäjä on tarkoittanut. Kuuluisin injektioiden muoto lienevät [SQL-injektiot](https://stackoverflow.com/questions/332365/how-does-the-sql-injection-from-the-bobby-tables-xkcd-comic-work).
 
-https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1
+Esim. jos koodissa tehtäisiin seuravasti muotoiltu SQL-kysely: 
 
-https://medium.com/node-security/the-most-common-xss-vulnerability-in-react-js-applications-2bdffbcc1fa0
+```js
+let query = "SELECT * FROM Users WHERE name = '" + userName + "';"
+```
 
-https://expressjs.com/en/advanced/best-practice-security.html
+Jos käyttäjä nyt määrittelisi nimekseen
+
+<pre>
+John Doe'; DROP TABLE Users; --
+</pre>
+
+tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan
+
+```sql
+SELECT * FROM Users WHERE name = 'John Doe'; DROP TABLE Users; --'
+```
+
+SQL-injektiot estetään _sanitoimalla_ syötteem eli tarkastamalla, että kyselyjen parametrit evät sisällä kiellettyhä merkkejä, kuten täässä tapauksessa merkin _'_. Jos kiellettyjä merkkejä löytyy, ne poistetaan korvataan turvallisilla vastineilla [escapettamalla](https://en.wikipedia.org/wiki/Escape_character#JavaScript).
+
+Myös NoSQL-hyökkäykset ovat mahdollisia. Mongoose kuitenkin estää ne [sanitoimalla](https://zanon.io/posts/nosql-injection-in-mongodb) kyselyt. Lisää aiheeta esim. [täällä](https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html).
+
+_Cross-site scripting eli XSS_ on hyökkäys, missä sovellukseen om mahdollista injektoida suoritettavaksi vihollismielistä Javascript-koodia. Jos kokeilemme injektoida esim. muistiinpanosovellukseen seuraavan
+
+```js
+<script>alert('Evil XSS attack');</script>
+```
+
+koodia ei suoriteta, vaan koodi renderöityy sivulle 'tekstinä':
+
+![]({{ "/assets/7/23.png" | absolute_url }})
+
+sillä react [huolehtii muuttujissa olevan datan sanitoinnista](https://reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks). React
+[on mahdollistanut](https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1) XSS-hyökkäyksiä ja mikään ei takaa etteikö niitä voisi vielä löytyä. 
+
+Käytettyjen kirjastojen suhteen tuleekin olla tarkkana, jos niihin tulee tietoturvapäivityksiä, on kirjastot syytä päivittää omissa sovelluksissa. Expressin tietoturvapäitykset löytyvät [kirjaston dokumentaatiosta](https://expressjs.com/en/advanced/security-updates.html) ja Nodeen liittyvät [blogista](https://nodejs.org/en/blog/).
+
+Riippuvuuksien ajantasaisuuden voi testata komennolla
+
+```bash
+npm outdated --depth 0
+```
+
+![]({{ "/assets/7/24.png" | absolute_url }})
+
+Riippuvuudet saa ajantasaistettua päivittämällätiedostoa  _package.json_ ja suorittamalla komennon _npm install_. Riippuvuuden vanha versio ei tietenkään välttämättä ole tietoturvariski.
+
+[Node Security Platform](https://nodesecurity.io/) valvoo npm:ssä olevien riippuvuuksien turvallisuutta ja tallettaa tietokantaansa kaikki riippuvuuksissa havaitut tietoturvaongelmat. Oman projektin käyttämien riippuvuuksien turvallisuustilanne on helppo tarkistaa komentoriviltä toimivan [nsp](https://www.npmjs.com/package/nsp)-työkalun avulla.
+
+Vaikka työkalumme sisältää muutaman ei-ajantasaisen riippuvuuden, ei tietoturvaongelmia ole.
+
+![]({{ "/assets/7/25.png" | absolute_url }})
+
+Eräs OWASP:in listan mainitsemista uhista on _Broken Authentication_ ja siihen liittyvä _Broken Access Control_. Käyttämämme token-perustainen autentikointi on kohtuullisen robusti jos sovellusta käytetään  HTTPS-protokollalla. Access Controlin eli pääsynhallinnan toteuttamisessa on aina syytä muistaa tehdä esim. käyttäjän identiteetin tarkastus selaimen lisäksi myös palvelimella. Huonoa tietoturvaa olisi estää jotkut toimenpiteet ainoastaan piilottamalla niiden suoritusmahdollisuus selaimessa olevasta koodista.
+
+Expressin dokumentaatio sisältää tietoturvaa käsittelvän osan
+[Production Best Practices: Security](https://expressjs.com/en/advanced/best-practice-security.html) joka kannattaa lukea läpi. Erittäin suositeltavaa on ottaa backendissa käyttöön [Helmet](https://helmetjs.github.io/)-kirjasto, joka sisältää joukon Express-sovelluksista tunnettuja turvallisuusriskejä eliminoivia middlewareja.
+
+Myös ESlintin [security-plugininen]
+(https://github.com/nodesecurity/eslint-plugin-security) käyttöönotto kannattaa.
 
 ## Tulevaisuuden trendit
   
-### server side rendering ja isomorfinen koodi
+Katsotaan vielä lopuksi muutamaa huomisen tai oikeastaan jo tämän päivän tekniikoita tai suuntia mitä kohti Web-sovelluskehitys on kulkemalla
 
-Isomorfinen koodi: react backendissa
+### Server side rendering, isomorfiset sovellukset ja universaali koodi
 
-# Progessive web aps
+Selain ei ole ainoa paikka missä Reactilla määriteltyjä komponentteja voidaan renderöidä. renderöinti mahdollista tehdä myös [palvelimella](https://reactjs.org/docs/react-dom-server.html):in avulla. Tätä hyödynnetäänkin nykyään enenevissä määrin siten, että kun sovellukseen tullaan ensimmäistä kertaa, lähettää palvelin selaimeen jo valmiiksi renderöimänsä Reactilla muodostetun sivun. Tämän jälkeen sovelluksen toiminta jatkuu normaaliin tapaan, eli selain suorittaa Reactia, joka manipuloi selaimen näyttämää domia. Palvelimella tapahtuvasta renderöinnistä käytetään englanninkielessä nimitystä _server side rendering_.
 
-# Cloud native apps
+Eräs motivaatio server side renderingille on Searc Engine Optimization eli SEO. Hakukoneet ovat ainakin perinteisesti olleet huonoja tunnistamaan selainpuolella renderöityä sisältöä, ajat saattavat tosin olla muuttumassa, ks, esim. [tämä](https://www.andrewhfarmer.com/react-seo/) ja [tämä](https://medium.freecodecamp.org/seo-vs-react-is-it-neccessary-to-render-react-pages-in-the-backend-74ce5015c0c9).
 
-## Librarydropping
-  
-- immutable.js
-- websocket.js
-- Helmet.js
-- next.js
-- redux saga
-- https://github.com/vasanthk/react-bits
+Server side rendering ei tietenkään ole mikään React tai edes Javascript-spesifi asia, saman ohjelmointikielen käyttö kaikkialla koodissa tekee konseptista teoriassa helpommin toteutettavan sillä samaa koodia voidaan suorittaa sekä backendissä että frontendissä.
 
+Palvelimella tapahtuvaan renderöintiin liittyen on  alettu puhua isomorfisista sovelluksista ja universaalista koodista, termien määritelmistä on kiistelty. Joidenkin [määritelmien](https://medium.com/@ghengeveld/isomorphism-vs-universal-javascript-4b47fb481beb) mukaan isomorfinen web-sovellus on sellainen, joka suorittaa renderöintiä sekä selaimessa että backendissa. Universaalinen koodi taas on koodia, joka voidaan suorittaa useimmissa  ympärisöissä eli sekä selaimessa että backendissä. 
 
+React ja Node tarjavatkin varteenotettavan vaihtoehdon isomorfisten sovellusten toteuttamiseen universaalina koodina. Universaalin koodin kirjoittaminen Reactin avulla on vielä toistaiseksi aika työlästä. 
+
+Viime aikoina paljon huomiota saanut Reactin päälle toteutettu [Next.js](https://github.com/zeit/next.js/)-kirjasto on hyvä vaihtoehto universaalien sovellusten tekemiseen. 
+
+# Progessive web apps
+
+Viime aikona on myös ruvettu käyttämään Googlen lanseeraamaa termiä [progressive web app](https://developers.google.com/web/progressive-web-apps/) (PWA). Goolen sivuilla oleva määritelmä on kuulostaa markkinapuheelta ja sen perusteella on hankala saada selkeää käsitystä mistä on kyse. [Checklista](https://developers.google.com/web/progressive-web-apps/checklist) tuo mukaan konkretiaa. 
+
+Tiiviistäen kyse on web-sovelluksista, jotka toimivat mahdollisimman hyvin kaikilla alustoilla ottaen jokaisesta alustasta irti sen parhaat puolet. Mobiililaitteiden pienten näyttö ei saa heikentää sovellusten käytettävyyttä. PWA-sovellusten tulee myös toimia offline-tilassa tai hitaalla verkkoyhteydellä moitteettomasti. Mobiililaitteilla ne tulee pystyä asetamaan normaalien sovellusten tavoin. Kaiken PWA-sovellusten käyttämän verkkoliikenteen tulee olla salattua.
+
+reate-react-app:illa luodut sovellukset ovat oletusarvoisesti [progressiivisia](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app). Jos sovellus käyttää palvelimella olevaa dataa, edellyttää sovelluksen progressiiviseksi tekeminen vaivan näkemistä. Offline-toiminnallisuus toteutetaan yleensä
+[service workerien](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) avulla.
+
+# Mikropalveluarkkitehtuuri
+
+Tällä kurssilla olemme tehneet palvelinpuolelle ainoastaan matalan pintaraapaisun. Sovelluksissamme on ollut korkeintaan muutaman API-endpointin tarjoava _monoliittinen_ eli yhdellä palvelimella pyörivä kokonaisuuden muodostanut backend. 
+
+Sovelluksen kasvaessa massiiviseksi monoliittisen backendin malli alkaa muuttua ongelmalliseksi niin suorituskyvyn kuin jatkokehitettävyydenkin kannalta. 
+
+[Mikropalveluarkkitehtuurilla](https://martinfowler.com/articles/microservices.html) (microservice) tarkoitetaan tapaa koostaa sovelluksen backend useista autonoomisista erillisistä palveluista, jotka kommunikoivat keskenään verkon yli. Yksittäisen mikropalvelun on tarkoitusena hoitaa tietty looginen toiminnallinen kokonaisuus. Puhdasoppisessa mikropalveluarkkitehtuurissa  palvelut eivät käytä jaettua tietokantaa.
+
+Esim. blogilistasovelluksen voisi koostaa kahdesta palvelusta, toinen huolehtisi käyttäjistä ja toinen blogeista. Käyttäjäpalveun vastuulla olisi käyttäjätynnusten luominen ja käyttäjien autentikointi, blogipalvelu taas huolehtisi blogeihin liittyvistä toimista. 
+
+Seuraava kuva havainnollistaa mikroarkkitehtuuriin perustuvan sovelluksen rakennetta perinteiseen monoliittiseen rakenteeseen verrattuna:
+
+![]({{ "/assets/7/26.png" | absolute_url }})
+
+Fronendin (kuvassa neliöitynä) rooli ei välttämättä poikkea malleissa kovinkaan paljoa, mikropalveluiden ja fronendin välissä on usein [API gateway](http://microservices.io/patterns/apigateway) jonka tarjoaa frontendille perinteisen kaltaisen "yhdessä palvelimessa" olevan näkymän backendiin, esim. [Netflix](https://medium.com/netflix-techblog/optimizing-the-netflix-api-5c9ac715cf19) käyttää tätä ratkaisua. 
+
+Mikropalveluarkkitehtuurit ovat syntyneet ja kehittyneet suurten internetskaalan sovellusten tarpeisiin. Trendin aloitti Amazon jo kauan ennen termin microservice lanseeraamista. Tärkeä lähtölaukaus oli CEO Jeff Bezosin vuonna 2002 kaikille työntekijöille lähettämä email:
+
+>All teams will henceforth expose their data and functionality through service interfaces.
+>
+>Teams must communicate with each other through these interfaces.
+>
+>There will be no other form of inter-process communication allowed: no direct linking, no direct reads of another team’s data store, no shared-memory model, no back-doors whatsoever. The only communication allowed is via service interface calls over the network.
+>
+>It doesn’t matter what technology you use.
+>
+>All service interfaces, without exception, must be designed from the ground up to be externalize-able. That is to say, the team must plan and design to be able to expose the interface to developers in the outside world. 
+>
+>No exceptions.
+>
+>Anyone who doesn’t do this will be fired. Thank you; have a nice day!
+
+Nykyään eräs vahvimmista suunnannäyttäjistä mikropalveluiden suhteen on [Netflix](https://www.infoq.com/presentations/netflix-chaos-microservices). 
+
+Mikropalveluista on pikkuhiljaa tullut hype, tämän ajan [silver buller](https://en.wikipedia.org/wiki/No_Silver_Bullet), jota yritetään tarjota ratkaisuiksi lähes kaikkiin ongelmiin. Mikropalveluarkkitehtuurin soveltamiseen liittyy kuitenkin suuri määrä haasteita ja voi olla järkevämpi lähteä liikeelle [monolith first](https://martinfowler.com/bliki/MonolithFirst.html), eli tehdä aluksi perinteinen kaiken sisältävä backend. Tai sitten [ei](https://martinfowler.com/articles/dont-start-monolith.html). Mielipiteitä on monenlaisia! Molemmat linkit johtavat Martin Fowlerin sivuille, eli viisaimmat eivät ole ihan varmoja kumpi näistä oikeista tavoista on oikeampi. 
+
+Emme voi valitettavasti tällä kurssilla syventyä tähän tärkeään aihepiiriin tämän tarkemmin. Jo pintapuolinenkin käsittely vaatisi ainakin 5 viikkoa lisää aikaa.
+
+# Serverless
+
+Loppuvuodesta 2014 tapahtuneen Amazonin [lambda](https://aws.amazon.com/lambda/) palvelun julkaisun jälkeen aikoihin alkoi web-sovellusten kehittämiseen nousta jälleen uusi trendi [serverless](https://serverless.com/).
+
+Lambda ja nyttemmin Googlen [Cloud functions](https://cloud.google.com/functions/) ja [Azuren vastaava toiminnallisuus](https://azure.microsoft.com/en-us/services/functions/) mahdollistava yksittäisten funktioiden suorittamisen pilvessä. 
+
+Esim. Amazonin [API-gateway](https://aws.amazon.com/api-gateway/):n avulla on mahdollista tehdä "palvelimettomia" sovelluksia, missä määritellyn HTTP API:n kutsuihin vastataan pilvifunktioilla. Funktiot yleensä operoivat jo valmiiksi pilvipalvelun tietokantoihin talletetun datan avulla.
+
+Serverlessissä ei siis ole kyse siitä että sovelluksissa ei olisi palvelinta, vaan tavasta määritellä palvelin. Sovelluskehittäjät voivat siirtyä ohjelmoinnissa korkeammalle abstratkiotasolle, ei ole enää tarvitta määritellä ohjelmallisesti HTTP-kutsujen reitityksia, tietokantayhteyksiä ym, pilviinfrastruktuuri tarjoaa kaiken tämän. Pilvifunktioilla on myös mahdollista saada helposti aikaan hyvin skaalautuvia järjestelmiä, esim. Amazon Lambda pystyy suorittamaan massiivisen määrän pilvifunktioita sekunnissa. Kaikki tämä tapahtuu infrastruktuurin toimesta automaattisesti, ei ole tarvetta käynnistellä uusia palvelimia ym.
+
+# Cloud native app
+
+Viime aikoina on myös yleistynyt termin pilvinatiivi, _cloud native_ käyttö. Termillä ei ole mitään [yhtenäistä määritelmää](https://techcrunch.com/2016/08/03/what-real-cloud-native-apps-will-look-like/). 
+
+[Pivotal](https://pivotal.io/cloud-native) määrittelee käsitteen seuraavasti
+
+> Cloud-native is an approach to building and running applications that fully exploits the advantages of the cloud computing delivery model. Cloud-native is about how applications are created and deployed, not where. While today public cloud impacts the thinking about infrastructure investment for virtually every industry, a cloud-like delivery model isn’t exclusive to public environments. It's appropriate for both public and private clouds. Most important is the ability to offer nearly limitless computing power, on-demand, along with modern data and application services for developers. When companies build and operate applications in a cloud-native fashion, they bring new ideas to market faster and respond sooner to customer demands.
+
+Esim. Netflixin koko infrastruktuuria voi pitää pilvinatiivina. Netflixillä ei ole omia palvelimia, kaikki toimii Amazonin alustalla olevissa virtuaalikoneissa.
+
+Pilvinatiiviuteen liittyvät usein äsken mainitut mirkropalvelut ja serverless-arkkitehtuurit. Tärkeä teema pilvinattiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
+
+## Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
+
+Facebookin ylläpitämä kirjasto <immutable.js> tarjoaa muutamista tietorakenteista nimensä mukaisia toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä sikkä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella. 
+
+[Redux-saga](https://redux-saga.js.org/) tarjoaa osassa 5 käsitellylle [redux thunkille](osa5/#redux-thunk) vaihtoehtoisen tavan tehdä asynkronisia actioneja. Jotkut tykkää ja hypettää, itse en.
+
+Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
+
+Jos tiedät jotain suositeltavia linkkejä tai kirjastoja, tee pull request!
