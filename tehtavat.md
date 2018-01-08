@@ -1934,11 +1934,33 @@ Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aika
 
 Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia  "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
 
+Osassa on 22 tehtävää, arvostelussa tehtävien maksimiin tässä osassa lasketaan kuitenkin ainoastaan 16.
+
 Useimmat tämän osan tehtävistä vaativat koodisi refaktoroimista. Tämä on tilanne käytännössä aina sovelluksia laajennettaessa, eli vaikka refaktorointi voi olla hankalaa ja ikävääkin, on kyseessä oleellinen taito.
 
 Hyvä neuvo refaktorintiin niinkuin uudenkin koodin kirjoittamiseen on _pienissä askelissa eteneminen_, koodia ei kannata hajottaa totaalisesti refaktorointia tehdessä pitkäkti aikaa, se on käytännössä varma resepti hermojen menettämiseen.
 
-### 122
+### 122 käyttäjien näkymä
+
+Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot: 
+
+![]({{ "/assets/teht/53.png" | absolute_url }})
+
+### 123 käyttäjän näkymä, osa 1
+
+Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
+
+![]({{ "/assets/teht/54.png" | absolute_url }})
+
+Näkymään päästään klikkaamalla nimeä kaikkien käyttäjien näkymästä
+
+![]({{ "/assets/teht/55.png" | absolute_url }})
+
+### 124 käyttäjän näkymä osa, 2
+
+Merkkaa tämä tehtävä tehdyksi jos yksittäisen käyttäjän näkymä toimii oikein myös siinä tilanteessa että menet urliin suoraan tai refreshaat selaimen ollessasi käyttäjän näkymässä.
+
+### 125 blogin näkymä
 
 Toteuta sovellukseen oma näkymä yksittäislle blogeille. Näkymä voi näyttää seuraavalta
 
@@ -1946,80 +1968,88 @@ Toteuta sovellukseen oma näkymä yksittäislle blogeille. Näkymä voi näyttä
 
 Näkymään päästään klikkaamalla blogin nimeä kaikkien blogien näkymästä
 
-![]({{ "/assets/teht/50.png" | absolute_url }})
+![]({{ "/assets/teht/56.png" | absolute_url }})
 
-### 123
+### 126 navigointi
 
-Tee sovellukseen mahdollisuus blogien kommentointiin
+Tee sovellukseen navigaatiomenu
 
-### 124
+![]({{ "/assets/teht/52.png" | absolute_url }})
 
-Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot 
+### 127 kommentit, osa 1
 
-### 125
+Tee sovellukseen mahdollisuus blogien kommentointiin:
 
-Tee sovellukseen navigaatiopalkki
+![]({{ "/assets/teht/51.png" | absolute_url }})
 
-### 126
+Kommentit ovat anonyymejä, eli ne eivät liity kirjautuneeseen käyttäjään.
 
-Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
+Tässä tehtävässä riittää, että fronend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
 
-### 127
+Sopiva rajapinta kommentin luomiseen on osoitteeseen  _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö. 
 
-Siirry käyttämään Reactin komponenttien tilan sijaan Reduxia
+### 128 kommentit, osa 2
 
-### 128
+Laajenna sovellusta siten, että kommentointi onnistuu fronendista käsin:
 
-Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tpahtumaan Redux-thunkia hyväksikäyttäen
+![]({{ "/assets/teht/52.png" | absolute_url }})
 
-### 129
-
-Konfiguroi fronend käyttämään Lintiä
-
-### 130
-
-Deployaa sovellus internetiin
-
-### 131
-
-Tee sovellukselle sopiva webpack-konfiguraatio
-
-### 132
-
-Tee backendille testit joiden rivikattavuus on vähintään 80%
-
-### 133
-
-Tee fronendille testit joiden rivikattavuus on vähintään 80%
-
-### 134
-
-Ota sovellukseessasi käyttöön snapshot testing
-
-### 135
-
-Tee headles-browsertestausta
-
-### 136
+### 129 tyylit, osa 1
 
 Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
 
-### 137
+### 130 tyylit, osa 2
 
 Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtävä tehdyksi.
 
-### 138
+### 131 redux, osa 1
 
-Siirrä frontend ja backend samaan repositorioon
+Siirry käyttämään Reactin komponenttien tilan sijaan Reduxia. Koska refaktorointi saattaa olla aika työläs, voit merkitä tämän rastin kun "puolet" ohjelman tilasta hallitaan reduxilla
 
-### 139
+### 132 redux, osa 2
 
-Toteuta Travisin avulla automaattinen deployment
+Korvaa kaikki turha staten käyttö reduxin storella
 
-### 140
+### 133 redux, osa 3
 
-Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tapahtumaan Redux-thunkia hyväksikäyttäen
 
-### 141
+### 134 ESLint
+
+Konfiguroi fronend käyttämään Lintiä
+
+### 135 Webpack
+
+Tee sovellukselle sopiva webpack-konfiguraatio
+
+### 136 backendin testaus
+
+Tee backendille testit joiden rivikattavuus on vähintään 50%
+
+### 137 frontendin testaut
+
+Tee fronendille testit joiden rivikattavuus on vähintään 50%
+
+### 138 snapshot-testaus
+
+Ota sovellukseessasi käyttöön [snapshot testing](https://facebook.github.io/jest/docs/en/snapshot-testing.html)
+
+### 139 headless-testaus
+
+Tee Puppetia tai haluamaasi kirjastoa käyttäviä headless-testejä, testaa ainakin paria toiminnallisuutta
+
+### 140 Tyypitarkastuksia
+
+Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Flown avulla tai Typescriptillä
+
+### 141 Internet
+
+Deployaa sovellus internetiin
+
+### 142 Jatkuva tuotantoonvienti
+
+Toteuta sovelluksellesi esim. [Travis CI](https://travis-ci.org/):n avulla jatkuva tuotantoonvienti, eli mekanismi, missä koodin pushaaminen githubiin aiheuttaa testien läpimennessä uuden version käynnistämisen internettiin.
+
+### 143
 
 Koodaa parempi versio facebookista
