@@ -882,7 +882,7 @@ const config = (env) => {
 }
 ```
 
-Konsoli varmistaa että bundle on nyt oiken muodostettu
+Konsoli varmistaa että bundle on nyt oikein muodostettu
 
 ![]({{ "/assets/7/11.png" | absolute_url }})
 
