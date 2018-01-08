@@ -514,7 +514,7 @@ addNote = (e) => {
   const noteObject = {
     content: this.state.new_note,
     date: new Date().new,
-    important: Math.random() > 0.5
+    important: Math.random() > 0.5,
     id: this.state.notes.length + 1
   }
 
