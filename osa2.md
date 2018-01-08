@@ -364,7 +364,7 @@ this.state = {
 }
 ```
 
-Lisätään sitten lomake uusen muistiinpanon lisäämistä varten:
+Lisätään sitten lomake uuden muistiinpanon lisäämistä varten:
 
 ```react
 class App extends React.Component {
@@ -1109,7 +1109,7 @@ Tutustumme REST:iin tarkemmin kurssin [seuraavassa osassa](/osa3), mutta jo nyt 
 
 REST:issä yksittäisi asioita esim. meidän tapauksessamme muistiinpanoja kutsutaan _resursseiksi_. Jokaisella resurssilla on yksilöivä osoite eli URL. json-serverin noudattaman yleisen konvention mukaan yksittäisen muistiinpanoa kuvaavan resurssin URL on muotoa _notes/3_, missä 3 on resurssin tunniste. Osoite _notes_ taas vastaa kaikkien yksittäisten muistiinpanojen kokoelmaa.
 
-Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id-kentän arvo on 3. Kun taan HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
+Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id-kentän arvo on 3. Kun taas HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
 
 Uuden muistiinpanoa vastaavan resurssin luominen tapahtuu json-serverin RESTful-konventiossa tekemällä HTTP POST -pyyntö, joka kohdistuu myös samaan osoiteeseen _notes_. Pyynnön mukana sen runkona eli _bodynä_ lähetetään luotavan muistiinpanon tiedot.
 
@@ -1253,7 +1253,7 @@ console.log(`importance of ${id} needs to be toggled`)
 
 Merkkijonon sisälle voi nyt määritellä "dollari-aaltosulku"-syntaksilla kohtia, minkä sisälle evaluoidaan javascript-lausekkeita, esim. muuttujan arvo. Huomaa, että template stringien hipsutyyppi poikkeaa javascriptin normaaleista merkkijonojen käyttämistä hipsuista.
 
-Yksittäistä json-serverillä olevaa muistiinpanoa voi muuttaa kahdella tavalla, joko _korvaamalla_ sen tekemällä HTTP PUT -pyyntö muistiinpanon yksilöivään osoitteeseen tai muu muuttamalla ainoastaan joidenkin muistiinpanon kenttien arvoja HTTP PATCH -pyynnöllä.
+Yksittäistä json-serverillä olevaa muistiinpanoa voi muuttaa kahdella tavalla, joko _korvaamalla_ sen tekemällä HTTP PUT -pyyntö muistiinpanon yksilöivään osoitteeseen tai muuttamalla ainoastaan joidenkin muistiinpanon kenttien arvoja HTTP PATCH -pyynnöllä.
 
 Korvaamme nyt muistiinpanon kokonaan, sillä samalla tulee esille muutama tärkeä React:iin ja Javascriptiin liittyvä seikka.
 
@@ -1279,7 +1279,7 @@ toggleImportanceOf = (id) => {
 
 Melkein joka riville sisältyy tärkeitä yksityiskohtia. Ensimmäinen rivi määrittelee jokaiselle muistiinpanolle id-kenttään perustuvan yksilöivän url:in.
 
-Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan viite siihen muuttujaan _note_.
+Taulukon metodilla [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) etsitään muutettava muistiinpano ja talletetaan muuttujaan _note_ viite siihen.
 
 Sen jälkeen luodaan _uusi olio_, jonka sisältö on sama kuin vanhan olion sisältö poislukien kenttä important. Luominen näyttää hieman erikoiselta:
 
@@ -1396,7 +1396,7 @@ export default { getAll, create, update }
 
 Moduuli palauttaa nyt olion, jonka kenttinä on kolme muistiinpanojen käsittelyä hoitavaa funktiota. Funktiot palauttavat suoraan axiosin metodien palauttaman promisen.
 
-Komponentti _App_ saa moduuli käyttöön _import_-lauseella
+Komponentti _App_ saa moduulin käyttöön _import_-lauseella
 
 ```js
 import noteService from './services/notes'

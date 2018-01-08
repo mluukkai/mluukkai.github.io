@@ -78,7 +78,7 @@ Tehdään kenttään _scripts_ pieni lisäys:
 }
 ```
 
-Luodaan sitten sovelluksen ensimmäinen versio, eli projektin juureen sijoitettava tiedosto _index.js_ ja sille seuraava sisältä:
+Luodaan sitten sovelluksen ensimmäinen versio, eli projektin juureen sijoitettava tiedosto _index.js_ ja sille seuraava sisältö:
 
 ```js
 console.log('hello word')

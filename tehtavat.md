@@ -736,7 +736,7 @@ Jos poistat jonkun henkilön toisesta selaimesta hieman ennen kun yrität _muutt
 
 <img src="/assets/teht/18.png" height="300">
 
-Korjaa ongelma osan 2 esimerkin [promise ja virheet](#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
+Korjaa ongelma osan 2 esimerkin [promise ja virheet](osa2/#promise-ja-virheet) tapaan. Loogisin korjaus lienee henkilön lisääminen uudelleen palvelimelle.
 
 ## Osa 3
 
@@ -1954,7 +1954,7 @@ Tee sovellukseen mahdollisuus blogien kommentointiin
 
 ### 124
 
-Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot 
+Tee sovellukseen näkymä, joka näyttää kaikkiin käyttäjiin liittyvät perustiedot
 
 ### 125
 
@@ -2002,7 +2002,7 @@ Tee headles-browsertestausta
 
 ### 136
 
-Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
+Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen
 
 ### 137
 
