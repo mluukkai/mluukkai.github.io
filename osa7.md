@@ -751,8 +751,8 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    axios.get('http://localhost:3001/notes').then(result=>{
-      this.setState({noteCount: result.data.length})
+    axios.get('http://localhost:3001/notes').then(result => {
+      this.setState({ noteCount: result.data.length })
     })
   }
 

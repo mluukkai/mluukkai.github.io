@@ -1514,7 +1514,7 @@ describe('<App />', () => {
     })
   })
 
-  describe('when user is logged', ()=>{
+  describe('when user is logged', () => {
     beforeEach(() => {
       // luo sovellus siten, että käyttäjä on kirjautuneena
     })
