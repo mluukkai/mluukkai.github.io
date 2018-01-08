@@ -1608,10 +1608,12 @@ Esim. Netflixin koko infrastruktuuria voi pitää pilvinatiivina. Netflixillä e
 
 Pilvinatiiviuteen liittyvät usein äsken mainitut mirkropalvelut ja serverless-arkkitehtuurit. Tärkeä teema pilvinattiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
 
-## Librarydropping ja linkkejä
+## Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
 
-Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
+Facebookin ylläpitämä kirjasto <immutable.js> tarjoaa muutamista tietorakenteista nimensä mukaisia toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä sikkä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella. 
 
-- immutable.js
-- redux saga
-- https://github.com/vasanthk/react-bits
+[Redux-saga](https://redux-saga.js.org/) tarjoaa osassa 5 käsitellylle [redux thunkille](osa5/#redux-thunk) vaihtoehtoisen tavan tehdä asynkronisia actioneja. Jotkut tykkää ja hypettää, itse en.
+
+Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
+
+Jos tiedät jotain suositeltavia linkkejä tai kirjastoja, tee pull request!
