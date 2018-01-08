@@ -288,7 +288,7 @@ npm install --save-dev jest
 
 määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoimaan testien suorituksesta _verbose_-tyylillä:
 
-```bash
+```json
 {
   //...
   "scripts": {
@@ -342,7 +342,66 @@ Kuten odotettua, testit menevät läpi:
 
 ![]({{ "/assets/4/1.png" | absolute_url }})
 
-Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
+**HUOM!** Jest ei välttämättä toimi Windowsilla. Windowsia käytettäessä testien ajosta on tapahtunut mm. seuraava tilanne:
+
+![]({{ "/assets/4/16.png" | absolute_url }})
+
+Eli jest löytää testitiedoston, mutta ei tunnista funktiota _test_. Halutessasi voit ottaa käyttöön [Mochan](https://mochajs.org/) ja [Chai:n](http://chaijs.com/), joilla saadaan kirjoitettua lähes identtisiä testejä kuin jestillä. Asenna Mocha ja Chai kehitysaikaisiksi riippuvuuksiksi komennoilla
+
+```bash
+npm install --save-dev mocha
+npm install --save-dev chai
+```
+
+Muokkaa _package.json_ tiedostossa npm skripti _test_ seuraavanlaiseksi:
+
+```json
+{
+  //...
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "node_modules/.bin/mocha --reporter spec"
+  },
+  //...
+}
+```
+
+Nyt tiedoston _palindrom.test.js_ sisältö näyttäisi Mocha + Chai -kombinaatiolla kirjoitettuna seuraavalta:
+
+
+```js
+const palindrom = require('../utils/for_testing').palindrom
+const expect = require('chai').expect
+
+describe('palindrom', () => {
+    it('of a', () => {
+      const result = palindrom('a')
+
+      expect(result).to.equal('a')
+    })
+
+    it('of react', () => {
+      const result = palindrom('react')
+
+      expect(result).to.equal('tcaer')
+    })
+
+    it('of saippuakauppias', () => {
+      const result = palindrom('saippuakauppias')
+
+      expect(result).to.equal('saippuakauppias')
+    })
+})
+```
+
+Kuten huomata saattaa, testit näyttävät hyvin samankaltaisilta kuin jestillä kirjoitetut testitapaukset. Testit menevät läpi, joskin testien ajosta luotu raportti on suppeampi kuin jestillä:
+
+![]({{ "/assets/4/16-2.png" | absolute_url }})
+
+Palaamme testeissä kirjoitettuun _describe_-lohkon merkitykseen myöhemmin jestiä käyttäessämme. Jos käytät Mochaa ja Chai:ta, materiaalien esimerkit eivät suoraan kopioimalla toimi (suosittelen muutenkin kirjoittamaan esimerkit itse copypasten sijaan), vaan kirjoita ne Mochan ja Chain ominaisuuksia käyttäen. Tämän pitäisi onnistua melko pienin muutoksin, tarvittaessa lue [Mochan](https://mochajs.org/) ja [Chain](http://chaijs.com/api/bdd/) dokumentaatiota.
+
+Palataan takaisin jestiin. Jestin antamat virheilmoitukset ovat hyviä, rikotaan testi
 
 ```js
 test('palindrom of react', () => {
@@ -445,7 +504,7 @@ Yleinen käytäntö on määritellä sovelluksille omat moodinsa myös sovellusk
 
 Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovelluksen _NODE_ENV_ saa arvokseen _test_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -570,7 +629,7 @@ Sovelluksen käynnistäminen tapahtuu nyt _server_-muuttujassa olevan olion kaut
 
 Sekä sovellus _app_ että sitä suorittava _server_-olio määritellään eksportattavaksi tiedostosta. Tämä mahdollistaa sen, että testit voivat käynnistää ja sammuttaa backendin.
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_integraatiotesteja) tagissä _ennen_integraatiotesteja_
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-backend/tree/ennen_integraatiotesteja) tagissä _ennen_integraatiotesteja_
 
 ### supertest
 
@@ -1206,7 +1265,7 @@ Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöt
 
 Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
-Tämän hetkinen koodi on kokonaisuudessaan [githubissa]((https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
+Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-backend/tree/ennen_testien_refaktorointia) tagissä _ennen_testien_refaktorointia_
 
 ## Tehtäviä
 
@@ -1694,7 +1753,7 @@ describe.only('when there is initially one user at db', async () => {
     await user.save()
   })
 
-  test('POST /api/notes succeeds with a fresh username', async () => {
+  test('POST /api/users succeeds with a fresh username', async () => {
     const usersBeforeOperation = await usersInDb()
 
     const newUser = {
@@ -1739,7 +1798,7 @@ module.exports = {
 Lohkon _beforeAll_ lisää kantaan käyttäjän, jonka username on _root_. Voimmekin tehdä uuden testi, jolla varmistetaan, että samalla käyttäjätunnuksella ei voi luoda uutta käyttäjää:
 
 ```js
-  test('POST /api/notes fails with proper statuscode and message if username already taken', async () => {
+  test('POST /api/users fails with proper statuscode and message if username already taken', async () => {
     const usersBeforeOperation = await usersInDb()
 
     const newUser = {
@@ -1979,7 +2038,7 @@ npm install jsonwebtoken --save
 Tehdään kirjautumisesta vastaava koodi tiedostoon _controllers/login.js_
 
 ```js
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
@@ -2217,7 +2276,7 @@ node_modules/.bin/eslint index.js
 
 Kannattaa ehkä tehdä linttaustakin varten _npm-skripti_:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -2238,7 +2297,7 @@ ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/r
 
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error"
@@ -2256,7 +2315,7 @@ Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyj
 Mukana on myös _console.log_-komennoista varoittava sääntö-
 Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/docs/user-guide/configuring#configuring-rules) määrittelemällä sen "arvoksi" konfiguraatiossa 0. Tehdään toistaiseksi näin säännölle _no-console_.
 
-```bash
+```json
 "rules": {
   // ...
   "eqeqeq": "error",
@@ -2266,10 +2325,9 @@ Yksittäisen sääntö on helppo kytkeä [pois päältä](https://eslint.org/doc
 
 ESlint valittaa määrittelemättömien muuttujien käytöstä. Koodimme viittaa ympäristömuuttujiin _globaalin_ muuttujan _process_ kautta. ESlintin silmissä on tämä kuitenkin näyttää määrittelemättömän muuttujan käytöltä.
 
-Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env]
-(https://eslint.org/docs/rules/no-process-env), omalla koneellani täm ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
+Valitus pitäisi saada vaimennettua kytkemällä pois sääntö [no-process-env](https://eslint.org/docs/rules/no-process-env), omalla koneellani tämä ei kuitenkaan toimi. Toinen tapa sallia muuttujaan _process_-viittaaminen on määritellä se sallituksi globaaliksi muuttujaksi:
 
-```bash
+```js
 module.exports = {
   // ...
   "globals": {
@@ -2277,6 +2335,7 @@ module.exports = {
   },
   // ...
 }
+```
 
 Ympäristömuuttujien käyttö suoraan globaalin muuttujan _process_ kautta ei välttämättä ole paras mahdollinen idea. Tutustumme seuraavissa osissa vaihtoehtoisiin tapoihin.
 

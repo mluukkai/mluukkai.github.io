@@ -67,7 +67,7 @@ Tiedosto määrittelee mm. että ohjelmamme käynnistyspiste on tiedosto _index.
 
 Tehdään kenttään _scripts_ pieni lisäys:
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -78,7 +78,7 @@ Tehdään kenttään _scripts_ pieni lisäys:
 }
 ```
 
-Luodaan sitten sovelluksen ensimmäinen versio, eli projektin juureen sijoitettava tiedosto _index.js_ ja sille seuraava sisältä:
+Luodaan sitten sovelluksen ensimmäinen versio, eli projektin juureen sijoitettava tiedosto _index.js_ ja sille seuraava sisältö:
 
 ```js
 console.log('hello word')
@@ -98,7 +98,7 @@ npm start
 
 npm-skripti _start_ toimii koska määrittelimme sen tiedostoon _package.json_
 
-```bash
+```json
 {
   // ...
   "scripts": {
@@ -600,12 +600,14 @@ Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovel
 
 ![]({{ "/assets/3/8.png" | absolute_url }})
 
-
 Postmanin käyttö on tässä tilanteessa suhteellisen yksinkertaista, riittää määritellä url ja valita oikea pyyntötyyppi.
 
 Palvelin näyttää vastaavan oikein. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla.
 
 Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
+
+**HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
+[REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
 
 ### Datan vastaanottaminen
 
@@ -1068,6 +1070,8 @@ Käyttöönotto tapahtuu sovelluksen repositorissa komennolla
 heroku addons:create mongolab:sandbox
 ```
 
+** HUOM** vaikka Heroku tarjoaa ilmaisen Mongon, joudut ehkä antamaan Herokulle luottokorttinumerosi, että saat Mongon asennettua. Voit kiertää tämän tarpeen stackoverflow:sta löytyvää [ohjetta](https://stackoverflow.com/questions/36321385/deploy-nodejs-mongodb-on-heroku-but-need-verify-credit-card-when-install-add-o) seuraten.
+
 Kuten komennon tuloste kertoo, kysessä on [mlab](https://mlab.com/):n tarjoama Mongo:
 
 ![]({{ "/assets/3/12.png" | absolute_url }})
@@ -1093,7 +1097,11 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true });
+// jos käytössäsi on mongoosen versio 4.x seuraava rivi tulee antaa muodossa
+// version voit tarkistaa tiedostosta package.js
+// mongoose.connect(url, { useMongoClient: true })
+
+mongoose.connect(url)
 mongoose.Promise = global.Promise;
 
 const Note = mongoose.model('Note', {
@@ -1131,11 +1139,11 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true });
-mongoose.Promise = global.Promise;
+mongoose.connect(url)
+mongoose.Promise = global.Promise
 ```
 
-Valitettavasti mongosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
+Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
 ### skeema
 
@@ -1248,7 +1256,7 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true })
+mongoose.connect(url)
 mongoose.Promise = global.Promise
 
 const Note = mongoose.model('Note', {
@@ -1348,7 +1356,7 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-mongoose.connect(url, { useMongoClient: true })
+mongoose.connect(url)
 mongoose.Promise = global.Promise
 
 const Note = mongoose.model('Note', {
@@ -1512,7 +1520,7 @@ app.get('/api/notes/:id', (request, response) => {
 
 Jos kannasta ei löydy haettua olioa, muuttujan _note_ arvo on _undefined_ ja koodi ajautuu _else_-haaraan. Siellä vastataan kyselyyn _404 not found_.
 
-Jos id ei ole hyväksyttävässä muodossa ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
+Jos id ei ole hyväksyttävässä muodossa, ajaudutaan _catch_:in avulla määriteltyyn virheidenkäsittelijään. Sopiva statauskoodi on [400 bad request](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1) koska kyse on juuri siitä:
 
 > The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
 
@@ -1520,7 +1528,7 @@ Vastaukseen on lisätty myös hieman dataa kertomaan virheen syystä.
 
 Promisejen yhteydessä kannattaa melkeinpä aina lisätä koodiin myös virhetilainteiden käsittely, muuten seurauksena on usein hämmentäviä vikoja.
 
-Ei ole koskaan huno idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virheenkäsittelijässä:
+Ei ole koskaan huono idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin virheenkäsittelijässä:
 
 ```js
 .catch(error => {
@@ -1724,7 +1732,7 @@ Sovelluksen juurihakemistoon tehdään sitten tiedosto nimeltään _.env_, minne
 MONGODB_URI=mongodb://....
 ```
 
-Tiedosto **tulee heti gitignorata** sillä emme halua dotenvin tietoja verkkoon.
+Tiedosto .env **tulee heti gitignorata** sillä emme halua julkaista .env -tiedoston sisältöä verkkoon.
 
 dotenvissä määritellyt ympäristömuuttujat otetaan koodissa käyttöön komennolla
 

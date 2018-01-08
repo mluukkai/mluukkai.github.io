@@ -552,7 +552,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonto)
+Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonti)
 
 ## Kirjautumislomakkeen näyttäminen vain tarvittaessa
 
@@ -821,7 +821,7 @@ Eräs keino viitteen saamiseen on React-komponenttien attribuutti [ref](https://
 
 Muutetaan lomakkeen renderöivää koodia seuraavasti:
 
-```bash
+```react
 <div>
   <Togglable buttonLabel="new note" ref={component => this.noteForm = component}>
     <NoteForm
@@ -869,7 +869,7 @@ class Togglable extends React.Component {
 
 ja otetaan se käyttöön seuraavasti
 
-```bash
+```react
 <div>
   <Togglable buttonLabel="1" ref={component => this.t1 = component}>
     ensimmäinen
@@ -1105,7 +1105,7 @@ Itse en pidä siitä, että testit ja normaali koodi ovat samassa hakemistossa. 
 
 Testejä tehdessä törmäämme tyypillisesti erittäin moniin ongelmiin. Näissä tilanteissa vanha kunnon _console.log_ on hyödyllinen. Voimme tulostaa _shallow_-metodin avulla renderöityjä komponentteja ja niiden sisällä olevia elementtejä metodin [debug](http://airbnb.io/enzyme/docs/api/ShallowWrapper/debug.html) avulla:
 
-```bash
+```js
 describe.only('<Note />', () => {
   it('renders content', () => {
     const note = {
@@ -1127,7 +1127,7 @@ describe.only('<Note />', () => {
 
 Konsoliin tulostuu komponentin generoima html:
 
-```bash
+```js
 console.log src/components/Note.test.js:16
   <div className="wrapper">
     <div className="content">
@@ -1152,7 +1152,7 @@ Sisällön näyttämisen lisäksi toinen _Note_-komponenttien vastuulla oleva as
 
 Testaus onnistuu seuraavasti:
 
-```bash
+```js
 it('clicking the button calls event handler once', () => {
   const note = {
     content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
@@ -1281,7 +1281,7 @@ Käyttämämme _shallow_-renderöijä on useimmista tapauksissa riittävä. Josk
 
 Jos yritämme esim. sijoittaa kaksi _Note_-komponenttia _Togglable_-komponentin sisälle ja tulostamme syntyvän _ShallowWrapper_ olion
 
-```bash
+```js
 it('shallow renders only one level', () => {
   const note1 = {
     content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
@@ -1305,7 +1305,7 @@ it('shallow renders only one level', () => {
 
 huomaamme, että _Togglable_ komponentti on renderöitynyt, eli "muuttunut" HTML:ksi, mutta sen sisällä olevat _Note_-komponentit eivät ole HTML:ää vaan React-komponentteja.
 
-```bash
+```react
 <div>
   <div style={{...}}>
     <button onClick={[Function]}>
@@ -1326,7 +1326,7 @@ Jos komponentille tehdään edellisten esimerkkien tapaan yksikkötestejä, _sha
 
 Muutetaan testi käyttämään _shallowin_ sijaan _mountia_:
 
-```bash
+```react
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Note from './Note'
@@ -1355,7 +1355,7 @@ it('mount renders all components', () => {
 
 Tuloksena on kokonaisuudessaan HTML:ksi renderöitynyt _Togglable_-komponentti:
 
-```bash
+```react
 <Togglable buttonLabel="show...">
   <div>
     <div style={{...}}>
@@ -1479,7 +1479,7 @@ class Wrapper extends React.Component {
 
 Testi on seuraavassa:
 
-```bash
+```js
 import React from 'react'
 import { mount } from 'enzyme'
 import NoteForm from './NoteForm'
@@ -2232,7 +2232,7 @@ Kyseessä on jälleen tuttu _funktio, joka palauttaa funktion_, eli kullekin mui
 
 ### action creatorit
 
-Alamme huomata, että jo näinkin yksinkertaisessa sovelluksessa Reduxin käyttö yksinkertaistaa sovelluksen ulkoasusta vastaavaa koodia melkoisesti. React-komponenttien on oikestaan tarpeetonta tuntea reduxin actionien tyyppejä ja esitysmuotoja. Eristetään ne erilliseen olioon, _action creatoriin_:
+Alamme huomata, että jo näinkin yksinkertaisessa sovelluksessa Reduxin käyttö yksinkertaistaa sovelluksen ulkoasusta vastaavaa koodia melkoisesti. React-komponenttien on oikestaan tarpeetonta tuntea reduxin actionien tyyppejä ja esitysmuotoja. Eristetään ne erilliseen olioon jonka metodit ovat [action creatoreja](https://redux.js.org/docs/basics/Actions.html#action-creators):
 
 ```js
 const actionFor = {
@@ -2398,7 +2398,7 @@ class NoteList extends React.Component {
 }
 ```
 
-Komponettiin _App_ ei jää enää paljoa koodia:
+Komponenttiin _App_ ei jää enää paljoa koodia:
 
 ```react
 class App extends React.Component {
