@@ -1235,10 +1235,9 @@ pääsevät routet tokeniin käsiksi suoraan viittaamalla _request.token_:
 
 ```js
 blogsRouter.post('/', async (request, response) => {
-    // ..
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    // ..
-  }
+  // ..
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  // ..
 })
 ```
 
@@ -1246,7 +1245,7 @@ blogsRouter.post('/', async (request, response) => {
 
 Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
 
-Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaankuuluva statuskoodi.
+Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaan kuuluva statuskoodi.
 
 Huomaa, että jos haet blogin tietokannasta
 
@@ -1300,28 +1299,28 @@ Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa lo
 
 **HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
 
-```html
-  render() {
-    if (this.state.user === null) {
-      return (
-        <div>
-          <h2>Kirjaudu sovellukseen</h2>
-          <form>
-            //...
-          </form>
-        </div>
-      )
-    }
-
+```react
+render() {
+  if (this.state.user === null) {
     return (
       <div>
-        <h2>blogs</h2>
-        {this.state.blogs.map(blog =>
-          <Blog key={blog._id} blog={blog}/>
-        )}
+        <h2>Kirjaudu sovellukseen</h2>
+        <form>
+          //...
+        </form>
       </div>
     )
   }
+
+  return (
+    <div>
+      <h2>blogs</h2>
+      {this.state.blogs.map(blog =>
+        <Blog key={blog._id} blog={blog} />
+      )}
+    </div>
+  )
+}
 ```
 
 #### 82 blogilistan frontend, osa 2
@@ -1330,7 +1329,7 @@ Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahd
 
 ![]({{ "/assets/teht/29.png" | absolute_url }})
 
-Uloskirjautumisen jälkeen selain enää saa muistaa kirjautunutta käyttäjää reloadauksen jäleen.
+Uloskirjautumisen jälkeen selain ei saa muistaa kirjautunutta käyttäjää reloadauksen jälkeen.
 
 #### 83 blogilistan frontend, osa 3
 
@@ -1537,7 +1536,7 @@ Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
 
-Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
+Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
 
 ```js
 {
@@ -1942,7 +1941,7 @@ Hyvä neuvo refaktorintiin niinkuin uudenkin koodin kirjoittamiseen on _pieniss�
 
 ### 122 käyttäjien näkymä
 
-Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot: 
+Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot:
 
 ![]({{ "/assets/teht/53.png" | absolute_url }})
 
@@ -1986,7 +1985,7 @@ Kommentit ovat anonyymejä, eli ne eivät liity järjestelmän käyttäjiin.
 
 Tässä tehtävässä riittää, että fronend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
 
-Sopiva rajapinta kommentin luomiseen on osoitteeseen  _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö. 
+Sopiva rajapinta kommentin luomiseen on osoitteeseen  _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö.
 
 ### 128 kommentit, osa 2
 
@@ -1997,7 +1996,7 @@ Laajenna sovellusta siten, että kommentointi onnistuu fronendista käsin:
 ### 129 tyylit, osa 1
 
 <<<<<<< HEAD
-Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen 
+Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen
 =======
 Konfiguroi frontend käyttämään Lintiä
 >>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d

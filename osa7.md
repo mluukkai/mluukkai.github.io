@@ -49,9 +49,9 @@ Emme voi kuitenkaan turvautua ikuisesti create-react-app:in magiaan ja nyt onkin
 
 ### bundlaus
 
-Olemme toteuttaneet sovelluksia jakamalla koodin moduuleihin, joita on _importattu_ niitä tarvitseviin paikkoihin. Vaikka ES6-moduulit ovatkin Javascript-standardissa märiteltyjä, ei mikään selain vielä osaa käsitellä moduuleihin jaettua koodia. 
+Olemme toteuttaneet sovelluksia jakamalla koodin moduuleihin, joita on _importattu_ niitä tarvitseviin paikkoihin. Vaikka ES6-moduulit ovatkin Javascript-standardissa märiteltyjä, ei mikään selain vielä osaa käsitellä moduuleihin jaettua koodia.
 
-Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yksittäinen, kaiken koodin sisältävä tiedosto. Kun veimme Reactilla toeutetun frontendin tuotantoon osan 3 luvussa [Frontendin tuotantoversio](/osa3/#Frontendin-tuotantoversio), suoritimme bundlauksen komennolla _npm run build_. Konepellin alla kyseinen npm-skripti suorittaa bundlauksen webpackia hyväksikäyttäen. Tuloksena on joukko hakemistoon _build_ sijoitettavia tiedostoja:  
+Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yksittäinen, kaiken koodin sisältävä tiedosto. Kun veimme Reactilla toeutetun frontendin tuotantoon osan 3 luvussa [Frontendin tuotantoversio](/osa3/#Frontendin-tuotantoversio), suoritimme bundlauksen komennolla _npm run build_. Konepellin alla kyseinen npm-skripti suorittaa bundlauksen webpackia hyväksikäyttäen. Tuloksena on joukko hakemistoon _build_ sijoitettavia tiedostoja:
 
 <pre>
 ├── asset-manifest.json
@@ -61,8 +61,8 @@ Selainta varten moduuleissa oleva koodi _bundlataan_, eli siitä muodostetaan yk
 ├── service-worker.js
 └── static
     ├── css
-    │   ├── main.1b1453df.css
-    │   └── main.1b1453df.css.map
+    │   ├── main.1b1453df.css
+    │   └── main.1b1453df.css.map
     └── js
         ├── main.54f11b10.js
         └── main.54f11b10.js.map
@@ -101,7 +101,7 @@ Luodaan projektia varten hakemisto ja sen sisälle seuraavat hakemistot (build j
 ├── build
 ├── package.json
 ├── src
-│   └── index.js
+│   └── index.js
 └── webpack.config.js
 </pre>
 
@@ -142,11 +142,11 @@ module.exports = config
 Määritellään sitten npm-skripti _build_ jonka avulla bundlaus suoritetaan
 
 ```bash
-  // ...
-  "scripts": {
-    "build": "node_modules/.bin/webpack"
-  },
-  // ...
+// ...
+"scripts": {
+  "build": "node_modules/.bin/webpack"
+},
+// ...
 ```
 
 Lisätään hieman koodia tiedostoon _src/index.js_:
@@ -231,7 +231,7 @@ Konfiguraatio on Javascriptia ja tapahtuu eksporttaamalla määrittelyt sisält�
 
 Tämän hetkinen minimaalinen määrittely on aika ilmeninen, kenttä [entry](https://webpack.js.org/concepts/#entry) kertoo sen tiedoston, mistä bundlaus aloitetaan.
 
-Kenttä [output](https://webpack.js.org/concepts/#output) taas kertoo minne muodostettu bundle sijoitetaan. Kohdehakemisto täytyy määritellä absoluuttisena polkuna, se taas onnistuu helposti [path.resolve](https://nodejs.org/docs/latest-v8.x/api/path.html#path_path_resolve_paths)-metodilla. [__dirname](https://nodejs.org/docs/latest/api/globals.html#globals_dirname) on Noden globaali muuttuja, joka viittaa nykyiseen hakemistoon.
+Kenttä [output](https://webpack.js.org/concepts/#output) taas kertoo minne muodostettu bundle sijoitetaan. Kohdehakemisto täytyy määritellä absoluuttisena polkuna, se taas onnistuu helposti [path.resolve](https://nodejs.org/docs/latest-v8.x/api/path.html#path_path_resolve_paths)-metodilla. [\_\_dirname](https://nodejs.org/docs/latest/api/globals.html#globals_dirname) on Noden globaali muuttuja, joka viittaa nykyiseen hakemistoon.
 
 ### Reactin bundlaaminen
 
@@ -298,7 +298,7 @@ const App = () => (
 
 ei ole "normalia" Javascriptia, vaan JSX:n tarjoama syntaktinen oikotie määritellä _div_-tagiä vastaava React-elementti.
 
-[Loaderien](https://webpack.js.org/concepts/loaders/) avulla on mahdollista kertoa webpackille miten tiedostot tulee käsitellä ennen niiden bundlausta. 
+[Loaderien](https://webpack.js.org/concepts/loaders/) avulla on mahdollista kertoa webpackille miten tiedostot tulee käsitellä ennen niiden bundlausta.
 
 Määritellään projektiimme Reactin käyttämän JSX:n normaaliksi Javascriptiksi muuntava loaderi:
 
@@ -468,7 +468,7 @@ Transpilointi hajoaa, ja CSS:ää varten onkin otettava käyttöön [css](https:
 
 [css-loaderin](https://webpack.js.org/loaders/css-loader/) tehtävänä on ladata _CSS_-tiedostot, ja [style-loader](https://webpack.js.org/loaders/style-loader/) generoi koodiin CSS:t sisältävän _style_-elementin.
 
-Näin konfiguroituna CSS-määrittelyt sisällytetään sovelluksen Javascriptin sisältävään tiedostoon _bundle.js_. Sovelluksen päätiedostossa _index.html_ ei siis ole tarvetta erikseen ladata CSS:ää. 
+Näin konfiguroituna CSS-määrittelyt sisällytetään sovelluksen Javascriptin sisältävään tiedostoon _bundle.js_. Sovelluksen päätiedostossa _index.html_ ei siis ole tarvetta erikseen ladata CSS:ää.
 
 CSS voidaan tarpeen vaatiessa myös generoida omaan tiedostoonsa esim. [extract-text](https://github.com/webpack-contrib/extract-text-webpack-plugin)-pluginin avulla.
 
@@ -650,7 +650,7 @@ Tästä aiheutuu kuitenkin virheilmoitus
 Virhe johtuu siitä, että käyttämämme syntaksi ei ole vielä mukana Javascriptin uusimmassa standardissa ES7. Saamme syntaksin käyttöön asentamalla [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/)-pluginin komennolla
 
 ```bash
-npm install transform-class-properties- --save-dev 
+npm install transform-class-properties- --save-dev
 ```
 
 ja kehottamalla _babel-loader_:ia käyttämään pluginia:
@@ -672,7 +672,7 @@ Kun sovellus viedään tuotantoon, on siis käytössä tiedostoon _bundle.js_ we
 
 Jos tiedoston sisältöä tarkastelee, huomaa että sitä voisi optimoida huomattavasti koon suhteen esim. poistamalla kommentit. Tiedostoa ei kuitenkaan kannata lähteä optimoimaan käsin, sillä tarkoitusta varten on olemassa monia työkaluja.
 
-Javascript-tiedostojen optimonintiprosessista käytetään nimitystä _minifiointi_. Alan johtava työkalu tällä hetkellä lienee [UglifyJS](http://lisperator.net/uglifyjs/).
+Javascript-tiedostojen optimointiprosessista käytetään nimitystä _minifiointi_. Alan johtava työkalu tällä hetkellä lienee [UglifyJS](http://lisperator.net/uglifyjs/).
 
 Otetaan Uglify käyttöön asentamalla webpackin [uglifyjs-webpack-plugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/) komennolla:
 
@@ -710,7 +710,7 @@ function h(){if(!d){var e=u(p);d=!0;for(var t=c.length;t;){for(s=c,c=[];++f<t;)s
 
 ### Sovelluskehitys- ja tuotantokonfiguraatio
 
-Lisätään sovellukselle backend. Käytetän jo tutuksi käynyttä muistiinpanoja tarjoavaa palvelua. 
+Lisätään sovellukselle backend. Käytetän jo tutuksi käynyttä muistiinpanoja tarjoavaa palvelua.
 
 Talletetaan seuraava sisältö tiedostoon _db.json_
 
@@ -815,7 +815,7 @@ module.exports = config
 
 Määrittely on muuten täysin sama, mutta aiemmin eksportattu olio on nyt määritellyn funktion paluuarvo. Funktio saa parametrin _env_, joka saa npm-skriptissä asetetun arvon. Tämän ansiosta on mahdollista muodostaa erilainen konfiguraatio development- ja production-moodeisssa.
 
-Webpackin [DefinePlugin](https://webpack.js.org/plugins/define-plugin/):in auvlla voimme määritellä globaaleja _vakioarvoja_, joita on mahdollista käyttää bundlattavassa koodissa. Määritellään nyt vakio _BACKEND_URL_, joka saa eri arvon riippuen siitä ollaanko kehitysympäristössä vai tehdäänkö tuotantoon sopivaa bundlea:
+Webpackin [DefinePlugin](https://webpack.js.org/plugins/define-plugin/):in avulla voimme määritellä globaaleja _vakioarvoja_, joita on mahdollista käyttää bundlattavassa koodissa. Määritellään nyt vakio _BACKEND_URL_, joka saa eri arvon riippuen siitä ollaanko kehitysympäristössä vai tehdäänkö tuotantoon sopivaa bundlea:
 
 ```js
 const path = require('path')
@@ -854,12 +854,11 @@ Jos kehitys- ja tuotantokonfiguraatio eriytyvät paljon, saattaa olla hyvä idea
 
 ### Production build
 
-Kun kokeilemme suorittaa bundlattua sovellusta, 
-[React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) huomauttaa että bundlessa on vielä pieni ongelma
+Kun kokeilemme suorittaa bundlattua sovellusta, [React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) huomauttaa että bundlessa on vielä pieni ongelma
 
 ![]({{ "/assets/7/10.png" | absolute_url }})
 
-[Production build]((https://reactjs.org/docs/optimizing-performance.html)) on optimoitu versio React-koodista, josta on mm. poistettu sovelluskehitystä helpottavat, mutta koodia  hidastavat varoitukset. Tuotantokäytössä kannattaakin aina käyttä production buildia.
+[Production build](https://reactjs.org/docs/optimizing-performance.html) on optimoitu versio React-koodista, josta on mm. poistettu sovelluskehitystä helpottavat, mutta koodia hidastavat varoitukset. Tuotantokäytössä kannattaakin aina käyttää production buildia.
 
 Ongelma on helppo korjata [Reactin dokumentaatonohjetta](https://reactjs.org/docs/optimizing-performance.html) soveltaen:
 
@@ -968,10 +967,10 @@ export default Hello
 import './NoteCount.css'
 
 const NoteCount = ({ noteCount }) => (
-  <p className="content"> 
+  <p className="content">
     {noteCount} notes in server
   </p>
-) 
+)
 
 export default NoteCount
 ```
@@ -1055,7 +1054,7 @@ Nyt molemmat komponentit saavat omat tyylinsä. Konsolista tarkastelemalla huoma
 CSS-luokan nimen muotoileva osa on _css-loaderin_ yhteydessä oleva
 
 <pre>
-localIdentName=[name]__[local]___[hash:base64:5]
+localIdentName=[name]\_\_[local]\_\_\_[hash:base64:5]
 </pre>
 
 Jos olet aikeissa käyttää CSS-moduuleja, kannattaa vilkaista mitä kirjasto [react-css-modules](https://github.com/gajus/react-css-modules) tarjoaa.
@@ -1217,7 +1216,7 @@ const main = async () => {
 }
 ```
 
-Tehdään sitten muutama testi. Toimiakseen hyvin Jestin kanssa vaaditaan hieman konfiguraatiota, joka onnistuu  Jestin dokumentaation [ohjetta](https://facebook.github.io/jest/docs/en/puppeteer.html#content) noudattaen.
+Tehdään sitten muutama testi. Toimiakseen hyvin Jestin kanssa vaaditaan hieman konfiguraatiota, joka onnistuu Jestin dokumentaation [ohjetta](https://facebook.github.io/jest/docs/en/puppeteer.html#content) noudattaen.
 
 Tehdään ensimmäinen testi
 
@@ -1452,7 +1451,7 @@ Kun sovelluksen tila muuttuu, määrittyy komponenttien render-metodien ansiosta
 
 ### Reactin roolista sovelluksissa
 
-Materiaalissa ei ole tuotu ehkä riittävän selkeästi esille sitä, että React on ensisijaisesti tarkoitettu näkymien luomisesta huolehtivaksi kirjastoksi. Jos ajatellaan perinteistä [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) -jaoittelua, on Reactin toimialaa juurikin _View_. React on siis sovellusalueeltaan suppeampi kuin esim [Angular](https://angular.io/), joka on kaiken tarjoava Frontendin MVC-sovelluskehys. Reactia ei kutsutakaan sovellukehykseksi (framework) vaan kirjastoksi (library). 
+Materiaalissa ei ole tuotu ehkä riittävän selkeästi esille sitä, että React on ensisijaisesti tarkoitettu näkymien luomisesta huolehtivaksi kirjastoksi. Jos ajatellaan perinteistä [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) -jaoittelua, on Reactin toimialaa juurikin _View_. React on siis sovellusalueeltaan suppeampi kuin esim [Angular](https://angular.io/), joka on kaiken tarjoava Frontendin MVC-sovelluskehys. Reactia ei kutsutakaan sovellukehykseksi (framework) vaan kirjastoksi (library).
 
 Pienissä sovelluksissa React-komponenttien tilaan talletetaan sovelluksen käsittelemää dataa, eli komponenttien tilan voi näissä tapaukissa ajatella vastaavan MVC:n modeleita.
 
@@ -1482,7 +1481,7 @@ Oletetaan että hieman ilkeämielinen käyttäjä _Arto Hellas_ nyt määritteli
 Arto Hell-as'; DROP TABLE Users; --
 </pre>
 
-eli nimi sisältäisi hipsun <code>'</code>, jonka on SQL:ssä merkkijonon aloitus/lopetusmerkki. Tämän seurauksena tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan 
+eli nimi sisältäisi hipsun <code>'</code>, jonka on SQL:ssä merkkijonon aloitus/lopetusmerkki. Tämän seurauksena tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan
 
 ```sql
 SELECT * FROM Users WHERE name = 'Arto Hell-as'; DROP TABLE Users; --'
@@ -1526,7 +1525,7 @@ Toinen vastaava palvelu riippuvuuksien turvallisuuden tarkkailuun on [Snyk](http
 
 Eräs OWASP:in listan mainitsemista uhista on _Broken Authentication_ ja siihen liittyvä _Broken Access Control_. Käyttämämme token-perustainen autentikointi on kohtuullisen robusti, jos sovellusta käytetään tietoliikenteen salaavalla HTTPS-protokollalla. Access Controlin eli pääsynhallinnan toteuttamisessa on aina syytä muistaa tehdä esim. käyttäjän identiteetin tarkastus selaimen lisäksi myös palvelimella. Huonoa tietoturvaa olisi estää jotkut toimenpiteet ainoastaan piilottamalla niiden suoritusmahdollisuus selaimessa olevasta koodista.
 
-Mozzillan MDN:n erittäin hyvä [Website security -guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security)  nostaakin esiin tämän tärkän seikan:
+Mozillan MDN:n erittäin hyvä [Website security -guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security) nostaakin esiin tämän tärkän seikan:
 
 ![]({{ "/assets/7/25a.png" | absolute_url }})
 
@@ -1618,7 +1617,7 @@ Viime aikoina on myös yleistynyt termin pilvinatiivi, _cloud native_ käyttö. 
 
 Esim. Netflixin koko infrastruktuuria voi pitää pilvinatiivina. Netflixillä ei ole omia palvelimia, kaikki toimii Amazonin alustalla olevissa virtuaalikoneissa.
 
-Pilvinatiiviuteen liittyvät usein äsken mainitut mirkropalvelut ja serverless-arkkitehtuurit. Tärkeä teema pilvinattiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
+Pilvinatiiviuteen liittyvät usein äsken mainitut mikropalvelut ja serverless-arkkitehtuurit. Tärkeä teema pilvinatiiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
 
 ## Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
 
