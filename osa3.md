@@ -1537,7 +1537,7 @@ Ei ole koskaan huono idea tulostaa poikkeuksen aiheuttanutta olioa konsoliin vir
 })
 ```
 
-Virheenkäsittelijään joutumisen syy voi olla joku ihan muu mitä on tullu alunperin ajatelleeksi. Jos virheen tulostaa konsoliin, voi säästyä pitkiltä ja turhauttavilta väärää asiaa debuggaavilta sessioita.
+Virheenkäsittelijään joutumisen syy voi olla joku ihan muu kuin mitä on tullut alunperin ajatelleeksi. Jos virheen tulostaa konsoliin, voi säästyä pitkiltä ja turhauttavilta väärää asiaa debuggaavilta sessioita.
 
 ### loput operaatiot
 
