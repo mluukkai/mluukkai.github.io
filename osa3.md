@@ -1723,7 +1723,7 @@ tämän muutoksen jäkeen sovellus ei toimi paikallisesti, koska ympäristömuut
 Asennetaan kirjasto komennolla
 
 ```bash
-https://www.npmjs.com/package/dotenv
+npm install dotenv --save
 ```
 
 Sovelluksen juurihakemistoon tehdään sitten tiedosto nimeltään _.env_, minne tarvittavien ympäristömuuttujien arvot asetetaan
