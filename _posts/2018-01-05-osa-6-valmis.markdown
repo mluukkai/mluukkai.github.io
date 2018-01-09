@@ -5,6 +5,6 @@ date:   2018-01-05 17:46:59 +0200
 categories: jekyll 
 ---
 
-[osa 6]({{ "/osa6 | absolute_url }}) on nyt valmis ja loppusuora lähestyy.
+[osa 6](/osa6) on nyt valmis ja loppusuora lähestyy.
 
 Osassa 6 jatketaan Reduxiin tutustumista ja katsotaan miten React-sovelluksille toteutetaan reititys, eli illuusio siitä että sovellus koostuu monesta sivusta. Tyylien lisäämistä sivutaan myös hieman.

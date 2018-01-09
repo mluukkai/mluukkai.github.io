@@ -26,7 +26,7 @@ permalink: /osa7/
   - Isompien sovellusten komponenttien organisointi
   - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa
   - Virtual DOM
-- react/node-sovellusten tietoturva
+- React/node-sovellusten tietoturva
 - Tyypitys
   - PropTypes revisited
   - Flow
@@ -668,13 +668,13 @@ ja kehottamalla _babel-loader_:ia käyttämään pluginia:
 
 ### Koodin minifiointi
 
-Kun sovellus viedään tuotantoon, on siis käytössä tiedostoon _bundle.js_ bundlattu koodi. Vaikka sovelluksemme sisältää omaa koodia vain muutaman rivin, on tiedoston _bundle.js_ koko 702917 tavua sillä se sisältää myös kaiken React-kirjaston koodin. Tiedoston koollahan on sikäli väliä, että selain joutuu lataamaan tiedoston kun sovellusta aletaan käyttämään. Nopeilla internetyhteyksillä 702917 tavua ei sinänsä ole ongelma, mutta jos mukaan sisällytetään enemmän kirjastoja, alkaa sovelluksen lataaminen ikkuhiljaa hidastua etenkin mobiilikäytössä.
+Kun sovellus viedään tuotantoon, on siis käytössä tiedostoon _bundle.js_ webpackin generoima koodi. Vaikka sovelluksemme sisältää omaa koodia vain muutaman rivin, on tiedoston _bundle.js_ koko 702917 tavua sillä se sisältää myös kaiken React-kirjaston koodin. Tiedoston koollahan on sikäli väliä, että selain joutuu lataamaan tiedoston kun sovellusta aletaan käyttämään. Nopeilla internetyhteyksillä 702917 tavua ei sinänsä ole ongelma, mutta jos mukaan sisällytetään enemmän kirjastoja, alkaa sovelluksen lataaminen pikkuhiljaa hidastua etenkin mobiilikäytössä.
 
 Jos tiedoston sisältöä tarkastelee, huomaa että sitä voisi optimoida huomattavasti koon suhteen esim. poistamalla kommentit. Tiedostoa ei kuitenkaan kannata lähteä optimoimaan käsin, sillä tarkoitusta varten on olemassa monia työkaluja.
 
 Javascript-tiedostojen optimonintiprosessista käytetään nimitystä _minifiointi_. Alan johtava työkalu tällä hetkellä lienee [UglifyJS](http://lisperator.net/uglifyjs/).
 
-Otetaan Uglify käyttöön asentamalla Webpackin [uglifyjs-webpack-plugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/) komennolla:
+Otetaan Uglify käyttöön asentamalla webpackin [uglifyjs-webpack-plugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/) komennolla:
 
 ```bash
 npm install --save-dev uglifyjs-webpack-plugin
@@ -708,9 +708,11 @@ Minifioinnin lopputulos on kuin vanhan liiton c-koodia, kommentit ja jopa turhat
 function h(){if(!d){var e=u(p);d=!0;for(var t=c.length;t;){for(s=c,c=[];++f<t;)s&&s[f].run();f=-1,t=c.length}s=null,d=!1,function(e){if(o===clearTimeout)return clearTimeout(e);if((o===l||!o)&&clearTimeout)return o=clearTimeout,clearTimeout(e);try{o(e)}catch(t){try{return o.call(null,e)}catch(t){return o.call(this,e)}}}(e)}}a.nextTick=function(e){var t=new Array(arguments.length-1);if(arguments.length>1)
 ```
 
-### envs
+### Sovelluskehitys- ja tuotantokonfiguraatio
 
-Lisätään sovellukselle backend. Käytetän jo tutuksi käynyttä muistiinpanoja tarjoavaa palvelua. Talletetaan seuraava sisältö tiedostoon _db.json_
+Lisätään sovellukselle backend. Käytetän jo tutuksi käynyttä muistiinpanoja tarjoavaa palvelua. 
+
+Talletetaan seuraava sisältö tiedostoon _db.json_
 
 ```json
 {
@@ -767,11 +769,11 @@ class App extends React.Component {
 }
 ```
 
-Koodissa on nyt kovakoodattuna sovelluskehityksessä käytettävän palvelimen osoite. Miten saamme osoitteen hallitusti muutettua internetissä olevan backendin bundlatessamme koodin?
+Koodissa on nyt kovakoodattuna sovelluskehityksessä käytettävän palvelimen osoite. Miten saamme osoitteen hallitusti muutettua osoittamaan internetissä olevaan backendiin bundlatessamme koodin?
 
-Lisätään webpackia käyttäviin npm-skripteihin [ympäristömuuttujien](https://webpack.js.org/guides/environment-variables/) avulla tapahtuva määrittely siitä onko kyse sovelluskehitysmoodista _development_ vai tuotantomodista _production_:
+Lisätään webpackia käyttäviin npm-skripteihin [ympäristömuuttujien](https://webpack.js.org/guides/environment-variables/) avulla tapahtuva määrittely siitä, onko kyse sovelluskehitysmoodista _development_ vai tuotantomodista _production_:
 
-```json
+```bash
 {
   // ...
   "scripts": {
@@ -811,9 +813,9 @@ const config = (env) => {
 module.exports = config
 ```
 
-Määrittely on muuten täysin sama, mutta aiemmin exportattu olio on nyt määritellyn funktion paluuarvo. Funktio saa parametrin _env_ joka saa npm-skriptissä asetetun arvon. Tämän ansiosta on mahdollista muodostaa erilainen konfiguraatio development- ja production-moodeisssa.
+Määrittely on muuten täysin sama, mutta aiemmin eksportattu olio on nyt määritellyn funktion paluuarvo. Funktio saa parametrin _env_, joka saa npm-skriptissä asetetun arvon. Tämän ansiosta on mahdollista muodostaa erilainen konfiguraatio development- ja production-moodeisssa.
 
-Webpackin [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) voimme määritellä globaaleja _vakioarvoja_, joita on mahdollista käyttää bundlattavassa koodissa. Määritellään nyt vakio _BACKEND_URL_, joka saa eri arvon riippuen siitä ollaanko kehitysympäristössä vai tehdäänkö tuotantoon sopivaa bundlea:
+Webpackin [DefinePlugin](https://webpack.js.org/plugins/define-plugin/):in auvlla voimme määritellä globaaleja _vakioarvoja_, joita on mahdollista käyttää bundlattavassa koodissa. Määritellään nyt vakio _BACKEND_URL_, joka saa eri arvon riippuen siitä ollaanko kehitysympäristössä vai tehdäänkö tuotantoon sopivaa bundlea:
 
 ```js
 const path = require('path')
@@ -850,13 +852,16 @@ componentWillMount() {
 
 Jos kehitys- ja tuotantokonfiguraatio eriytyvät paljon, saattaa olla hyvä idea [eriyttää konfiguraatiot](https://webpack.js.org/guides/production/) omiin tiedostoihinsa.
 
-### production build
+### Production build
 
-[React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) huomauttaa että sovelluksen bundlessa on vielä pieni ongelma
+Kun kokeilemme suorittaa bundlattua sovellusta, 
+[React devtools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) huomauttaa että bundlessa on vielä pieni ongelma
 
 ![]({{ "/assets/7/10.png" | absolute_url }})
 
-Ongelma on helppo korjata [tätä](https://reactjs.org/docs/optimizing-performance.html) ohjetta soveltaen:
+[Production build]((https://reactjs.org/docs/optimizing-performance.html)) on optimoitu versio React-koodista, josta on mm. poistettu sovelluskehitystä helpottavat, mutta koodia  hidastavat varoitukset. Tuotantokäytössä kannattaakin aina käyttä production buildia.
+
+Ongelma on helppo korjata [Reactin dokumentaatonohjetta](https://reactjs.org/docs/optimizing-performance.html) soveltaen:
 
 ```js
 const config = (env) => {
@@ -885,13 +890,15 @@ Konfiguraatio on edelleen oikea myös sovelluskehitysmoodissa:
 
 ![]({{ "/assets/7/12.png" | absolute_url }})
 
-### polyfill
 
-Sovelluksemme on valmis ja toimii muiden selaimien kohtuullisen uusilla versiolla,mutta Internet Explorerilla sovellus ei toimi. Syynä tähän on se, että _axiosin_ ansiosta koodissa käytetään [Promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), mikään IE:n versio ei kuitenkaan niitä tue:
+
+### Polyfill
+
+Sovelluksemme on valmis ja toimii muiden selaimien kohtuullisen uusilla versiolla, mutta Internet Explorerilla sovellus ei toimi. Syynä tähän on se, että _axiosin_ ansiosta koodissa käytetään [Promiseja](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), mikään IE:n versio ei kuitenkaan niitä tue:
 
 ![]({{ "/assets/7/13.png" | absolute_url }})
 
-On paljon muutakin standardissa määriteltyä koodia, mitä IE ei tue, esim. niinkin harmiton komento kuin taulukoiden [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) ylittää ie:n kyvyt:
+On paljon muutakin standardissa määriteltyjä asioita, joita IE ei tue, esim. niinkin harmiton komento kuin taulukoiden [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) ylittää IE:n kyvyt:
 
 ![]({{ "/assets/7/14.png" | absolute_url }})
 
@@ -901,7 +908,7 @@ Jos haluamme sovelluksen IE-yhteensopivaksi, tarvitsemme [polyfilliä](https://r
 
 Polyfillaus on mahdollista hoitaa [Webpackin ja Babelin avulla](https://babeljs.io/docs/usage/polyfill/) tai asentamalla yksi monista tarjolla olevista polyfill-kirjastoista.
 
-Esim .kirjaston [promse-polyfill](https://www.npmjs.com/package/promise-polyfill) tajoaman polyfillin käyttö on todella helppoa, koodiin lisätään seuraava:
+Esim. kirjaston [promse-polyfill](https://www.npmjs.com/package/promise-polyfill) tajoaman polyfillin käyttö on todella helppoa, koodiin lisätään seuraava:
 
 ```js
 import PromisePolyfill from 'promise-polyfill'
@@ -911,13 +918,13 @@ if (!window.Promise) {
 }
 ```
 
-Jos globaalia _Promise_ ei ole olemassa, eli selain ei tue promiseja, sijoittaan polyfillattu promise globaaliin muuttujaan. Jos polyfillattu promise on hyvin toteutettu, muun koodin pitäisi toimia ilman ongelmia.
+Jos globaalia _Promise_-olioa ei ole olemassa, eli selain ei tue promiseja, sijoittaan polyfillattu promise globaaliin muuttujaan. Jos polyfillattu promise on hyvin toteutettu, muun koodin pitäisi toimia ilman ongelmia.
 
 Kattavahko lista olemassaolevista polyfilleistä löytyy [täältä](https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-browser-Polyfills).
 
 Selaimien yhteensopivuus käytettävien API:en suhteen kannattaakin tarkistaa esim. [https://caniuse.com](https://caniuse.com)-sivustolta tai [Mozillan sivuilta](https://developer.mozilla.org/en-US/).
 
-### eject
+### Eject
 
 Create-react-app käyttää taustalla webpackia. Jos peruskonfiguraatio ei riitä, on projektit mahdollista [ejektoida](https://github.com/facebookincubator/create-react-app#converting-to-a-custom-setup), jolloin kaikki konepellin alla oleva magia häviää, ja konfiguraatiot tallettuvat hakemistoon _config_ ja muokattuun _package.json_-tiedostoon.
 
@@ -931,7 +938,7 @@ Osissa 2 ja 6 on jo katsottu muutamaa tapaa tyylien lisäämiseen eli vanhan kou
 
 Tapoja on [monia muitakin](https://survivejs.com/react/advanced-techniques/styling-react/), katsotaan vielä lyhyestä kahta tapaa.
 
-### css-moduulit
+### CSS-moduulit
 
 Yksi CSS:n keskeisistä ongelmista on se, että CSS-määrittelyt ovat _globaaleja_. Suurissa tai jo keskikokoisissakin sovelluksissa tämä aiheuttaa ongelmia, sillä tiettyihin komponentteihin vaikuttavat monissa paikoissa määritellyt tyylit ja lopputulos voi olla vaikeasti ennakoitavissa.
 
@@ -939,7 +946,7 @@ Laitoksen [kurssilistasivun](https://www.cs.helsinki.fi/courses) alaosassa on it
 
 ![]({{ "/assets/7/15.png" | absolute_url }})
 
-Sivulla on monessa paikassa määriteltyjä tyylejä, osa määrittelyistä tulee Drupal-sisällönhallintajärjestelmästä, osa on laitoskohtaisia, osa taas tulee sivun yläosan olemassaolevaa opetustarjontaa näyttävistä komponenteista. Vika on niin hankala korjata, ettei kukaan ole viitsinyt sitä tehdä.
+Sivulla on monessa paikassa määriteltyjä tyylejä, osa määrittelyistä tulee Drupal-sisällönhallintajärjestelmästä, osa on laitoskohtaisia, osa taas tulee sivun yläosan olemassaolevaa opetustarjontaa näyttävistä syksyllä lisätystä komponenteista. Vika on niin hankala korjata, ettei kukaan ole viitsinyt sitä tehdä.
 
 Demonstroidaan vastaavankaltaista ongelmatilannetta esimerkkisovelluksessamme.
 
@@ -948,7 +955,11 @@ Muutetan esimerkkitietostoamme siten, että komponentista _App_ irrotetaan osa t
 ```react
 import './Hello.css'
 
-const Hello = ({ counter }) => <p className="content">hello webpack {counter} clicks!</p>
+const Hello = ({ counter }) => (
+  <p className="content">
+    hello webpack {counter} clicks!
+  </p>
+)
 
 export default Hello
 ```
@@ -956,12 +967,16 @@ export default Hello
 ```react
 import './NoteCount.css'
 
-const NoteCount = ({ noteCount }) => <p className="content"> {noteCount} notes in server</p>
+const NoteCount = ({ noteCount }) => (
+  <p className="content"> 
+    {noteCount} notes in server
+  </p>
+) 
 
 export default NoteCount
 ```
 
-Molemmat näistä määrittelevät oman tyylitiedostonsa.
+Molemmat komponentit määrittelevät oman tyylitiedostonsa:
 
 _Hello.css_
 
@@ -1037,25 +1052,24 @@ Nyt molemmat komponentit saavat omat tyylinsä. Konsolista tarkastelemalla huoma
 
 ![]({{ "/assets/7/17.png" | absolute_url }})
 
-CSS-luokan nimen muotoieva osa on _css-loaderin_ yhteydessä oleva
+CSS-luokan nimen muotoileva osa on _css-loaderin_ yhteydessä oleva
 
 <pre>
 localIdentName=[name]__[local]___[hash:base64:5]
 </pre>
 
-Jos olet aikeissa käyttää CSS-moduuleja, kannattaa vilkaista mitä kirjasto [react-css-modules](https://github.com/gajus/react-css-modules) tarjoaa .
+Jos olet aikeissa käyttää CSS-moduuleja, kannattaa vilkaista mitä kirjasto [react-css-modules](https://github.com/gajus/react-css-modules) tarjoaa.
 
 ### Styled components
 
-Mielenkiintoisen näkökulman tyylien määrittelyyn tarjoaa Javascriptin ES6 syntaksin [tagged template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)-syntaksia hyödyntävä [styled components](https://www.styled-components.com/)-kirjasto.
-
+Mielenkiintoisen näkökulman tyylien määrittelyyn tarjoaa ES6:n [tagged template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) -syntaksia hyödyntävä [styled components](https://www.styled-components.com/) -kirjasto.
 
 Tehdään styled-componentsin avulla esimerkkisovellukseemme muutama tyylillinen muutos:
 
 ```bash
 import styled from 'styled-components'
 
-const Button = styled.button`
+const Button = styled.button `
   font-size: 1em;
   margin: 1em;
   padding: 0.25em 1em;
@@ -1091,7 +1105,7 @@ class App extends React.Component {
 Heti alussa luodaan HTML:n _button_-elementistä jalostettu versio ja sijoitetaan se muuttujaan _Button_:
 
 ```js
-const Button = styled.button`
+const Button = styled.button `
   font-size: 1em;
   margin: 1em;
   padding: 0.25em 1em;
@@ -1129,7 +1143,7 @@ const StyledHello = styled(Hello) `
 
 Muuttujaan _StyledHello_ sijoitettua tyyleillä jalostettua komponenttia käytetään kuten alkuperäistä:
 
-```react
+```bash
 <StyledHello counter={this.state.counter} />
 ```
 
@@ -1141,7 +1155,7 @@ Sovelluksen ulkoasu seuraavassa:
 
 Palataan vielä hetkeksi testauksen pariin. Aiemmissa osissa teimme sovelluksille yksikkötestejä sekä integraatiotestejä. Katsotaa nyt erästä tapaa tehdä [järjestelmää kokonaisuutena](https://en.wikipedia.org/wiki/System_testing) tutkivia _End to End (E2E) -testejä_.
 
-Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org/)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. headless browseria eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää.
+Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Selenium](http://www.seleniumhq.org/)-kirjastoa käyttäen. Toinen vaihtoehto on käyttää ns. [headless browseria](https://en.wikipedia.org/wiki/Headless_browser) eli selainta, jolla ei ole ollenkaan graafista käyttöliittymää.
 
 Chrome-selain on jo hetken sisältänyt [headless](https://developers.google.com/web/updates/2017/04/headless-chrome)-moodin. Käytetään nyt headless chromea sille Node API:n tarjoavan [Puppeteer](https://github.com/GoogleChrome/puppeteer)-kirjaston avulla.
 
@@ -1150,10 +1164,10 @@ Tehdään muutama testi osan 3 muistiinpanosovelluksen ["Full stack"-versiolle](
 Asennetan puppeteer komennolla
 
 ```bash
-npm install puppeteer --save
+npm install puppeteer --save-dev
 ```
 
-Ennen testejä, tehdään kokeilija varten tiedosto _puppeteer.js_ ja sille sisältö
+Ennen testejä, tehdään kokeiluja varten tiedosto _puppeteer.js_ ja sille seuraava sisältö
 
 ```js
 const puppeteer = require('puppeteer')
@@ -1170,7 +1184,7 @@ const main = async () => {
 main()
 ```
 
-Kun koodi suoritetaan komennolla _node puppeteer.js_ menee _headless chrome_ osoitteeseen http://localhost:3000 ja tallettaa sivulta ottamansa screenshotin tiedostoon _kuva.png_
+Kun koodi suoritetaan komennolla _node puppeteer.js_ menee _headless chrome_ osoitteeseen http://localhost:3000 ja tallettaa sivulta ottamansa screenshotin tiedostoon _kuva.png_:
 
 ![]({{ "/assets/7/19.png" | absolute_url }})
 
@@ -1203,9 +1217,11 @@ const main = async () => {
 }
 ```
 
-Tehdään sitten muutama testi. Toimiakseen hyvin Jestin kanssa vaaditaan hieman konfiguraatiota. Seurataan sivun <(https://facebook.github.io/jest/docs/en/puppeteer.html#content)> ohjetta ja tehdään ensimmäinen testi
+Tehdään sitten muutama testi. Toimiakseen hyvin Jestin kanssa vaaditaan hieman konfiguraatiota, joka onnistuu  Jestin dokumentaation [ohjetta](https://facebook.github.io/jest/docs/en/puppeteer.html#content) noudattaen.
 
-```ja
+Tehdään ensimmäinen testi
+
+```js
 describe('note app', () => {
 
   it('renders main page', async () => {
@@ -1245,7 +1261,7 @@ describe('note app', () => {
 })
 ```
 
-Testi ei yllättäen mene läpi. Jos testissä tulostetaan konsoliin pagen metodilla [content](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagecontent) palauttama sivun koko sisältö, huomataan että sivulla ei todellakaan ole yhtään muistiinpanoa:
+Testi ei yllättäen mene läpi. Jos testissä tulostetaan konsoliin olion page metodilla [content](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagecontent) palauttama sivun koko sisältö, huomataan että sivulla ei todellakaan ole yhtään muistiinpanoa:
 
 ```html
 <body>
@@ -1259,7 +1275,7 @@ Testi ei yllättäen mene läpi. Jos testissä tulostetaan konsoliin pagen metod
 
 Syynä tälle on se, että puppeteer on ollut liian nopea, ja sivu ei ole _ehtinyt_ renderöityä.
 
-Koska muistiinpanot sisältävällä _div_-elementillä on CSS-luokka _wrapper_, testi saadaan korjattua odottamalla koko sivun renderöitymistä metodin [waitForSelector](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options) avulla:
+Koska muistiinpanot sisältävällä _div_-elementillä on CSS-luokka _wrapper_, testi saadaan menemään läpi _odottamalla_ koko kyseisten elementtien renderöitymistä metodin [waitForSelector](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options) avulla:
 
 ```js
 it('renders a note', async () => {
@@ -1308,7 +1324,7 @@ it('allows new notes to be added', async () => {
 
 Lomakkeen täyttäminen on helppoa. Koska sivulla on useita painikkeita, on käytetty CSS-selektoria _form button_ joka hakee sivulta lomakkeen sisällä olevan napin.
 
-Napin painalluksen jälkeen syntyy potentiaalinen ajastusongelma jos uuden muistiinpanon sivulle renderöitymistä testataan liian nopeasti. Ongelma on kierretty sillä, että sovellusta on muutettu siten että se näyttää ruudulla CSS-luokalla _notification_ merkityssä _div_-elementissä uuden muistiinpanon lisäämisestä kertovan ilmoituksen.
+Napin painalluksen jälkeen syntyy jälleen potentiaalinen ajoitusongelma jos uuden muistiinpanon sivulle renderöitymistä testataan liian nopeasti. Ongelma on kierretty sillä, että sovellusta on muutettu siten, että se näyttää ruudulla CSS-luokalla _notification_ merkityssä _div_-elementissä uuden muistiinpanon lisäämisestä kertovan ilmoituksen.
 
 Testausasetelmamme kaipaisi vielä paljon hiomista. Testejä vartan olisi mm. oltava oma tietokanta, jonka tila testien pitäisi pystyä nollaamaan hallitusti. Nyt testit luottavat siihen että sovellus on käynnissä portissa 3001. Olisi parempi jos testit itse käynnistäisivät ja sammuttaisivat palvelimen.
 
@@ -1316,15 +1332,13 @@ Lisää aiheesta [Puppeteerin Github-sivujen](https://github.com/GoogleChrome/pu
 
 ## Tyypitys
 
-Javascriptin muuttujien [dynaaminen tyypitys](https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing) aiheuttaa välillä ikäviä bugeja. Osassa 5 käsittelimme [PropTypejä](osa5/#PropTypes), eli mekanismia, jonka avulla React-komponenteille välitettävile propseille on mahdollista tehdä tyyppitarkastus
+Javascriptin muuttujien [dynaaminen tyypitys](https://developer.mozilla.org/en-US/docs/Glossary/Dynamic_typing) aiheuttaa välillä ikäviä bugeja. Osassa 5 käsittelimme lyhyesti [PropTypejä](osa5/#PropTypes), eli mekanismia, jonka avulla React-komponenteille välitettävile propseille on mahdollista tehdä tyyppitarkastuksia.
 
 Viime aikoina on ollut havaittavissa nousevaa kiinnostusta [staattiseen tyypitykseen](https://en.wikipedia.org/wiki/Type_system#Static_type_checking).
 
-Javascriptistä on olemassa useita tyypitettyjä versioita, suosituimmat näistä ovat Facebookin kehittämä [flow](https://flow.org/) ja Microsofin [typescript](https://www.typescriptlang.org/).
+Javascriptistä on olemassa useita staattisesti tyypitettyjä versioita, suosituimmat näistä ovat Facebookin kehittämä [flow](https://flow.org/) ja Microsofin [typescript](https://www.typescriptlang.org/).
 
-Flow on ratkaisuista konservatiivisempi, sillä se mahdollistaa tyyppien lisäämisen vain johonkin osaan koodista.
-
-Flown asentaminen create-react-app:illa toteutettuun sovellukseen on [helppoa](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-flow). Tiedostossa _.flowconfig_ kannattaa ignoroida hakemistoissa _node_modules_ ja _build_ olevat tiedostot
+Flown käyttöönottaminen create-react-app:illa toteutettuun sovellukseen on [helppoa](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-flow). Tiedostossa _.flowconfig_ kannattaa ignoroida hakemistoissa _node_modules_ ja _build_ olevat tiedostot
 
 ```bash
 [ignore]
@@ -1359,7 +1373,7 @@ tulostuu luku 12.
 
 Flow suorittaa koodille ainoastaan tyyppitarkastuksen, [babel](https://babeljs.io/docs/plugins/preset-flow/) kääntää flow-tyyppejä sisältävän koodin normaaliksi javascriptiksi ja tyyppien tarjoma suoja onkin voimassa ainoastaan jos ohjelmoija suorittaa tyyppitarkastuksia.
 
-Kaikissa tapauksissa tyyppejä ei edes ole tarvetta määritellä, joissain tapauksissa flow osaa päätellä itse mikä muuttujien tyypin tulee olla, seuraavassa tapauksessa
+Kaikissa tapauksissa tyyppejä ei edes ole tarvetta määritellä, joissain tapauksissa flow osaa päätellä itse mikä muuttujien tyypin tulee olla. Esim. seuraavassa tapauksessa
 
 ```js
 function square(n) {
@@ -1369,13 +1383,13 @@ function square(n) {
 square('5')
 ```
 
-Flow osaa varoittaa asiasta ilman tyyppien määrittelyä
+flow osaa varoittaa ongelmasta ilman tyyppien määrittelyä
 
 ![]({{ "/assets/7/22.png" | absolute_url }})
 
-Flown hyvä puoli on keveys, vanhoihinkin projekteihin on helppo ruveta vähitellen lisäämään tyyppejä Flowlla
+Flown hyvä puoli on keveys, vanhoihinkin projekteihin on helppo ruveta vähitellen lisäämään tyyppejä Flowlla.
 
-Typescript on hieman raskaampi ja sen käyttö vaatii Flowia enemmän konfigurointia. Typescript-koodi kirjoitetaan _.ts_-päätteisiin tiedostoihin ja se tulee kääntää javascriptiksi. Käännös pystytään toki hoitamaan helposti [Webpackilla](https://github.com/s-panferov/awesome-typescript-loader). Toisin kun flown yhteydessä, Typescriptillä tehdyssä koodissa oleva virheellinen tyyppien käyttö johtaa siihe, että koodi ei käänny.
+Typescript on jossain määrin laajempi ratkaisu ja sen käyttö vaatii Flowia enemmän konfigurointia. Typescript-koodi kirjoitetaan _.ts_-päätteisiin tiedostoihin ja se tulee kääntää javascriptiksi. Käännös pystytään toki hoitamaan helposti [webpackilla](https://github.com/s-panferov/awesome-typescript-loader). Toisin kun flown yhteydessä, Typescriptillä tehdyssä koodissa oleva virheellinen tyyppien käyttö johtaa siihe, että koodi ei käänny.
 
 Internetistä löytyy runsaasti Flowta ja Typescriptiä vertailevia artikkeleja, ks esim.:
 - <https://blog.mariusschulz.com/2017/01/13/typescript-vs-flow>
@@ -1386,36 +1400,36 @@ Internetistä löytyy runsaasti Flowta ja Typescriptiä vertailevia artikkeleja,
 
 ### React-sovelluksen koodin organisointi
 
-Nodatimme useimmissa sovelluksissa periaatetta, missä komponentit sijoitettiin hakemistoon _components_, reducerit hakemistoon _reducers_ ja palvelimen kanssa kommunikoida koodi hakemistoon _services_. Tälläinen organisoimistapa riittää pienehköihin sovelluksiin, mutta komponenttien määrän kasvaessa tarvitaan muunlaisia ratkaisuja. Yhtä oikeaa tapaa ei ole, artikkeli [The 100% correct way to structure a React app (or why there’s no such thing)](https://hackernoon.com/the-100-correct-way-to-structure-a-react-app-or-why-theres-no-such-thing-3ede534ef1ed)
+Nodatimme useimmissa sovelluksissa periaatetta, missä komponentit sijoitettiin hakemistoon _components_, reducerit hakemistoon _reducers_ ja palvelimen kanssa kommunikoiva koodi hakemistoon _services_. Tälläinen organisoimistapa riittää pienehköihin sovelluksiin, mutta komponenttien määrän kasvaessa tarvitaan muunlaisia ratkaisuja. Yhtä oikeaa tapaa ei ole, artikkeli [The 100% correct way to structure a React app (or why there’s no such thing)](https://hackernoon.com/the-100-correct-way-to-structure-a-react-app-or-why-theres-no-such-thing-3ede534ef1ed)
 tarjoaa näkökulmia aiheeseen.
 
 ### Frontti ja backend samassa repositoriossa
 
-Olemme kurssilla tehneet frontendin ja backendin omiin repositorioihinsa. Kyseessä on varsin tyypillinen ratkaisu. Teimme tosin deploymentin kopioimalla frontin bundlatun koodin backendin repositorion sisälle. Toinen, ehkä järkevämpi tilanne olisi ollut deployata frontin koodi erikseen, create-react-appilla tehtyjen sovellusten osalta se on todella helppoa oman [buildpackin](https://github.com/mars/create-react-app-buildpack) ansiosta.
+Olemme kurssilla tehneet frontendin ja backendin omiin repositorioihinsa. Kyseessä on varsin tyypillinen ratkaisu. Teimme tosin deploymentin [kopioimalla](/osa3/#Staattisten-tiedostojen-tarjoaminen-backendistä) frontin bundlatun koodin backendin repositorion sisälle. Toinen, ehkä järkevämpi tilanne olisi ollut deployata frontin koodi erikseen, create-react-appilla tehtyjen sovellusten osalta se on todella helppoa oman [buildpackin](https://github.com/mars/create-react-app-buildpack) ansiosta.
 
 Joskus voi kuitenkin olla tilanteita, missä koko sovellus halutaan samaan repositorioon. Tällöin yleinen ratkaisu on sijoittaa _package.json_ ja _webpack.config.js_ hakemiston juureen ja frontin sekä backendin koodi omiin hakemistoihinsa, esin _client_ ja _server_.
 
-Erään hyvän lähtökohdan yksirepositorioiden koodin organisoinnille antaa [Mern](http://mern.io/)-projektin ylläpitämä [Mern-starter](https://github.com/Hashnode/mern-starter).
+Erään hyvän lähtökohdan yksirepositorioisen koodin organisoinnille antaa [MERN](http://mern.io/)-projektin ylläpitämä [MERN starter](https://github.com/Hashnode/mern-starter).
 
 ### Palvelimella tapahtuvat muutokset
 
-Jos palvelimella olevassa tilassa tapahtuu muutoksia, esim. blogilistapalveluumme lisätään uusia blogeja, tällä kurssilla tekemämme React-frontendit eivät huomaa muutoksia ennen sivujen uudelleenlatausta. Vastaava tilanne tulee eteen, jos frontendistä käynnistetään jotain kauemmin kestävää laskentaa backendiin, miten laskennan tulokset saadaan heijastettua frontediin?
+Jos palvelimella olevassa tilassa tapahtuu muutoksia, esim. blogilistapalveluun lisätään uusia blogeja muiden käyttäjien toimesta, tällä kurssilla tekemämme React-frontendit eivät huomaa muutoksia ennen sivujen uudelleenlatausta. Vastaava tilanne tulee eteen, jos frontendistä käynnistetään jotain kauemmin kestävää laskentaa backendiin, miten laskennan tulokset saadaan heijastettua frontediin?
 
-Eräs tapa on suorittaa frontendissa pollausta, eli toistuvia kyselyitä backendin apiin esim. [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)-komennon avulla.
+Eräs tapa on suorittaa frontendissa [pollausta](https://en.wikipedia.org/wiki/Polling_(computer_science)), eli toistuvia kyselyitä backendin apiin esim. [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)-komennon avulla.
 
-Edistyneempi tapa on käyttää [WebSocketeja](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), joiden avulla on mahdollista muodostaa kaksisuuntainen kommunikaatiokanava selaimen ja palvelimen välille. Tällöin frontendin ei tarvitse pollata backendia. Riittää määritellä takaisinkutsufunktiot tilanteisiin, joissa palvelin lähettää WebSocketin avulla tietoja tilan päivittämisestä.
+Edistyneempi tapa on käyttää [WebSocketeja](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API), joiden avulla on mahdollista muodostaa kaksisuuntainen kommunikaatiokanava selaimen ja palvelimen välille. Tällöin frontendin ei tarvitse pollata backendia, riittää määritellä takaisinkutsufunktiot tilanteisiin, joissa palvelin lähettää WebSocketin avulla tietoja tilan päivittämisestä.
 
-WebSocketit ovat selaimen tarjoama palvelu, jolla ei kuitenkaan ole kaikille selaimille vielä täyttä tukea
+WebSocketit ovat selaimen tarjoama rajapinta, jolla ei kuitenkaan ole kaikille selaimille vielä täyttä tukea:
 
 ![]({{ "/assets/7/22a.png" | absolute_url }})
 
-WebSocket API:n suoran käyttämisen sijaan onkin suositeltavaa käyttää [Socket.io](https://socket.io/)-kirjastoa, joka tarjoaa erilaisia automaattisia _fallback_-mahdollisuuksia jos käytettävässä selaimessa ei ole täyttä WebSocket-tukea.
+WebSocket API:n suoran käyttämisen sijaan onkin suositeltavaa käyttää [Socket.io](https://socket.io/)-kirjastoa, joka tarjoaa erilaisia automaattisia _fallback_-mahdollisuuksia, jos käytettävässä selaimessa ei ole täyttä WebSocket-tukea.
 
 ### Virtual DOM
 
-Reactin yhteydessä mainitan uusein käsite Virtual DOM. Mistä oikein on kyseä? Kuten [osassa 1](osa1/#Document-Object-Model-eli-DOM) mainittiin, selaimet tarjoavat [DOM API](https://developer.mozilla.org/fi/docs/DOM):n, jota hyväksikäyttäen selaimessa toimiva Javascript voi muokata sivun ulkoasun määritteleviä elementtejä.
+Reactin yhteydessä mainitan usein käsite Virtual DOM. Mistä oikein on kyseä? Kuten [osassa 1](osa1/#Document-Object-Model-eli-DOM) mainittiin, selaimet tarjoavat [DOM API](https://developer.mozilla.org/fi/docs/DOM):n, jota hyväksikäyttäen selaimessa toimiva Javascript voi muokata sivun ulkoasun määritteleviä elementtejä.
 
-Reactissa ohjelmoija ei koskaan manipuloi DOM:ia suoraan. React-komponenttien ulkoasun määrittelevä _render_-metodi palauttaa joukon [React](https://reactjs.org/docs/glossary.html#elements)-elementtejä. Vaikka osa elementeistä näyttä normaaleilta HTML-elementeiltä
+Reactia käyttäessä ohjelmoija ei koskaan (tai parempi sanoa yleensä) manipuloi DOM:ia suoraan. React-komponenttien ulkoasun määrittelevä _render_-metodi palauttaa joukon [React](https://reactjs.org/docs/glossary.html#elements)-elementtejä. Vaikka osa elementeistä näyttä normaaleilta HTML-elementeiltä
 
 ```react
 const element = <h1>Hello, world</h1>
@@ -1425,7 +1439,7 @@ eivät nekään ole HTML:ää vaan pohjimmiltaan javascriptiä olevia React-elem
 
 Sovelluksen komponenttien ulkoasun määrittelevät React-elementit muodostavat [Virtual DOM:in](https://reactjs.org/docs/faq-internals.html#what-is-the-virtual-dom) joka pidetään suorituksen aikana keskusmuistissa.
 
-[ReactDOM](https://reactjs.org/docs/react-dom.html)-kirjaston avulla komponenttien määrittelevä virtuaalinen DOM renderöidään oikeaksi DOM:iksi eli DOM-API:n avulla selaimen näytettäbäksi:
+[ReactDOM](https://reactjs.org/docs/react-dom.html)-kirjaston avulla komponenttien määrittelevä virtuaalinen DOM renderöidään oikeaksi DOM:iksi eli DOM API:n avulla selaimen näytettäväksi:
 
 ```react
 ReactDOM.render(
@@ -1438,11 +1452,11 @@ Kun sovelluksen tila muuttuu, määrittyy komponenttien render-metodien ansiosta
 
 ### Reactin roolista sovelluksissa
 
-Materiaalissa ei ole tuotu kovin selkeästi esille sitä, että React on näkymäkirjasto. Jos ajatellaan perinteistä [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) -jaoittelua, on Reactin toimialaa juurikin _View_. React on siis sovellusalueeltaan suppeampi kuin esim [Angular](https://angular.io/), joka on kaiken tarjoava Frontendin MVC-sovelluskehys.
+Materiaalissa ei ole tuotu ehkä riittävän selkeästi esille sitä, että React on ensisijaisesti tarkoitettu näkymien luomisesta huolehtivaksi kirjastoksi. Jos ajatellaan perinteistä [Model View Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) -jaoittelua, on Reactin toimialaa juurikin _View_. React on siis sovellusalueeltaan suppeampi kuin esim [Angular](https://angular.io/), joka on kaiken tarjoava Frontendin MVC-sovelluskehys. Reactia ei kutsutakaan sovellukehykseksi (framework) vaan kirjastoksi (library). 
 
-Reactia ei kutsutakaan sovellukehykseksi (framework) vaan kirjastoksi (library). Pienissä sovelluksissa React-komponenttien tilan avulla hoidetaan MVC:n _Model_-osuutta.
+Pienissä sovelluksissa React-komponenttien tilaan talletetaan sovelluksen käsittelemää dataa, eli komponenttien tilan voi näissä tapaukissa ajatella vastaavan MVC:n modeleita.
 
-React-sovellusten yheydessä ei kuitenkaan yleensä puhuta MVC-arkkitehtuurista ja jos käytössä on Redux niin silloin sovellukset noudattavat [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content)-arkkitehtuuria ja Reactin rooliksi jää entistä enemmän näkymien muodostaminen. Varsinainen sovelluslogiikka hallitaan Reduxin tilan ja action creatorien avulla. Jos käytössä on osasta 6 tuttu [redux thunk](osa6/#Asynkroniset-actionit-ja-redux-thunk), on sovelluslogiikka mahdollista eristää lähes täysin React-koodista.
+React-sovellusten yheydessä ei kuitenkaan yleensä puhuta MVC-arkkitehtuurista ja jos käytössä on Redux niin silloin sovellukset noudattavat [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content)-arkkitehtuuria ja Reactin rooliksi jää entistä enemmän pelkkä näkymien muodostaminen. Varsinainen sovelluslogiikka hallitaan Reduxin tilan ja action creatorien avulla. Jos käytössä on osasta 6 tuttu [redux thunk](osa6/#Asynkroniset-actionit-ja-redux-thunk), on sovelluslogiikka mahdollista eristää lähes täysin React-koodista.
 
 Koska sekä React että [Flux](https://facebook.github.io/flux/docs/in-depth-overview.html#content) ovat Facebookilla syntyneinä, voi ajatella, että Reactin pitäminen ainoastaan käyttöliittymästä huolehtivana kirjastona on sen oikeaoppista käyttöä. Flux-arkkitehtuurin noudattaminen tuo sovelluksiin tietyn overheadin ja jos on kyse pienestä sovelluksesta tai prototyypistä, saattaa Reatcin "väärinkäyttäminen" olla järkevää sillä myöskään [Overengineering](https://en.wikipedia.org/wiki/Overengineering) ei yleensä johda optimaalisiin seurauksiin.
 
@@ -1454,33 +1468,33 @@ Katsotaan kuitenkin muutamaa kurssispesifistä seikkaa.
 
 The Open Web Application Security Project eli [OWASP](https://www.owasp.org) julkaisee vuosittain listan Websovellusten yleisimmistä turvallisuusuhista. Tuorein lista on [täällä](https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf). Samat uhat ovat listalla vuodesta toiseen.
 
-Listaykkösenä on _injection_ joka tarkoittaa sitä, että sovellukseen esim, lomakkeen avulla lähetettävä teksti tulkitaankin aivan eri eri tavalla kun sovelluskehittäjä on tarkoittanut. Kuuluisin injektioiden muoto lienevät [SQL-injektiot](https://stackoverflow.com/questions/332365/how-does-the-sql-injection-from-the-bobby-tables-xkcd-comic-work).
+Listaykkösenä on _injection_, joka tarkoittaa sitä, että sovellukseen esim, lomakkeen avulla lähetettävä teksti tulkitaankin aivan eri eri tavalla kun sovelluskehittäjä on tarkoittanut. Kuuluisin injektioiden muoto lienevät [SQL-injektiot](https://stackoverflow.com/questions/332365/how-does-the-sql-injection-from-the-bobby-tables-xkcd-comic-work).
 
-Esim. jos koodissa tehtäisiin seuravasti muotoiltu SQL-kysely:
+Esim. jos ei-turvallisessa koodissa tehtäisiin seuravasti muotoiltu SQL-kysely:
 
 ```js
 let query = "SELECT * FROM Users WHERE name = '" + userName + "';"
 ```
 
-Jos käyttäjä nyt määrittelisi nimekseen
+Oletetaan että hieman ilkeämielinen käyttäjä _Arto Hellas_ nyt määrittelisi nimekseen
 
 <pre>
-John Doe'; DROP TABLE Users; --
+Arto Hell-as'; DROP TABLE Users; --
 </pre>
 
-tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan
+eli nimi sisältäisi hipsun <code>'</code>, jonka on SQL:ssä merkkijonon aloitus/lopetusmerkki. Tämän seurauksena tulisi suoritetuksi kaksi SQL-operaatiota, joista jälkimmäinen tuhoaisi tietokannan 
 
 ```sql
-SELECT * FROM Users WHERE name = 'John Doe'; DROP TABLE Users; --'
+SELECT * FROM Users WHERE name = 'Arto Hell-as'; DROP TABLE Users; --'
 ```
 
-SQL-injektiot estetään _sanitoimalla_ syötteem eli tarkastamalla, että kyselyjen parametrit evät sisällä kiellettyhä merkkejä, kuten täässä tapauksessa merkin _'_. Jos kiellettyjä merkkejä löytyy, ne poistetaan korvataan turvallisilla vastineilla [escapettamalla](https://en.wikipedia.org/wiki/Escape_character#JavaScript).
+SQL-injektiot estetään [sanitoimalla](https://security.stackexchange.com/questions/172297/sanitizing-input-for-parameterized-queries) syöte, eli tarkastamalla, että kyselyjen parametrit eivät sisällä kiellettyhä merkkejä, kuten täässä tapauksessa hipsun. Jos kiellettyjä merkkejä löytyy, ne poistetaan korvataan turvallisilla vastineilla [escapettamalla](https://en.wikipedia.org/wiki/Escape_character#JavaScript).
 
 Myös NoSQL-hyökkäykset ovat mahdollisia. Mongoose kuitenkin estää ne [sanitoimalla](https://zanon.io/posts/nosql-injection-in-mongodb) kyselyt. Lisää aiheeta esim. [täällä](https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html).
 
-_Cross-site scripting eli XSS_ on hyökkäys, missä sovellukseen om mahdollista injektoida suoritettavaksi vihollismielistä Javascript-koodia. Jos kokeilemme injektoida esim. muistiinpanosovellukseen seuraavan
+_Cross-site scripting eli XSS_ on hyökkäys, missä sovellukseen on mahdollista injektoida suoritettavaksi vihollismielistä Javascript-koodia. Jos kokeilemme injektoida esim. muistiinpanosovellukseen seuraavan
 
-```js
+```html
 <script>alert('Evil XSS attack');</script>
 ```
 
@@ -1488,7 +1502,7 @@ koodia ei suoriteta, vaan koodi renderöityy sivulle 'tekstinä':
 
 ![]({{ "/assets/7/23.png" | absolute_url }})
 
-sillä react [huolehtii muuttujissa olevan datan sanitoinnista](https://reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks). React [on mahdollistanut](https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1) XSS-hyökkäyksiä ja mikään ei takaa etteikö niitä voisi vielä löytyä.
+sillä React [huolehtii muuttujissa olevan datan sanitoinnista](https://reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks). Reactin jotkut versiot [ovat mahdollistaneet](https://medium.com/dailyjs/exploiting-script-injection-flaws-in-reactjs-883fb1fe36c1) XSS-hyökkäyksiä, aukot on toki korjattu, mutta mikään ei takaa etteikö niitä voisi vielä löytyä.
 
 Käytettyjen kirjastojen suhteen tuleekin olla tarkkana, jos niihin tulee tietoturvapäivityksiä, on kirjastot syytä päivittää omissa sovelluksissa. Expressin tietoturvapäitykset löytyvät [kirjaston dokumentaatiosta](https://expressjs.com/en/advanced/security-updates.html) ja Nodeen liittyvät [blogista](https://nodejs.org/en/blog/).
 
@@ -1500,15 +1514,21 @@ npm outdated --depth 0
 
 ![]({{ "/assets/7/24.png" | absolute_url }})
 
-Riippuvuudet saa ajantasaistettua päivittämällätiedostoa _package.json_ ja suorittamalla komennon _npm install_. Riippuvuuden vanha versio ei tietenkään välttämättä ole tietoturvariski.
+Riippuvuudet saa ajantasaistettua päivittämällä tiedostoa _package.json_ ja suorittamalla komennon _npm install_. Riippuvuuksien vanhat versiot eivät tietenkään välttämättä ole tietoturvariski.
 
 [Node Security Platform](https://nodesecurity.io/) valvoo npm:ssä olevien riippuvuuksien turvallisuutta ja tallettaa tietokantaansa kaikki riippuvuuksissa havaitut tietoturvaongelmat. Oman projektin käyttämien riippuvuuksien turvallisuustilanne on helppo tarkistaa komentoriviltä toimivan [nsp](https://www.npmjs.com/package/nsp)-työkalun avulla.
 
-Vaikka työkalumme sisältää muutaman ei-ajantasaisen riippuvuuden, ei tietoturvaongelmia ole.
+Vaikka työkalumme sisältää muutaman ei-ajantasaisen riippuvuuden, ei tietoturvaongelmia ole:
 
 ![]({{ "/assets/7/25.png" | absolute_url }})
 
-Eräs OWASP:in listan mainitsemista uhista on _Broken Authentication_ ja siihen liittyvä _Broken Access Control_. Käyttämämme token-perustainen autentikointi on kohtuullisen robusti jos sovellusta käytetään HTTPS-protokollalla. Access Controlin eli pääsynhallinnan toteuttamisessa on aina syytä muistaa tehdä esim. käyttäjän identiteetin tarkastus selaimen lisäksi myös palvelimella. Huonoa tietoturvaa olisi estää jotkut toimenpiteet ainoastaan piilottamalla niiden suoritusmahdollisuus selaimessa olevasta koodista.
+Toinen vastaava palvelu riippuvuuksien turvallisuuden tarkkailuun on [Snyk](https://snyk.io).
+
+Eräs OWASP:in listan mainitsemista uhista on _Broken Authentication_ ja siihen liittyvä _Broken Access Control_. Käyttämämme token-perustainen autentikointi on kohtuullisen robusti, jos sovellusta käytetään tietoliikenteen salaavalla HTTPS-protokollalla. Access Controlin eli pääsynhallinnan toteuttamisessa on aina syytä muistaa tehdä esim. käyttäjän identiteetin tarkastus selaimen lisäksi myös palvelimella. Huonoa tietoturvaa olisi estää jotkut toimenpiteet ainoastaan piilottamalla niiden suoritusmahdollisuus selaimessa olevasta koodista.
+
+Mozzillan MDN:n erittäin hyvä [Website security -guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security)  nostaakin esiin tämän tärkän seikan:
+
+![]({{ "/assets/7/25a.png" | absolute_url }})
 
 Expressin dokumentaatio sisältää tietoturvaa käsittelvän osan [Production Best Practices: Security](https://expressjs.com/en/advanced/best-practice-security.html) joka kannattaa lukea läpi. Erittäin suositeltavaa on ottaa backendissa käyttöön [Helmet](https://helmetjs.github.io/)-kirjasto, joka sisältää joukon Express-sovelluksista tunnettuja turvallisuusriskejä eliminoivia middlewareja.
 
@@ -1602,10 +1622,10 @@ Pilvinatiiviuteen liittyvät usein äsken mainitut mirkropalvelut ja serverless-
 
 ## Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
 
-Facebookin ylläpitämä kirjasto <immutable.js> tarjoaa muutamista tietorakenteista nimensä mukaisia toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä sekä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella.
+Facebookin ylläpitämä kirjasto [immutable.js](immutable.js) tarjoaa muutamista tietorakenteista nimensä mukaisia toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä, sillä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella.
 
 [Redux-saga](https://redux-saga.js.org/) tarjoaa osassa 5 käsitellylle [redux thunkille](osa5/#redux-thunk) vaihtoehtoisen tavan tehdä asynkronisia actioneja. Jotkut tykkää ja hypettää, itse en.
 
-Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
+Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä, joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
 
 Jos tiedät jotain suositeltavia linkkejä tai kirjastoja, tee pull request!

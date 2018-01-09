@@ -976,7 +976,7 @@ Koska frontend toimii osoitteessa _localhost:3000_, menevät backendiin tehtäv�
 
 create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riittää, että tiedostoon _package.json_ lisätään seuraava määritelmä:
 
-```json
+```bash
 {
   // ...
   "proxy": "http://localhost:3001"
