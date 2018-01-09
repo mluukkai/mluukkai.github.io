@@ -1532,7 +1532,7 @@ class App extends React.component {
         this.setState({ notes: response })
       })
   }
-  
+
   addNote = (e) => {
     // ...
     noteService
