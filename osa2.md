@@ -1124,7 +1124,7 @@ addNote = (e) => {
   e.preventDefault()
   const noteObject = {
     content: this.state.new_note,
-    date: new Date().new,
+    date: new Date(),
     important: Math.random() > 0.5
   }
 
