@@ -944,13 +944,13 @@ Varmista, että frontend toimii muutosten jälkeen.
 
 Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista niiden toimivuus suoraan selaimella.
 
+### loppuhuipennus
+
 #### 58 puhelinluettelo ja tietokanta, osa 6
 
 Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluettelossa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
 
 Tämä tehtävä saattaa olla jossain määrin hankala. Osassa 4 esitettävä async/await-syntaksi helpottaa tehtävän tekemistä, eli jos joudut ongelmiin, älä juutu tehtävään liian pitkäksi aikaa.
-
-### loppuhuipennus
 
 #### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
 Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen vieminen tuotantoon](osa3#sovelluksen-vieminen-tuotantoon).

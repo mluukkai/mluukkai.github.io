@@ -1600,7 +1600,7 @@ Koska javascriptissa merkkijonojen leksikaalista aakkosjärjestystä on mahdolli
 
 ### Tehtäviä
 
-Tee nyt tehtävät [55-58](tehtavat#lisää-operaatioita)
+Tee nyt tehtävät [55-57](tehtavat#lisää-operaatioita)
 
 ## refaktorointia - promisejen ketjutus
 
@@ -1766,4 +1766,4 @@ Node-sovellusten konfigurointiin on olemassa ympäristömuuttujien ja dotenvin l
 
 ### Tehtäviä
 
-Tee nyt osan viimeiset tehtävät [59-](tehtavat#loppuhuipennus)
+Tee nyt osan viimeiset tehtävät [58-](tehtavat#loppuhuipennus)
