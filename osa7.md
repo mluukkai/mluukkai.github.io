@@ -4,13 +4,6 @@ title: osa 7
 permalink: /osa7/
 ---
 
-<div class="important">
-  <h1>KESKEN, ÄLÄ LUE</h1>
-
-  <p>Osan on tavoitteena valmistua tiistaina 9.1.</p>
-</div>
-
-
 ## Osan 7 oppimistavoitteet
 
 - Webpack
@@ -22,8 +15,10 @@ permalink: /osa7/
   - Styled components
 - Testaus
   - Headless browser testing
+  - Puppeteer
 - React
   - Isompien sovellusten komponenttien organisointi
+  - Palvelimella tapahtuvien muutosten 
   - sovelluksen rakenne jos frontti ja backend kaikki samassa repossa
   - Virtual DOM
 - React/node-sovellusten tietoturva
@@ -1564,17 +1559,17 @@ create-react-app:illa luodut sovellukset ovat oletusarvoisesti [progressiivisia]
 
 Tällä kurssilla olemme tehneet palvelinpuolelle ainoastaan matalan pintaraapaisun. Sovelluksissamme on ollut korkeintaan muutaman API-endpointin tarjoava _monoliittinen_ eli yhdellä palvelimella pyörivä kokonaisuuden muodostanut backend.
 
-Sovelluksen kasvaessa massiiviseksi monoliittisen backendin malli alkaa muuttua ongelmalliseksi niin suorituskyvyn kuin jatkokehitettävyydenkin kannalta.
+Sovelluksen kasvaessa suuremmaksi monoliittisen backendin malli alkaa muuttua ongelmalliseksi niin suorituskyvyn kuin jatkokehitettävyydenkin kannalta.
 
-[Mikropalveluarkkitehtuurilla](https://martinfowler.com/articles/microservices.html) (microservice) tarkoitetaan tapaa koostaa sovelluksen backend useista autonomisista erillisistä palveluista, jotka kommunikoivat keskenään verkon yli. Yksittäisen mikropalvelun on tarkoituksena hoitaa tietty looginen toiminnallinen kokonaisuus. Puhdasoppisessa mikropalveluarkkitehtuurissa palvelut eivät käytä jaettua tietokantaa.
+[Mikropalveluarkkitehtuurilla](https://martinfowler.com/articles/microservices.html) (microservice) tarkoitetaan tapaa koostaa sovelluksen backend useista erillisistä autonomisista palveluista, jotka kommunikoivat keskenään verkon yli. Yksittäisen mikropalvelun on tarkoituksena hoitaa tietty looginen toiminnallinen kokonaisuus. Puhdasoppisessa mikropalveluarkkitehtuurissa palvelut eivät käytä jaettua tietokantaa.
 
-Esim. blogilistasovelluksen voisi koostaa kahdesta palvelusta, toinen huolehtisi käyttäjistä ja toinen blogeista. Käyttäjäpalveun vastuulla olisi käyttäjätynnusten luominen ja käyttäjien autentikointi, blogipalvelu taas huolehtisi blogeihin liittyvistä toimista.
+Esim. blogilistasovelluksen voisi koostaa kahdesta palvelusta, toinen huolehtisi käyttäjistä ja toinen blogeista. Käyttäjäpalvelun vastuulla olisi käyttäjätynnusten luominen ja käyttäjien autentikointi, blogipalvelu taas huolehtisi blogeihin liittyvistä toimista.
 
-Seuraava kuva havainnollistaa mikroarkkitehtuuriin perustuvan sovelluksen rakennetta perinteiseen monoliittiseen rakenteeseen verrattuna:
+Seuraava kuva havainnollistaa mikropalveluarkkitehtuuriin perustuvan sovelluksen rakennetta perinteiseen monoliittiseen rakenteeseen verrattuna:
 
 ![]({{ "/assets/7/26.png" | absolute_url }})
 
-Frontendin (kuvassa neliöitynä) rooli ei välttämättä poikkea malleissa kovinkaan paljoa, mikropalveluiden ja frontendin välissä on usein [API gateway](http://microservices.io/patterns/apigateway) jonka tarjoaa frontendille perinteisen kaltaisen "yhdessä palvelimessa" olevan näkymän backendiin, esim. [Netflix](https://medium.com/netflix-techblog/optimizing-the-netflix-api-5c9ac715cf19) käyttää tätä ratkaisua.
+Frontendin (kuvassa neliöitynä) rooli ei välttämättä poikkea malleissa kovinkaan paljoa, mikropalveluiden ja frontendin välissä on usein [API gateway](http://microservices.io/patterns/apigateway) jonka tarjoaa frontendille perinteisen kaltaisen, "yhdessä palvelimessa" olevan näkymän backendiin, esim. [Netflix](https://medium.com/netflix-techblog/optimizing-the-netflix-api-5c9ac715cf19) käyttää tätä ratkaisua.
 
 Mikropalveluarkkitehtuurit ovat syntyneet ja kehittyneet suurten internetskaalan sovellusten tarpeisiin. Trendin aloitti Amazon jo kauan ennen termin microservice lanseeraamista. Tärkeä lähtölaukaus oli CEO Jeff Bezosin vuonna 2002 kaikille työntekijöille lähettämä email:
 
@@ -1594,17 +1589,17 @@ Mikropalveluarkkitehtuurit ovat syntyneet ja kehittyneet suurten internetskaalan
 
 Nykyään eräs vahvimmista suunnannäyttäjistä mikropalveluiden suhteen on [Netflix](https://www.infoq.com/presentations/netflix-chaos-microservices).
 
-Mikropalveluista on pikkuhiljaa tullut hype, tämän ajan [silver buller](https://en.wikipedia.org/wiki/No_Silver_Bullet), jota yritetään tarjota ratkaisuiksi lähes kaikkiin ongelmiin. Mikropalveluarkkitehtuurin soveltamiseen liittyy kuitenkin suuri määrä haasteita ja voi olla järkevämpi lähteä liikeelle [monolith first](https://martinfowler.com/bliki/MonolithFirst.html), eli tehdä aluksi perinteinen kaiken sisältävä backend. Tai sitten [ei](https://martinfowler.com/articles/dont-start-monolith.html). Mielipiteitä on monenlaisia! Molemmat linkit johtavat Martin Fowlerin sivuille, eli viisaimmat eivät ole ihan varmoja kumpi näistä oikeista tavoista on oikeampi.
+Mikropalveluista on pikkuhiljaa tullut hype, tämän ajan [silver buller](https://en.wikipedia.org/wiki/No_Silver_Bullet), jota yritetään tarjota ratkaisuiksi lähes kaikkiin ongelmiin. Mikropalveluarkkitehtuurin soveltamiseen liittyy kuitenkin suuri määrä haasteita ja voi olla järkevämpi lähteä liikeelle [monolith first](https://martinfowler.com/bliki/MonolithFirst.html), eli tehdä aluksi perinteinen kaiken sisältävä backend. Tai sitten [ei](https://martinfowler.com/articles/dont-start-monolith.html). Mielipiteitä on monenlaisia. Molemmat linkit johtavat Martin Fowlerin sivuille, eli viisaimmat eivät ole ihan varmoja kumpi näistä oikeista tavoista on oikeampi.
 
-Emme voi valitettavasti tällä kurssilla syventyä tähän tärkeään aihepiiriin tämän tarkemmin. Jo pintapuolinenkin käsittely vaatisi ainakin 5 viikkoa lisää aikaa.
+Emme voi valitettavasti syventyä tällä kurssilla tähän tärkeään aihepiiriin tämän tarkemmin. Jo pintapuolinenkin käsittely vaatisi ainakin 5 viikkoa lisää aikaa.
 
 # Serverless
 
-Loppuvuodesta 2014 tapahtuneen Amazonin [lambda](https://aws.amazon.com/lambda/) palvelun julkaisun jälkeen aikoihin alkoi web-sovellusten kehittämiseen nousta jälleen uusi trendi [serverless](https://serverless.com/).
+Loppuvuodesta 2014 tapahtuneen Amazonin [lambda](https://aws.amazon.com/lambda/)-palvelun julkaisun jälkeen alkoi web-sovellusten kehittämiseen nousta jälleen uusi trendi, [serverless](https://serverless.com/).
 
-Lambda ja nyttemmin Googlen [Cloud functions](https://cloud.google.com/functions/) ja [Azuren vastaava toiminnallisuus](https://azure.microsoft.com/en-us/services/functions/) mahdollistava yksittäisten funktioiden suorittamisen pilvessä.
+Kyse on siitä, että lambda ja nyttemmin Googlen [Cloud functions](https://cloud.google.com/functions/) ja [Azuren vastaava toiminnallisuus](https://azure.microsoft.com/en-us/services/functions/) mahdollistava _yksittäisten funktioiden suorittamisen_ pilvessä, kun ennen tätä pienin pilvessä suoritettava yksikkö oli käytännössä yksittäinen _prosessi_, eli esim. Node-backeniä suorittava ajoympäristö.
 
-Esim. Amazonin [API-gateway](https://aws.amazon.com/api-gateway/):n avulla on mahdollista tehdä "palvelimettomia" sovelluksia, missä määritellyn HTTP API:n kutsuihin vastataan pilvifunktioilla. Funktiot yleensä operoivat jo valmiiksi pilvipalvelun tietokantoihin talletetun datan avulla.
+Esim. Amazonin [API-gateway](https://aws.amazon.com/api-gateway/):n avulla on mahdollista tehdä "palvelimettomia" sovelluksia, missä määritellyn HTTP API:n kutsuihin vastataan suoraan pilvifunktioilla. Funktiot yleensä operoivat jo valmiiksi pilvipalvelun tietokantoihin talletetun datan avulla.
 
 Serverlessissä ei siis ole kyse siitä että sovelluksissa ei olisi palvelinta, vaan tavasta määritellä palvelin. Sovelluskehittäjät voivat siirtyä ohjelmoinnissa korkeammalle abstratkiotasolle, ei ole enää tarvetta määritellä ohjelmallisesti HTTP-kutsujen reitityksiä, tietokantayhteyksiä ym, pilviinfrastruktuuri tarjoaa kaiken tämän. Pilvifunktioilla on myös mahdollista saada helposti aikaan hyvin skaalautuvia järjestelmiä, esim. Amazon Lambda pystyy suorittamaan massiivisen määrän pilvifunktioita sekunnissa. Kaikki tämä tapahtuu infrastruktuurin toimesta automaattisesti, ei ole tarvetta käynnistellä uusia palvelimia ym.
 
@@ -1618,17 +1613,19 @@ Viime aikoina on myös yleistynyt termin pilvinatiivi, _cloud native_ käyttö. 
 
 Esim. Netflixin koko infrastruktuuria voi pitää pilvinatiivina. Netflixillä ei ole omia palvelimia, kaikki toimii Amazonin alustalla olevissa virtuaalikoneissa.
 
-Pilvinatiiviuteen liittyvät usein äsken mainitut mikropalvelut ja serverless-arkkitehtuurit. Tärkeä teema pilvinatiiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
+Pilvinatiiviuteen liittyvät usein äsken mainitut mikropalvelut ja serverless-arkkitehtuuri. Tärkeä teema pilvinatiiveissa sovelluksissa on myös [kontainereiden](https://www.docker.com/what-container), kuten Dockerin hyödyntäminen.
 
 ## Hyödyllisiä kirjastoja ja mielenkiintoisia linkkejä
 
-Facebookin ylläpitämä kirjasto [immutable.js](immutable.js) tarjoaa muutamista tietorakenteista nimensä mukaisia toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä, sillä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella.
+Facebookin ylläpitämä kirjasto [immutable.js](immutable.js) tarjoaa muutamista tietorakenteista nimensä mukaisia _muuttumattomia_ toteutuksia. Kirjastosta voi olla hyötyä Reduxia käytettäessä, sillä kuten osasta 5 [muistamme](osa5/#puhtaat-funktiot,-immutable) reducerien on oltava puhtaita funktioita eli ne eivät saa muuttaa storen tilaa vaan niiden on korvattava se muutostilanteissa uudella.
 
-[Redux-saga](https://redux-saga.js.org/) tarjoaa osassa 5 käsitellylle [redux thunkille](osa5/#redux-thunk) vaihtoehtoisen tavan tehdä asynkronisia actioneja. Jotkut tykkää ja hypettää, itse en.
+[Redux-saga](https://redux-saga.js.org/) tarjoaa osassa 5 käsitellylle [redux thunkille](osa5/#redux-thunk) vaihtoehtoisen tavan tehdä asynkronisia actioneja. Jotkut hypettää ja tykkää, itse en.
+
+Single page sovelluksissa analytiikkatietojen käyttäjien sivuston kanssa käymän interaktion kerääminen on [haastavampaa](https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications) kuin perinteisissä, kokonaiseen sivun lataamiseen perustuvissa web-sovelluksissa. [React Google Analytics](https://github.com/react-ga/react-ga) -kirjasto tuo tähän avun.
+
+Voit hyödyntää React-osaamistasi myös mobiilisovellusten toteuttamiseen Facebookin erittäin suositun [React Native](https://facebook.github.io/react-native/) -kirjaston avulla.
+
 
 Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä, joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
-
-Voit hyödyntää React-osaamistasi myös mobiilisovellusten toteuttamiseen Facebookin
-[React Native](https://facebook.github.io/react-native/) -kirjaston avulla.
 
 Jos tiedät jotain suositeltavia linkkejä tai kirjastoja, tee pull request!
