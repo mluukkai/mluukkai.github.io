@@ -1107,7 +1107,7 @@ Ihan alkuperäisen [määritelmän](https://en.wikipedia.org/wiki/Representation
 
 Tutustumme REST:iin tarkemmin kurssin [seuraavassa osassa](/osa3), mutta jo nyt on tärkeä ymmärtää minkälaista [konventiota](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_Web_services) json-server ja yleisemminkin REST API:t käyttävät [reittien](https://github.com/typicode/json-server#routes), eli URL:ien ja käytettävien HTTP-pyyntöjen tyyppien suhteen.
 
-REST:issä yksittäisi asioita esim. meidän tapauksessamme muistiinpanoja kutsutaan _resursseiksi_. Jokaisella resurssilla on yksilöivä osoite eli URL. json-serverin noudattaman yleisen konvention mukaan yksittäisen muistiinpanoa kuvaavan resurssin URL on muotoa _notes/3_, missä 3 on resurssin tunniste. Osoite _notes_ taas vastaa kaikkien yksittäisten muistiinpanojen kokoelmaa.
+REST:issä yksittäisiä asioita esim. meidän tapauksessamme muistiinpanoja kutsutaan _resursseiksi_. Jokaisella resurssilla on yksilöivä osoite eli URL. json-serverin noudattaman yleisen konvention mukaan yksittäisen muistiinpanoa kuvaavan resurssin URL on muotoa _notes/3_, missä 3 on resurssin tunniste. Osoite _notes_ taas vastaa kaikkien yksittäisten muistiinpanojen kokoelmaa.
 
 Resursseja haetaan palvelimelta HTTP GET -pyynnöillä. Esim. HTTP GET osoitteeseen _notes/3_ palauttaisi muistiinpanon, jonka id-kentän arvo on 3. Kun taas HTTP GET -pyyntö osoitteeseen _notes_ palauttaa kaikki muistiinpanot.
 
@@ -1124,7 +1124,7 @@ addNote = (e) => {
   e.preventDefault()
   const noteObject = {
     content: this.state.new_note,
-    date: new Date().new,
+    date: new Date(),
     important: Math.random() > 0.5
   }
 
@@ -1525,6 +1525,14 @@ Moduulin muutoksen jälkeen täytyy komponentti _App_ muokata _noteService_:n me
 ```js
 class App extends React.component {
 
+  componentWillMount() {
+    noteService
+      .getAll()
+      .then(response => {
+        this.setState({ notes: response })
+      })
+  }
+  
   addNote = (e) => {
     // ...
     noteService
