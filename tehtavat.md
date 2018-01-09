@@ -748,11 +748,11 @@ Tämän osan tehtävissä teemme backendin edellisen osan puhelinluettelosovellu
 
 **HUOM** tämän osan tehtäväsarja kannattaa tehdä omaan git-repositorioon, suoraan repositorion juureen! Jos et tee näin, joudut ongelmiin tehtävässä 49.
 
-Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taukkoon listan puhelinnumerotietoja:
+Tee node-sovellus, joka tarjoaa osoitteessa <http://localhost:3001/api/persons> kovakoodatun taulukon puhelinnumerotietoja:
 
 ![]({{ "/assets/teht/19.png" | absolute_url }})
 
-Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuiten mikä tahansa muu merkki.
+Huomaa, että noden routejen määrittelyssä merkkijonon _api/persons_ kenoviiva käyttäytyy kuten mikä tahansa muu merkki.
 
 Sovellus pitää pystyä käynnistämään komennolla _npm start_.
 
@@ -760,11 +760,11 @@ Komennolla _npm run watch_ käynnistettäessa sovelluksen tulee käynnistyä uud
 
 #### 41 puhelinluettelon backend osa 2
 
-Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunilleen seuraavanlainen sivu
+Tee sovelluksen osoitteeseen <http://localhost:3001/info> suunnilleen seuraavanlainen sivu
 
 ![]({{ "/assets/teht/20.png" | absolute_url }})
 
-eli sivu kertoo pyynön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
+eli sivu kertoo pyynnön tekohetken sekä sen kuinka monta puhelinluettelotietoa sovelluksen muistissa olevassa taulukossa on.
 
 #### 42 puhelinluettelon backend osa 3
 
@@ -800,7 +800,7 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 #### 46 puhelinluettelon backend osa 6
 
-Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
+Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan / logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
 Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
@@ -834,7 +834,7 @@ Tee repositorion juureen tiedosto README.md ja lisää siihen linkki internetiss
 
 Generoi frontendistä tuotantoversio ja lisää se internetissä olevaan sovellukseesi osan 3 [tapaa noudatellen](osa3/#staattisten-tiedostojen-tarjoaminen-backendistä)
 
-Huolehdi myös, frontend toimii edelleen myös paikallisesti.
+Huolehdi myös, että frontend toimii edelleen myös paikallisesti.
 
 **PRO TIP:** kun deployaat sovelluksen herokuun, kannattaa ainakin alkuvaiheissa pitää **KOKO AJAN** näkyvillä herokussa olevan sovelluksen loki antamalla komento <code>heroku logs -t</code>:
 
@@ -885,7 +885,7 @@ Saat selville ohjelman komentoriviparametrit muuttujasta [process.argv](https://
 
 #### 52 tietokanta komentoriviltä, finetuning
 
-Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunilleen seuraavanlainen
+Parantele ohjelmaasi siten, että koko luettelon tulostaminen tapahtuu (etunimen mukaisessa) aakkosjärjestyksessä, ja puhelinnumerot tulostuvat alkaen samasta kohdasta riviä, eli tulostus on suunnilleen seuraavanlainen
 
 <pre>
 puhelinluettelo:
@@ -944,13 +944,13 @@ Varmista, että frontend toimii muutosten jälkeen.
 
 Päivitä myös polkujen _api/persons/:id_ ja _info_ käsittely, ja varmista niiden toimivuus suoraan selaimella.
 
+### loppuhuipennus
+
 #### 58 puhelinluettelo ja tietokanta, osa 6
 
 Huolehdi, että backendiin voi lisätä yhdelle nimelle ainoastaan yhden numeron. Jos HTTP POST -pyyntö yrittää lisätä nimeä, joka on jo puhelinluettelossa, tulee vastata sopivalla statuskoodilla ja lisätä vastaukseen asianmukainen virheilmoitus.
 
 Tämä tehtävä saattaa olla jossain määrin hankala. Osassa 4 esitettävä async/await-syntaksi helpottaa tehtävän tekemistä, eli jos joudut ongelmiin, älä juutu tehtävään liian pitkäksi aikaa.
-
-### loppuhuipennus
 
 #### 59 eriytetty sovelluskehitys- ja tuotantotietokanta
 Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen vieminen tuotantoon](osa3#sovelluksen-vieminen-tuotantoon).
@@ -1235,10 +1235,9 @@ pääsevät routet tokeniin käsiksi suoraan viittaamalla _request.token_:
 
 ```js
 blogsRouter.post('/', async (request, response) => {
-    // ..
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    // ..
-  }
+  // ..
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  // ..
 })
 ```
 
@@ -1246,7 +1245,7 @@ blogsRouter.post('/', async (request, response) => {
 
 Muuta blogin poistavaa operaatiota siten, että poisto onnistuu ainoastaan jos poisto-operaation tekijä (eli se kenen token on pyynnön mukana) on sama kuin blogin lisääjä.
 
-Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaankuuluva statuskoodi.
+Jos poistoa yritetään ilman tokenia tai väärän käyttäjän toimesta, tulee operaation palauttaa asiaan kuuluva statuskoodi.
 
 Huomaa, että jos haet blogin tietokannasta
 
@@ -1300,28 +1299,28 @@ Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa lo
 
 **HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
 
-```html
-  render() {
-    if (this.state.user === null) {
-      return (
-        <div>
-          <h2>Kirjaudu sovellukseen</h2>
-          <form>
-            //...
-          </form>
-        </div>
-      )
-    }
-
+```react
+render() {
+  if (this.state.user === null) {
     return (
       <div>
-        <h2>blogs</h2>
-        {this.state.blogs.map(blog =>
-          <Blog key={blog._id} blog={blog}/>
-        )}
+        <h2>Kirjaudu sovellukseen</h2>
+        <form>
+          //...
+        </form>
       </div>
     )
   }
+
+  return (
+    <div>
+      <h2>blogs</h2>
+      {this.state.blogs.map(blog =>
+        <Blog key={blog._id} blog={blog} />
+      )}
+    </div>
+  )
+}
 ```
 
 #### 82 blogilistan frontend, osa 2
@@ -1330,7 +1329,7 @@ Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahd
 
 ![]({{ "/assets/teht/29.png" | absolute_url }})
 
-Uloskirjautumisen jälkeen selain enää saa muistaa kirjautunutta käyttäjää reloadauksen jäleen.
+Uloskirjautumisen jälkeen selain ei saa muistaa kirjautunutta käyttäjää reloadauksen jälkeen.
 
 #### 83 blogilistan frontend, osa 3
 
@@ -1435,7 +1434,7 @@ tulee palvelimelle tehdä PUT-pyyntö osoitteeseen _/api/blogs/5a43fde2cbd20b12a
 
 Lisää nappi blogin poistamiselle. Nappi näytetään ainoastaan jos kyseessä on kirjautuneen käyttäjän lisäämä blogi _tai_ blogi, jolle ei ole määritelty lisääjää.
 
-Toteuta myös poiston tekevä logiikka. Laajenna backendiä siten, että ne blogit joihin ei liity lisääjää ovat kaikkien kirjautuneiden käyttäjien positettavissa.
+Toteuta myös poiston tekevä logiikka. Laajenna backendiä siten, että ne blogit joihin ei liity lisääjää ovat kaikkien kirjautuneiden käyttäjien poistettavissa.
 
 Ohjelmasi voi näyttää esim. seuraavalta:
 
@@ -1497,7 +1496,7 @@ Kirjautuminen kannattanee toteuttaa manipulomalla testeissä local storagea.
 
 **Vihje 2:**
 
-Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _describe_-lohkossa. Voit noudataa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
+Jotta mockin palauttamat blogit renderöityvät, kannattaa komponentti _App_ luoda _describe_-lohkossa. Voit noudattaa tämän ja edellisen tehtävän organisoinnissa esim. seuraavaa tapaa:
 
 ```js
 describe('<App />', () => {
@@ -1514,7 +1513,7 @@ describe('<App />', () => {
     })
   })
 
-  describe('when user is logged', ()=>{
+  describe('when user is logged', () => {
     beforeEach(() => {
       // luo sovellus siten, että käyttäjä on kirjautuneena
     })
@@ -1537,7 +1536,7 @@ Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
 
-Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteeta. Storen hallitsema tila on siis muotoa:
+Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
 
 ```js
 {
@@ -1746,7 +1745,7 @@ Muuta myös _AnecdoteList_ käyttämään connectia.
 
 Poista turhaksi staten propseina tapahtuva välittäminen, eli pelkistä _App_ muotoon:
 
-```js
+```react
 class App extends React.Component {
   render() {
     return (
@@ -1934,13 +1933,35 @@ Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aika
 
 Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia  "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
 
+Osassa on 22 tehtävää, arvostelussa tehtävien maksimiin tässä osassa lasketaan kuitenkin ainoastaan 18.
+
 Useimmat tämän osan tehtävistä vaativat koodisi refaktoroimista. Tämä on tilanne käytännössä aina sovelluksia laajennettaessa, eli vaikka refaktorointi voi olla hankalaa ja ikävääkin, on kyseessä oleellinen taito.
 
 Hyvä neuvo refaktorintiin niinkuin uudenkin koodin kirjoittamiseen on _pienissä askelissa eteneminen_, koodia ei kannata hajottaa totaalisesti refaktorointia tehdessä pitkäkti aikaa, se on käytännössä varma resepti hermojen menettämiseen.
 
-### 122
+### 122 käyttäjien näkymä
 
-Toteuta sovellukseen oma näkymä yksittäislle blogeille. Näkymä voi näyttää seuraavalta
+Tee sovellukseen näkymä, joka näyttää kaikkin käyttäjiin liittyvät perustietot:
+
+![]({{ "/assets/teht/53.png" | absolute_url }})
+
+### 123 yksittäisen käyttäjän näkymä, osa 1
+
+Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
+
+![]({{ "/assets/teht/54.png" | absolute_url }})
+
+Näkymään päästään klikkaamalla nimeä kaikkien käyttäjien näkymästä
+
+![]({{ "/assets/teht/55.png" | absolute_url }})
+
+### 124 yksittäisen käyttäjän näkymä osa, 2
+
+Merkkaa tämä tehtävä tehdyksi jos toteuttamasi yksittäisen käyttäjän näkymä toimii oikein myös siinä tilanteessa että menet urliin suoraan tai refreshaat selaimen ollessasi käyttäjän näkymässä.
+
+### 125 blogin näkymä
+
+Toteuta sovellukseen oma näkymä yksittäisille blogeille. Näkymä voi näyttää seuraavalta
 
 ![]({{ "/assets/teht/49.png" | absolute_url }})
 
@@ -1948,78 +1969,98 @@ Näkymään päästään klikkaamalla blogin nimeä kaikkien blogien näkymäst�
 
 ![]({{ "/assets/teht/50.png" | absolute_url }})
 
-### 123
+### 126 navigointi
 
-Tee sovellukseen mahdollisuus blogien kommentointiin
+Tee sovellukseen navigaatiomenu
 
-### 124
+![]({{ "/assets/teht/56.png" | absolute_url }})
 
-Tee sovellukseen näkymä, joka näyttää kaikkiin käyttäjiin liittyvät perustiedot
+### 127 kommentit, osa 1
 
-### 125
+Tee sovellukseen mahdollisuus blogien kommentointiin:
 
-Tee sovellukseen navigaatiopalkki
+![]({{ "/assets/teht/51.png" | absolute_url }})
 
-### 126
+Kommentit ovat anonyymejä, eli ne eivät liity järjestelmän käyttäjiin.
 
-Tee sovellukseen yksittäisen käyttäjän näkymä, jolta selviää mm. käyttäjän lisäämät blogit
+Tässä tehtävässä riittää, että fronend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
 
-### 127
+Sopiva rajapinta kommentin luomiseen on osoitteeseen  _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö.
 
-Siirry käyttämään Reactin komponenttien tilan sijaan Reduxia
+### 128 kommentit, osa 2
 
-### 128
+Laajenna sovellusta siten, että kommentointi onnistuu fronendista käsin:
 
-Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tpahtumaan Redux-thunkia hyväksikäyttäen
+![]({{ "/assets/teht/52.png" | absolute_url }})
 
-### 129
+### 129 tyylit, osa 1
 
-Konfiguroi fronend käyttämään Lintiä
-
-### 130
-
-Deployaa sovellus internetiin
-
-### 131
-
-Tee sovellukselle sopiva webpack-konfiguraatio
-
-### 132
-
-Tee backendille testit joiden rivikattavuus on vähintään 80%
-
-### 133
-
-Tee fronendille testit joiden rivikattavuus on vähintään 80%
-
-### 134
-
-Ota sovellukseessasi käyttöön snapshot testing
-
-### 135
-
-Tee headles-browsertestausta
-
-### 136
-
+<<<<<<< HEAD
 Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen
+=======
+Konfiguroi frontend käyttämään Lintiä
+>>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
 
-### 137
+### 130 tyylit, osa 2
 
 Jos käytät tyylien lisäämiseen yli tunnin aikaa, merkkaa myös tämä tehtävä tehdyksi.
 
-### 138
+### 131 redux, osa 1
 
-Siirrä frontend ja backend samaan repositorioon
+Siirry käyttämään React-komponenttien tilan eli _staten_ sijaan Reduxia. Koska refaktorointi saattaa olla aika työläs, voit merkitä tehtävän tehdyksi, kun "puolet" ohjelman tilasta hallitaan reduxilla.
 
-### 139
+### 132 redux, osa 2
 
-Toteuta Travisin avulla automaattinen deployment
+Korvaa kaikki turha React-komponenttien staten käyttö reduxin storella
 
-### 140
+### 133 redux, osa 3
 
-Toteuta sovellukseen parempi tyyppitarkastus Proptypeinä, Fownn avulla tai typescriptillä
+Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tapahtumaan Redux-thunkia hyväksikäyttäen
 
-### 141
+### 134 ESLint
+
+<<<<<<< HEAD
+Konfiguroi fronend käyttämään Lintiä
+=======
+Tee frontendille testit joiden rivikattavuus on vähintään 80%
+>>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
+
+### 135 Webpack
+
+<<<<<<< HEAD
+Tee sovellukselle sopiva webpack-konfiguraatio
+=======
+Ota sovelluksessasi käyttöön snapshot testing
+>>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
+
+### 136 backendin testaus
+
+Tee backendille testit joiden rivikattavuus on vähintään 50%
+
+### 137 frontendin testaus
+
+Tee fronendille testit joiden rivikattavuus on vähintään 50%
+
+### 138 snapshot-testaus
+
+Ota sovellukseessasi käyttöön [snapshot testing](https://facebook.github.io/jest/docs/en/snapshot-testing.html)
+
+### 139 headless-testaus
+
+Tee Puppeteeria tai haluamaasi kirjastoa käyttäviä headless-testejä, testaa ainakin paria toiminnallisuutta
+
+### 140 Tyypitarkastuksia
+
+Lisää sovellukseen tyyppitarkastuksia Proptypeinä, Flown avulla tai Typescriptillä
+
+### 141 Internet
+
+Deployaa sovellus internetiin
+
+### 142 Jatkuva tuotantoonvienti
+
+Toteuta sovelluksellesi esim. [Travis CI](https://travis-ci.org/):n avulla jatkuva tuotantoonvienti, eli mekanismi, missä koodin pushaaminen githubiin aiheuttaa testien läpimennessä uuden version käynnistämisen internettiin.
+
+### 143 Facebook
 
 Koodaa parempi versio facebookista

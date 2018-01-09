@@ -6,8 +6,6 @@ permalink: /about/
 
 # Huomioita kurssin betaversion suorittajille ja katselmoijille
 
-Kurssi tulee koostumaan alustavan idean mukaan seitsemästä osasta, joista nyt on ilmestynyt 1-6. Viimeisen eli seitsemännen osan on tarkoitus olla valmiina tiistaina 9.1.
-
 Betaversioon liittyvää keskustelua [Telegramissa](https://t.me/joinchat/EHqi4hBo27NTY1gNw6jTlw), tule mukaan.
 
 ## suoritustapa
@@ -20,15 +18,7 @@ Olisi hyvä jos erityisesti vähemmän taustaa omaavat suorittajat arvioisivat k
 
 Kurssin arvostelu perustuu tehtyjen tehtävien määrään, noin 50% tehtävistä riittää arvosanaan 1 ja noin 90% tuo arvosanan 5. Betatestaajien oletetaan osallistuvan myös pieneen haastatteluun kurssin lopuksi. Toisin kuin normaalissa versiossa, koetta ei betasuorittajilla ole.
 
-Betatestaajien osalta deadline on periaatteessa kevään kurssin alku eli 15.1. Siitäkin on tosin mahdollista tarvittaessa joustaa.
-
-## ilmoittautuminen
-
-Toistaiseksi betan osallistujamäärää ei ole rajoitettu. Jos määrä lähtee täysin käsistä, saatetaan rajoituksia harkita.
-
-Jos osallistut kurssille siten, että tavoittelet kurssisuoritusta, ilmoittaudu mailitse mluukkai@cs.helsinki.fi
-
-Kerro ilmoittautumisen yhteydessä kuinka paljon omaat kokemusta Web-sovellusten kehittämisestä (esim. HTML, CSS, palvelinpuoli, tietokannat, react, redux, node.js).
+9.1. mennessä aloittaneet betatestaajat saavat suorittaa kurssin loppuun omaa tahtiaan. Nopea eteneminen on plussaa, sillä se tuo erittäin arvokasta tietoa myös myöhempien osien ajankäytöstä ja ongelmakohdista.
 
 ## korjaukset ja sisältöön liittyvät ideat
 

@@ -9,7 +9,7 @@ permalink: /osa2/
 - Web-sovellusten toiminnan perusteet
   - lisää CSS:ää
   - selain suoritusympäristönä
-  - selaimen ja palvelimen välisen kummunikoinnin perusteet
+  - selaimen ja palvelimen välisen kommunikoinnin perusteet
 - React
   - taulukossa olevan datan renderöinti
   - komponenttien määrittely moduuleissa
