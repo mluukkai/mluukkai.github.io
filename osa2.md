@@ -1525,6 +1525,14 @@ Moduulin muutoksen jälkeen täytyy komponentti _App_ muokata _noteService_:n me
 ```js
 class App extends React.component {
 
+  componentWillMount() {
+    noteService
+      .getAll()
+      .then(response => {
+        this.setState({ notes: response })
+      })
+  }
+  
   addNote = (e) => {
     // ...
     noteService
