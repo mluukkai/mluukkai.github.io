@@ -282,7 +282,7 @@ npm install
 ```
 
 
-Jos riippuvuuen _major_-versionumero ei muutu, uudempien versioiden pitäisi olla [taaksepäin yhteensopivia](https://en.wikipedia.org/wiki/Backward_compatibility), eli jos ohjelmamme käyttäisi tulevaisuudessa esim. expressin versiota 4.99.175, tässä osassa tehtävän koodin pitäisi edelleen toimia ilman muutoksia. Sen sijaan tulevaisuudessa joskus julkasitava express 5.0.0. voi sisältää sellaisia muutoksia, että koodimme ei enää toimisi.
+Jos riippuvuuden _major_-versionumero ei muutu, uudempien versioiden pitäisi olla [taaksepäin yhteensopivia](https://en.wikipedia.org/wiki/Backward_compatibility), eli jos ohjelmamme käyttäisi tulevaisuudessa esim. expressin versiota 4.99.175, tässä osassa tehtävän koodin pitäisi edelleen toimia ilman muutoksia. Sen sijaan tulevaisuudessa joskus julkasitava express 5.0.0. voi sisältää sellaisia muutoksia, että koodimme ei enää toimisi.
 
 ### Web ja express
 
