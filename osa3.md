@@ -214,6 +214,7 @@ const app = http.createServer((request, response) => {
   response.end(JSON.stringify(notes))
 })
 ```
+Käynnistetään palvelin uudelleen ja ladataan sivu selaimessa, ja päivitetty sisältö näkyy selaimessa.
 
 Headerin _Content-Type_ arvolla _application/json_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
 
@@ -281,7 +282,7 @@ npm install
 ```
 
 
-Jos riippuvuuen _major_-versionumero ei muutu, uudempien versioiden pitäisi olla [taaksepäin yhteensopivia](https://en.wikipedia.org/wiki/Backward_compatibility), eli jos ohjelmamme käyttäisi tulevaisuudessa esim. expressin versiota 4.99.175, tässä osassa tehtävän koodin pitäisi edelleen toimia ilman muutoksia. Sen sijaan tulevaisuudessa joskus julkasitava express 5.0.0. voi sisältää sellaisia muutoksia, että koodimme ei enää toimisi.
+Jos riippuvuuden _major_-versionumero ei muutu, uudempien versioiden pitäisi olla [taaksepäin yhteensopivia](https://en.wikipedia.org/wiki/Backward_compatibility), eli jos ohjelmamme käyttäisi tulevaisuudessa esim. expressin versiota 4.99.175, tässä osassa tehtävän koodin pitäisi edelleen toimia ilman muutoksia. Sen sijaan tulevaisuudessa joskus julkaistava express 5.0.0. voi sisältää sellaisia muutoksia, että koodimme ei enää toimisi.
 
 ### Web ja express
 
@@ -290,6 +291,10 @@ Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
 ```js
 const express = require('express')
 const app = express()
+
+let notes = [
+  ...
+]
 
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
@@ -380,7 +385,9 @@ Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 }
 ```
 
-Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen kuten _nodemon_.
+Jos nodemon-riippuvuus kuitenkin meni normaaliin "dependencies"-ryhmään, päivitä package.json manuaalisesti vastaamaan yllä näkyvää (versiot kuitenkin säilyttäen).
+
+Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastaan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen kuten _nodemon_.
 
 Kun sovellusta suoritetaan tuotantomoodissa, eli samoin kun sitä tullaan suorittamaan tuotantopalvelimella (esim. Herokussa, mihin tulemme kohta siirtämään sovelluksemme), ei kehitysaikaisia riippuvuuksia tarvita.
 
@@ -455,7 +462,7 @@ Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://sh
 
 ### Yksittäisen resurssin haku
 
-Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensin [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
+Laajennetaan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensin [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
 
 Yksittäisen muistiinpanon identifioi url, joka on muotoa _notes/10_, missä lopussa oleva numero vastaa resurssin muistiinpanon id:tä.
 
@@ -480,7 +487,7 @@ const id = request.params.id
 
 Jo tutuksi tulleella taulukon _find_-metodilla haetaan taulukosta parametria vastaava muistiinpano ja palautetaan se pyynnön tekijälle.
 
-Kun sovellusta testataa menemällä selaimella osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan.
+Kun sovellusta testataan menemällä selaimella osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan.
 
 Vanha hyvä keino on alkaa lisäillä koodiin _console.log_-komentoja:
 
@@ -596,7 +603,12 @@ Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
-Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. Asennetaan postman ja kokeillaan
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. 
+
+**HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
+[REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
+
+Asennetaan postman ja kokeillaan
 
 ![]({{ "/assets/3/8.png" | absolute_url }})
 
@@ -605,9 +617,6 @@ Postmanin käyttö on tässä tilanteessa suhteellisen yksinkertaista, riittää
 Palvelin näyttää vastaavan oikein. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla.
 
 Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
-
-**HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
-[REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
 
 ### Datan vastaanottaminen
 
