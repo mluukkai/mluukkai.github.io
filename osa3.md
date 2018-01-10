@@ -603,7 +603,12 @@ Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
-Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. Asennetaan postman ja kokeillaan
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. 
+
+**HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
+[REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
+
+Asennetaan postman ja kokeillaan
 
 ![]({{ "/assets/3/8.png" | absolute_url }})
 
@@ -612,9 +617,6 @@ Postmanin käyttö on tässä tilanteessa suhteellisen yksinkertaista, riittää
 Palvelin näyttää vastaavan oikein. Tekemällä HTTP GET osoitteeseen _http://localhost:3001/notes_ selviää että poisto-operaatio oli onnistunut, muistiinpanoa, jonka id on 2 ei ole enää listalla.
 
 Koska muistiinpanot on talletettu palvelimen muistiin, uudelleenkäynnistys palauttaa tilanteen ennalleen.
-
-**HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
-[REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
 
 ### Datan vastaanottaminen
 
