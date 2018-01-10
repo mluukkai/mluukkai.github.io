@@ -902,7 +902,7 @@ Jos haluamme sovelluksen IE-yhteensopivaksi, tarvitsemme [polyfilliä](https://r
 
 Polyfillaus on mahdollista hoitaa [Webpackin ja Babelin avulla](https://babeljs.io/docs/usage/polyfill/) tai asentamalla yksi monista tarjolla olevista polyfill-kirjastoista.
 
-Esim. kirjaston [promise-polyfill](https://www.npmjs.com/package/promise-polyfill) tajoaman polyfillin käyttö on todella helppoa, koodiin lisätään seuraava:
+Esim. kirjaston [promise-polyfill](https://www.npmjs.com/package/promise-polyfill) tarjoaman polyfillin käyttö on todella helppoa, koodiin lisätään seuraava:
 
 ```js
 import PromisePolyfill from 'promise-polyfill'
