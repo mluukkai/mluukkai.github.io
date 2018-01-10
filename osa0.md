@@ -4,6 +4,14 @@ title: osa 0
 permalink: /osa0/
 ---
 
+<div class="important">
+  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+
+  <p>uusi osoite <https://fullstack-hy.github.io/osa0/></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <https://github.com/FullStack-HY/FullStack-Hy.github.io> </p>
+</div>
+
 ## Yleistä
 
 Kurssilla tutustutaan Javascriptilla tapahtuvaan moderniin websovelluskehitykseen. Pääpaino on React-kirjaston avulla toteutettavissa single page -sovelluksissa, ja niitä tukevissa Node.js:llä toteutetuissa REST-rajapinnoissa.
