@@ -1470,7 +1470,7 @@ Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
 ![]({{ "/assets/4/5.png" | absolute_url }})
 
-Backendin tietokannan tilaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi _'addition of a new note'_, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
+Backendin tietokannan tilaa muuttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi _'addition of a new note'_, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
 
 ```js
 const notesAtBeginningOfOperation = await notesInDb()
