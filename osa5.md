@@ -954,7 +954,7 @@ LoginForm.propTypes = {
 }
 ```
 
-Funtionaalisen komponentin proptypejen määrittely tapahtuu samalla tavalla kuin luokkaperustaisten.
+Funktionaalisen komponentin proptypejen määrittely tapahtuu samalla tavalla kuin luokkaperustaisten.
 
 Jos propsin tyyppi on väärä, esim. yritetään määritellä propsiksi _handleChange_ merkkijono, seurauksena on varoitus:
 

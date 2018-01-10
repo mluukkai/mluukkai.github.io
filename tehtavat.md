@@ -1732,7 +1732,7 @@ Sovelluksessa välitetään _redux store_ tällä hetkellä kaikille komponentei
 
 Ota käyttöön kirjasto [react-redux](https://github.com/reactjs/react-redux) ja muuta komponenttia _Notification_, se pääsee käsiksi tilaan _connect_-funktion välityksellä.
 
-Huomaa, että toimiakseen _context_ edellyttää että sovelukselle on määriteltävä [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
+Huomaa, että toimiakseen _contect_ edellyttää että sovelukselle on määriteltävä [Provider](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
 
 
 #### 105 paremmat anekdootit, osa 6
@@ -1931,7 +1931,7 @@ Toteuta loppufiilistelynä sovellukseen anekdoottien äänestäminen ja jos aika
 
 ## osa 7
 
-Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia  "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
+Tämän osan tehtävissä jatketaan osissa 4 ja 5 tehtyä Bloglist-sovellusta. Suurin osa tämän osan tehtävistä on toisistaan riippumattomia "featureita", eli tehtäviä ei tarvitse tehdä järjestyksessä, voit jättää osan aivan hyvin toteuttamatta.
 
 Osassa on 22 tehtävää, arvostelussa tehtävien maksimiin tässä osassa lasketaan kuitenkin ainoastaan 18.
 
@@ -1983,23 +1983,19 @@ Tee sovellukseen mahdollisuus blogien kommentointiin:
 
 Kommentit ovat anonyymejä, eli ne eivät liity järjestelmän käyttäjiin.
 
-Tässä tehtävässä riittää, että fronend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
+Tässä tehtävässä riittää, että frontend osaa näyttää blogilla olevat backendin kautta lisätyt kommentit.
 
-Sopiva rajapinta kommentin luomiseen on osoitteeseen  _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö.
+Sopiva rajapinta kommentin luomiseen on osoitteeseen _api/blogs/:id/comments_ tapahtuva HTTP POST -pyyntö.
 
 ### 128 kommentit, osa 2
 
-Laajenna sovellusta siten, että kommentointi onnistuu fronendista käsin:
+Laajenna sovellusta siten, että kommentointi onnistuu frontendista käsin:
 
 ![]({{ "/assets/teht/52.png" | absolute_url }})
 
 ### 129 tyylit, osa 1
 
-<<<<<<< HEAD
 Tee sovelluksesi ulkoasusta tyylikkäämpi jotain kurssilla esiteltyä tapaa käyttäen
-=======
-Konfiguroi frontend käyttämään Lintiä
->>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
 
 ### 130 tyylit, osa 2
 
@@ -2019,19 +2015,11 @@ Jos siirryit Redux-storen käyttöön, muuta palvelimen kanssa kommunikointi tap
 
 ### 134 ESLint
 
-<<<<<<< HEAD
-Konfiguroi fronend käyttämään Lintiä
-=======
-Tee frontendille testit joiden rivikattavuus on vähintään 80%
->>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
+Konfiguroi frontend käyttämään Lintiä
 
 ### 135 Webpack
 
-<<<<<<< HEAD
 Tee sovellukselle sopiva webpack-konfiguraatio
-=======
-Ota sovelluksessasi käyttöön snapshot testing
->>>>>>> 796833ff39ce7d027c876742f1b25b8dc554ba1d
 
 ### 136 backendin testaus
 
@@ -2039,7 +2027,7 @@ Tee backendille testit joiden rivikattavuus on vähintään 50%
 
 ### 137 frontendin testaus
 
-Tee fronendille testit joiden rivikattavuus on vähintään 50%
+Tee frontendille testit joiden rivikattavuus on vähintään 50%
 
 ### 138 snapshot-testaus
 

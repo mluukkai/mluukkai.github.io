@@ -1164,7 +1164,7 @@ Tee nyt [tehtävät 9-11](../tehtavat#javascriptin-alkeet)
 
 Kaikille kolmelle tavalle määritellä funktio on oma paikkansa.
 
-Nuolifunktiot ja avainsanan _function_ avulla määritellyt funktiot kuitenkin poikkeavat radikaalisti siitä miten ne käyttäytyvät avainsanan _this_  suhteen.
+Nuolifunktiot ja avainsanan _function_ avulla määritellyt funktiot kuitenkin poikkeavat radikaalisti siitä miten ne käyttäytyvät avainsanan _this_ suhteen.
 
 Voimme liittää oliolle metodeja määrittelemällä niille kenttiä, jotka ovat funktioita:
 

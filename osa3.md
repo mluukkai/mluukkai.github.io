@@ -1291,7 +1291,7 @@ Voimme todeta selaimella, että backend toimii kaikkien dokumenttien näyttämis
 
 <img src="/assets/3/14.png" height="200">
 
-Toiminnallisuus on muuten kunnossa, mutta frontend olettaa, että olioiden yksikäsitteinen tunniste on kentässä _id_. Emme myöskään halua näyttää frontendille mongon versiontiin käyttämää kenttää <em>\_\_v</em>. Tehdään pieni apufunktio, jonka avulla yksittäinen muistiinpano saadaan muutettua mongon sisäisestä esitysmuodosta haluamaamme muotoon:
+Toiminnallisuus on muuten kunnossa, mutta frontend olettaa, että olioiden yksikäsitteinen tunniste on kentässä _id_. Emme myöskään halua näyttää frontendille mongon versiointiin käyttämää kenttää <em>\_\_v</em>. Tehdään pieni apufunktio, jonka avulla yksittäinen muistiinpano saadaan muutettua mongon sisäisestä esitysmuodosta haluamaamme muotoon:
 
 ```js
 const formatNote = (note) => {
@@ -1414,7 +1414,6 @@ app.post('/api/notes', (request, response) => {
     .then(savedNote => {
       response.json(formatNote(savedNote))
     })
-
 })
 ```
 
@@ -1732,7 +1731,7 @@ tämän muutoksen jäkeen sovellus ei toimi paikallisesti, koska ympäristömuut
 Asennetaan kirjasto komennolla
 
 ```bash
-https://www.npmjs.com/package/dotenv
+npm install dotenv --save
 ```
 
 Sovelluksen juurihakemistoon tehdään sitten tiedosto nimeltään _.env_, minne tarvittavien ympäristömuuttujien arvot asetetaan

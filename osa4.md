@@ -294,13 +294,13 @@ määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoim
   "scripts": {
     "start": "node index.js",
     "watch": "node_modules/.bin/nodemon index.js",
-    "test": "node_modules/.bin/jest --verbose test"
+    "test": "node_modules/.bin/jest --verbose tests"
   },
   //...
 }
 ```
 
-Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_, jonka sisältö on seuraava
+Tehdään testejä varten hakemisto _tests_ ja sinne tiedosto _palindrom.test.js_, jonka sisältö on seuraava
 
 ```js
 const palindrom = require('../utils/for_testing').palindrom
@@ -417,7 +417,7 @@ seurauksena on seuraava virheilmotus
 
 Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
-Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
+Lisätään muutama testi metodille _average_, tiedostoon _tests/average.test.js_.
 
 ```js
 const average = require('../utils/for_testing').average
@@ -641,7 +641,7 @@ Kirjasto asennetaan kehitysaikaiseksi riippuvuudeksi komennolla
 npm install --save-dev supertest
 ```
 
-Luodaan heti ensimmäinen testi tiedostoon _test/note_api.test.js:_
+Luodaan heti ensimmäinen testi tiedostoon _tests/note_api.test.js:_
 
 ```js
 const supertest = require('supertest')
@@ -1279,7 +1279,7 @@ Testeissä on myös eräs hieman ikävä ja jopa riskialtis piirre. Testit luott
 
 Parannellaan testejä hiukan.
 
-Tehdään testejä varten muutama apufunktio moduuliin _test/test_helper.js_
+Tehdään testejä varten muutama apufunktio moduuliin _tests/test_helper.js_
 
 ```js
 const Note = require('../models/note')
