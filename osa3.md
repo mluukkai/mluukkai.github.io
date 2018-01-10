@@ -292,6 +292,10 @@ Palataan taas sovelluksen ääreen ja muutetaan se muotoon:
 const express = require('express')
 const app = express()
 
+let notes = [
+  ...
+]
+
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
@@ -483,7 +487,7 @@ const id = request.params.id
 
 Jo tutuksi tulleella taulukon _find_-metodilla haetaan taulukosta parametria vastaava muistiinpano ja palautetaan se pyynnön tekijälle.
 
-Kun sovellusta testataa menemällä selaimella osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan.
+Kun sovellusta testataan menemällä selaimella osoitteeseen <http://localhost:3001/notes/1>, havaitaan että se ei toimi. Tämä on tietenkin softadevaajan arkipäivää, ja on ruvettava debuggaamaan.
 
 Vanha hyvä keino on alkaa lisäillä koodiin _console.log_-komentoja:
 
