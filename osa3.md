@@ -214,6 +214,7 @@ const app = http.createServer((request, response) => {
   response.end(JSON.stringify(notes))
 })
 ```
+Käynnistetään palvelin uudelleen ja ladataan sivu selaimessa, ja päivitetty sisältö näkyy selaimessa.
 
 Headerin _Content-Type_ arvolla _application/json_ kerrotaan että kyse on JSON-muotoisesta datasta. Taulukko muutetaan jsoniksi metodilla <code>JSON.stringify(notes)</code>.
 
