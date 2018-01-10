@@ -772,19 +772,19 @@ Toteuta toiminnallisuus yksittäisen puhelinnumerotiedon näyttämiseen. Esim. i
 
 Jos id:tä vastaavaa puhelinnumerotietoa ei ole, tulee palvelimen vastata asianmukaisella statuskoodilla.
 
-#### 43 puhelinluettelon backend osa 3
+#### 43 puhelinluettelon backend osa 4
 
 Toteuta toiminnallisuus, jonka avulla puhelinnumerotieto on mahdollista poistaa numerotiedon yksilöivään URL:iin tehtävällä HTTP DELETE -pyynnöllä.
 
 Testaa toiminnallisuus Postmanilla.
 
-#### 44 puhelinluettelon backend osa 4
+#### 44 puhelinluettelon backend osa 5
 
 Laajenna backendia siten, että uusia puhelintietoja on mahdollista lisätä osoitteeseen <http://localhost:3001/api/persons> tapahtuvalla HTTP POST -pyynnöllä.
 
 Generoi uuden puhelintiedon tunniste funktiolla [Math.random](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random). Käytä riittävän isoa arvoväliä jotta arvottu id on riittävän suurella todennäköisyydellä sellainen, joka ei ole jo käytössä.
 
-#### 45 puhelinluettelon backend osa 5
+#### 45 puhelinluettelon backend osa 6
 
 Tee uuden numeron lisäykseen virheiden käsittely, pyyntö ei saa onnistua, jos
 - jos nimi tai numero puuttu
@@ -798,13 +798,13 @@ Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, j
 
 ### lisää middlewareja
 
-#### 46 puhelinluettelon backend osa 6
+#### 46 puhelinluettelon backend osa 7
 
 Lisää sovellukseesi loggausta tekevä middleware [morgan](https://github.com/expressjs/morgan). Konfiguroi se tulostamaan / logaamaan konsoliin _tiny_-konfiguraation mukaisesti.
 
 Morganin ohjeet eivät ole ehkä kaikkein selvimmät ja joudut kenties miettimään hiukan. Toisaalta juuri koskaan dokumentaatio ei ole aivan itsestäänselvää, joten kryptisempiäkin asioita on hyvä oppia tulkitsemaan.
 
-#### 47 puhelinluettelon backend osa 7
+#### 47 puhelinluettelon backend osa 8
 
 Konfiguroi morgania siten, että se näyttää myös HTTP-pyyntöjen mukana tulevan datan:
 
@@ -816,13 +816,13 @@ Tämä tehtävä ei välttämättä ole helpommasta päästä. Pari vihjettä:
 
 ### yhteys frontendiin ja vienti tuotantoon
 
-#### 48 puhelinluettelon backend osa 8
+#### 48 puhelinluettelon backend osa 9
 
 Laita backend toimimaan edellisessä osassa tehdyn puhelinluettelon frontendin kanssa.
 
 Joudut tekemään erinäisiä pieniä muutoksia. Muista pitää selaimen konsoli koko ajan auki. Jos jotkut HTTP-pyynnöt epäonnistuvat, kannattaa katsoa _Network_-välilehdeltä mitä tapahtuu. Pidä myös silmällä mitä palvelimen konsolissa tapahtuu. Jos et tehnyt tehtävää 47, kannattaa POST-pyyntöä käsittelevässä tapahtumankäsittelijässä tulostaa konsoliin mukana tuleva data eli _request.body_.
 
-#### 49 puhelinluettelon backend osa 9
+#### 49 puhelinluettelon backend osa 10
 
 Vie sovelluksen backend internetiin, esim. Herokuun.
 
