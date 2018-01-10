@@ -381,6 +381,8 @@ Tiedoston _package.json_ sisältö muuttuu seuraavasti:
 }
 ```
 
+Jos nodemon-riippuvuus kuitenkin meni normaaliin "dependencies"-ryhmään, päivitä package.json manuaalisesti vastaamaan yllä näkyvää (versiot kuitenkin säilyttäen).
+
 Kehitysaikaisilla riippuvuuksilla tarkoitetaan työkaluja, joita tarvitaan ainoastan sovellusta kehitettäessä, esim. testaukseen tai sovelluksen automaattiseen uudelleenkäynnistykseen kuten _nodemon_.
 
 Kun sovellusta suoritetaan tuotantomoodissa, eli samoin kun sitä tullaan suorittamaan tuotantopalvelimella (esim. Herokussa, mihin tulemme kohta siirtämään sovelluksemme), ei kehitysaikaisia riippuvuuksia tarvita.
