@@ -458,7 +458,7 @@ Jotkut yhteyksissä (ks. esim [Richardsom, Ruby: RESTful Web Services](http://sh
 
 ### Yksittäisen resurssin haku
 
-Laajennetan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensin [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
+Laajennetaan nyt sovellusta siten, että se tarjoaa muistiinpanojen operointiin REST-rajapinnan. Tehdään ensin [route](http://expressjs.com/en/guide/routing.html) yksittäisen resurssin katsomista varten.
 
 Yksittäisen muistiinpanon identifioi url, joka on muotoa _notes/10_, missä lopussa oleva numero vastaa resurssin muistiinpanon id:tä.
 
