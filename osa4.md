@@ -2293,7 +2293,7 @@ Nyt komennot _npm run lint_ suorittaa tarkastukset koko projektille.
 
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
-ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/rules/), joita on helppo ottaa käyttöön muokkaamalla tietostoa _.eslintrc.js_.
+ESlintille on määritelty suuri määrä [sääntöjä](https://eslint.org/docs/rules/), joita on helppo ottaa käyttöön muokkaamalla tietostoa _.eslintrc.js_.
 
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
