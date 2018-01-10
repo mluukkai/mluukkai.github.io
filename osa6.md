@@ -1427,7 +1427,7 @@ class App extends React.Component {
 
   render() {
     const content = () => {
-      if ( this.state.page ==='home' ) {
+      if (this.state.page === 'home') {
         return <Home />
       } else if (this.state.page === 'notes') {
         return <Notes />
