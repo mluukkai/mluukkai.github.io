@@ -429,7 +429,7 @@ Määritellään tyyli käytettäväksi komponentissa _App_
 
 ```react
 const App = () => (
-  <div className='container'>
+  <div className="container">
     hello webpack
   </div>
 )
@@ -549,7 +549,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className="container">
         <p>hello webpack {this.state.counter} clicks</p>
         <button onClick={()=>this.setState({counter: this.state.counter+1})}>click</button>
       </div>
