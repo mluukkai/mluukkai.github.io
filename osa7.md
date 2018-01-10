@@ -1625,6 +1625,15 @@ Single page sovelluksissa analytiikkatietojen käyttäjien sivuston kanssa käym
 
 Voit hyödyntää React-osaamistasi myös mobiilisovellusten toteuttamiseen Facebookin erittäin suositun [React Native](https://facebook.github.io/react-native/) -kirjaston avulla.
 
+Javascript-projektien projektinhallintaan ja bundlaamiseen käytettyjen työkalujen rintamalla on ollut tuulista, best practicet ovat vaihdelleet nopeasti (vuosiluvut ovat suuntaa-antavia, kukaan ei enää muista noin kauas menneistyyteen):
+- 2011 [Yeoman](https://www.npmjs.com/package/yeoman) 
+- 2011 [Bower](https://www.npmjs.com/package/bower)
+- 2012 [Grunt](https://www.npmjs.com/package/grunt)
+- 2013-14 [Gulp](https://www.npmjs.com/package/gulp) 
+- 2012-14 [Browserify](https://www.npmjs.com/package/browserify)
+- 2015- [Webpack](https://www.npmjs.com/package/webpack)
+
+Hipsterien suurin into työkalukehitykseen näytti pysähtyneen webpackin vallattua markkinat. Uusi tulokas [Parcel](https://parceljs.org) on kuitenkin saanut viime aikoina nopeasti paljon huomiota. Parcel markkinoi olevansa yksinkertainen, sitähän webpack ei missään nimessä ole, ja paljon nopeampi kuin webpack. Parcelin kehitystä kannattaa jäädä seuraamaan.
 
 Sivu <https://reactpatterns.com/> tarjoaa tiiviissä muodossa listan parhaita react-käytänteitä, joista osa on jo tältäkin kurssilta tuttuja. Toinen samankaltainen lista on [react bits](https://vasanthk.gitbooks.io/react-bits/).
 
