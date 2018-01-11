@@ -1348,7 +1348,7 @@ Kun _render_-metodissa määritellään tapahtumankäsittelijä kutsumalla <code
 
 eli juuri oikeanlainen tilan nollaamisen aiheuttava funktio!
 
-Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaArvoon(this.state.counter + 1)</code>. Kun komponentti renderöidään ensimmäisen kerran, _this.state.counter_ on saanut konstruktorissa arvon 1, eli plus-napin tapahtumankäsittelijäksi tulee metodukutsun <code>this.asetaArvoon(1 + 1)</code> tulos, eli funktio
+Plus-napin tapahtumankäsittelijä määritellään kutsumalla <code>this.asetaArvoon(this.state.counter + 1)</code>. Kun komponentti renderöidään ensimmäisen kerran, _this.state.counter_ on saanut konstruktorissa arvon 1, eli plus-napin tapahtumankäsittelijäksi tulee metodikutsun <code>this.asetaArvoon(1 + 1)</code> tulos, eli funktio
 
 ```js
 () => {
@@ -1391,7 +1391,7 @@ asetaArvoon = (arvo) => () => this.setState({ counter: arvo })
 
 Kaksinuolisen funktion voi ajatella funktiona, jota lopullisen tuloksen saadakseen täytyy kutsua kaksi kertaa.
 
-Ensimmäisellä kutsulla "konfiguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
+Ensimmäisellä kutsulla "konfiguroidaan" varsinainen funktio, sijoittamalla osalle parametreista arvo. Eli kutsu <code>asetaArvoon(5)</code> sitoo muuttujaan _arvo_ arvon 5 ja funktiosta "jää jäljelle" seuraava funktio:
 
 ```js
 () => this.setState({ counter: 5 })
