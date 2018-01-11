@@ -1,4 +1,10 @@
-### linkit.md, wtf
+---
+layout: page
+title: linkit
+permalink: /linkit/
+---
+
+### linkit
 
 Sisältää about kaikki materiaaleissa esiintyneet linkit esiintymisjärjestyksessä.
 

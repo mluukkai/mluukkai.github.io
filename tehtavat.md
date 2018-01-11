@@ -1189,7 +1189,7 @@ Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö 
 Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
 
 Käyttäjäien lista voi näyttää esim. seuraavalta:
-![]({{ "/assets/teht/24.png" | absolute_url }})
+![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/24.png)
 
 #### 74 blogilistan laajennus, osa 5
 
@@ -1207,7 +1207,7 @@ Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten,
 
 Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
 
-![]({{ "/assets/teht/25.png" | absolute_url }})
+![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/25.png)
 
 ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näkyvillä
 
