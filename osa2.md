@@ -1067,7 +1067,7 @@ axios.get('http://localhost:3001/notes').then(response => {
 })
 ```
 
-Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponenentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
+Tapahtumankäsittelijän koodia, eli then:in parametrina olevaa _funktiota_ ei siis suoriteta vielä tässä vaiheessa. Javascriptin runtime kutuu sitä jossain vaiheessa sen jälkeen kun palvelin on vastannut HTTP GET -pyyntöön. Tätä ennen kutsutaan metodia _render_ ja komponentti _App_ piirtyy ruudulle aluksi siten, että yhtään muistiinpanoa ei näytetä.
 
 Emme kuitenkaan ehdi huomaamaan asiaa, sillä palvelimen vastaus tulee pian, ja se taas saa aikaan tapahtumankäsittelijän suorituksen. Tapahtumankäsittelijä päivittää komponentin tilaa kutsumalla _setState_ ja tämä saa aikaan komponentin uudelleenrenderöinnin.
 
