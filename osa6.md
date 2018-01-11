@@ -1864,7 +1864,7 @@ Monesta UI-frameworkista on tehty React-ystävällisiä versiota, joissa UI-fram
 
 ### react bootstrap
 
-Tehdään nyt [react-bootstrap](https://react-bootstrap.github.io/)-kirjaston avulla luvussa [React-roter](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
+Tehdään nyt [react-bootstrap](https://react-bootstrap.github.io/)-kirjaston avulla luvussa [React-router](osa6/#React-router)-sovelluksesta hieman tyylikkäämpi.
 
 Asennetaan kirjasto suorittamalla komento
 
