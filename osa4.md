@@ -518,7 +518,7 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 
 Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
-Nht sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
+Nyt sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
 Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
@@ -910,7 +910,7 @@ beforeAll(async () => {
 })
 ```
 
-Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöiden. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useapia alkioita, olisi toisto parempi ratkaisu:
+Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöiden. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useampia alkioita, olisi toisto parempi ratkaisu:
 
 ```js
 beforeAll(async () => {
@@ -969,7 +969,7 @@ Siispä viimeinen rivi, <code>await Promise.all(promiseArray)</code> odottaa, et
 
 > Promise.all-metodia käyttäessä päästään tarvittaessa käsiksi sen parametrina olevien yksittäisten promisejen arvoihin, eli promiseja vastaavien operaatioiden tuloksiin. Jos odotetaan promisejen valmistumista _await_-syntaksilla <code>const results = await Promise.all(promiseArray)</code> palauttaa operaatio taulukon, jonka alkioina on _promiseArray_:n promiseja vastaavat arvot samassa järjestyksessä kuin promiset ovat taulukossa.
 
-Javascriptin asynkroninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on tuntea mahdollisimman hyvin!
+Javascriptin asynkroninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on syytä tuntea mahdollisimman hyvin!
 
 ### async/await backendissä
 
