@@ -959,7 +959,7 @@ Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen 
 
 Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka avulla käyttäjien on mahdollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
 
-Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehtyä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
+Blogilistasovellus muistuttaa huomattavasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehtyä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
 
 ### sovelluksen alustus ja rakenne
 
