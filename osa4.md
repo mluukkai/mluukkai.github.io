@@ -278,7 +278,11 @@ module.exports = {
 
 Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runnereita_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
 
+<<<<<<< HEAD
 Jest on tälle kurssille luonteva valinta, sillä se sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
+=======
+Jest on tälle kurssille luonteva valinta, sillä sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
+>>>>>>> 7e4e46db35a5be8c30ad6e01bceb2eb9dbfc7ae2
 
 Koska testejä on tarkoitus suorittaa ainoastaan sovellusta kehitettäessä, asennetaan _jest_ kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -294,13 +298,13 @@ määritellään _npm_ skripti _test_ suorittmaan testaus jestillä ja raportoim
   "scripts": {
     "start": "node index.js",
     "watch": "node_modules/.bin/nodemon index.js",
-    "test": "node_modules/.bin/jest --verbose test"
+    "test": "node_modules/.bin/jest --verbose tests"
   },
   //...
 }
 ```
 
-Tehdään testejä varten hakemisto _test_ ja sinne tiedosto _palindrom.test.js_, jonka sisältö on seuraava
+Tehdään testejä varten hakemisto _tests_ ja sinne tiedosto _palindrom.test.js_, jonka sisältö on seuraava
 
 ```js
 const palindrom = require('../utils/for_testing').palindrom
@@ -417,7 +421,7 @@ seurauksena on seuraava virheilmotus
 
 Jest olettaa oletusarvoisesti, että testitiedoston nimessä on merkkijono _.test_. Käytetään kurssilla konventiota, millä testitiedostojen nimen loppu on _.test.js_
 
-Lisätään muutama testi metodille _average_, tiedostoon _test/average.test.js_.
+Lisätään muutama testi metodille _average_, tiedostoon _tests/average.test.js_.
 
 ```js
 const average = require('../utils/for_testing').average
@@ -575,7 +579,11 @@ TEST_MONGODB_URI=mongodb://localhost/test
 
 Eri porttien käyttö mahdollistaa sen, että sovellus voi olla käynnissä testien suorituksen aikana.
 
+<<<<<<< HEAD
 Omatekemämme eri ympäristöjen kongiguroinnista huolehtivaa _config_-moduuli toimii hieman samassa hengessä kuin [node-config](https://github.com/lorenwest/node-config)-kirjasto. Omatekemä konfigurointiympäristö sopii tarkoitukseemme, sillä sovellus on yksinkertainen ja oman konfiguraatio-moduulin tekeminen on myös jossain määrin opettavaista. Isommissa sovelluksissa kannattaa harkita valmiiden kirjastojen, kuten [node-config](https://github.com/lorenwest/node-config):in käyttöä.
+=======
+Omatekemämme eri ympäristöjen konfiguroinnista huolehtiva _config_-moduuli toimii hieman samassa hengessä kuin [node-config](https://github.com/lorenwest/node-config)-kirjasto. Omatekemä konfigurointiympäristö sopii tarkoitukseemme, sillä sovellus on yksinkertainen ja oman konfiguraatio-moduulin tekeminen on myös jossain määrin opettavaista. Isommissa sovelluksissa kannattaa harkita valmiiden kirjastojen, kuten [node-config](https://github.com/lorenwest/node-config):in käyttöä.
+>>>>>>> 7e4e46db35a5be8c30ad6e01bceb2eb9dbfc7ae2
 
 Tiedosto _index.js_ muutetaan nyt muotoon:
 
@@ -641,7 +649,7 @@ Kirjasto asennetaan kehitysaikaiseksi riippuvuudeksi komennolla
 npm install --save-dev supertest
 ```
 
-Luodaan heti ensimmäinen testi tiedostoon _test/note_api.test.js:_
+Luodaan heti ensimmäinen testi tiedostoon _tests/note_api.test.js:_
 
 ```js
 const supertest = require('supertest')
@@ -723,7 +731,7 @@ Async/await-kikan hyödyt tulevat nyt selkeästi esiin. Normaalisti tarvitsisimm
   expect(res.body.length).toBe(5)
 ```
 
-Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippu tietokannan tilast. Jotta saisimme robustimmat testit, tulee tietokannan tila nollata testien alussa ja sen jälkeen laittaa kantaan hallitusti testien tarvitsema data.
+Testit menevät läpi. Testit ovat kuitenkin huonoja, niiden läpimeno riippuu tietokannan tilasta. Jotta saisimme robustimmat testit, tulee tietokannan tila nollata testien alussa ja sen jälkeen laittaa kantaan hallitusti testien tarvitsema data.
 
 ### Error: listen EADDRINUSE :::3002
 
@@ -910,7 +918,7 @@ beforeAll(async () => {
 })
 ```
 
-Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöiden. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useapia alkioita, olisi toisto parempi ratkaisu:
+Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen alkion, kummankin erikseen taulukon alkioita indeksöiden. Ratkaisu on ok, mutta jos haluaisimme tallettaa alustuksen yhteydessä kantaan useampia alkioita, olisi toisto parempi ratkaisu:
 
 ```js
 beforeAll(async () => {
@@ -969,7 +977,11 @@ Siispä viimeinen rivi, <code>await Promise.all(promiseArray)</code> odottaa, et
 
 > Promise.all-metodia käyttäessä päästään tarvittaessa käsiksi sen parametrina olevien yksittäisten promisejen arvoihin, eli promiseja vastaavien operaatioiden tuloksiin. Jos odotetaan promisejen valmistumista _await_-syntaksilla <code>const results = await Promise.all(promiseArray)</code> palauttaa operaatio taulukon, jonka alkioina on _promiseArray_:n promiseja vastaavat arvot samassa järjestyksessä kuin promiset ovat taulukossa.
 
+<<<<<<< HEAD
 Javascriptin asynkroninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on hyvä tuntea mahdollisimman hyvin!
+=======
+Javascriptin asynkroninen suoritusmalli aiheuttaakin siis helposti yllätyksiä ja myös async/await-syntaksin kanssa pitää olla koko ajan tarkkana. Vaikka async/await peittää monia promisejen käsittelyyn liittyviä seikkoja, promisejen toiminta on syytä tuntea mahdollisimman hyvin!
+>>>>>>> 7e4e46db35a5be8c30ad6e01bceb2eb9dbfc7ae2
 
 ### async/await backendissä
 
@@ -1279,7 +1291,7 @@ Testeissä on myös eräs hieman ikävä ja jopa riskialtis piirre. Testit luott
 
 Parannellaan testejä hiukan.
 
-Tehdään testejä varten muutama apufunktio moduuliin _test/test_helper.js_
+Tehdään testejä varten muutama apufunktio moduuliin _tests/test_helper.js_
 
 ```js
 const Note = require('../models/note')
@@ -1470,7 +1482,7 @@ Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
 ![]({{ "/assets/4/5.png" | absolute_url }})
 
-Backendin tietokannan tilaa muttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi _'addition of a new note'_, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
+Backendin tietokannan tilaa muuttavat testit, esim. uuden muistiinpanon lisäämistä testaava testi _'addition of a new note'_, on tehty siten, että ne ensin aluksi selvittävät tietokannan tilan apufunktiolla _notesInDb()_
 
 ```js
 const notesAtBeginningOfOperation = await notesInDb()
@@ -2293,7 +2305,7 @@ Nyt komennot _npm run lint_ suorittaa tarkastukset koko projektille.
 
 Paras vaihtoehto on kuitenkin konfiguroida editorille lint-plugin joka suorittaa linttausta koko ajan. Näin pääset korjaamaan pienet virheet välittömästi. Tietoja esim. Visual Studion ESlint-pluginsta [täällä](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
 
-ESlintille on määritelty suuri määrä [saantöjä](https://eslint.org/docs/rules/), joita on helppo ottaa käyttöön muokkaamalla tietostoa _.eslintrc.js_.
+ESlintille on määritelty suuri määrä [sääntöjä](https://eslint.org/docs/rules/), joita on helppo ottaa käyttöön muokkaamalla tietostoa _.eslintrc.js_.
 
 Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) joka varottaa, jos koodissa yhtäsuuruutta verrataan muuten kuin käyttämällä kolmea =-merkkiä. Sääntö lisätään konfiguraatiotiedostoon avaimen _rules_ alle.
 
