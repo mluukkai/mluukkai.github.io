@@ -600,6 +600,11 @@ Mikäli sinulla on hyviä linkkejä lisättäväksi, lisää ne [tiedoston loppu
 * [haastavampaa](https://developers.google.com/analytics/devguides/collection/analyticsjs/single-page-applications)
 * [React Google Analytics](https://github.com/react-ga/react-ga)
 * [React Native](https://facebook.github.io/react-native/)
+* [Bower](https://www.npmjs.com/package/bower)
+* [Grunt](https://www.npmjs.com/package/grunt)
+* [Gulp](https://www.npmjs.com/package/gulp)
+* [Browserify](https://www.npmjs.com/package/browserify)
+* [Webpack](https://www.npmjs.com/package/webpack)
 * <https://reactpatterns.com/>
 * [react bits](https://vasanthk.gitbooks.io/react-bits/)
 
