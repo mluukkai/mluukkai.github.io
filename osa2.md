@@ -1150,7 +1150,7 @@ Joskus on hyödyllistä tarkastella HTTP-pyyntöjä [osan 1 alussa](osa1/#HTTP-G
 
 Voimme, esim. tarkastaa onko POST-pyynnön mukana menevä data juuri se mitä oletimme, onko headerit asetettu oikein ym.
 
-Koska POST-pyynnössä lähettämämme data oli javascrip-olio, osasi axios automaattisesti asettaa pyynnön _content-type_ headerille oikean arvon eli _application/json_.
+Koska POST-pyynnössä lähettämämme data oli javascript-olio, osasi axios automaattisesti asettaa pyynnön _content-type_ headerille oikean arvon eli _application/json_.
 
 Uusi muistiinpano ei vielä renderöidy ruudulle, sillä emme aseta komponentille _App_ uutta tilaa muistiinpanon luomisen yhteydessä. Viimeistellään sovellus vielä tältä osin:
 
