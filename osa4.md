@@ -248,7 +248,7 @@ Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei
 
 ## Tehtäviä
 
-Tee nyt tehtävät [59 ja 60](../tehtavat#sovelluksen-alustus-ja-rakenne)
+Tee nyt tehtävä [60](../tehtavat#sovelluksen-alustus-ja-rakenne)
 
 ## node-sovellusten testaaminen
 
