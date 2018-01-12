@@ -1174,7 +1174,7 @@ Määrittele ensin toiminnallisuutta testaavat testit ja tämän jälkeen toteut
 
 Toteuta sovellukseen mahdollisuus yksittäisen blogin muokkaamiseen.
 
-Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiinn [osassa 3](osa3/#loput-operaatiot).
+Tarvitsemme muokkausta lähinnä _likejen_ lukumäärän päivittämiseen, mutta toiminnallisuuden voi toteuttaa samaan tapaan kuin muistiinpanon päivittäminen toteutettiin [osassa 3](osa3/#loput-operaatiot).
 
 ### Blogilistan käyttäjät
 
