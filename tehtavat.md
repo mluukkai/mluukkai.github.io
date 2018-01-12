@@ -957,9 +957,9 @@ Käytettävän tietokannan voit konfiguroida seuraten osan 3 lukua [sovelluksen 
 
 ## Osa 4
 
-Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka aulla käyttäjien on mahdollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
+Rakennamme tämän osan tehtävissä _blogilistasovellusta_, jonka avulla käyttäjien on mahdollista tallettaa tietoja internetistä löytämistään mielenkiintoisista blogeista. Kustakin blogista talletetaan sen kirjoittaja (author), aihe (title), url sekä blogilistasovelluksen käyttäjien antamien äänien määrä.
 
-Blogilistasovellus muistuttaa huomattanvasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehyvä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
+Blogilistasovellus muistuttaa huomattavasti syksyn ohjelmistotuotantokurssin miniprojekteissa tehyvä [ohjelmistoa](https://github.com/mluukkai/ohjelmistotuotanto2017/wiki/miniprojekti-speksi).
 
 ### sovelluksen alustus ja rakenne
 
@@ -1027,7 +1027,7 @@ Paras käytänne on commitoida koodi aina stabiilissa tilanteessa, tällöin on 
 
 ### yksikkötestaus
 
-Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funktiot esim. tiedoston _utils/list_helper.js_. Tee testit sopivasti nimettyyn tiedostoon hakemistoon _test_.
+Tehdään joukko blogilistan käsittelyyn tarkoitettuja apufunktioita. Tee funktiot esim. tiedostoon _utils/list_helper.js_. Tee testit sopivasti nimettyyn tiedostoon hakemistoon _test_.
 
 **HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
 
@@ -1189,7 +1189,7 @@ Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö 
 Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
 
 Käyttäjäien lista voi näyttää esim. seuraavalta:
-![]({{ "/assets/teht/24.png" | absolute_url }})
+![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/24.png)
 
 #### 74 blogilistan laajennus, osa 5
 
@@ -1207,7 +1207,7 @@ Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten,
 
 Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
 
-![]({{ "/assets/teht/25.png" | absolute_url }})
+![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/25.png)
 
 ja käyttäjien listausta siten että käyttäjien lisäämät blogit ovat näkyvillä
 

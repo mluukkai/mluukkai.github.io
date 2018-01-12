@@ -603,7 +603,7 @@ Herää kysymys miten voimme testata poisto-operaatiota? HTTP GET -pyyntöjä on
 
 On olemassa useita backendin testaamista helpottavia työkaluja, eräs näistä on edellisessä osassa nopeasti mainittu komentorivityökalu [curl](https://curl.haxx.se).
 
-Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta. 
+Käytetään nyt kuitenkin [postman](https://www.getpostman.com/)-nimistä sovellusta.
 
 **HUOM:** jos käytät Visual Studio Codea, voit postmanin sijaan käyttää VS Coden
 [REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) -pluginia.
@@ -1108,7 +1108,7 @@ const mongoose = require('mongoose')
 
 const url = 'mongodb://...'
 
-// voit tarkistaa mongoosen version tiedostosta package-lock.json
+// voit tarkistaa mongoosen version tiedostosta package.json
 // jos käytössäsi on mongoosen versio 4.x seuraava rivi tulee antaa muodossa
 // mongoose.connect(url, { useMongoClient: true })
 
