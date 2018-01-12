@@ -645,7 +645,7 @@ Tästä aiheutuu kuitenkin virheilmoitus
 Virhe johtuu siitä, että käyttämämme syntaksi ei ole vielä mukana Javascriptin uusimmassa standardissa ES7. Saamme syntaksin käyttöön asentamalla [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/)-pluginin komennolla
 
 ```bash
-npm install transform-class-properties- --save-dev
+npm install babel-plugin-transform-class-properties --save-dev
 ```
 
 ja kehottamalla _babel-loader_:ia käyttämään pluginia:
