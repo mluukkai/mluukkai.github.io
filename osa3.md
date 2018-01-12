@@ -1358,7 +1358,7 @@ Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](
 
 ### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
-Ennen kun täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
+Ennen kuin täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
 
 Tehdään moduulia varten hakemisto _models_ ja sinne tiedosto _note.js_:
 
@@ -1453,7 +1453,7 @@ Tee nyt tehtävät [53 ja 54](tehtavat#backend-ja-tietokanta)
 
 ### Virheiden käsittely
 
-Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mitä ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
+Jos yritämme mennä selaimella sellaisen yksittäisen muistiinpanon sivulle, jota ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
 
 Palvelimen konsolissa näkyykin virheilmoitus:
 
