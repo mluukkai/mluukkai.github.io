@@ -987,8 +987,10 @@ create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riitt√
 
 ```bash
 {
-  // ...
-  "proxy": "http://localhost:3001"
+  "scripts": {
+    // ...
+    "proxy": "http://localhost:3001
+  }
 }
 ```
 
