@@ -1648,7 +1648,7 @@ eli jos käyttäjä on kirjaantunut, renderöidäänkin linkin _Login_ sijaan ki
 
 Kirjautumisen toteuttamiseen liittyy eräs mielenkiintoinen seikka. Kirjaantumislomakkeelle mennään selaimen osoitteen ollessa _/login_, määrittelevä Route on seuraavassa
 
-```react
+```bash
 <Route path="/login" render={({history}) =>
   <Login history={history} onLogin={this.login} />}
 />
@@ -1658,7 +1658,7 @@ Routen render-attribuutissa määritelty metodi ottaa nyt vastaan olion [history
 
 Renderöitävälle _Login_-näkymälle annetaan parametriksi _history_-olio ja kirjautumisen komponentin _App_ tilaan synkronoiva funktio _this.login_:
 
-```react
+```bash
 <Login history={history} onLogin={this.login}/>}
 ```
 

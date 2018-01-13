@@ -5,7 +5,7 @@ permalink: /osa0/
 ---
 
 <div class="important">
-  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
 
   <p>uusi osoite <a href='https://fullstack-hy.github.io/osa0/'>https://fullstack-hy.github.io/osa0/</a></p>
 
