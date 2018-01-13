@@ -1820,7 +1820,6 @@ this.props.notifyWith(`you voted '${anecdote.content}'`)
 setTimeout(() => {
   this.props.clearNotification()
 }, 10000)
-}
 ```
 
 Tee asynkrooninen action creator, joka mahdollistaa notifikaation antamisen seuraavasti:

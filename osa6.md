@@ -722,7 +722,7 @@ render() {
   console.log(this.props.noteCreation)
   return (
     <form onSubmit={this.addNote}>
-      <input name='note' />
+      <input name="note" />
       <button>lisää</button>
     </form>
   )
@@ -921,8 +921,7 @@ connect(
 )(NoteList)
 ```
 
-taas on selkeästi _container_-komponentti, joita Dan Abramov
-[luonnehtii](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) seuraavasti:
+taas on selkeästi _container_-komponentti, joita Dan Abramov [luonnehtii](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) seuraavasti:
 
 - Are concerned with how things work.
 - May contain both presentational and container components inside but usually don’t have any DOM markup of their own except for some wrapping divs, and never have any styles.
@@ -1122,7 +1121,7 @@ componentWillMount = async () => {
 
 Voimme toimia samoin myös uuden muistiinpanon luomisen suhteen. Laajennetaan palvelimen kanssa kommunikoivaa koodia:
 
-```
+```js
 const url = 'http://localhost:3001/notes'
 
 const getAll = async () => {
