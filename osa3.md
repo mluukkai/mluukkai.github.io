@@ -748,7 +748,7 @@ HTTP-pyynnöistä muiden paitsi POST:in tulisi olla _idemponent_:
 
 Eli jos pyynnöllä on sivuvaikutuksia, lopputulos on sama suoritetaanko pyyntö yhden tai useamman kerran.
 
-Esim. jos tehdään HTTP POST pyyntö osoitteeseen _/notes/10_ ja pyynnön mukana on <code>{ content: "vain yksi sivuvaikutus", important: true }</code>, on lopputulos sama riippumatta siitä kuinka monta kertaa pyyntö suoritetaan.
+Esim. jos tehdään HTTP PUT pyyntö osoitteeseen _/notes/10_ ja pyynnön mukana on <code>{ content: "ei sivuvaikutuksia", important: true }</code>, on lopputulos sama riippumatta siitä kuinka monta kertaa pyyntö suoritetaan.
 
 Kuten metodin GET _safety_ myös _idempotence_ on HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET, HEAD, PUT ja DELETE-pyyntöjä käytetäänkin aina siten, että ne ovat idemponent.
 
@@ -868,7 +868,7 @@ Tehdään projektihakemistosta git-repositorio, lisätään _.gitignore_ jolla s
 node_modules
 ```
 
-Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennolla _git push heroku master_.
+Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennoilla _git add -A_, _git commit -m \"Initiate app.\"_ ja _git push heroku master_.
 
 Jos kaikki meni hyvin, sovellus toimii. Jos ei, vikaa voi selvittää herokun lokeja lukemalla, eli komennolla _heroku logs_.
 
@@ -903,7 +903,7 @@ Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraa
 
 Eräs mahdollisuus frontendin tuotantoon viemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin repositorion juureen ja määritellä backend näyttämään pääsivunaan frontendin _pääsivu_, eli tiedosto _build/index.html_.
 
-Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym. tarvitsemme expressiin sisäänrakennettua midlewarea [static](http://expressjs.com/en/starter/static-files.html).
+Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym. tarvitsemme expressiin sisäänrakennettua middlewarea [static](http://expressjs.com/en/starter/static-files.html).
 
 Kun lisäämme muiden middlewarejen määrittelyn yhteyteen seuraavan
 
@@ -939,7 +939,7 @@ Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa kat
 
 ### Backendin urlit
 
-Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen lista ym. Koska backendin roolina on tarjota frontendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_.
+Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen lista ym. Koska backendin roolina on tarjota frontendille koneluettava rajapinta, eli API, olisi ehkä parempi erottaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_.
 
 Tehdään muutos ensin muuttamalla käsin kaikki backendin routet:
 
@@ -987,8 +987,10 @@ create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riitt�
 
 ```bash
 {
-  // ...
-  "proxy": "http://localhost:3001"
+  "scripts": {
+    // ...
+    "proxy": "http://localhost:3001
+  }
 }
 ```
 
@@ -1356,7 +1358,7 @@ Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](
 
 ### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
-Ennen kun täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
+Ennen kuin täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
 
 Tehdään moduulia varten hakemisto _models_ ja sinne tiedosto _note.js_:
 
@@ -1451,7 +1453,7 @@ Tee nyt tehtävät [53 ja 54](tehtavat#backend-ja-tietokanta)
 
 ### Virheiden käsittely
 
-Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mitä ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
+Jos yritämme mennä selaimella sellaisen yksittäisen muistiinpanon sivulle, jota ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
 
 Palvelimen konsolissa näkyykin virheilmoitus:
 
@@ -1774,4 +1776,4 @@ Node-sovellusten konfigurointiin on olemassa ympäristömuuttujien ja dotenvin l
 
 ### Tehtäviä
 
-Tee nyt osan viimeiset tehtävät [58-](tehtavat#loppuhuipennus)
+Tee nyt osan viimeiset tehtävät [58-](/tehtavat#loppuhuipennus)
