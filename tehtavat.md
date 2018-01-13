@@ -1203,7 +1203,7 @@ Tee testit, jotka varmistavat, että virheellisiä käyttäjiä ei luoda, ja ett
 
 Laajenna blogia siten, että blogiin tulee tieto sen lisänneestä käyttäjästä.
 
-Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä). Tässä vaiheessa ei ole väliä kuka käyttäjistä määritellään lisääväksi. Toiminnallisuus viimeistellään tehtävässä 77
+Muokkaa blogien lisäystä osan 4 luvun [populate](osa4/#populate) tapaan siten, että blogin lisämisen yhteydessä määritellään blogin lisääjäksi _joku_ järjestelmän tietokannassa olevista käyttäjistä (esim. ensimmäisenä löytyvä). Tässä vaiheessa ei ole väliä kuka käyttäjistä määritellään lisääväksi. Toiminnallisuus viimeistellään tehtävässä 76
 
 Muokaa kaikkien blogien listausta siten, että blogien yhteydessä näytetään lisääjän tiedot:
 

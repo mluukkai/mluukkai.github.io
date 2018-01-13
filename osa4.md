@@ -248,7 +248,7 @@ Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei
 
 ## Tehtäviä
 
-Tee nyt tehtävät [59 ja 60](../tehtavat#sovelluksen-alustus-ja-rakenne)
+Tee nyt tehtävä [60](../tehtavat#sovelluksen-alustus-ja-rakenne)
 
 ## node-sovellusten testaaminen
 
@@ -664,7 +664,7 @@ Toisella rivillä testi käynnistää backendin ja käärii sen kolmannella rivi
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](osa4/#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkronisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
+Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkronisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
 
 Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
 
@@ -733,7 +733,7 @@ Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palve
 Error: listen EADDRINUSE :::3002
 </pre>
 
-Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla esim. komennolla <code>lsof -i :3002</code>
+Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Komento ei toimi Windowsilla.
 
 ```bash
 COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
@@ -741,8 +741,6 @@ node    8318 mluukkai   14u  IPv6 0x5428af4833b85e8b      0t0  TCP *:redwood-bro
 ```
 
 Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
-
-En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
 ## Tietokannan alustaminen ennen testejä
 
@@ -1942,7 +1940,7 @@ tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksin näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
+Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksi näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
 
 Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
 
@@ -2196,7 +2194,7 @@ Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypill
 
 Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyödyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta suojattuna sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
 
-Toteutamme kirjautumisen frontendin puolelle kurssin [seuraavassa osassa](osa5).
+Toteutamme kirjautumisen frontendin puolelle kurssin [seuraavassa osassa](/osa5).
 
 ## Tehtäviä
 

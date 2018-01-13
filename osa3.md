@@ -1774,4 +1774,4 @@ Node-sovellusten konfigurointiin on olemassa ympäristömuuttujien ja dotenvin l
 
 ### Tehtäviä
 
-Tee nyt osan viimeiset tehtävät [58-](tehtavat#loppuhuipennus)
+Tee nyt osan viimeiset tehtävät [58-](/tehtavat#loppuhuipennus)
