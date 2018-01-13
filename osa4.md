@@ -276,9 +276,9 @@ module.exports = {
 }
 ```
 
-Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runnereita_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
+Javascriptiin on tarjolla runsaasti erilaisia testikirjastoja eli _test runnereita_. Käytämme tällä kurssilla Facebookin kehittämää ja sisäisesti käyttämää [jest](https://facebook.github.io/jest/):iä, joka on toiminnaltaan ja syntakstiltaankin hyvin samankaltainen kuin tämän hetken eniten käytetty testikirjasto [Mocha](https://mochajs.org/). Muitakin mahdollisuuksia olisi, esim. eräissä piireissä suosiota nopeasti saavuttanut [ava](https://github.com/avajs/ava).
 
-Jest on tälle kurssille luonteva valinta, sillä sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
+Jest on tälle kurssille luonteva valinta, sillä se sopii hyvin backendien testaamiseen, mutta suorastaan loistaa Reactilla tehtyjen frontendien testauksessa.
 
 Koska testejä on tarkoitus suorittaa ainoastaan sovellusta kehitettäessä, asennetaan _jest_ kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -326,7 +326,7 @@ test('palindrom of saippuakauppias', () => {
 
 Testi ottaa ensimmäisellä rivillä käyttöön testattavan funktion sijoittaen sen muuttujaan _palindrom_.
 
-Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. tosen testitapauksen toiminnallisuus näyttää seuraavalta:
+Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. toisen testitapauksen toiminnallisuus näyttää seuraavalta:
 
 ```js
 () => {
@@ -520,7 +520,7 @@ Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watc
 
 Nyt sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
 
-Sovelluksen testikanta voidaan luoda tuotantokäyttön ja sovellukehitykseen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
+Sovelluksen testikanta voidaan luoda tuotantokäytön ja sovelluskehityksen tapaan [mlabiin](https://mlab.com/). Ratkaisu ei kuitenkaan ole optimaalinen erityisesti, jos sovellusta on tekemässä yhtä aikaa useita henkilöitä. Testien suoritus nimittäin yleensä edellyttää, että samaa tietokantainstanssia ei ole yhtä aikaa käyttämässä useampia testiajoja.
 
 Testaukseen kannattaakin käyttää verkossa olevaa jaettua tietokantaa mielummin esim. sovelluskehittäjän paikallisen koneen tietokantaa. Optimiratkaisu olisi tietysti se, että jokaista testiajoa varten olisi käytettävissä oma tietokanta, sekin periaatteessa onnistuu "suhteellisen helposti" mm. [keskusmuistissa toimivan Mongon](https://docs.mongodb.com/manual/core/inmemory/) ja [docker](https://www.docker.com)-kontainereiden avulla. Etenemme kuitenkin nyt lyhyemmän kaavan mukaan ja käytetään testikantana normaalia Mongoa.
 
@@ -575,7 +575,7 @@ TEST_MONGODB_URI=mongodb://localhost/test
 
 Eri porttien käyttö mahdollistaa sen, että sovellus voi olla käynnissä testien suorituksen aikana.
 
-Omatekemämme eri ympäristöjen konfiguroinnista huolehtiva _config_-moduuli toimii hieman samassa hengessä kuin [node-config](https://github.com/lorenwest/node-config)-kirjasto. Omatekemä konfigurointiympäristö sopii tarkoitukseemme, sillä sovellus on yksinkertainen ja oman konfiguraatio-moduulin tekeminen on myös jossain määrin opettavaista. Isommissa sovelluksissa kannattaa harkita valmiiden kirjastojen, kuten [node-config](https://github.com/lorenwest/node-config):in käyttöä.
+Omatekemämme eri ympäristöjen kongiguroinnista huolehtivaa _config_-moduuli toimii hieman samassa hengessä kuin [node-config](https://github.com/lorenwest/node-config)-kirjasto. Omatekemä konfigurointiympäristö sopii tarkoitukseemme, sillä sovellus on yksinkertainen ja oman konfiguraatio-moduulin tekeminen on myös jossain määrin opettavaista. Isommissa sovelluksissa kannattaa harkita valmiiden kirjastojen, kuten [node-config](https://github.com/lorenwest/node-config):in käyttöä.
 
 Tiedosto _index.js_ muutetaan nyt muotoon:
 
@@ -822,7 +822,7 @@ Metodikutsu _Note.find()_ palauttaa promisen, ja saamme itse operaation tuloksen
 
 Kaikki operaation suorituksen jälkeinen koodi kirjoitetaan tapahtumankäsittelijään. Jos haluisimme tehdä peräkkäin useita asynkronisia funktiokutsuja, menisi tilanne ikävämmäksi. Joutuisimme tekemään kutsut tapahtumankäsittelijästä. Näin syntyisi potentiaalisesti monimutkaista koodia, pahimmassa tapauksessa jopa niin sanottu [callback-helvetti](http://callbackhell.com/).
 
-[Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hallinnassa, callback-helvetin eli monien sisäkkäisten callbackein sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
+[Ketjuttamalla promiseja](https://javascript.info/promise-chaining) tilanne pysyy jollain tavalla hallinnassa, callback-helvetin eli monien sisäkkäisten callbackien sijaan saadaan aikaan siistihkö _then_-kutsujen ketju. Olemmekin nähneet jo kurssin aikana muutaman sellaisen. Seuraavassa vielä erittäin keinotekoinen esimerkki, joka hakee ensin kaikki muistiinpanot ja sitten tuhoaa niistä ensimmäisen:
 
 ```js
 Note
@@ -1140,7 +1140,7 @@ notesRouter.post('/', async (request, response) => {
   })
 
   const savedNote = await note.save()
-  response.json(formatNote(note))
+  response.json(formatNote(savedNote))
 })
 ```
 
@@ -1261,7 +1261,7 @@ notesRouter.delete('/:id', async (request, response) => {
 })
 ```
 
-Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöty ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos asnynkronisia kutsuja on tehtävä useampia.
+Async/await ehkä selkeyttää koodia jossain määrin, mutta saavutettava hyöty ei ole sovelluksessamme vielä niin iso mitä se tulee olemaan jos asynkronisia kutsuja on tehtävä useampia.
 
 Kaikki eivät kuitenkaan ole vakuuttuneita siitä, että async/await on hyvä lisä javascriptiin, lue esim. [ES7 async functions - a step in the wrong direction](https://spion.github.io/posts/es7-async-await-step-in-the-wrong-direction.html)
 
@@ -1275,7 +1275,7 @@ Tee nyt tehtävät [66-69](../tehtavat##API:n-testaaminen)
 
 Testimme sisältävät tällä hetkellä jossain määrin toisteisuutta ja niiden rakenne ei ole optimaalinen. Testit ovat myös osittain epätäydelliset, esim. reittejä GET /api/notes/:id ja DELETE /api/notes/:id ei tällä hetkellä testata epävalidien id:iden osalta.
 
-Testeissä on myös eräs hieman ikävä ja jopa riskialtis piirre. Testit luottavat siihen, että ne suoritetaan siinä järjestyksessä, missä ne on kirjoitettu testitiedostoon. Tämä pitää kyllä paikkansa, vaikkakin ei ole kovin selkeästi määritelty ominaisuus eli siihen ei ole hyvä luottaa. Testit tuleekin kirjoittaa siten, että yksittäiset testit ovat riippumattoimia toistensa suorituksesta.
+Testeissä on myös eräs hieman ikävä ja jopa riskialtis piirre. Testit luottavat siihen, että ne suoritetaan siinä järjestyksessä, missä ne on kirjoitettu testitiedostoon. Tämä pitää kyllä paikkansa, vaikkakin se ei ole kovin selkeästi määritelty ominaisuus eli siihen ei ole hyvä luottaa. Testit tuleekin kirjoittaa siten, että yksittäiset testit ovat riippumattoimia toistensa suorituksesta.
 
 Parannellaan testejä hiukan.
 
@@ -1464,7 +1464,7 @@ describe('when there is initially some notes saved', async () => {
 
 Muutama huomio testeistä. Olemme jaotelleet testejä [desribe](http://facebook.github.io/jest/docs/en/api.html#describename-fn)-lohkojen avulla ja muutamissa lohkoissa on oma [beforeAll](http://facebook.github.io/jest/docs/en/api.html#beforeallfn-timeout)-funktiolla suoritettava alustuskoodi.
 
-Joissain tapauksissa oli parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty.
+Joissain tapauksissa tämä olisi parempi tehdä operaatioilla [beforeEach](https://facebook.github.io/jest/docs/en/api.html#beforeeachfn-timeout), joka suoritetaan _ennen jokaista testiä_, näin testeistä saisi varmemmin toisistaan riippumattomia. Esimerkissä beforeEachia ei kuitenkaan ole käytetty.
 
 Testien raportointi tapahtuu _describe_-lohkojen ryhmittelyn mukaan:
 
@@ -1631,7 +1631,7 @@ Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alis
 
 Dokumenttietietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samalla tavalla ilmeinen kuin relaatiotietokannoissa, ja valittava ratkaisu kannattaa määritellä siten että se tukee parhaalla tavalla sovelluksen käyttötapauksia. Tämä ei luonnollisestikaan ole helppoa, sillä järjestelmän kaikki käyttötapaukset eivät yleensä ole selvillä siinä vaiheessa kun projektin alkuvaiheissa mietitään datan organisointitapoja.
 
-Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin projektin alkuvaiheissa jopa radikaalimpia datan organisoimiseen liittyien ratkaisujen tekemistä kuin tietokannan tasolla skeemalliset relaatiotietokannat, jotka tarjoavat keskimäärin kaikkiin tilanteisiin melko hyvin sopivan tavan organisoida dataa.
+Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin projektin alkuvaiheissa jopa radikaalimpia datan organisoimiseen liittyvien ratkaisujen tekemistä kuin tietokannan tasolla skeemalliset relaatiotietokannat, jotka tarjoavat keskimäärin kaikkiin tilanteisiin melko hyvin sopivan tavan organisoida dataa.
 
 ### Käyttäjien mongoose-skeema
 
@@ -1942,7 +1942,7 @@ tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksin äyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
+Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksin näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
 
 Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
 
