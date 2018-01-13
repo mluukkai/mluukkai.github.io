@@ -1510,7 +1510,7 @@ Normaalisti selain lataa uuden sivun osoiterivillä olevn urlin muuttuessa. [HTM
 
 Routerin sisälle määritellään selaimen osoiteriviä muokkaavia _linkkejä_ komponentin [Link](https://reacttraining.com/react-router/web/api/Link) avulla. Esim.
 
-```react
+```bash
 <Link to="/notes">notes</Link>
 ```
 
@@ -1518,7 +1518,7 @@ luo sovellukseen linkin, jonka teksti on _notes_ ja jonka klikkaaminen vaihtaa s
 
 Selaimen urliin perustuen renderöitävät komponentit määritellään komponentin [Route](https://reacttraining.com/react-router/web/api/Route) avulla. Esim.
 
-```react
+```bash
 <Route path="/notes" render={() => <Notes />} />
 ```
 
@@ -1526,7 +1526,7 @@ määrittelee, että jos selaimen osoiteena on _/notes_, renderöidään kompone
 
 Sovelluksen juuren, eli osoitteen _/_ määritellään renderöivän komponentti _Home_:
 
-```react
+```bash
 <Route exact path="/" render={() => <Home />} />
 ```
 
