@@ -453,7 +453,7 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 | notes/10 | PATCH       | korvaa yksilöidyn resurssin osan pyynnön mukana olevalla datalla |
 |          |  |  |
 
-Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
+Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossain määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
 
 Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. REST:in kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen REST-API:n määritelmää.
@@ -730,7 +730,7 @@ Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
 ## Huomioita HTTP pyyntötyyppien käytöstä
 
-[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **save** ja **idemponent**.
+[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **safe** ja **idemponent**.
 
 HTTP-pyynnöistä GET:in tulisi olla _safe_:
 
@@ -1054,7 +1054,7 @@ Kaikki sovelluksen console.log-tulostukset tulevat debuggerin _Console_-välileh
 
 ![]({{ "/assets/3/20.png" | absolute_url }})
 
-### epäile kaikkea
+### Epäile kaikkea
 
 Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja frontend on yhdistetty backendiin, on potentiaalisia virheenlähteitä todella paljon.
 
@@ -1156,7 +1156,7 @@ mongoose.Promise = global.Promise
 
 Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
-### skeema
+### Skeema
 
 Yhteyden avaamisen jälkeen määritellään mustiinpanoa vastaava [model](http://mongoosejs.com/docs/models.html):
 
@@ -1256,7 +1256,7 @@ Note
 
 Tee nyt tehtävät [51 ja 52](../tehtavat#mongoosen-alkeet)
 
-## tietokantaa käyttävä backend
+## Tietokantaa käyttävä backend
 
 Nyt meillä on periaatteessa hallussamme riittävä tietämys ottaa mongo käyttöön sovelluksessamme.
 
@@ -1356,7 +1356,7 @@ app.get('/api/notes', (request, response) => {
 
 Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/).
 
-### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
+### Tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
 Ennen kuin täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
 
@@ -1391,7 +1391,7 @@ const Note = require('./models/note')
 
 Näin muuttuja _Note_ saa arvokseen saman olion, jonka moduuli määrittelee.
 
-### muut operaatiot
+### Muut operaatiot
 
 Muutetaan nyt kaikki operaatiot tietokantaa käyttävään muotoon.
 
@@ -1728,7 +1728,7 @@ const url = process.env.MONGODB_URI
 module.exports = Note
 ```
 
-tämän muutoksen jäkeen sovellus ei toimi paikallisesti, koska ympäristömuuttujalla _MONGODB_URI_ ei ole mitään arvoa. Tapoja määritellä ympäristömuuttujalle arvo on monia, käytetään nyt [dotenv](https://www.npmjs.com/package/dotenv)-kirjastoa.
+tämän muutoksen jälkeen sovellus ei toimi paikallisesti, koska ympäristömuuttujalla _MONGODB_URI_ ei ole mitään arvoa. Tapoja määritellä ympäristömuuttujalle arvo on monia, käytetään nyt [dotenv](https://www.npmjs.com/package/dotenv)-kirjastoa.
 
 Asennetaan kirjasto komennolla
 

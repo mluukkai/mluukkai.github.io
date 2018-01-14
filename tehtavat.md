@@ -787,7 +787,7 @@ Generoi uuden puhelintiedon tunniste funktiolla [Math.random](https://developer.
 #### 45 puhelinluettelon backend osa 6
 
 Tee uuden numeron lisäykseen virheiden käsittely, pyyntö ei saa onnistua, jos
-- jos nimi tai numero puuttu
+- jos nimi tai numero puuttuu
 - lisättävälle nimelle on jo numero luettelossa
 
 Vastaa asiaankuuluvalla statuskoodilla, liitä vastaukseen mukaan myös tieto, joka kertoo virheen syyn, esim:
