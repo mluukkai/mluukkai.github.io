@@ -1054,7 +1054,7 @@ Kaikki sovelluksen console.log-tulostukset tulevat debuggerin _Console_-välileh
 
 ![]({{ "/assets/3/20.png" | absolute_url }})
 
-### epäile kaikkea
+### Epäile kaikkea
 
 Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja frontend on yhdistetty backendiin, on potentiaalisia virheenlähteitä todella paljon.
 
