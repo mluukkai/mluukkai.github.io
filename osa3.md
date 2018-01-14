@@ -1156,7 +1156,7 @@ mongoose.Promise = global.Promise
 
 Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
-### skeema
+### Skeema
 
 Yhteyden avaamisen jälkeen määritellään mustiinpanoa vastaava [model](http://mongoosejs.com/docs/models.html):
 
@@ -1256,7 +1256,7 @@ Note
 
 Tee nyt tehtävät [51 ja 52](../tehtavat#mongoosen-alkeet)
 
-## tietokantaa käyttävä backend
+## Tietokantaa käyttävä backend
 
 Nyt meillä on periaatteessa hallussamme riittävä tietämys ottaa mongo käyttöön sovelluksessamme.
 
