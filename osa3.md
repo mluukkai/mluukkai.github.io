@@ -1356,7 +1356,7 @@ app.get('/api/notes', (request, response) => {
 
 Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/).
 
-### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
+### Tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
 Ennen kuin täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
 
@@ -1391,7 +1391,7 @@ const Note = require('./models/note')
 
 Näin muuttuja _Note_ saa arvokseen saman olion, jonka moduuli määrittelee.
 
-### muut operaatiot
+### Muut operaatiot
 
 Muutetaan nyt kaikki operaatiot tietokantaa käyttävään muotoon.
 
