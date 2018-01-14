@@ -730,7 +730,7 @@ Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
 ## Huomioita HTTP pyyntötyyppien käytöstä
 
-[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **save** ja **idemponent**.
+[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **safe** ja **idemponent**.
 
 HTTP-pyynnöistä GET:in tulisi olla _safe_:
 
