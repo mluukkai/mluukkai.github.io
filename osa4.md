@@ -2257,7 +2257,7 @@ module.exports = {
 };
 ```
 
-Muutetaan heti konfiguraatioista seisennystä määrittelevä sääntö, siten että sisennystaso on 2 välilyöntiä
+Muutetaan heti konfiguraatioista sisennystä määrittelevä sääntö, siten että sisennystaso on 2 välilyöntiä
 
 ```
 "indent": [
@@ -2304,7 +2304,7 @@ Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) jok
 
 Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
 
-Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyjä säätntöjä _eslint:recommended_
+Oletusarvoinen konfiguraatiomme ottaa käyttöön joukon valmiiksi määriteltyjä sääntöjä _eslint:recommended_
 
 ```bash
 "extends": "eslint:recommended",
