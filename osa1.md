@@ -3,8 +3,9 @@ layout: page
 title: osa 1
 permalink: /osa1/
 ---
-<div class="important">
-  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
 
   <p>uusi osoite <a href='https://fullstack-hy.github.io/osa1/'>https://fullstack-hy.github.io/osa1/</a></p>
 
