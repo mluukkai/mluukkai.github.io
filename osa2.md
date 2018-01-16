@@ -8,11 +8,7 @@ permalink: /osa2/
 
 
 <div class="important warn">
-  <h1>TIEDOSTO ON SIIRRETTY</h1>
-
-  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa0/'>https://fullstack-hy.github.io/osa0/</a></p>
-
-  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
+  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
 </div>
 
 
