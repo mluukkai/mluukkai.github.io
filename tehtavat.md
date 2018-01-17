@@ -1188,7 +1188,7 @@ Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö 
 
 Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
 
-Käyttäjäien lista voi näyttää esim. seuraavalta:
+Käyttäjien lista voi näyttää esim. seuraavalta:
 ![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/24.png)
 
 #### 74 blogilistan laajennus, osa 5
@@ -1223,7 +1223,7 @@ Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP
 
 Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla.
 
-Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
+Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middlewaret), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
 
 Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
 
