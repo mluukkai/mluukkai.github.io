@@ -4,6 +4,14 @@ title: osa 1
 permalink: /osa1/
 ---
 
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
+
+  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa1/'>https://fullstack-hy.github.io/osa1/</a></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
+</div>
+
 ## Osan 1 oppimistavoitteet
 
 - React

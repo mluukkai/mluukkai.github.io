@@ -6,6 +6,12 @@ permalink: /osa2/
 
 ## osan 2 oppimistavoitteet
 
+
+<div class="important warn">
+  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+</div>
+
+
 - Web-sovellusten toiminnan perusteet
   - lisää CSS:ää
   - selain suoritusympäristönä

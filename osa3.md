@@ -453,7 +453,7 @@ Resursseille voi suorittaa erilaisia operaatiota. Suoritettavan operaation mää
 | notes/10 | PATCH       | korvaa yksilöidyn resurssin osan pyynnön mukana olevalla datalla |
 |          |  |  |
 
-Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossian määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
+Näin määrittyy suurin piirtein asia, mitä REST kutsuu nimellä [uniform interface](https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints), eli jossain määrin yhtenäinen tapa määritellä rajapintoja, jotka mahdollistavat (tietyin tarkennuksin) järjestelmien yhteiskäytön.
 
 
 Tämänkaltaista tapaa tulkita REST:iä on nimitetty kolmiportaisella asteikolla [kypsyystason 2](https://martinfowler.com/articles/richardsonMaturityModel.html) REST:iksi. REST:in kehittäjän Roy Fieldingin mukaan tällöin kyseessä ei vielä ole ollenkaan asia, jota tulisi kutsua [REST-apiksi](http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven). Maailman "REST"-apeista valtaosa ei täytäkään puhdasverisen Fieldingiläisen REST-API:n määritelmää.
@@ -730,7 +730,7 @@ Tee nyt tehtävät [40-45](../tehtavat#expressin-alkeet)
 
 ## Huomioita HTTP pyyntötyyppien käytöstä
 
-[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **save** ja **idemponent**.
+[HTTP-standardi](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) puhuu pyyntötyyppien yhteydessä kahdesta ominaisuudesta, **safe** ja **idemponent**.
 
 HTTP-pyynnöistä GET:in tulisi olla _safe_:
 
@@ -748,7 +748,7 @@ HTTP-pyynnöistä muiden paitsi POST:in tulisi olla _idemponent_:
 
 Eli jos pyynnöllä on sivuvaikutuksia, lopputulos on sama suoritetaanko pyyntö yhden tai useamman kerran.
 
-Esim. jos tehdään HTTP POST pyyntö osoitteeseen _/notes/10_ ja pyynnön mukana on <code>{ content: "vain yksi sivuvaikutus", important: true }</code>, on lopputulos sama riippumatta siitä kuinka monta kertaa pyyntö suoritetaan.
+Esim. jos tehdään HTTP PUT pyyntö osoitteeseen _/notes/10_ ja pyynnön mukana on <code>{ content: "ei sivuvaikutuksia", important: true }</code>, on lopputulos sama riippumatta siitä kuinka monta kertaa pyyntö suoritetaan.
 
 Kuten metodin GET _safety_ myös _idempotence_ on HTTP-standardin suositus palvelimien toteuttajille. RESTful-periaatetta noudattaessa GET, HEAD, PUT ja DELETE-pyyntöjä käytetäänkin aina siten, että ne ovat idemponent.
 
@@ -868,7 +868,7 @@ Tehdään projektihakemistosta git-repositorio, lisätään _.gitignore_ jolla s
 node_modules
 ```
 
-Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennolla _git push heroku master_.
+Luodaan heroku-sovellus komennolla _heroku create_ ja deployataan sovellus komennoilla _git add -A_, _git commit -m \"Initiate app.\"_ ja _git push heroku master_.
 
 Jos kaikki meni hyvin, sovellus toimii. Jos ei, vikaa voi selvittää herokun lokeja lukemalla, eli komennolla _heroku logs_.
 
@@ -903,7 +903,7 @@ Minifioitu koodi ei ole miellyttävää luettavaa. Koodin alku näyttää seuraa
 
 Eräs mahdollisuus frontendin tuotantoon viemiseen on kopioida tuotantokoodi, eli hakemisto _build_ backendin repositorion juureen ja määritellä backend näyttämään pääsivunaan frontendin _pääsivu_, eli tiedosto _build/index.html_.
 
-Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym. tarvitsemme expressiin sisäänrakennettua midlewarea [static](http://expressjs.com/en/starter/static-files.html).
+Jotta saamme expressin näyttämään _staattista sisältöä_ eli sivun _index.html_ ja sen lataaman javascriptin ym. tarvitsemme expressiin sisäänrakennettua middlewarea [static](http://expressjs.com/en/starter/static-files.html).
 
 Kun lisäämme muiden middlewarejen määrittelyn yhteyteen seuraavan
 
@@ -939,7 +939,7 @@ Tarvitsemme sovelluksellemme tietokannan. Ennen tietokannan käyttöönottoa kat
 
 ### Backendin urlit
 
-Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen lista ym. Koska backendin roolina on tarjota frontendille koneluettava rajapinta, eli API, olisi ehkä parempi eroittaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_.
+Backendin tarjoama muistiinpanojen käsittelyn rajapinta on nyt suoraan sovelluksen URL:in <https://radiant-plateau-25399.herokuapp.com> alla. Eli <https://radiant-plateau-25399.herokuapp.com/notes> on kaikkien mustiinpanojen lista ym. Koska backendin roolina on tarjota frontendille koneluettava rajapinta, eli API, olisi ehkä parempi erottaa API:n tarjoama osoitteisto selkeämmin, esim. aloittamalla kaikki sanalla _api_.
 
 Tehdään muutos ensin muuttamalla käsin kaikki backendin routet:
 
@@ -987,8 +987,10 @@ create-react-app:illa luoduissa projekteissa ongelma on helppo ratkaista. Riitt�
 
 ```bash
 {
-  // ...
-  "proxy": "http://localhost:3001"
+  "scripts": {
+    // ...
+    "proxy": "http://localhost:3001
+  }
 }
 ```
 
@@ -1052,7 +1054,7 @@ Kaikki sovelluksen console.log-tulostukset tulevat debuggerin _Console_-välileh
 
 ![]({{ "/assets/3/20.png" | absolute_url }})
 
-### epäile kaikkea
+### Epäile kaikkea
 
 Full Stack -sovellusten debuggaaminen vaikuttaa alussa erittäin hankalalta. Kun kohta kuvaan tulee myös tietokanta ja frontend on yhdistetty backendiin, on potentiaalisia virheenlähteitä todella paljon.
 
@@ -1154,7 +1156,7 @@ mongoose.Promise = global.Promise
 
 Valitettavasti mongoosen dokumentaatiossa käytetään joka paikassa takaisinkutsufunktioita, joten sieltä ei kannata suoraan copypasteta koodia, sillä promisejen ja vanhanaikaisten callbackien sotkeminen samaan koodiin ei ole kovin järkevää.
 
-### skeema
+### Skeema
 
 Yhteyden avaamisen jälkeen määritellään mustiinpanoa vastaava [model](http://mongoosejs.com/docs/models.html):
 
@@ -1254,7 +1256,7 @@ Note
 
 Tee nyt tehtävät [51 ja 52](../tehtavat#mongoosen-alkeet)
 
-## tietokantaa käyttävä backend
+## Tietokantaa käyttävä backend
 
 Nyt meillä on periaatteessa hallussamme riittävä tietämys ottaa mongo käyttöön sovelluksessamme.
 
@@ -1354,9 +1356,9 @@ app.get('/api/notes', (request, response) => {
 
 Kyselyjen palauttamien kenttien määrittely tapahtuu Mongon [syntaksin mukaan](https://docs.mongodb.com/manual/tutorial/project-fields-from-query-results/).
 
-### tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
+### Tietokantamäärittelyjen eriyttäminen omaksi moduuliksi
 
-Ennen kun täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
+Ennen kuin täydennämme backendin muutkin osat käyttämään tietokantaa, eriytetään mongoose-spesifinen koodi omaan moduuliin.
 
 Tehdään moduulia varten hakemisto _models_ ja sinne tiedosto _note.js_:
 
@@ -1389,7 +1391,7 @@ const Note = require('./models/note')
 
 Näin muuttuja _Note_ saa arvokseen saman olion, jonka moduuli määrittelee.
 
-### muut operaatiot
+### Muut operaatiot
 
 Muutetaan nyt kaikki operaatiot tietokantaa käyttävään muotoon.
 
@@ -1451,7 +1453,7 @@ Tee nyt tehtävät [53 ja 54](tehtavat#backend-ja-tietokanta)
 
 ### Virheiden käsittely
 
-Jos yritämme mennä selaimella sellaisen yksittäise muistiinpanon sivulle mitä ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
+Jos yritämme mennä selaimella sellaisen yksittäisen muistiinpanon sivulle, jota ei ole olemassa, eli esim. urliin <http://localhost:3001/api/notes/5a3b80015b6ec6f1bdf68d> missä _5a3b80015b6ec6f1bdf68d_ ei ole minkään tietokannassa olevan muistiinpanon tunniste, jää selain "jumiin" sillä palvelin ei vastaa pyyntöön koskaan.
 
 Palvelimen konsolissa näkyykin virheilmoitus:
 
@@ -1726,7 +1728,7 @@ const url = process.env.MONGODB_URI
 module.exports = Note
 ```
 
-tämän muutoksen jäkeen sovellus ei toimi paikallisesti, koska ympäristömuuttujalla _MONGODB_URI_ ei ole mitään arvoa. Tapoja määritellä ympäristömuuttujalle arvo on monia, käytetään nyt [dotenv](https://www.npmjs.com/package/dotenv)-kirjastoa.
+tämän muutoksen jälkeen sovellus ei toimi paikallisesti, koska ympäristömuuttujalla _MONGODB_URI_ ei ole mitään arvoa. Tapoja määritellä ympäristömuuttujalle arvo on monia, käytetään nyt [dotenv](https://www.npmjs.com/package/dotenv)-kirjastoa.
 
 Asennetaan kirjasto komennolla
 
@@ -1774,4 +1776,4 @@ Node-sovellusten konfigurointiin on olemassa ympäristömuuttujien ja dotenvin l
 
 ### Tehtäviä
 
-Tee nyt osan viimeiset tehtävät [58-](tehtavat#loppuhuipennus)
+Tee nyt osan viimeiset tehtävät [58-](/tehtavat#loppuhuipennus)

@@ -248,7 +248,7 @@ Express-sovelluksien rakenteelle, eli hakemistojen ja tiedostojen nimennälle ei
 
 ## Tehtäviä
 
-Tee nyt tehtävät [59 ja 60](../tehtavat#sovelluksen-alustus-ja-rakenne)
+Tee nyt tehtävä [60](../tehtavat#sovelluksen-alustus-ja-rakenne)
 
 ## node-sovellusten testaaminen
 
@@ -664,7 +664,7 @@ Toisella rivillä testi käynnistää backendin ja käärii sen kolmannella rivi
 
 Testimetodi tekee HTTP GET -pyynnön osoitteeseen _api/notes_ ja varmistaa, että pyyntöön vastataan statuskoodilla 200 ja että data palautetaan oikeassa muodossa, eli että _Content-Type_:n arvo on _application/json_.
 
-Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](osa4/#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkronisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
+Testissä on muutama detalji joihin tutustumme vasta [hieman myöhemmin](#async-await) tässä osassa. Testikoodin määrittelevä nuolifunktio alkaa sanalla _async_ ja _api_-oliolle tehtyä metodikutsua edeltää sama _await_. Teemme ensin muutamia testejä ja tutustumme sen jälkeen async/await-magiaan. Tällä hetkellä niistä ei tarvitse välittää, kaikki toimii kun kirjoitat testimetodit esimerkin mukaan. Async/await-syntaksin käyttö liittyy siihen, että palvelimelle tehtävät pyynnöt ovat _asynkronisia_ operaatioita. [Async/await-kikalla](https://facebook.github.io/jest/docs/en/asynchronous.html) saamme pyynnön näyttämään koodin tasolla synkroonisesti toimivalta.
 
 Kaikkien testien päätteeksi on vielä lopputoimenpiteenä pyydettävä backendia suorittava _server_-olio sammuttamaan itsensä. Tämä onnistuu helposti metodilla [afterAll](https://facebook.github.io/jest/docs/en/api.html#afterallfn-timeout):
 
@@ -733,7 +733,7 @@ Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palve
 Error: listen EADDRINUSE :::3002
 </pre>
 
-Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla esim. komennolla <code>lsof -i :3002</code>
+Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Komento ei toimi Windowsilla.
 
 ```bash
 COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
@@ -741,8 +741,6 @@ node    8318 mluukkai   14u  IPv6 0x5428af4833b85e8b      0t0  TCP *:redwood-bro
 ```
 
 Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
-
-En tiedä toimiiko _lsof_ samoin Linuxissa. Windowsissa se ei ei toimi ainakaan. Jos joku tietää, kertokoon asiasta Telegramissa. Tai lisätköön tähän pull requestilla.
 
 ## Tietokannan alustaminen ennen testejä
 
@@ -988,7 +986,7 @@ Voimme varmistaa refaktoroinnin onnistumisen selaimella, sekä suorittamalla juu
 
 ### testejä ja backendin refaktorinita
 
-Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineet ominaisuudet hajoavat. Tehdäänkin muiden operaatioiden refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle sen toimminnallisuuden varmistavat testit.
+Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineet ominaisuudet hajoavat. Tehdäänkin muiden operaatioiden refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle sen toiminnallisuuden varmistavat testit.
 
 Aloitetaan lisäysoperaatiosta. Tehdään testi, joka lisää uuden muistiinpanon ja tarkistaa, että API:n palauttamien mustiinpanojen määrä kasvaa, ja että lisätty muistiinpano on palautettujen joukossa:
 
@@ -1020,7 +1018,7 @@ Kuten odotimme ja toimimme, menee testi läpi.
 Tehdään myös testi, joka varmistaa, että muistiinpanoa, jolle ei ole asetettu sisältöä ei talleteta
 
 ```js
-test('note without content is not be added ', async () => {
+test('note without content is not added ', async () => {
   const newNote = {
     important: true
   }
@@ -1074,7 +1072,7 @@ routerRouter.post('/', (request, response) => {
     })
     .catch(error => {
       console.log(error)
-      response.status(500).json({ error: 'something whent wrong...' })
+      response.status(500).json({ error: 'something went wrong...' })
     })
 ```
 
@@ -1148,7 +1146,7 @@ Koodiin jää kuitenkin pieni ongelma: virhetilanteita ei nyt käsitellä ollenk
 
 ### virheiden käsittely ja async/await
 
-Jos sovellus POST-pyyntöä käsitellessään aiheuttaa jonkinlaiseen ajoaikaiseen virheen, syntyy jälleen tuttu tilanne:
+Jos sovellus POST-pyyntöä käsitellessään aiheuttaa jonkinlaisen ajonaikaisen virheen, syntyy jälleen tuttu tilanne:
 
 <pre>
 (node:30644) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): TypeError: formattedNote.nonexistingMethod is not a function
@@ -1177,7 +1175,7 @@ notesRouter.post('/', async (request, response) => {
     response.json(formatNote(note))
   } catch (exception) {
     console.log(exception)
-    response.status(500).json({ error: 'something whent wrong...' })
+    response.status(500).json({ error: 'something went wrong...' })
   }
 })
 ```
@@ -1508,7 +1506,7 @@ expect(contents).toContain('async/await yksinkertaistaa asynkronisten funktioide
 
 Testeihin jää vielä paljon parannettavaa mutta on jo aika siirtyä eteenpäin.
 
-Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaan ainoa tai välttämättä edes paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testien tekoon ei ole, kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
+Käytetty tapa API:n testaamiseen, eli HTTP-pyyntöinä tehtävät operaatiot ja tietokannan tilan tarkastelu Mongoosen kautta ei ole suinkaan ainoa tai välttämättä edes paras tapa tehdä API-tason integraatiotestausta. Universaalisti parasta tapaa testien tekoon ei ole, vaan kaikki on aina suhteessa käytettäviin resursseihin ja testattavaan ohjelmistoon.
 
 ## Tehtäviä
 
@@ -1530,7 +1528,7 @@ Olemassaoleva ratkaisumme tallentaa jokaisen luodun muistiinpanon tietokantaan _
 
 Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:itä viittaamaan muissa kokoelmissa talletettaviin dokumentteihin, vastaavasti kuten viiteavaimia käytetään relaatiotietokannoissa.
 
-Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatioitietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan niitä käsittele kurssilla).
+Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatiotietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, sillä versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan käsittele niitä kurssilla).
 
 Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
@@ -1629,7 +1627,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
 
 Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
 
-Dokumenttietietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samalla tavalla ilmeinen kuin relaatiotietokannoissa, ja valittava ratkaisu kannattaa määritellä siten että se tukee parhaalla tavalla sovelluksen käyttötapauksia. Tämä ei luonnollisestikaan ole helppoa, sillä järjestelmän kaikki käyttötapaukset eivät yleensä ole selvillä siinä vaiheessa kun projektin alkuvaiheissa mietitään datan organisointitapoja.
+Dokumenttitietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samalla tavalla ilmeinen kuin relaatiotietokannoissa, ja valittava ratkaisu kannattaa määritellä siten että se tukee parhaalla tavalla sovelluksen käyttötapauksia. Tämä ei luonnollisestikaan ole helppoa, sillä järjestelmän kaikki käyttötapaukset eivät yleensä ole selvillä siinä vaiheessa kun projektin alkuvaiheissa mietitään datan organisointitapoja.
 
 Hieman paradoksaalisesti tietokannan tasolla skeematon Mongo edellyttääkin projektin alkuvaiheissa jopa radikaalimpia datan organisoimiseen liittyvien ratkaisujen tekemistä kuin tietokannan tasolla skeemalliset relaatiotietokannat, jotka tarjoavat keskimäärin kaikkiin tilanteisiin melko hyvin sopivan tavan organisoida dataa.
 
@@ -1658,7 +1656,7 @@ Muistiinpanojen id:t on talletettu käyttäjien sisälle taulukkona mongo-id:it�
 
 kentän tyyppi on _ObjectId_ joka viittaa _Note_-tyyppisiin dokumentteihin. Mongo ei itsessään tiedä mitään siitä, että kyse on kentästä joka viittaa nimenomaan muistiinpanoihin, kyseessä onkin puhtaasti mongoosen syntaksi.
 
-Laajennetaan muistiinpanon skeemaa siten, että myös muistiinpanoissa on tieto ne luoneesta käyttäjästä
+Laajennetaan muistiinpanon skeemaa siten, että myös muistiinpanossa on tieto sen luoneesta käyttäjästä
 
 
 ```js
@@ -1721,7 +1719,7 @@ usersRouter.post('/', async (request, response) => {
     response.json(savedUser)
   } catch (exception) {
     console.log(exception)
-    response.status(500).json({ error: 'something whent wrong...' })
+    response.status(500).json({ error: 'something went wrong...' })
   }
 })
 
@@ -1734,7 +1732,7 @@ Materiaalin tilamäärä ei valitettavasti riitä käsittelemään sen tarkemmin
 
 Koodissa ei tällä hetkellä ole mitään virheidenkäsittelyä eikä validointeja, eli esim. käyttäjätunnuksen ja salasanan halutun muodon tarkastuksia.
 
-Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, eteenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan.
+Uutta ominaisuutta voidaan ja kannattaakin joskus testailla käsin esim. postmanilla. Käsin tapahtuva testailu muuttuu kuitenkin nopeasti työlääksi, etenkin kun tulemme pian vaatimaan, että samaa käyttäjätunnusta ei saa tallettaa kantaan kahteen kertaan.
 
 Pienellä vaivalla voimme tehdä automaattisesti suoritettavat testit, jotka helpottavat sovelluksen kehittämistä merkittävästi.
 
@@ -1840,7 +1838,7 @@ usersRouter.post('/', async (request, response) => {
 })
 ```
 
-Eli haetaan tietokannasta ne user-dokumentit, joten _username_-kentän arvo on sama kun pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
+Eli haetaan tietokannasta ne user-dokumentit, joiden _username_-kentän arvo on sama kuin pyynnössä oleva. Jos sellainen user-dokumentti löytyy, vastataan pyyntöön statuskoodilla _400 bad request_ ja kerrotaan syy ongelmaan.
 
 Voisimme toteuttaa käyttäjien luomisen yhteyteen myös muita tarkistuksia, esim. onko käyttäjätunnus tarpeeksi pitkä, koostuuko se sallituista merkeistä ja onko salasana tarpeeksi hyvä. Jätämme ne kuitenkin harjoitustehtäväksi.
 
@@ -1898,12 +1896,12 @@ notesRouter.post('/', async (request, response) => {
     response.json(formatNote(note))
   } catch(exception) {
     console.log(exception)
-    response.status(500).json({ error: 'something whent wrong...' })
+    response.status(500).json({ error: 'something went wrong...' })
   }
 })
 ```
 
-Huomionarvoista on nyt se, että myös _user_-olio muuttuu, sen kenttään _notes_ talletetaan luodun muistiinpanon _id_:
+Huomionarvoista on nyt se, että myös _user_-olio muuttuu. Sen kenttään _notes_ talletetaan luodun muistiinpanon _id_:
 
 ```js
 const user = User.findById(userId)
@@ -1942,11 +1940,11 @@ tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksin näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
+Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksi näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
 
-Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitos-operaation.
+Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitosoperaation.
 
-Liitoksen tekeminen suoritetaan mongoosen komennolla [populate](http://mongoosejs.com/docs/populate.html). Päivitetään ensin kaikkien käyttäjien tietdot palauttava route:
+Liitoksen tekeminen suoritetaan mongoosen komennolla [populate](http://mongoosejs.com/docs/populate.html). Päivitetään ensin kaikkien käyttäjien tiedot palauttava route:
 
 ```js
 usersRouter.get('/', async (request, response) => {
@@ -2076,7 +2074,7 @@ await bcrypt.compare(body.password, user.passwordHash)
 
 Jos käyttäjää ei ole olemassa tai salasana on väärä, vastataan kyselyyn statuskoodilla [401 unauthorized](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2) ja kerrotaan syy vastauksen bodyssä.
 
-Jos salasana on oikein, luodaan metodiln _jwt.sign_ avulla token, joka sisältää kryptatussa muodossa käyttäjätunnuksen ja käyttäjän id:
+Jos salasana on oikein, luodaan metodin _jwt.sign_ avulla token, joka sisältää kryptatussa muodossa käyttäjätunnuksen ja käyttäjän id:
 
 ```js
 const userForToken = {
@@ -2160,7 +2158,7 @@ notesRouter.post('/', async (request, response) => {
       response.status(401).json({ error: exception.message })
     } else {
       console.log(exception)
-      response.status(500).json({ error: 'something whent wrong...' })
+      response.status(500).json({ error: 'something went wrong...' })
     }
   }
 })
@@ -2192,11 +2190,11 @@ Uuden muistiinpanon luominen onnistuu nyt postmanilla jos _authorization_-header
 
 ### Loppuhuomioita
 
-Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypillinen kiivaasti etenevät ohjelmistoprojektin ilmiö: suuri osa testeistä on hajonnut. Koska kurssin tämä osa on jo muutenkin täynnä uutta asiaa, jätämme testien korjailun harjoitustehtäväksi.
+Koodissa on tapahtunut paljon muutoksia ja matkan varrella on tapahtunut tyypillinen kiivaasti etenevän ohjelmistoprojektin ilmiö: suuri osa testeistä on hajonnut. Koska kurssin tämä osa on jo muutenkin täynnä uutta asiaa, jätämme testien korjailun harjoitustehtäväksi.
 
 Käyttäjätunnuksia, salasanoja ja tokenautentikaatiota hyödyntäviä sovelluksia tulee aina käyttää salatun [HTTPS](https://en.wikipedia.org/wiki/HTTPS)-yhteyden yli. Voimme käyttää sovelluksissamme Noden [HTTP](https://nodejs.org/docs/latest-v8.x/api/http.html)-serverin sijaan [HTTPS](https://nodejs.org/api/https.html)-serveriä. Toisaalta koska sovelluksemme tuotantoversio on Herokussa, sovelluksemme pysyy käyttäjien kannalta suojattuna sen ansiosta, että Heroku reitittää kaiken liikenteen selaimen ja Herokun palvelimien välillä HTTPS:n yli.
 
-Toteutamme kirjautumisen frontendin puolelle kurssin [seuraavassa osassa](osa5).
+Toteutamme kirjautumisen frontendin puolelle kurssin [seuraavassa osassa](/osa5).
 
 ## Tehtäviä
 
@@ -2259,7 +2257,7 @@ module.exports = {
 };
 ```
 
-Muutetaan heti konfiguraatioista seisennystä määrittelevä sääntö, siten että sisennystaso on 2 välilyöntiä
+Muutetaan heti konfiguraatioista sisennystä määrittelevä sääntö, siten että sisennystaso on 2 välilyöntiä
 
 ```
 "indent": [
@@ -2306,7 +2304,7 @@ Otetaan käyttöön sääntö [eqeqeq](https://eslint.org/docs/rules/eqeqeq) jok
 
 Tehdään samalla muutama muukin muutos tarkastettaviin sääntöihin.
 
-Oletusarvoinen konfiguraatiomme ottaa käyttään joukon valmiiksi määriteltyjä säätntöjä _eslint:recommended_
+Oletusarvoinen konfiguraatiomme ottaa käyttöön joukon valmiiksi määriteltyjä sääntöjä _eslint:recommended_
 
 ```bash
 "extends": "eslint:recommended",

@@ -4,8 +4,8 @@ title: osa 0
 permalink: /osa0/
 ---
 
-<div class="important">
-  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
 
   <p>uusi osoite <a href='https://fullstack-hy.github.io/osa0/'>https://fullstack-hy.github.io/osa0/</a></p>
 
@@ -419,7 +419,7 @@ Tiedosto määrittelee kaksi [luokkaselektoria](https://developer.mozilla.org/en
 
 Luokkaselektori alkaa aina pisteellä ja sisältää luokan nimen.
 
-Luokat ovat [attribuuteja](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) joita voidaan liittää HTML-elementeille.
+Luokat ovat [attribuutteja](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/class) joita voidaan liittää HTML-elementeille.
 
 Konsolin _Elements_-välilehti mahdollistaa class-attribuuttien tarkastelun:
 
