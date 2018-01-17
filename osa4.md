@@ -87,7 +87,7 @@ notesRouter.post('/', (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.content === undefined ? false : body.important,
+    important: body.important === undefined ? false : body.important,
     date: new Date()
   })
 
@@ -633,7 +633,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ### supertest
 
-Käytetään API:n testaamiseen avan apuna [supertest](https://github.com/visionmedia/supertest)-kirjastoa.
+Käytetään API:n testaamiseen Jestin apuna [supertest](https://github.com/visionmedia/supertest)-kirjastoa.
 
 Kirjasto asennetaan kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -913,7 +913,7 @@ Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen
 ```js
 beforeAll(async () => {
   await Note.remove({})
-  console.log('clearead')
+  console.log('cleared')
 
   initialNotes.forEach(async (note) => {
     let noteObject = new Note(note)
@@ -976,7 +976,7 @@ Muutetaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkronis
 Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
 
 ```js
-routerRouter.get('/', async (request, response) => {
+notesRouter.get('/', async (request, response) => {
   const notes = await Note.find({})
   response.json(notes.map(formatNote))
 })
@@ -984,7 +984,7 @@ routerRouter.get('/', async (request, response) => {
 
 Voimme varmistaa refaktoroinnin onnistumisen selaimella, sekä suorittamalla juuri määrittelemämme testit.
 
-### testejä ja backendin refaktorinita
+### testejä ja backendin refaktorointia
 
 Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineet ominaisuudet hajoavat. Tehdäänkin muiden operaatioiden refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle sen toiminnallisuuden varmistavat testit.
 
@@ -1059,7 +1059,7 @@ Body:   { important: true }
 Kuten jo edellisessä osassa mainittiin, tämä ei ole hyvä idea. Kannattaakin aloittaa lisäämällä promise-ketjuun metodilla _catch_ virheenkäisttelijä, joka tulostaa konsoliin virheen syyn:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   // ...
 
   note
@@ -1091,7 +1091,7 @@ Kyse on siitä, että koodi kutsuu _response_-olion metodia _send_ kaksi kertaa,
 Kaksi kertaa tapahtuva _send_-kutsu johtuu siitä, että koodin alun _if_-lauseessa on ongelma:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -1108,7 +1108,7 @@ kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koo
 Korjataan ongelma lisäämällä _if_-lauseeseen _return_:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -1133,7 +1133,7 @@ notesRouter.post('/', async (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.content === undefined ? false : body.important,
+    important: body.important === undefined ? false : body.important,
     date: new Date()
   })
 
@@ -1167,7 +1167,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date()
     })
 
@@ -1682,7 +1682,7 @@ npm install bcrypt --save
 
 Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_.
 
-Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users_, ja liitetään se _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
+Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users.js_, ja liitetään se _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
 
 ```js
 const usersRouter = require('./controllers/users')
@@ -1883,7 +1883,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date(),
       user: user._id
     })
@@ -2142,7 +2142,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date(),
       user: user._id
     })

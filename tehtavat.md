@@ -1256,7 +1256,7 @@ const blog = await Blog.findById(...)
 ei kenttä _blog.user_ ole tyypiltään merkkijono vaan _object_. Eli jos haluat verrata kannasta haetun olion id:tä merkkijonomuodossa olevaan id:hen, ei normaali vertailu toimi. Kannasta haettu id tulee muuttaa vertailua varten merkkijonoksi:
 
 ```js
-if ( blog.user.toString() === userid ) ...
+if ( blog.user.toString() === userid.toString() ) ...
 ```
 
 #### 79 blogilistan laajennus, osa 10
