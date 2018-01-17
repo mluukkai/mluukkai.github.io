@@ -516,6 +516,19 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 }
 ```
 
+Windowsissa komennot täytyy erotella &-merkillä siten, että komennon loppuun ei jää välilyöntejä, sillä muuten välit siirtyvät NODE_ENV-muuttujaan. Samalla kauttaviivat täytyy korvata kaksoiskenoviivoilla, joita ei tarvittu yhden komennon skripteissä.
+
+```json
+{
+  // ...
+    "start": "NODE_ENV=production& node index.js",
+    "watch": "NODE_ENV=development& node_modules\\.bin\\nodemon index.js",
+    "test": "NODE_ENV=test& node_modules\\.bin\\jest --verbose test"
+  },
+  // ...
+}
+```
+
 Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
 Nyt sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
@@ -733,14 +746,14 @@ Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palve
 Error: listen EADDRINUSE :::3002
 </pre>
 
-Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Komento ei toimi Windowsilla.
+Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Windowsissa portin varaavan prosessin näkee resmon.exe:n Verkko-välilehdeltä.
 
 ```bash
 COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 node    8318 mluukkai   14u  IPv6 0x5428af4833b85e8b      0t0  TCP *:redwood-broker (LISTEN)
 ```
 
-Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
+Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>. Windowsissa vastaava komento on <code>taskkill /f /pid 8318</code>.
 
 ## Tietokannan alustaminen ennen testejä
 
