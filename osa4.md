@@ -184,7 +184,7 @@ const Note = require('./models/note')
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.static('build'))
-app.use(middleware.error)
+app.use(middleware.logger)
 
 const mongoUrl = process.env.MONGODB_URI
 mongoose.connect(mongoUrl, { useMongoClient: true })
