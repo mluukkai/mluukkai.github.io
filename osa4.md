@@ -87,7 +87,7 @@ notesRouter.post('/', (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.content === undefined ? false : body.important,
+    important: body.important === undefined ? false : body.important,
     date: new Date()
   })
 
@@ -516,6 +516,19 @@ Määrtellään nyt tiedostossa _package.js_, että testejä suorittaessa sovell
 }
 ```
 
+Windowsissa komennot täytyy erotella &-merkillä siten, että komennon loppuun ei jää välilyöntejä, sillä muuten välit siirtyvät NODE_ENV-muuttujaan. Samalla kauttaviivat täytyy korvata kaksoiskenoviivoilla, joita ei tarvittu yhden komennon skripteissä.
+
+```json
+{
+  // ...
+    "start": "NODE_ENV=production& node index.js",
+    "watch": "NODE_ENV=development& node_modules\\.bin\\nodemon index.js",
+    "test": "NODE_ENV=test& node_modules\\.bin\\jest --verbose test"
+  },
+  // ...
+}
+```
+
 Samalla määriteltiin, että suoritettaessa sovellusta komennolla _npm run watch_ eli nodemonin avulla, on sovelluksen ympäristö _development_. Jos sovellusta suoritetaan normaalisti nodella, on ympäristöksi määritelty _production_.
 
 Nyt sovelluksen toimintaa on mahdollista muokata sen suoritusympäristöön perustuen. Eli voimme määritellä, esim. että testejä suoritettaessa ohjelma käyttää erillistä, testejä varten luotua tietokantaa.
@@ -633,7 +646,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ### supertest
 
-Käytetään API:n testaamiseen avan apuna [supertest](https://github.com/visionmedia/supertest)-kirjastoa.
+Käytetään API:n testaamiseen Jestin apuna [supertest](https://github.com/visionmedia/supertest)-kirjastoa.
 
 Kirjasto asennetaan kehitysaikaiseksi riippuvuudeksi komennolla
 
@@ -733,14 +746,14 @@ Jos jotain patologista tapahtuu voi käydä niin, että testien suorittama palve
 Error: listen EADDRINUSE :::3002
 </pre>
 
-Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Komento ei toimi Windowsilla.
+Ratkaisu tilanteeseen on tappaa palvelinta suorittava prosessi. Portin 3002 varaava prosessi löytyy OSX:lla ja Linuxilla esim. komennolla <code>lsof -i :3002</code>. Windowsissa portin varaavan prosessin näkee resmon.exe:n Verkko-välilehdeltä.
 
 ```bash
 COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 node    8318 mluukkai   14u  IPv6 0x5428af4833b85e8b      0t0  TCP *:redwood-broker (LISTEN)
 ```
 
-Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>.
+Komennon avulla selviää ikävyyksiä aiheuttavan prosesin PID eli prosessi-id. Prosessin saa tapettua komennolla <code>KILL 8318</code> olettaen että PID on 8318 niin kuin kuvassa. Joskus prosessi on sitkeä eikä kuole ennen kuin se tapetaan komennolla <code>KILL -9 8318</code>. Windowsissa vastaava komento on <code>taskkill /f /pid 8318</code>.
 
 ## Tietokannan alustaminen ennen testejä
 
@@ -913,7 +926,7 @@ Funktio tallettaa tietokantaan taulukon _initialNotes_ nollannen ja ensimmäisen
 ```js
 beforeAll(async () => {
   await Note.remove({})
-  console.log('clearead')
+  console.log('cleared')
 
   initialNotes.forEach(async (note) => {
     let noteObject = new Note(note)
@@ -976,7 +989,7 @@ Muutetaan nyt backend käyttämään asyncia ja awaitia. Koska kaikki asynkronis
 Kaikkien muistiinpanojen hakemisesta vastaava route muuttuu seuraavasti:
 
 ```js
-routerRouter.get('/', async (request, response) => {
+notesRouter.get('/', async (request, response) => {
   const notes = await Note.find({})
   response.json(notes.map(formatNote))
 })
@@ -984,7 +997,7 @@ routerRouter.get('/', async (request, response) => {
 
 Voimme varmistaa refaktoroinnin onnistumisen selaimella, sekä suorittamalla juuri määrittelemämme testit.
 
-### testejä ja backendin refaktorinita
+### testejä ja backendin refaktorointia
 
 Koodia refaktoroidessa vaanii aina [regression](https://en.wikipedia.org/wiki/Regression_testing) vaara, eli on olemassa riski, että jo toimineet ominaisuudet hajoavat. Tehdäänkin muiden operaatioiden refaktorointi siten, että ennen koodin muutosta tehdään jokaiselle API:n routelle sen toiminnallisuuden varmistavat testit.
 
@@ -1059,7 +1072,7 @@ Body:   { important: true }
 Kuten jo edellisessä osassa mainittiin, tämä ei ole hyvä idea. Kannattaakin aloittaa lisäämällä promise-ketjuun metodilla _catch_ virheenkäisttelijä, joka tulostaa konsoliin virheen syyn:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   // ...
 
   note
@@ -1091,7 +1104,7 @@ Kyse on siitä, että koodi kutsuu _response_-olion metodia _send_ kaksi kertaa,
 Kaksi kertaa tapahtuva _send_-kutsu johtuu siitä, että koodin alun _if_-lauseessa on ongelma:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -1108,7 +1121,7 @@ kun koodi kutsuu <code>response.status(400).json(...)</code> suoritus jatkaa koo
 Korjataan ongelma lisäämällä _if_-lauseeseen _return_:
 
 ```js
-routerRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response) => {
   const body = request.body
 
   if (body.content === undefined) {
@@ -1133,7 +1146,7 @@ notesRouter.post('/', async (request, response) => {
 
   const note = new Note({
     content: body.content,
-    important: body.content === undefined ? false : body.important,
+    important: body.important === undefined ? false : body.important,
     date: new Date()
   })
 
@@ -1167,7 +1180,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date()
     })
 
@@ -1682,7 +1695,7 @@ npm install bcrypt --save
 
 Käyttäjien luominen tapahtuu osassa 3 läpikäytyjä [RESTful](osa3/#rest)-periaatteita seuraten tekemällä HTTP POST -pyyntö polkuun _users_.
 
-Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users_, ja liitetään se _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
+Määritellään käyttäjienhallintaa varten oma _router_ tiedostoon _controllers/users.js_, ja liitetään se _index.js_-tiedostossa huolehtimaan polulle _/api/users/_ tulevista pyynnöistä:
 
 ```js
 const usersRouter = require('./controllers/users')
@@ -1883,7 +1896,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date(),
       user: user._id
     })
@@ -2142,7 +2155,7 @@ notesRouter.post('/', async (request, response) => {
 
     const note = new Note({
       content: body.content,
-      important: body.content === undefined ? false : body.important,
+      important: body.important === undefined ? false : body.important,
       date: new Date(),
       user: user._id
     })
