@@ -400,7 +400,7 @@ Ratkaisu näyttää hieman rumalta, mutta jätämme sen koodiin toistaiseksi.
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-2) tagissä _v5-2_.
 
-Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syyt refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
+Sovelluksemme pääkomponentti _App_ on tällä hetkellä jo aivan liian laaja ja nyt tekemämme muutokset ovat ilmeinen signaali siitä, että lomakkeet olisi syytä refaktoroida omiksi komponenteikseen. Jätämme sen kuitenkin harjoitustehtäväksi.
 
 ## Muistiinpanojen luominen
 
@@ -775,7 +775,7 @@ Toisin kuin "normaalit" propsit, _children_ on Reactin automaattisesti määritt
 
 on _this.props.children_ tyhjä taulukko.
 
-Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemään myös uuden muistiinpanon luomisesta huolehtivan fromin vastaavalla tavalla tarpeen mukaan näytettäväksi.
+Komponentti _Togglable_ on uusiokäytettävä ja voimme käyttää sitä tekemään myös uuden muistiinpanon luomisesta huolehtivan formin vastaavalla tavalla tarpeen mukaan näytettäväksi.
 
 Eristetään ensin muistiinpanojen luominen omaksi komponentiksi
 
@@ -1469,7 +1469,7 @@ class Wrapper extends React.Component {
   render() {
     return (
       <NoteForm
-        value={this.state.value}
+        value={this.state.formInput}
         onSubmit={this.props.onSubmit}
         handleChange={this.onChange}
       />

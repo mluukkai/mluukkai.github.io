@@ -1295,7 +1295,7 @@ Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä 
 
 ![]({{ "/assets/teht/28.png" | absolute_url }})
 
-Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa local storagen avulla.
+Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vielä tarvitse muistaa local storagen avulla.
 
 **HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
 
@@ -1325,7 +1325,7 @@ render() {
 
 #### 82 blogilistan frontend, osa 2
 
-Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus ulkokirjautumiseen
+Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus uloskirjautumiseen
 
 ![]({{ "/assets/teht/29.png" | absolute_url }})
 
@@ -1359,7 +1359,7 @@ Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näyt
 
 #### 86 blogilistan frontend, osa 6
 
-Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
+Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen täydelliset tiedot aukeavat
 
 ![]({{ "/assets/teht/33.png" | absolute_url }})
 
