@@ -257,7 +257,6 @@ Olemme laiminlyöneet ikävästi yhtä oleellista ohjelmistokehityksen osa-aluet
 Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertaista, että siinä ei ole juurikaan mielekästä yksikkötestattavaa. Luodaan tiedosto _utils/for_testing.js_ ja määritellään sinne pari yksinkertaista funktiota testattavaksi:
 
 ```js
-//...
 const palindrom = (string) => {
   return string.split('').reverse().join('')
 }
