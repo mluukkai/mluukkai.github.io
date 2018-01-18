@@ -201,7 +201,7 @@ app.listen(PORT, () => {
 })
 ```
 
-Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niinkuin jotkut sitä kutsuisivat) avataan yhteys tietokantaan ja käynnistetään sovellus.
+Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niin kuin jotkut sitä kutsuisivat).
 
 Middlewareista kaksi _middleware.logger_ ja _middleware.error_ on määritelty hakemiston _utils_ tiedostossa _middleware.js_:
 
