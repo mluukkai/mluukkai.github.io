@@ -1146,13 +1146,13 @@ Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP 
 
 Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
 
-#### 68 blogilistan testit, osa 2
+#### 68 blogilistan testit, osa 3
 
 Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
 
 Laajenna ohjelmaa siten, että testi menee läpi.
 
-#### 69 blogilistan testit, osa 3
+#### 69 blogilistan testit, osa 4
 
 Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
 
