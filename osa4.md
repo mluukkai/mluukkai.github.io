@@ -1586,7 +1586,7 @@ Kokoelmassa _notes_ on kolme muistiinpanoa, kaikkien kenttä _user_ viittaa _use
 ]
 ```
 
-Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
+Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viitteet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
 
 ```js
 [
