@@ -4,6 +4,10 @@ title: osa 3
 permalink: /osa3/
 ---
 
+<div class="important warn">
+  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
+</div>
+
 ## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
