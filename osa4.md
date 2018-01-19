@@ -1542,7 +1542,7 @@ Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:
 
 Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatiotietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, sillä versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan käsittele niitä kurssilla).
 
-Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
+Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitenkin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
 ### Viitteet kokoelmien välillä
 
