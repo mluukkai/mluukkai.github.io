@@ -769,7 +769,7 @@ const Note = require('../models/note')
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
