@@ -2066,9 +2066,9 @@ const noteReducer = (state = [], action) => {
       const id = action.data.id
       const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
-      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+      const changedNote = { ...noteToChange, important: !noteToChange.important }
 
-      return newState.concat(chagedNote)
+      return newState.concat(changedNote)
     default:
       return state
   }
@@ -2092,9 +2092,9 @@ const noteReducer = (state = [], action) => {
       const id = action.data.id
       const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
-      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+      const changedNote = { ...noteToChange, important: !noteToChange.important }
 
-      return [...newState, chagedNote]
+      return [...newState, changedNote]
     default:
     return state
   }
