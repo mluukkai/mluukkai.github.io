@@ -960,7 +960,7 @@ Jos propsin tyyppi on väärä, esim. yritetään määritellä propsiksi _handl
 
 ![]({{ "/assets/5/7.png" | absolute_url }})
 
-Luokkaperustaisille komponenteille ProcTypet on mahdollista määritellä myös _luokkamuuttujina_, seuraavalla syntaksilla:
+Luokkaperustaisille komponenteille PropTypet on mahdollista määritellä myös _luokkamuuttujina_, seuraavalla syntaksilla:
 
 ```react
 import PropTypes from 'prop-types'
@@ -982,11 +982,11 @@ Togglable.propTypes = {
 }
 ```
 
-Surfatessasi internetissä saatat vielä nähdä ennen Reactin versiota 0.16 tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
+Surffatessasi internetissä saatat vielä nähdä ennen Reactin versiota 0.16 tehtyjä esimerkkejä, joissa PropTypejen käyttö ei edellytä erillistä kirjastoa. Versiosta 0.16 alkaen PropTypejä ei enää määritelty React-kirjastossa itsessään ja kirjaston _prop-types_ käyttö on pakollista.
 
 ## Tehtäviä
 
-Tee nyt tehtävä [89](../tehtavat#ProcTypet)
+Tee nyt tehtävä [89](../tehtavat#PropTypet)
 
 ## React-sovelluksen testaus
 
@@ -1673,7 +1673,7 @@ Web-sovellusten E2E-testaus tapahtuu simuloidun selaimen avulla esimerkiksi [Sel
 
 E2E testit ovat potentiaalisesti kaikkein hyödyllisin testikategoria, sillä ne tutkivat järjestelmää mahdollisimman samanlaisena, mikä käyttöönotettava sovellus todellisuudessa on.
 
-E2E-testeihin liittyy myös ikäviä puolia. Niiden konfigurointi on haastavampaa kuin yksikkö- ja integraatiotestien. E2E-testit ovat tyypillisesti myös melko hitaita ja isommassa ohjelmistossa niiden suortitusaika voi helposti nousta minuutteihin, tai jopa tunteihin. Tämä on ikävää sovelluskehityksen kannalta, sillä sovellusta koodatessa olisi erittäin hyödyllistä pystyä ajamaan testejä mahdollisimman usein koodin regressioiden varalta.
+E2E-testeihin liittyy myös ikäviä puolia. Niiden konfigurointi on haastavampaa kuin yksikkö- ja integraatiotestien. E2E-testit ovat tyypillisesti myös melko hitaita ja isommassa ohjelmistossa niiden suoritusaika voi helposti nousta minuutteihin, tai jopa tunteihin. Tämä on ikävää sovelluskehityksen kannalta, sillä sovellusta koodatessa olisi erittäin hyödyllistä pystyä ajamaan testejä mahdollisimman usein koodin regressioiden varalta.
 
 Palaamme end to end -testeihin kurssin viimeisessä, eli seitsemännessä osassa.
 
@@ -1723,9 +1723,9 @@ Storen tilaa muutetaan [actionien](https://redux.js.org/docs/basics/Actions.html
 
 Jos actioneihin liittyy dataa, määritellään niille tarpeen vaatiessa muitakin kenttiä. Laskurisovelluksemme on kuitenkin niin yksinkertainen, että actioneille riittää pelkkä tyyppikenttä.
 
-Actioinien vaikutus sovelluksen tilaan määritellään [reducerin](https://redux.js.org/docs/basics/Reducers.html) avulla. Käytännössä reducer on funktio, joka saa parametrikseen olemassaolevan staten tilan sekä actionin ja _palauttaa_ staten uuden tilan.
+Actionien vaikutus sovelluksen tilaan määritellään [reducerin](https://redux.js.org/docs/basics/Reducers.html) avulla. Käytännössä reducer on funktio, joka saa parametrikseen olemassaolevan staten tilan sekä actionin ja _palauttaa_ staten uuden tilan.
 
-Määritellään nyt sovellukselleme reduceri:
+Määritellään nyt sovelluksellemme reduceri:
 
 ```js
 const counterReducer = (state, action) => {
@@ -2066,9 +2066,9 @@ const noteReducer = (state = [], action) => {
       const id = action.data.id
       const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
-      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+      const changedNote = { ...noteToChange, important: !noteToChange.important }
 
-      return newState.concat(chagedNote)
+      return newState.concat(changedNote)
     default:
       return state
   }
@@ -2092,9 +2092,9 @@ const noteReducer = (state = [], action) => {
       const id = action.data.id
       const newState = state.filter(n => n.id !== id)
       const noteToChange = state.find(n => n.id === id)
-      const chagedNote = { ...noteToChange, important: !noteToChange.important }
+      const changedNote = { ...noteToChange, important: !noteToChange.important }
 
-      return [...newState, chagedNote]
+      return [...newState, changedNote]
     default:
     return state
   }
@@ -2255,7 +2255,7 @@ const actionFor = {
 }
 ```
 
-Komponentin _App_ ei tarvitse enää tietää mitään actionejen sisäisestä esitystavasta:
+Komponentin _App_ ei tarvitse enää tietää mitään actionien sisäisestä esitystavasta:
 
 ```js
 class App extends React.Component {
@@ -2413,7 +2413,7 @@ class App extends React.Component {
 }
 ```
 
-Toisin kuin aiemmin ilman Reduxia tekemässämme React-koodissa, tapahtumankäsittelijät on nyt siirretty pois _App_-komponentista. Yksittäisen muistiinpanon renderöinnistä huolehtiva _Note_ on erittäin yksinkertainen, eikä ole tietoinen siitä, että on sen propsina saama tapahtumankäsittelijä dispatchaa actionin. Tälläisiä komponentteja kutsutaan Reactin terminologiassa [presentational](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)-komponenteiksi.
+Toisin kuin aiemmin ilman Reduxia tekemässämme React-koodissa, tapahtumankäsittelijät on nyt siirretty pois _App_-komponentista. Yksittäisen muistiinpanon renderöinnistä huolehtiva _Note_ on erittäin yksinkertainen, eikä ole tietoinen siitä, että sen propsina saama tapahtumankäsittelijä dispatchaa actionin. Tälläisiä komponentteja kutsutaan Reactin terminologiassa [presentational](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)-komponenteiksi.
 
 _NoteList_ taas on sellainen mitä kutsutaan [container](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)-komponenteiksi, se sisältää sovelluslogiikkaa, eli määrittelee mitä _Note_-komponenttien tapahtumankäsittelijät tekevät ja koordinoi _presentational_-komponenttien, eli _Notejen_ konfigurointia.
 
@@ -2508,7 +2508,7 @@ NoteList.contextTypes = {
 }
 ```
 
-Muutos on siis hyvin pieni propsien sijaan storen viite on <code>this.context.store</code>. Komponentille on myös pakko määritellä sen vastaanottaman kontekstin tyyppi, ilman määrittelyä konteksti jää tyhjäksi.
+Muutos on siis hyvin pieni. Nyt propsien sijaan storen viite on <code>this.context.store</code>. Komponentille on myös pakko määritellä sen vastaanottaman kontekstin tyyppi. Ilman määrittelyä konteksti jää tyhjäksi.
 
 Komponenttiin _NoteForm_ tehtävä muutos on samanlainen. Koska _Note_ ei riipu millään tavalla _storesta_, se jää muuttumattomaksi.
 
@@ -2547,7 +2547,7 @@ ReactDOM.render(
 Redux-sovelluksen tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/redux-simplenotes/tree/v5-6) tagissä _v5-6_.
 
 
-Egghead.io:ssa on ilmaiseksi saatavilla Reduxin kehittäjän Dan Abramovin loistava tutoriaali [Getting started with Redux](https://egghead.io/courses/getting-started-with-redux). Neljässä viimeisessä videossa käytettävää _connect_-metodia käsittelemmä vasta kurssin seuraavassa osassa.
+Egghead.io:ssa on ilmaiseksi saatavilla Reduxin kehittäjän Dan Abramovin loistava tutoriaali [Getting started with Redux](https://egghead.io/courses/getting-started-with-redux). Neljässä viimeisessä videossa käytettävää _connect_-metodia käsittelemme vasta kurssin seuraavassa osassa.
 
 ## Tehtäviä
 
