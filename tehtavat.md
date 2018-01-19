@@ -1448,7 +1448,7 @@ Määrittele joillekin sovelluksesi komponenteille ProcTypet.
 
 ### komponenttien testaaminen
 
-**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+**HUOM:** jos jokin testi on rikki, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä, vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
 
 #### 90 blogilistan testit, osa 1
 
@@ -1536,7 +1536,7 @@ Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
 
-Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
+Storeen täytyy tallettaa erikseen lukumäärä jokaisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
 
 ```js
 {
