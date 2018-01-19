@@ -901,7 +901,7 @@ Palataan takaisin testien pariin, ja tarkastellaan määrittelemäämme testit a
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
