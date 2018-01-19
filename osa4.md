@@ -875,7 +875,7 @@ Awaitin käyttöön liittyy parikin tärkeää seikkaa. Jotta asynkronisia opera
 
 Mistä tahansa kohtaa Javascript-koodia ei awaitia kuitenkaan pysty käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
 
-Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä, huomaa funktion määrittelevä rivi:
+Eli jotta edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä, huomaa funktion määrittelevä rivi:
 
 ```js
 const main = async () => {
