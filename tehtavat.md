@@ -1440,11 +1440,11 @@ Ohjelmasi voi näyttää esim. seuraavalta:
 
 ![]({{ "/assets/teht/34.png" | absolute_url }})
 
-### ProcTypet
+### PropTypet
 
 #### 89 blogilistan frontend, osa 9
 
-Määrittele joillekin sovelluksesi komponenteille ProcTypet.
+Määrittele joillekin sovelluksesi komponenteille PropTypet.
 
 ### komponenttien testaaminen
 
