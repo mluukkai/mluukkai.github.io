@@ -573,7 +573,7 @@ module.exports = {
 }
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ tuotantomoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
 
 Tiedostossa _.env_ on nyt määritelty _erikseen_ sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
