@@ -1188,7 +1188,7 @@ Tee sovellukseen mahdollisuus luoda käyttäjiä tekemällä HTTP POST -pyyntö 
 
 Tee järjestelmään myös mahdollisuus katsoa kaikkien käyttäjien tiedot sopivalla HTTP-pyynnöllä.
 
-Käyttäjäien lista voi näyttää esim. seuraavalta:
+Käyttäjien lista voi näyttää esim. seuraavalta:
 ![](https://raw.githubusercontent.com/mluukkai/mluukkai.github.io/master/assets/teht/24.png)
 
 #### 74 blogilistan laajennus, osa 5
@@ -1223,7 +1223,7 @@ Blogin lisääminen tulee olla mahdollista vain, jos lisäyksen tekevässä HTTP
 
 Osan 4 [esimerkissä](osa4/#kirjautuminen) token otetaan headereista apufunktion _getTokenFrom_ avulla.
 
-Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middleware), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
+Jos käytit samaa ratkaisua, refaktoroi tokenin erottaminen [middlewareksi](osa3/#middlewaret), joka ottaa tokenin _Authorization_-headerista ja sijoittaa sen _request_-olion kenttään _token_.
 
 Eli kun rekisteröit middlewaren ennen routeja tiedostossa _index.js_
 
@@ -1256,7 +1256,7 @@ const blog = await Blog.findById(...)
 ei kenttä _blog.user_ ole tyypiltään merkkijono vaan _object_. Eli jos haluat verrata kannasta haetun olion id:tä merkkijonomuodossa olevaan id:hen, ei normaali vertailu toimi. Kannasta haettu id tulee muuttaa vertailua varten merkkijonoksi:
 
 ```js
-if ( blog.user.toString() === userid ) ...
+if ( blog.user.toString() === userid.toString() ) ...
 ```
 
 #### 79 blogilistan laajennus, osa 10
@@ -1295,7 +1295,7 @@ Kirjautuneelle käyttäjälle näytetään kirjautuneen käyttäjän nimi sekä 
 
 ![]({{ "/assets/teht/28.png" | absolute_url }})
 
-Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vilä tarvitse muistaa local storagen avulla.
+Tässä vaiheessa kirjautuneen käyttäjien tietoja ei vielä tarvitse muistaa local storagen avulla.
 
 **HUOM** Voit tehdä kirjautumislomakkeen ehdollisen renderöinnin esim. seuraavasti:
 
@@ -1325,7 +1325,7 @@ render() {
 
 #### 82 blogilistan frontend, osa 2
 
-Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus ulkokirjautumiseen
+Tee kirjautumisesta "pysyvä" local storagen avulla. Tee sovellukseen myös mahdollisuus uloskirjautumiseen
 
 ![]({{ "/assets/teht/29.png" | absolute_url }})
 
@@ -1359,7 +1359,7 @@ Tee blogin luomiseen käytettävästä lomakkeesta ainoastaan tarvittaessa näyt
 
 #### 86 blogilistan frontend, osa 6
 
-Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen tädelliset tiedot aukeavat
+Laajenna blogien listausta siten, että klikkaamalla blogin nimeä, sen täydelliset tiedot aukeavat
 
 ![]({{ "/assets/teht/33.png" | absolute_url }})
 
@@ -1440,15 +1440,15 @@ Ohjelmasi voi näyttää esim. seuraavalta:
 
 ![]({{ "/assets/teht/34.png" | absolute_url }})
 
-### ProcTypet
+### PropTypet
 
 #### 89 blogilistan frontend, osa 9
 
-Määrittele joillekin sovelluksesi komponenteille ProcTypet.
+Määrittele joillekin sovelluksesi komponenteille PropTypet.
 
 ### komponenttien testaaminen
 
-**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+**HUOM:** jos jokin testi on rikki, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä, vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
 
 #### 90 blogilistan testit, osa 1
 
@@ -1536,7 +1536,7 @@ Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
 
-Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
+Storeen täytyy tallettaa erikseen lukumäärä jokaisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
 
 ```js
 {
