@@ -4,10 +4,13 @@ title: osa 3
 permalink: /osa3/
 ---
 
-<div class="important warn">
-  <h1>TIEDOSTOA OLLAAN SIIRTÄMÄSSÄ</h1>
-</div>
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
 
+  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa1/'>https://fullstack-hy.github.io/osa3/</a></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
+</div>
 ## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
