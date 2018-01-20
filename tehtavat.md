@@ -1090,7 +1090,7 @@ describe('total likes', () => {
 
 Törmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [debuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
 
-#### 63 apufunktioita ja yksikkötestejä, osa 2
+#### 63 apufunktioita ja yksikkötestejä, osa 3
 
 Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää millä blogilla on eniten likejä. Paluuarvo voi olla esim. seuraavassa muodossa:
 
@@ -1146,13 +1146,13 @@ Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP 
 
 Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
 
-#### 68 blogilistan testit, osa 2
+#### 68 blogilistan testit, osa 3
 
 Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
 
 Laajenna ohjelmaa siten, että testi menee läpi.
 
-#### 69 blogilistan testit, osa 3
+#### 69 blogilistan testit, osa 4
 
 Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
 
