@@ -184,7 +184,7 @@ const Note = require('./models/note')
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.static('build'))
-app.use(middleware.error)
+app.use(middleware.logger)
 
 const mongoUrl = process.env.MONGODB_URI
 mongoose.connect(mongoUrl, { useMongoClient: true })
@@ -201,7 +201,7 @@ app.listen(PORT, () => {
 })
 ```
 
-Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niinkuin jotkut sitä kutsuisivat) avataan yhteys tietokantaan ja käynnistetään sovellus.
+Tiedostossa siis otetaan käyttöön joukko middlewareja, näistä yksi on polkuun _/api/notes_ kiinnitettävä _notesRouter_ (tai notes-kontrolleri niin kuin jotkut sitä kutsuisivat).
 
 Middlewareista kaksi _middleware.logger_ ja _middleware.error_ on määritelty hakemiston _utils_ tiedostossa _middleware.js_:
 
@@ -257,7 +257,6 @@ Olemme laiminlyöneet ikävästi yhtä oleellista ohjelmistokehityksen osa-aluet
 Aloitamme yksikkötestauksesta. Sovelluksemme logiikka on sen verran yksinkertaista, että siinä ei ole juurikaan mielekästä yksikkötestattavaa. Luodaan tiedosto _utils/for_testing.js_ ja määritellään sinne pari yksinkertaista funktiota testattavaksi:
 
 ```js
-//...
 const palindrom = (string) => {
   return string.split('').reverse().join('')
 }
@@ -326,7 +325,7 @@ test('palindrom of saippuakauppias', () => {
 
 Testi ottaa ensimmäisellä rivillä käyttöön testattavan funktion sijoittaen sen muuttujaan _palindrom_.
 
-Ysittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. toisen testitapauksen toiminnallisuus näyttää seuraavalta:
+Yksittäinen testitapaus määritellään funktion _test_ avulla. Ensimmäisenä parametrina on merkkijonomuotoinen testin kuvaus. Toisena parametrina on _funktio_, joka määrittelee testitapauksen toiminnallisuuden. Esim. toisen testitapauksen toiminnallisuus näyttää seuraavalta:
 
 ```js
 () => {
@@ -574,7 +573,7 @@ module.exports = {
 }
 ```
 
-Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ sovelluskehitysmoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
+Koodi lataa ympäristömuuttujat tiedostosta _.env_ jos se _ei ole_ tuotantomoodissa. Tuotantomoodissa Heroku asettaa ympäristömuuttujille sopivat arvot.
 
 Tiedostossa _.env_ on nyt määritelty _erikseen_ sekä sovelluskehitysympäristön ja testausympäristön tietokannan osoite (esimerkissä molemmat ovat sovelluskehityskoneen lokaaleja mongo-kantoja) ja portti:
 
@@ -770,7 +769,7 @@ const Note = require('../models/note')
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
@@ -876,7 +875,7 @@ Awaitin käyttöön liittyy parikin tärkeää seikkaa. Jotta asynkronisia opera
 
 Mistä tahansa kohtaa Javascript-koodia ei awaitia kuitenkaan pysty käyttämään. Awaitin käyttö onnistuu ainoastaan jos ollaan [async](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_functio)-funktiossa.
 
-Eli jotta, edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä, huomaa funktion määrittelevä rivi:
+Eli jotta edelliset esimerkit toimisivat, on ne suoritettava async-funktioiden sisällä, huomaa funktion määrittelevä rivi:
 
 ```js
 const main = async () => {
@@ -902,7 +901,7 @@ Palataan takaisin testien pariin, ja tarkastellaan määrittelemäämme testit a
 const initialNotes = [
   {
     content: 'HTML on helppoa',
-    important: false,
+    important: false
   },
   {
     content: 'HTTP-protokollan tärkeimmät metodit ovat GET ja POST',
@@ -1543,7 +1542,7 @@ Mongossa voidaan kaikkien dokumenttitietokantojen tapaan käyttää olioiden id:
 
 Dokumenttitietokannat kuten Mongo eivät kuitenkaan tue relaatiotietokantojen _liitoskyselyitä_ vastaavaa toiminnallisuutta, joka mahdollistaisi useaan kokoelmaan kohdistuvan tietokantahaun (tämä ei ole tarkalleen ottaen enää välttämättä pidä paikkaansa, sillä versiosta 3.2. alkaen Mongo on tukenut useampaan kokoelmaan kohdistuvia [lookup-aggregaattikyselyitä](https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/), emme kuitenkaan käsittele niitä kurssilla).
 
-Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitekin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
+Jos haluamme tehdä liitoskyselyitä, tulee ne toteuttaa sovelluksen tasolla, eli käytännössä tekemällä tietokantaan useita kyselyitä. Tietyissä tilanteissa mongoose-kirjasto osaa hoitaa liitosten tekemisen, jolloin kysely näyttää mongoosen käyttäjälle toimivan liitoskyselyn tapaan. Mongoose tekee kuitenkin näissä tapauksissa taustalla useamman kyselyn tietokantaan.
 
 ### Viitteet kokoelmien välillä
 
@@ -1587,7 +1586,7 @@ Kokoelmassa _notes_ on kolme muistiinpanoa, kaikkien kenttä _user_ viittaa _use
 ]
 ```
 
-Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viittet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
+Mikään ei kuitenkaan määrää dokumenttitietokannoissa, että viitteet on talletettava muistiinpanoihin, ne voivat olla _myös_ (tai ainoastaan) käyttäjien yhteydessä:
 
 ```js
 [
@@ -1638,7 +1637,7 @@ Dokumenttitietokannat tarjoavat myös radikaalisti erilaisen tavan datan organis
 ]
 ```
 
-Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identitettiä, eli id:tä tietokannan tasolla.
+Muistiinpanot olisivat tässä skeemaratkaisussa siis yhteen käyttäjään alisteisia kenttiä, niillä ei olisi edes omaa identiteettiä, eli id:tä tietokannan tasolla.
 
 Dokumenttitietokantojen yhteydessä skeeman rakenne ei siis ole ollenkaan samalla tavalla ilmeinen kuin relaatiotietokannoissa, ja valittava ratkaisu kannattaa määritellä siten että se tukee parhaalla tavalla sovelluksen käyttötapauksia. Tämä ei luonnollisestikaan ole helppoa, sillä järjestelmän kaikki käyttötapaukset eivät yleensä ole selvillä siinä vaiheessa kun projektin alkuvaiheissa mietitään datan organisointitapoja.
 
@@ -1953,7 +1952,7 @@ tulee muistiinpanon luoneen käyttäjän id näkyviin muistiinpanon yhteyteen.
 
 ### populate
 
-Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksi näyttää niiden sisällön. Relaatiotietokanoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
+Haluaisimme API:n toimivan siten, että haettaessa esim. käyttäjien tiedot polulle _/api/users_ tehtävällä HTTP GET -pyynnöllä tulisi käyttäjien tekemien muistiinpanojen id:iden lisäksi näyttää niiden sisällön. Relaatiotietokannoilla toiminnallisuus toteutettaisiin _liitoskyselyn_ avulla.
 
 Kuten aiemmin mainittiin, eivät dokumenttitietokannat tue (kunnolla) eri kokoelmien välisiä liitoskyselyitä. Mongoose-kirjasto osaa kuitenkin tehdä liitoksen puolestamme. Mongoose toteuttaa liitoksen tekemällä useampia tietokantakyselyitä, joten siinä mielessä kyseessä on täysin erilainen tapa kuin relaatiotietokantojen liitoskyselyt, jotka ovat _transaktionaalisia_, eli liitoskyselyä tehdessä tietokannan tila ei muutu. Mongoosella tehtävä liitos taas on sellainen, että mikään ei takaa sitä, että liitettävien kokoelmien tila on konsistentti, toisin sanoen jos tehdään users- ja notes-kokoelmat liittävä kysely, kokoelmien tila saattaa muuttua kesken mongoosen liitosoperaation.
 
