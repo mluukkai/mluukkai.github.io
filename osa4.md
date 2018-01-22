@@ -22,6 +22,10 @@ permalink: /osa4/
 - konfiguraatiot
   - ESlint
 
+<div class='important warn'>
+  <h1>TIEDOSTO OLLAAN SIIRTÄMÄSSÄ</h1>
+</div>
+
 ## Sovelluksen rakenteen parantelu
 
 Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](/osa3/#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi).
