@@ -22,10 +22,13 @@ permalink: /osa4/
 - konfiguraatiot
   - ESlint
 
-<div class='important warn'>
-  <h1>TIEDOSTO OLLAAN SIIRTÄMÄSSÄ</h1>
-</div>
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
 
+  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa4/'>https://fullstack-hy.github.io/osa4/</a></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
+</div>
 ## Sovelluksen rakenteen parantelu
 
 Muutetaan sovelluksen rakennetta siten, että projektin juuressa oleva _index.js_ ainoastaan konfiguroi sovelluksen tietokannan ja käytettävät middlewaret. Routejen määrittely siirretään omaan tiedostoonsa, eli siitä tehdään [moduuli](/osa3/#tietokantamäärittelyjen-eriyttäminen-omaksi-moduuliksi).

@@ -11,6 +11,7 @@ permalink: /osa3/
 
   <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
 </div>
+
 ## Osan 3 oppimistavoitteet
 
 - Web-sovellusten toiminnan perusteet
