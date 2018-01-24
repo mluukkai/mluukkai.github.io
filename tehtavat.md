@@ -1090,7 +1090,7 @@ describe('total likes', () => {
 
 Törmäät varmasti testien tekemisen yhteydessä erinäisiin ongelmiin. Pidä mielessä osassa 3 käsitellyt [debuggaukseen](osa3/#Node-sovellusten-debuggaaminen) liittyvät asiat, voit testejäkin suorittaessasi printtailla konsoliin komennolla _console.log_
 
-#### 63 apufunktioita ja yksikkötestejä, osa 2
+#### 63 apufunktioita ja yksikkötestejä, osa 3
 
 Määrittele funktio _favoriteBlog_ joka saa parametrikseen taulukollisen blogeja. Funktio selvittää millä blogilla on eniten likejä. Paluuarvo voi olla esim. seuraavassa muodossa:
 
@@ -1146,13 +1146,13 @@ Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP 
 
 Kun testi on valmis, refaktoroi operaatio käyttämään promisejen sijaan async/awaitia.
 
-#### 68 blogilistan testit, osa 2
+#### 68 blogilistan testit, osa 3
 
 Tee testi joka varmistaa, että jos kentälle _likes_ ei anneta arvoa, asetetaan sen arvoksi 0. Muiden kenttien sisällöstä ei tässä tehtävässä vielä välitetä.
 
 Laajenna ohjelmaa siten, että testi menee läpi.
 
-#### 69 blogilistan testit, osa 3
+#### 69 blogilistan testit, osa 4
 
 Tee testit blogin lisäämiselle, eli osoitteeseen /api/blogs tapahtuvalle HTTP POST -pyynnölle, joka varmistaa, että jos uusi blogi ei sisällä kenttiä _title_ ja _url_, pyyntöön vastataan statuskoodilla _400 Bad request_
 
@@ -1256,7 +1256,7 @@ const blog = await Blog.findById(...)
 ei kenttä _blog.user_ ole tyypiltään merkkijono vaan _object_. Eli jos haluat verrata kannasta haetun olion id:tä merkkijonomuodossa olevaan id:hen, ei normaali vertailu toimi. Kannasta haettu id tulee muuttaa vertailua varten merkkijonoksi:
 
 ```js
-if ( blog.user.toString() === userid ) ...
+if ( blog.user.toString() === userid.toString() ) ...
 ```
 
 #### 79 blogilistan laajennus, osa 10
@@ -1440,15 +1440,15 @@ Ohjelmasi voi näyttää esim. seuraavalta:
 
 ![]({{ "/assets/teht/34.png" | absolute_url }})
 
-### ProcTypet
+### PropTypet
 
 #### 89 blogilistan frontend, osa 9
 
-Määrittele joillekin sovelluksesi komponenteille ProcTypet.
+Määrittele joillekin sovelluksesi komponenteille PropTypet.
 
 ### komponenttien testaaminen
 
-**HUOM:** jos jokin teksti on rikki ei mene läpi, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
+**HUOM:** jos jokin testi on rikki, ei kannata ongelmaa korjatessa suorittaa kaikkia testejä, vaan ainoastaan rikkinäistä testiä hyödyntäen [only](https://facebook.github.io/jest/docs/en/api.html#testonlyname-fn-timeout)-metodia.
 
 #### 90 blogilistan testit, osa 1
 
@@ -1536,7 +1536,7 @@ Haluttu toiminnallisuus lienee ilmeinen.
 
 #### 95 unicafe revisited, osa 1
 
-Storeen täytyy tallettaa erikseen lukumäärä joisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
+Storeen täytyy tallettaa erikseen lukumäärä jokaisen tyyppisestä palautteesta. Storen hallitsema tila on siis muotoa:
 
 ```js
 {
