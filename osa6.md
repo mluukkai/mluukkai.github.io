@@ -546,7 +546,7 @@ class NoteList extends React.Component {
 }
 ```
 
-Storen _dispatch_-funktiota ei enää tarvitse kutsua, sillä _connect_ on muokannut action creatorin _importanceToggling_ sellainen, muotoon, joka sisältää  dispatchauksen.
+Storen _dispatch_-funktiota ei enää tarvitse kutsua, sillä _connect_ on muokannut action creatorin _importanceToggling_ sellaiseen muotoon, joka sisältää  dispatchauksen.
 
 _mapDispatchToProps_ lienee aluksi hieman haastava ymmärtää, etenkin sen kohta käsiteltävä [vaihtoehtoinen käyttötapa](osa6/mapDispatchToPropsin-toinen-muoto).
 
@@ -554,7 +554,7 @@ Connectin aikaansaamaa tilannetta voidaan havainnollistaa seuraavasti:
 
 ![]({{ "/assets/6/5c.png" | absolute_url }})
 
-eli sen lisäksi että _NoteList_ pääsee storen tilaan propsien _props.notes_ ja _props.filter_ kautta, se viittaa _props.importanceToggling_:lla funktioon, joka avulla storeen saadaan dispatchattua _TOGGLE_IMPORTANCE_-tyyppisiä actioneja.
+eli sen lisäksi että _NoteList_ pääsee storen tilaan propsien _props.notes_ ja _props.filter_ kautta, se viittaa _props.importanceToggling_:lla funktioon, jonka avulla storeen saadaan dispatchattua _TOGGLE_IMPORTANCE_-tyyppisiä actioneja.
 
 Koska komponentti saa storeen liittyvät asiat propseina, voidaan koodista poistaa metodit _componentDidMount_ ja _componentWillUnMount_ jotka huolehtivat komponentin uudelleenrenderöitymisestä storen tilan muuttuessa. Connect tekee tämän puolestamme.
 
@@ -607,7 +607,7 @@ export default connect(
 ```
 
 Koodi sisältää pari muutakin oikaisua, mm. apumetodista _toggleImportance_ on hankkiuduttu eroon.
-Itseasiassa komponentti on nyt niin yksinkertainen että se voitaisiin määritellä funktionaalisena komponenttina, emme kuitenkaan tee muutosta nyt.
+Itseasiassa komponentti on nyt niin yksinkertainen että se voitaisiin määritellä funktionaalisena komponenttina. Emme kuitenkaan tee muutosta nyt.
 
 Otetaan _connect_ käyttöön myös uuden muistiinpanon luomisessa:
 
@@ -702,7 +702,7 @@ export default connect(
 )(NoteForm)
 ```
 
-Aloittelevalle connectin käyttäjälle aiheuttaa joskus ihmetystä se, että action creatorista _noteCreation_ on komponentin sisällä käytettävissä _kaksi eri veriosta_.
+Aloittelevalle connectin käyttäjälle aiheuttaa joskus ihmetystä se, että action creatorista _noteCreation_ on komponentin sisällä käytettävissä _kaksi eri versiota_.
 
 Funktioon tulee viitata propsien kautta, eli _this.props.noteCreation_, tällöin kyseessä on _connectin_ muotoilema, _dispatchauksen sisältävä_ versio funktiosta.
 
@@ -733,7 +733,7 @@ näemme eron:
 
 ![]({{ "/assets/6/5d.png" | absolute_url }})
 
-Ensimmäinen funktiosta siis on normaali _action creator_, toinen taas connectin mutoilema funktio, joka sisältää storen metodin dispatch-kutsun.
+Ensimmäinen funktiosta siis on normaali _action creator_, toinen taas connectin muotoilema funktio, joka sisältää storen metodin dispatch-kutsun.
 
 Connect on erittäin kätevä työkalu, mutta abstraktiutensa takia kenties käsitteellisesti haastavin kurssin tähänastisista asioista.
 
@@ -805,7 +805,7 @@ Tässä vaihtoehtoisessa tavassa _mapDispatchToProps_ on funktio, jota _connect_
 
 eli action creatorilla luodun actionin dispatchaus.
 
-Komponentti siis viitata funktioon propsin _this.props.createTodo_ kautta:
+Komponentti siis viittaa funktioon propsin _this.props.createTodo_ kautta:
 
 ```react
 class NoteForm extends React.Component {
@@ -827,7 +827,7 @@ class NoteForm extends React.Component {
 }
 ```
 
-Konsepti on hiukan monimutkaisen ja sen selittäminen sanallisesti on haastavaa. Kannattaa katsoa huolellisesti Dan Abramovin videot ja koittaa miettiä mistä on kyse.
+Konsepti on hiukan monimutkainen ja sen selittäminen sanallisesti on haastavaa. Kannattaa katsoa huolellisesti Dan Abramovin videot ja koittaa miettiä mistä on kyse.
 
 Useimmissa tapauksissa riittää _mapDispatchToProps_:in yksinkertaisempi muoto. On kuitenkin tilanteita, joissa monimutkaisempi muoto on tarpeen, esim. jos määriteltäessä propseiksi mäpättyjä _dispatchattavia actioneja_ on [viitattava komponentin omiin propseihin](https://github.com/gaearon/redux-devtools/issues/250#issuecomment-186429931).
 
@@ -937,11 +937,11 @@ Abramov mainitsee jaon [eduiksi](https://medium.com/@dan_abramov/smart-and-dumb-
 - Better reusability. You can use the same presentational component with completely different state sources, and turn those into separate container components that can be further reused.
 - Presentational components are essentially your app’s “palette”. You can put them on a single page and let the designer tweak all their variations without touching the app’s logic. You can run screenshot regression tests on that page.
 
-Abramov mainitsee termin [high order component](https://reactjs.org/docs/higher-order-components.html). Esim. _NoteList_ on normaali komponentti, React-reduxin taas _connect_ metodi taas on _high order komponentin_, eli käytännössä funktio, joka haluaa parametrikseen komponentin muuttuakseen "normaaliksi" komponentiksi.
+Abramov mainitsee termin [high order component](https://reactjs.org/docs/higher-order-components.html). Esim. _NoteList_ on normaali komponentti, React-reduxin _connect_ metodi taas on _high order komponentti_, eli käytännössä funktio, joka haluaa parametrikseen komponentin muuttuakseen "normaaliksi" komponentiksi.
 
 High order componentit eli HOC:t ovatkin yleinen tapa määritellä geneeristä toiminnallisuutta, joka sitten erikoistetaan esim. renderöitymisen määrittelyn suhteen parametrina annettavan komponentin avulla. Kyseessä on funktionaalisen ohjelmoinnin etäisesti olio-ohjelmoinnin perintää muistuttava käsite.
 
-HOC:it ovat oikeastaan käsitteen [High Order Function](https://en.wikipedia.org/wiki/Higher-order_function) (HOF) yleistys. HOF:eja ovat sellaiset funkiot, jotka joko ottavat parametrikseen funktioita tai palauttavat funkioita. Olemme oikeastaan käyttäneet HOF:eja läpi kurssin, esim. lähes kaikki taulukoiden käsittelyyn tarkoitetut metodit, kuten _map, filter, find_ ovat HOF:eja, samoin jo monta kertaa käyttämämme funktioita palauttavat (eli kahden nuolen) funktiot, esim.
+HOC:it ovat oikeastaan käsitteen [High Order Function](https://en.wikipedia.org/wiki/Higher-order_function) (HOF) yleistys. HOF:eja ovat sellaiset funkiot, jotka joko ottavat parametrikseen funktioita tai palauttavat funkioita. Olemme oikeastaan käyttäneet HOF:eja läpi kurssin, esim. lähes kaikki taulukoiden käsittelyyn tarkoitetut metodit, kuten _map, filter ja find_ ovat HOF:eja, samoin jo monta kertaa käyttämämme funktioita palauttavat (eli kahden nuolen) funktiot, esim.
 
 ```js
 filterClicked = (value) => (e) => {
@@ -1200,7 +1200,7 @@ class App extends React.Component {
 }
 ```
 
-ja _NoteForm_ loisi uuden muitsiinpanon seuraavasti:
+ja _NoteForm_ loisi uuden muistiinpanon seuraavasti:
 
 ```js
 class NoteForm extends React.Component {
@@ -1464,7 +1464,7 @@ Muutetaan ylläoleva sovellus käyttämään React routeria. Asennetaan React ro
 npm install --save react-router-dom
 ```
 
-React routerin tajoama reititys saadaan käyttöön muuttamalla sovellusta seuraavasti:
+React routerin tarjoama reititys saadaan käyttöön muuttamalla sovellusta seuraavasti:
 
 ```react
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
@@ -1495,7 +1495,7 @@ class App extends React.Component {
 Reititys, eli komponenttien ehdollinen, selaimen _urliin perustuva_ renderöinti otetaan käyttöön sijoittamalla komponentteja _Router_-komponentin lapsiksi, eli _Router_-tagien sisälle.
 
 Huomaa, että vaikka komponenttiin viitataan nimellä _Router_ kyseessä on [BrowserRouter](https://reacttraining.com/react-router/web/api/BrowserRouter), sillä
-importaus tapahtuu siten, että importattava olio uudelleennimetään:
+importtaus tapahtuu siten, että importattava olio uudelleennimetään:
 
 ```js
 import { BrowserRouter as Router ... } from 'react-router-dom'
@@ -1505,7 +1505,7 @@ Manuaalin mukaan
 
 > _BrowserRouter_ is a _Router_ that uses the HTML5 history API (pushState, replaceState and the popstate event) to keep your UI in sync with the URL.
 
-Normaalisti selain lataa uuden sivun osoiterivillä olevn urlin muuttuessa. [HTML5 history API](https://css-tricks.com/using-the-html5-history-api/):n avulla _BrowserRouter_ kuitenkin mahdollistaa sen, että selaimen osoiterivillä olevaa urlia voidaan käyttää React-sovelluksen sisäiseen "reitittämiseen", eli vaikka osoiterivillä oleva url muuttuu, sivun sisältöä manipuloidaan ainoastaan Javasctiptillä ja selain ei lataa uutta sisältöä palvelimelta. Selaimen toiminta back- ja forward-toimintojen ja bookmarkien tekemisen suhteen on kuitenkin loogista, eli toimii kuten perinteisillä web-sivuilla.
+Normaalisti selain lataa uuden sivun osoiterivillä olevan urlin muuttuessa. [HTML5 history API](https://css-tricks.com/using-the-html5-history-api/):n avulla _BrowserRouter_ kuitenkin mahdollistaa sen, että selaimen osoiterivillä olevaa urlia voidaan käyttää React-sovelluksen sisäiseen "reitittämiseen", eli vaikka osoiterivillä oleva url muuttuu, sivun sisältöä manipuloidaan ainoastaan Javasctiptillä ja selain ei lataa uutta sisältöä palvelimelta. Selaimen toiminta back- ja forward-toimintojen ja bookmarkien tekemisen suhteen on kuitenkin loogista, eli toimii kuten perinteisillä web-sivuilla.
 
 Routerin sisälle määritellään selaimen osoiteriviä muokkaavia _linkkejä_ komponentin [Link](https://reacttraining.com/react-router/web/api/Link) avulla. Esim.
 
@@ -1558,7 +1558,7 @@ const Notes = ({notes}) => (
 )
 ```
 
-Kun selain siirtyy muisiinpanon yksilöivään osoitteeseen, esim. _notes/3_, renderöidään komponentti _Note_:
+Kun selain siirtyy muistiinpanon yksilöivään osoitteeseen, esim. _notes/3_, renderöidään komponentti _Note_:
 
 ```react
 const Note = ({note}) => {
@@ -1828,7 +1828,7 @@ const footerStyle = {
 }
 ```
 
-Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:n on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa.
+Jokainen CSS-sääntö on olion kenttä, joten ne erotetaan Javascript-syntaksin mukaan pilkuilla. Pikseleinä ilmaistut numeroarvot voidaan määritellä kokonaislukuina. Merkittävin ero normaaliin CSS:ään on väliviivan sisältämien CSS-ominaisuuksien kirjoittaminen _camelCase_-muodossa.
 
 Voimme muotoilla edellisen luvun footer-elementin olion _footerStyle_ avulla seuraavasti:
 
@@ -1841,7 +1841,7 @@ Voimme muotoilla edellisen luvun footer-elementin olion _footerStyle_ avulla seu
 
 Inline-tyyleillä on tiettyjä rajoituksia, esim. ns. [pseudo-selektoreja](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) ei ole mahdollisuutta käyttää (ainakaan helposti).
 
-Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vahoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tulee erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä. Vanha koulukunta pyrkiikin siihen että sovelluksen CSS, HTML ja Javascript on kaikki kirjoitettu omiin tiedostoihinsa.
+Inline-tyylit ja muutamat seuraavassa osassa katsomamme tavat lisätä tyylejä Reactiin ovat periaatteessa täysin vastoin vanhoja hyviä periaatteita, joiden mukaan Web-sovellusten ulkoasujen määrittely eli CSS tulee erottaa sisällön (HTML) ja toiminnallisuuden (Javascript) määrittelystä. Vanha koulukunta pyrkiikin siihen että sovelluksen CSS, HTML ja Javascript on kaikki kirjoitettu omiin tiedostoihinsa.
 
 Itseasiassa Reactin filosofia on täysin päinvastainen. Koska CSS:n, HTML:n ja Javascriptin erottelu eri tiedostoihin ei ole kuitenkaan osoittautunut erityisen skaalautuvaksi ratkaisuiksi suurissa järjestelmissä, on Reactin näkökulma tehdä erottelu (eli jakaa sovelluksen koodi eri tiedostoihin) noudattaen _sovelluksen loogisia toiminnallisia kokonaisuuksia_.
 
@@ -1871,7 +1871,7 @@ Asennetaan kirjasto suorittamalla komento
 npm install --save react-bootstrap
 ```
 
-Lisätään sitten sovelluksen _index.html_ tiedoston _head_-tagin sisään bootstrapin css-määrittelyt lataava rivi:
+Lisätään sitten sovelluksen _public/index.html_ tiedoston _head_-tagin sisään bootstrapin css-määrittelyt lataava rivi:
 
 ```html
 <head>
