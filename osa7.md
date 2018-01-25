@@ -532,7 +532,7 @@ const config = {
 }
 ```
 
-Komento _npm server_ käynnistää nyt dev-serverin porttiin, eli sovelluskehitys tapahtuu avaamalla tuttuun tapaan selain osoitteeseen <http://localhos:3000>. Kun teemme koodiin muutoksia, reloadaa selain automaattisesti itsensä.
+Komento _npm start_ käynnistää nyt dev-serverin porttiin, eli sovelluskehitys tapahtuu avaamalla tuttuun tapaan selain osoitteeseen <http://localhos:3000>. Kun teemme koodiin muutoksia, reloadaa selain automaattisesti itsensä.
 
 Päivitysprosessi on nopea, dev-serveriä käytettäessä webpack ei bundlaa koodia normaaliin tapaan tiedostoksi _bundle.js_, bundlauksen tuotos on olemassa ainoastaan keskusmuistissa.
 
