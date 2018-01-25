@@ -28,6 +28,10 @@ permalink: /osa5/
 
 ## Kirjautuminen React-sovelluksesta
 
+<div class='important warn'>
+Osaa siirretään, älä tee pull requesteja, kerro typot mailitse/tg:ssä.
+</div>
+
 Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla.
 
 Frontend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identiteetin varmistava token.
