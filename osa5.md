@@ -28,8 +28,12 @@ permalink: /osa5/
 
 ## Kirjautuminen React-sovelluksesta
 
-<div class='important warn'>
-Osaa siirretään, älä tee pull requesteja, kerro typot mailitse/tg:ssä.
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
+
+  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa4/'>https://fullstack-hy.github.io/osa5/</a></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
 </div>
 
 Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla.
