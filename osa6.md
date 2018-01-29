@@ -18,6 +18,10 @@ permalink: /osa6/
   - Inline-tyylit
   - UI-frameworkien käyttö
 
+<div class='important warn'>
+Osaa siirretään, älä tee pull requesteja, kerro typot mailitse/tg:ssä.
+</div>
+
 ## Muistiinpano-sovelluksen refaktorointia
 
 Jatketaan osan 5 loppupuolella tehdyn muistiinpanosovelluksen yksinkertaistetun [redux-version](osa5/#Redux-muistiinpanot) laajentamista.

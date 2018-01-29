@@ -28,6 +28,14 @@ permalink: /osa5/
 
 ## Kirjautuminen React-sovelluksesta
 
+<div class="important deprecated">
+  <h1>TIEDOSTO ON SIIRRETTY</h1>
+
+  <p>uusi osoite <a href='https://fullstack-hy.github.io/osa4/'>https://fullstack-hy.github.io/osa5/</a></p>
+
+  <p>jos löydät typoja ym, tee pull requests uudelle sivulle <a href='https://github.com/FullStack-HY/FullStack-Hy.github.io'>https://github.com/FullStack-HY/FullStack-Hy.github.io</a> </p>
+</div>
+
 Kaksi edellistä osaa keskittyivät lähinnä backendin toiminnallisuuteen ja edellisessä osassa backendiin toteutettua käyttäjänhallintaa ei ole tällä hetkellä tuettuna frontendissa millään tavalla.
 
 Frontend näyttää tällä hetkellä olemassaolevat muistiinpanot ja antaa muuttaa niiden tilaa. Uusia muistiinpanoja ei kuitenkaan voi lisätä, sillä osan 4 muutosten myötä backend edellyttää, että lisäyksen mukana on käyttäjän identiteetin varmistava token.
@@ -160,7 +168,7 @@ export default App
 
 Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluukkai/notes-frontend/tree/v5-1) tagissä _v5-1_.
 
-Kirjautumislomakkeen käsittely noudattaa samaa periaatetta, kun [osassa 2](osa2/#Lomakkeet). Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePaswordChange_) joka synkronoi kenttään tehdyt muutokset komponentin _App_ tilaan. Kirjautumislomakkeen lähettämisestä vastaava metodi _login_ ei tee vielä mitään.
+Kirjautumislomakkeen käsittely noudattaa samaa periaatetta, kun [osassa 2](osa2/#Lomakkeet). Lomakkeen kenttiä varten on lisätty komponentin tilaan kentät _username_ ja _password_. Molemmille kentille on rekisteröity muutoksenkäsittelijä (_handleUsernameChange_ ja _handlePasswordChange_) joka synkronoi kenttään tehdyt muutokset komponentin _App_ tilaan. Kirjautumislomakkeen lähettämisestä vastaava metodi _login_ ei tee vielä mitään.
 
 Jos lomakkeella on paljon kenttiä, voi olla työlästä toteuttaa jokaiselle kentälle oma muutoksenkäsittelijä. React tarjoaakin tapoja, miten yhden muutoksenkäsittelijän avulla on mahdollista huolehtia useista syötekentistä. Jaetun käsittelijän on saatava jollain tavalla tieto minkä syötekentän muutos aiheutti tapahtuman. Eräs tapa tähän on lomakkeen syötekenttien nimeäminen.
 
@@ -552,7 +560,7 @@ Tämän hetkinen koodi on kokonaisuudessaan [githubissa](https://github.com/mluu
 
 ## Tehtäviä
 
-Tee nyt tehtävät [81-84](../tehtavat#kirjautuminen-ja-blogien-luonti)
+Tee nyt tehtävät [81-84](../tehtavat#osa-5)
 
 ## Kirjautumislomakkeen näyttäminen vain tarvittaessa
 

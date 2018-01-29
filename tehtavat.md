@@ -1910,7 +1910,7 @@ NavLink toimii Link-komponentin tavoin mutta sisältää muutamia käteviä lis�
 
 ### UI-framework
 
-Viimeistellään anekdoottisovellus lisäämällä siihen tyylejä Bootstrapin tai jonkun muun UI-frameworkin avulla.
+Viimeistele anekdoottisovellus lisäämällä siihen tyylejä Bootstrapin tai jonkun muun UI-frameworkin avulla.
 
 #### 119 styled anecdotes, osa 3
 
