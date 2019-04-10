@@ -1,0 +1,25 @@
+@import '../components/common.scss';
+
+.part-intro {
+  font-family: $font-heading !important;
+
+  p:not(:last-of-type) {
+    padding-bottom: 2em;
+  }
+
+  &__banner {
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center right;
+
+    @include to($tablet) {
+      background-position: top center;
+
+      > .container {
+        margin-top: 40%;
+      }
+
+      background-size: 70%;
+    }
+  }
+}

@@ -1,0 +1,98 @@
+@import '../common.scss';
+
+.accordion__container {
+  margin-bottom: 1rem;
+}
+
+.accordion__title {
+  padding-left: 2.149rem !important;
+  padding-right: 2.149rem !important;
+  font-size: 1.111rem !important;
+  font-weight: $font-weight-semi-bold;
+}
+
+.accordion {
+  background-color: $white;
+  border: 3px solid $black;
+  border-radius: 5px;
+  color: #444;
+  cursor: pointer;
+  padding: 1rem;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: max-width 0.4s;
+}
+
+.active,
+.accordion:hover {
+  background-color: $main;
+}
+
+.accordion:after {
+  content: '+';
+  font-size: 1.5rem;
+  float: right;
+  margin-left: 5px;
+}
+
+.active {
+  border-color: $white;
+}
+
+.active:after {
+  content: '-';
+  font-size: 1.5rem;
+}
+
+.panel {
+  background-color: $white;
+  transition: height 0.3s;
+  transition-timing-function: ease-in-out;
+  overflow: hidden;
+}
+
+.accordion--side-navigation {
+  width: 100%;
+  margin-left: unset;
+
+  .accordion {
+    border: none;
+    padding: 0 !important;
+    background-color: transparent !important;
+    color: $black !important;
+    border-radius: 0;
+  }
+
+  .accordion__title {
+    font-size: 16px !important;
+    font-weight: unset;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $black !important;
+      color: $white !important;
+    }
+  }
+
+  .panel {
+    padding: 1rem 0 0 !important;
+    background-color: transparent;
+
+    ul {
+      margin-left: 1rem;
+    }
+  }
+
+  .active,
+  .accordion:hover {
+    background-color: $black;
+    color: $white;
+  }
+
+  .accordion:after,
+  .active:after {
+    content: '';
+  }
+}

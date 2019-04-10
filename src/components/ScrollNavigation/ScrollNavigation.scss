@@ -1,0 +1,67 @@
+@import '../common.scss';
+
+.scroll-navigation {
+  font-size: 16px;
+  position: absolute;
+  width: 30%;
+  left: 0;
+  top: 198px;
+
+  @include to($desktop) {
+    display: none;
+  }
+
+  padding-right: 1rem;
+  z-index: 199;
+
+  li {
+    list-style-type: none;
+
+    &:hover {
+      cursor: pointer;
+
+      a {
+        background-color: $black;
+        color: $white !important;
+      }
+    }
+
+    &::before {
+      content: '-';
+    }
+  }
+}
+
+.left-navigation-link {
+  padding-left: 1.2rem;
+  text-indent: -1.2rem;
+
+  &:hover {
+    background-color: $black !important;
+    color: $white !important;
+  }
+
+  // &::before {
+  //   content: '';
+  //   display: inline-block;
+  //   width: 1.5rem;
+  //   height: 1.5rem;
+  //   border-radius: 50%;
+  //   border-width: 2px;
+  //   border-style: solid;
+  //   margin-right: 2rem;
+  //   background-color: inherit;
+  //   border-color: inherit;
+  // }
+}
+
+.level-h1 {
+  font-weight: bold;
+  padding-left: 2.8rem;
+  text-indent: -2.8rem;
+}
+
+.level-h2 {
+  padding-left: 1.6rem;
+  text-indent: -1.6rem;
+}

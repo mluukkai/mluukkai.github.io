@@ -1,0 +1,163 @@
+@import '../components/common.scss';
+
+.course {
+  position: relative;
+  width: 100%;
+
+  p {
+    font-family: $font-heading;
+
+    @include from($tablet) {
+      margin-left: 1rem;
+    }
+  }
+
+  p:not(:last-of-type) {
+    margin-bottom: $vertical-spacing;
+  }
+
+  h1 {
+    @include from($tablet) {
+      margin-left: 3rem;
+    }
+  }
+
+  h2,
+  h3,
+  h4 {
+    @include from($tablet) {
+      margin-left: 1rem;
+    }
+    padding-bottom: 2rem;
+  }
+
+  table {
+    @include from($tablet) {
+      margin-left: 1rem;
+    }
+  }
+
+  ul {
+    font-family: $font-heading;
+
+    @include from($tablet) {
+      margin-left: 2.2rem;
+    }
+  }
+
+  h2:not(:first-of-type) {
+    margin-top: 2rem;
+  }
+
+  pre {
+    margin: 2rem 0;
+    background-color: $black;
+    color: $white;
+  }
+
+  em {
+    font-family: Courier;
+    font-style: normal;
+    background-color: rgba($main, 0.6);
+    padding: 1px 5px 2px;
+  }
+
+  img {
+    border-width: 11px;
+    border-style: solid;
+    border-color: transparent;
+  }
+
+  .container,
+  .banner {
+    position: static;
+  }
+
+  .letter {
+    width: 4rem;
+    height: 4rem;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 2.5rem;
+    text-align: center;
+    margin: 1rem;
+    line-height: 1.3em;
+    transform: translate(-1rem, 0);
+
+    @include from($tablet) {
+      transform: translate(-3rem, 4.5rem);
+    }
+  }
+
+  .letter,
+  h1 {
+    font-size: 2.3rem;
+    font-weight: bold;
+  }
+}
+
+.course-content,
+.tasks {
+  a {
+    border: 0;
+    border-bottom-width: 2px;
+    border-style: solid;
+    padding: 2px;
+  }
+}
+
+.course-content {
+  max-width: 100%;
+}
+
+.tasks {
+  a {
+    border-color: $black !important;
+
+    &:hover {
+      background-color: white !important;
+      color: black !important;
+    }
+  }
+}
+
+.gatsby-highlight-code-line {
+  background-color: rgba($main, 0.3);
+  display: block;
+  margin-right: -1em;
+  margin-left: -1em;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+code[class*='language-'],
+pre[class*='language-'] {
+  text-shadow: none;
+}
+
+.arrow-go-up {
+  width: 36px;
+  height: 36px;
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  z-index: 99999;
+  cursor: pointer;
+
+  @include to($tablet) {
+    right: 10%;
+  }
+}
+
+.part-main__banner {
+  background-position: center center;
+  background-size: 50%;
+  padding-bottom: 10%;
+  background-repeat: no-repeat;
+
+  @include to($tablet) {
+    background-position: top center;
+    background-size: 70%;
+    padding-bottom: 30% !important;
+  }
+}

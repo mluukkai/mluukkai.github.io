@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,500,600');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400');
+@import './common.scss';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $font-body;
+  font-weight: $font-weight-medium;
+  color: $black;
+  font-size: 14px;
+  line-height: 1.555rem;
+
+  @include from($desktop) {
+    font-size: 18px;
+  }
+}
+
+.main-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+p {
+  margin: 0;
+  text-align: left;
+  line-height: 1.5em;
+  color: $black;
+}
+
+a {
+  text-decoration: none;
+  color: $black;
+}
+
+.link {
+  a {
+    border-bottom: 2px solid $main;
+
+    &:hover {
+      background-color: $main;
+    }
+  }
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 90%;
+  max-width: $large;
+
+  @include to($tablet) {
+    padding: 0 20px;
+  }
+}
+
+.container--right {
+  @include from($desktop) {
+    margin-right: 5%;
+    width: 54%;
+    max-width: $large/1.6667;
+
+    @include from($large) {
+      margin-right: calc((100% - #{$large}) / 2);
+    }
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.centered {
+  text-align: center;
+}
+
+.centered--mobile {
+  @include to($tablet) {
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+  }
+}
+
+.spacing {
+  margin-top: $vertical-spacing * 2;
+
+  @include from($desktop) {
+    margin-top: $vertical-spacing * 5;
+  }
+}
+
+.spacing--small {
+  margin-top: $vertical-spacing;
+
+  @include from($desktop) {
+    margin-top: 3.444rem;
+  }
+}
+
+.spacing--large {
+  margin-top: $vertical-spacing * 4;
+
+  @include from($desktop) {
+    margin-top: $vertical-spacing * 10;
+  }
+}
+
+.spacing--extra-large {
+  margin-top: $vertical-spacing * 4;
+
+  @include from($desktop) {
+    margin-top: $vertical-spacing * 20;
+  }
+}
+
+.spacing--after {
+  margin-bottom: $vertical-spacing * 2;
+
+  @include from($desktop) {
+    margin-bottom: $vertical-spacing * 5;
+  }
+}
+
+.spacing--after-small {
+  @include from($desktop) {
+    margin-bottom: $vertical-spacing * 2.5;
+  }
+}
+
+.spacing--after-large {
+  margin-bottom: $vertical-spacing * 4;
+
+  @include from($desktop) {
+    margin-bottom: $vertical-spacing * 10;
+  }
+}
+
+.spacing--mobile {
+  @include to($desktop) {
+    margin-top: $vertical-spacing * 2;
+  }
+
+  &--small {
+    @include to($large) {
+      margin-top: $vertical-spacing * 1.5;
+    }
+  }
+
+  &--large {
+    @include to($large) {
+      margin-top: $vertical-spacing * 3;
+    }
+  }
+}
+
+@for $i from 1 through 10 {
+  .col-#{$i} {
+    width: 100%;
+    @include from($desktop) {
+      width: #{$i * 10%};
+    }
+  }
+}
+
+@include from($desktop) {
+  @for $i from 1 through 5 {
+    .push-right-#{$i} {
+      margin-left: $i * 10%;
+    }
+  }
+
+  @for $i from 1 through 5 {
+    .push-left-#{$i} {
+      margin-right: $i * 10%;
+    }
+  }
+
+  .push-left {
+    margin-right: auto;
+  }
+
+  .push-right {
+    margin-left: auto;
+  }
+}
+
+@include to($tablet) {
+  @for $i from 1 through 10 {
+    .col-#{$i}--mobile {
+      width: #{$i * 10%} !important;
+    }
+
+    @for $i from 1 through 5 {
+      .push-right-#{$i}--mobile {
+        margin-left: $i * 10% !important;
+      }
+    }
+
+    @for $i from 1 through 5 {
+      .push-left-#{$i}--mobile {
+        margin-right: $i * 10% !important;
+      }
+    }
+  }
+
+  @for $i from 0 through 5 {
+    .order-#{$i}--mobile {
+      order: $i;
+    }
+  }
+  .hidden--mobile {
+    display: none;
+  }
+}
+
+@include to($large) {
+  @for $i from 1 through 10 {
+    .col-#{$i}--tablet {
+      width: #{$i * 10%};
+    }
+
+    @for $i from 0 through 5 {
+      .order-#{$i}--tablet {
+        order: $i;
+      }
+    }
+  }
+
+  @for $i from 0 through 5 {
+    .order-#{$i}--mobile {
+      order: $i;
+    }
+  }
+  .hidden--mobile {
+    display: none;
+  }
+}
+
+.centered-vertically {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nav-item-hover {
+  text-decoration: none;
+  color: $black;
+  font-weight: 500;
+  padding: 0.2em;
+
+  @include from($tablet) {
+    font-weight: $font-weight-semi-bold;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
+    background-color: $black !important;
+  }
+
+  &:focus,
+  &:active {
+    outline: 2px solid $blue;
+  }
+}
+
+.flex-fix-aligning {
+  &::before,
+  &::after {
+    content: '';
+    width: 30%;
+    order: 2;
+  }
+}
+
+.index__main-title {
+  font-size: 1.571rem;
+
+  @include from($desktop) {
+    font-size: 3rem;
+  }
+}
+
+.auto-bottom-margin {
+  margin-bottom: auto;
+}
+
+.absolute-top-right--desktop {
+  @include from($desktop) {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.frontpage__hero {
+  @include from($tablet) {
+    .image {
+      top: -2em;
+    }
+  }
+
+  @include from($desktop) {
+    flex-direction: column;
+
+    .image {
+      top: 4em;
+    }
+  }
+}
+
+.heading-font {
+  font-family: $font-heading;
+}
+
+.about__challenge-button {
+  background-color: $main;
+  padding: 0.6rem 1rem;
+  border: 3px solid $black;
+  font-weight: $font-weight-semi-bold;
+
+  &:hover {
+    background-color: $black;
+    color: $white;
+    cursor: pointer;
+  }
+
+  &--turquoise {
+    background-color: $turquoise;
+  }
+}
+
+.space-between--mobile {
+  @include to($large) {
+    justify-content: space-between;
+  }
+}
+
+.challenge__banner {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -70px;
+
+  @include from($tablet) {
+    transform: translateY(-10px);
+  }
+
+  @include from($large) {
+    margin-bottom: -370px;
+  }
+
+  .image {
+    margin: 0;
+    width: 70%;
+    transform: translateY(-25%);
+
+    @include from($tablet) {
+      transform: translateY(-10%);
+    }
+
+    @include from($large) {
+      transform: translateY(-30%);
+    }
+  }
+}

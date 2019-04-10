@@ -1,44 +1,70 @@
 {
-  "name": "gatsby-starter-default",
-  "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "name": "fullstackopen-2019",
+  "description": "Full stack open 2019",
+  "version": "1.0.0",
+  "author": "Houston Inc. Consulting Oy",
   "dependencies": {
-    "gatsby": "^2.0.76",
+    "anchorate": "^1.2.3",
+    "axios": "^0.18.0",
+    "gatsby": "^2.0.53",
     "gatsby-image": "^2.0.20",
+    "gatsby-plugin-canonical-urls": "^2.0.12",
+    "gatsby-plugin-google-analytics": "^2.0.16",
+    "gatsby-plugin-i18n": "^0.4.2",
     "gatsby-plugin-manifest": "^2.0.9",
     "gatsby-plugin-offline": "^2.0.16",
     "gatsby-plugin-react-helmet": "^3.0.2",
+    "gatsby-plugin-remove-serviceworker": "^1.0.0",
+    "gatsby-plugin-sass": "^2.0.7",
     "gatsby-plugin-sharp": "^2.0.14",
-    "gatsby-source-filesystem": "^2.0.8",
+    "gatsby-plugin-sitemap": "^2.0.10",
+    "gatsby-remark-picture": "^1.0.1",
+    "gatsby-remark-prismjs": "^3.2.0",
+    "gatsby-remark-unwrap-images": "^1.0.1",
+    "gatsby-source-filesystem": "^2.0.12",
+    "gatsby-transformer-json": "^2.1.6",
+    "gatsby-transformer-remark": "^2.1.19",
     "gatsby-transformer-sharp": "^2.1.8",
+    "html-react-parser": "^0.6.0",
+    "lodash": "^4.17.11",
+    "node-sass": "^4.11.0",
+    "prismjs": "^1.15.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-ga": "^2.5.7",
     "react-helmet": "^5.2.0"
   },
   "keywords": [
-    "gatsby"
+    "fullstack",
+    "course",
+    "helsingin yliopisto",
+    "tietojenkäsittelytieteen osasto",
+    "mooc",
+    "mooc.fi",
+    "full stack",
+    "web-sovelluskehitys"
   ],
-  "license": "MIT",
+  "license": "Creative Commons BY-NC-SA 3.0",
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
+    "deploy": "gatsby build && gh-pages -d public -b master"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-preset-gatsby": "^0.1.6",
     "gh-pages": "^2.0.1",
-    "prettier": "^1.15.2"
+    "identity-obj-proxy": "^3.0.0",
+    "prettier": "^1.15.2",
+    "react-test-renderer": "^16.6.3"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/fullstackopen-2019/fullstackopen-2019.github.io"
   }
 }
