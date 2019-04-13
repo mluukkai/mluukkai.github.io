@@ -16,7 +16,7 @@ export const PartBanner = () => {
           const partNames = [
             'Fundamental of Web apps',
             'Introduction to React',
-            'Palvelimen kanssa tapahtuva kommunikointi',
+            'Communicating with server',
             'Palvelimen ohjelmointi NodeJS:n Express-kirjastolla',
             'Express-sovellusten testaaminen, käyttäjänhallinta',
             'React-sovelluksen testaaminen, custom hookit',

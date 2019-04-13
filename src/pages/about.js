@@ -65,7 +65,7 @@ const About = () => (
             <Element className="container spacing spacing--mobile--large">
               <Element className="col-8 push-right-1">
                 <BodyText
-                  heading={{ level: 'h1', title: 'Yleistä' }}
+                  heading={{ level: 'h1', title: 'About the course' }}
                   headingFontSize="2.3rem"
                 />
 
@@ -78,7 +78,7 @@ const About = () => (
                       headingFont
                       text={[
                         'Osallistujilta edellytetään vahvaa ohjelmointirutiinia, web-ohjelmoinnin ja tietokantojen perustuntemusta, git-versionhallintajärjestelmän peruskäytön hallintaa, kykyä pitkäjänteiseen työskentelyyn sekä valmiutta omatoimiseen tiedonhakuun ja ongelmanratkaisuun. Osallistuminen ei kuitenkaan edellytä kurssilla käsiteltävien tekniikoiden tai Javascript-kielen hallintaa.',
-                        'Kurssin sisällöstä ja suoritustavasta kerrotaan materiaalissa osassa 0, lue ne huolella.',
+                        'Part 0 of the course material goes through the content and conduct of the course in more detail. Make sure to read the material and instructions thoroughly.',
                       ]}
                     />
                   </div>

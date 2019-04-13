@@ -45,7 +45,7 @@ const Challenge = () => (
     <Element className="container spacing">
       <SubHeader
         className="col-10col-8 push-right-1"
-        text="Tämä on Full Stack -haaste"
+        text="The Full Stack challenge"
         headingLevel="h1"
       />
 
